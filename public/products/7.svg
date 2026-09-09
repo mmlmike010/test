@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
   <rect width="400" height="400" fill="#ffffff"/>
-  <g transform="translate(200 200) scale(1.55) translate(-200 -200)">
-  <rect x="125" y="140" width="150" height="130" rx="12" fill="#fff"/>
-    <rect x="125" y="140" width="150" height="28" rx="12" fill="#2e7d32"/>
-    <rect x="125" y="156" width="150" height="12" fill="#2e7d32"/>
-    <ellipse cx="165" cy="210" rx="18" ry="12" fill="#c0392b"/>
-    <ellipse cx="200" cy="220" rx="16" ry="11" fill="#6d4c41"/>
-    <ellipse cx="235" cy="208" rx="17" ry="12" fill="#f4d03f"/>
-    <ellipse cx="190" cy="240" rx="15" ry="10" fill="#1e8449"/>
-    <text x="200" y="160" text-anchor="middle" fill="#fff" font-family="Arial" font-size="12" font-weight="700">5 BEAN</text>
-  </g>
+  <defs>
+    <filter id="pack" x="-25%" y="-15%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="16" stdDeviation="14" flood-color="#1a1a1a" flood-opacity="0.18"/>
+    </filter>
+    <linearGradient id="shine" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+      <stop offset="0.45" stop-color="#fff" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <g filter="url(#pack)"><rect x="118" y="110" width="164" height="176" rx="12" fill="#ffffff" stroke="#cfd8dc" stroke-width="2"/>
+    <rect x="118" y="110" width="164" height="40" rx="12" fill="#2e7d32"/>
+    <rect x="118" y="134" width="164" height="16" fill="#2e7d32"/>
+    <text x="200" y="136" text-anchor="middle" fill="#fff" font-family="Arial" font-size="14" font-weight="700">5 BEAN SALAD</text>
+    <ellipse cx="160" cy="200" rx="20" ry="13" fill="#c0392b"/>
+    <ellipse cx="200" cy="214" rx="18" ry="12" fill="#6d4c41"/>
+    <ellipse cx="238" cy="198" rx="19" ry="13" fill="#f4d03f"/>
+    <ellipse cx="190" cy="240" rx="16" ry="11" fill="#1e8449"/></g>
 </svg>

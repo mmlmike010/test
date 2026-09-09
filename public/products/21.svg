@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
   <rect width="400" height="400" fill="#ffffff"/>
-  <g transform="translate(200 200) scale(1.55) translate(-200 -200)">
-  <rect x="145" y="100" width="110" height="200" rx="8" fill="#4e342e"/>
-    <rect x="155" y="118" width="90" height="70" fill="#efebe9"/>
-    <text x="200" y="148" text-anchor="middle" fill="#4e342e" font-family="Arial" font-size="11" font-weight="700">KIRKLAND</text>
-    <text x="200" y="168" text-anchor="middle" fill="#6d4c41" font-family="Arial" font-size="10">COLOMBIAN</text>
-    <ellipse cx="200" cy="230" rx="16" ry="10" fill="#3e2723"/>
-    <ellipse cx="185" cy="248" rx="10" ry="7" fill="#5d4037"/>
-    <ellipse cx="215" cy="248" rx="10" ry="7" fill="#5d4037"/>
-    <text x="200" y="280" text-anchor="middle" fill="#d7ccc8" font-family="Arial" font-size="12">3 LB</text>
-  </g>
+  <defs>
+    <filter id="pack" x="-25%" y="-15%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="16" stdDeviation="14" flood-color="#1a1a1a" flood-opacity="0.18"/>
+    </filter>
+    <linearGradient id="shine" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+      <stop offset="0.45" stop-color="#fff" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <g filter="url(#pack)"><rect x="132" y="72" width="136" height="240" rx="8" fill="#4e342e"/>
+    <rect x="144" y="96" width="112" height="84" fill="#efebe9"/>
+    <text x="200" y="128" text-anchor="middle" fill="#4e342e" font-family="Arial" font-size="13" font-weight="700">KIRKLAND</text>
+    <text x="200" y="150" text-anchor="middle" fill="#6d4c41" font-family="Arial" font-size="12">COLOMBIAN</text>
+    <ellipse cx="200" cy="222" rx="18" ry="12" fill="#3e2723"/>
+    <ellipse cx="182" cy="244" rx="12" ry="8" fill="#5d4037"/>
+    <ellipse cx="218" cy="244" rx="12" ry="8" fill="#5d4037"/>
+    <text x="200" y="286" text-anchor="middle" fill="#d7ccc8" font-family="Arial" font-size="14" font-weight="700">3 LB</text>
+    <rect x="132" y="72" width="22" height="240" fill="url(#shine)"/></g>
 </svg>

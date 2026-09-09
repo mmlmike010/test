@@ -88,14 +88,14 @@ function ProductCard({
           onOpen();
         }
       }}
-      className="bg-white text-left cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-costco-blue/40"
+      className="bg-white text-left cursor-pointer rounded-2xl border border-[#ededed] shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_14px_rgba(0,0,0,0.08)] transition-shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-costco-blue/40 overflow-hidden"
     >
-      <div className="relative aspect-square bg-[#f6f6f6] border border-[#eee]">
+      <div className="relative aspect-square bg-white">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={product.image}
           alt={`${product.brand} ${product.name}`}
-          className="absolute inset-0 w-full h-full object-contain p-2"
+          className="absolute inset-0 w-full h-full object-contain p-3"
         />
         {membersOnly && product.savings > 0 && (
           <div className="absolute top-2 left-2 bg-costco-red text-white px-1.5 py-0.5 text-[10px] font-bold tracking-wide">
@@ -104,9 +104,9 @@ function ProductCard({
         )}
         <AddControl product={product} />
       </div>
-      <div className="pt-2.5 pb-1 px-0.5">
+      <div className="px-3 pb-3 pt-1">
         <div className="flex items-baseline gap-2 flex-wrap">
-          <span className="text-[20px] font-bold text-[#1a1a1a] tabular-nums leading-none">
+          <span className="text-[18px] font-bold text-[#1a1a1a] tabular-nums leading-none">
             ${product.price.toFixed(2)}
           </span>
           <span className="text-[13px] text-[#888] line-through tabular-nums">
@@ -119,9 +119,10 @@ function ProductCard({
           </p>
         )}
         <p className="text-[12px] text-[#555] mt-1.5">{product.brand}</p>
-        <h3 className="text-[14px] text-[#1a1a1a] leading-snug mt-0.5 line-clamp-2 min-h-[2.5rem]">
+        <h3 className="text-[14px] font-normal text-[#1a1a1a] leading-snug mt-0.5 line-clamp-2 min-h-[2.5rem]">
           {product.name}
         </h3>
+        <p className="text-[12px] text-[#777] capitalize">{product.category}</p>
         <div className="mt-1.5">
           <StarRating
             rating={product.rating}
@@ -209,7 +210,7 @@ export default function ProductGrid() {
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-x-5 gap-y-8">
+        <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">
           {(savings.length ? savings : filtered).map((product) => (
             <ProductCard
               key={product.id}

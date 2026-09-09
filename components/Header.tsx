@@ -35,7 +35,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
   return (
     <header className="bg-white border-b border-costco-border sticky top-0 z-50 shrink-0">
       <div className="border-b border-[#e8e8e8]">
-        <div className="max-w-[1800px] mx-auto px-4 min-h-[64px] py-2 flex items-center justify-between gap-4">
+        <div className="max-w-[1800px] mx-auto px-4 min-h-[56px] py-1.5 flex items-center justify-between gap-4">
           <div className="flex items-center gap-6 min-w-0">
             <button
               type="button"
@@ -99,7 +99,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
         </div>
       </div>
 
-      <div className="max-w-[1800px] mx-auto px-4 py-3">
+      <div className="max-w-[1800px] mx-auto px-4 py-2.5">
         <div className="flex items-center gap-3">
           <form
             className="relative flex-1 min-w-0"

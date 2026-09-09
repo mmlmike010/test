@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
   <rect width="400" height="400" fill="#ffffff"/>
-  <g transform="translate(200 200) scale(1.55) translate(-200 -200)">
-  <rect x="175" y="70" width="50" height="36" rx="6" fill="#3e2723"/>
-    <rect x="168" y="106" width="64" height="210" rx="8" fill="#1b5e20"/>
-    <rect x="178" y="130" width="44" height="120" fill="#f5e6c8"/>
-    <text x="200" y="165" text-anchor="middle" fill="#1b5e20" font-family="Arial" font-size="9" font-weight="700">KIRKLAND</text>
-    <text x="200" y="182" text-anchor="middle" fill="#333" font-family="Arial" font-size="8">OLIVE OIL</text>
-    <ellipse cx="200" cy="230" rx="12" ry="20" fill="#9ccc65" opacity=".7"/>
-  </g>
+  <defs>
+    <filter id="pack" x="-25%" y="-15%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="16" stdDeviation="14" flood-color="#1a1a1a" flood-opacity="0.18"/>
+    </filter>
+    <linearGradient id="shine" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+      <stop offset="0.45" stop-color="#fff" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <g filter="url(#pack)"><rect x="176" y="52" width="48" height="32" rx="6" fill="#3e2723"/>
+    <rect x="166" y="84" width="68" height="240" rx="8" fill="#1b5e20"/>
+    <rect x="176" y="118" width="48" height="130" fill="#f5e6c8"/>
+    <rect x="166" y="84" width="68" height="88" fill="#005DAA"/>
+    <text x="200" y="106" text-anchor="middle" fill="#fff" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" letter-spacing="1.2">KIRKLAND</text>
+    <text x="200" y="122" text-anchor="middle" fill="#c5d8ea" font-family="Arial, Helvetica, sans-serif" font-size="8" letter-spacing="2.4">SIGNATURE</text>
+    <text x="200" y="146" text-anchor="middle" fill="#fff" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700">OLIVE</text>
+    <text x="200" y="164" text-anchor="middle" fill="#e8f2fa" font-family="Arial, Helvetica, sans-serif" font-size="10">OIL</text>
+    <ellipse cx="200" cy="270" rx="12" ry="22" fill="#9ccc65" opacity=".75"/>
+    <rect x="166" y="84" width="14" height="240" fill="url(#shine)"/></g>
 </svg>

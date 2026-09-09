@@ -99,6 +99,8 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
   const clearCart = useCartStore((state) => state.clearCart);
   const openCart = useCartStore((state) => state.openCart);
   const getSnapshot = useCartStore((state) => state.getSnapshot);
+  const kirkCartCount = useCartStore((state) => state.getTotalItems());
+  const kirkCartSubtotal = useCartStore((state) => state.getSubtotal());
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -528,6 +530,20 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             </button>
           </div>
         </div>
+        {kirkCartCount > 0 && (
+          <button
+            type="button"
+            onClick={openCart}
+            className="mx-4 mb-3 w-[calc(100%-2rem)] flex items-center justify-between rounded-[3px] bg-[#e8f2fa] border border-[#c5d8ea] px-3 py-2 text-left"
+          >
+            <span className="text-[12px] font-bold text-costco-blue">
+              Cart · {kirkCartCount} item{kirkCartCount === 1 ? "" : "s"}
+            </span>
+            <span className="text-[13px] font-bold text-[#1a1a1a] tabular-nums">
+              ${kirkCartSubtotal.toFixed(2)}
+            </span>
+          </button>
+        )}
       </div>
 
       {cartNotice && (
@@ -544,7 +560,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             return (
               <div
                 key={message.id}
-                className="bg-white border border-[#e4e4e4] border-l-[3px] border-l-costco-red px-4 py-3.5"
+                className="bg-white border border-[#ededed] border-l-[3px] border-l-costco-red rounded-2xl px-4 py-3.5 shadow-[0_2px_8px_rgba(0,0,0,0.04)]"
               >
                 <div className="flex items-center gap-2 mb-2">
                   <KirkMark size={28} />
@@ -574,10 +590,10 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
               <KirkMark size={28} className="mt-0.5 shrink-0" />
             )}
             <div
-              className={`max-w-[82%] px-3.5 py-2.5 text-[13px] leading-relaxed ${
+              className={`max-w-[82%] px-3.5 py-2.5 text-[13px] leading-relaxed rounded-2xl ${
                 message.role === "user"
-                  ? "bg-costco-blue text-white"
-                  : "bg-white text-[#1a1a1a] border border-[#e4e4e4] border-l-[3px] border-l-costco-red"
+                  ? "bg-costco-blue text-white rounded-br-md"
+                  : "bg-white text-[#1a1a1a] border border-[#ededed] border-l-[3px] border-l-costco-red rounded-bl-md"
               }`}
             >
               <p className="whitespace-pre-line">{message.content}</p>
@@ -611,7 +627,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
         {isLoading && (
           <div className="flex justify-start gap-2">
             <KirkMark size={28} className="mt-0.5 shrink-0" />
-            <div className="bg-white border border-[#e4e4e4] px-3.5 py-3 max-w-[82%]">
+            <div className="bg-white border border-[#ededed] rounded-2xl rounded-bl-md px-3.5 py-3 max-w-[82%]">
               <div className="flex gap-1.5 items-center">
                 <span className="text-[11px] text-[#666] mr-1 font-semibold">Kirk</span>
                 <div className="w-1.5 h-1.5 bg-[#999] rounded-full animate-bounce" />
