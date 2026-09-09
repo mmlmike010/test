@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#f7f7f7"/>
+  <rect x="140" y="150" width="120" height="90" rx="8" fill="#f4d03f"/>
+    <rect x="140" y="150" width="120" height="22" fill="#E31837"/>
+    <rect x="190" y="130" width="20" height="40" fill="#c0392b"/>
+    <text x="200" y="280" text-anchor="middle" fill="#b7950b" font-family="Arial" font-size="14" font-weight="700">HUNT</text>
+</svg>

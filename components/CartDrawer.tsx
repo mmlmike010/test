@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { Minus, Plus, Trash2, X } from "lucide-react";
 import { useCartStore } from "@/lib/store/cart";
 
@@ -57,12 +56,11 @@ export default function CartDrawer() {
                 className="flex gap-3 pb-4 border-b border-[#eee]"
               >
                 <div className="relative w-[72px] h-[72px] overflow-hidden bg-[#f7f7f7] border border-[#eee] shrink-0">
-                  <Image
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
                     src={product.image}
                     alt={`${product.brand} ${product.name}`}
-                    fill
-                    className="object-contain p-1"
-                    sizes="72px"
+                    className="absolute inset-0 w-full h-full object-contain p-1"
                   />
                 </div>
                 <div className="flex-1 min-w-0">

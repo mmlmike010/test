@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { X, Check, Plus, Star } from "lucide-react";
 import type { Product } from "@/lib/data/products";
 import { useCartStore } from "@/lib/store/cart";
@@ -55,13 +54,12 @@ export default function ProductDetailModal({
         </div>
 
         <div className="grid sm:grid-cols-2 gap-0">
-          <div className="relative aspect-square bg-white border-b sm:border-b-0 sm:border-r border-[#eee]">
-            <Image
+          <div className="relative aspect-square bg-[#f6f6f6] border-b sm:border-b-0 sm:border-r border-[#eee]">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
               src={product.image}
               alt={`${product.brand} ${product.name}`}
-              fill
-              className="object-contain p-6"
-              sizes="(max-width: 640px) 100vw, 320px"
+              className="absolute inset-0 w-full h-full object-contain p-6"
             />
           </div>
           <div className="p-5 flex flex-col">

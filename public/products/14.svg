@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#f7f7f7"/>
+  <rect x="130" y="100" width="140" height="200" rx="10" fill="#fff"/>
+    <rect x="130" y="100" width="140" height="48" fill="#4fc3f7"/>
+    <text x="200" y="130" text-anchor="middle" fill="#01579b" font-family="Arial" font-size="13" font-weight="700">WIPES</text>
+    <rect x="148" y="168" width="104" height="14" fill="#e1f5fe"/>
+    <rect x="148" y="190" width="104" height="14" fill="#e1f5fe"/>
+    <rect x="148" y="212" width="104" height="14" fill="#e1f5fe"/>
+    <text x="200" y="270" text-anchor="middle" fill="#0277bd" font-family="Arial" font-size="12">12-PACK</text>
+</svg>

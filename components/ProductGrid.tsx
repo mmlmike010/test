@@ -5,7 +5,6 @@ import type { Product } from "@/lib/data/products";
 import { useCartStore } from "@/lib/store/cart";
 import { useCatalogStore } from "@/lib/store/catalog";
 import { Check, Minus, Plus } from "lucide-react";
-import Image from "next/image";
 import StarRating from "@/components/StarRating";
 import ProductDetailModal from "@/components/ProductDetailModal";
 
@@ -91,13 +90,12 @@ function ProductCard({
       }}
       className="bg-white text-left cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-costco-blue/40"
     >
-      <div className="relative aspect-square bg-white border border-[#eee]">
-        <Image
+      <div className="relative aspect-square bg-[#f6f6f6] border border-[#eee]">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
           src={product.image}
           alt={`${product.brand} ${product.name}`}
-          fill
-          className="object-contain p-3"
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 20vw"
+          className="absolute inset-0 w-full h-full object-contain p-2"
         />
         {membersOnly && product.savings > 0 && (
           <div className="absolute top-2 left-2 bg-costco-red text-white px-1.5 py-0.5 text-[10px] font-bold tracking-wide">

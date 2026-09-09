@@ -35,7 +35,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
   return (
     <header className="bg-white border-b border-costco-border sticky top-0 z-50 shrink-0">
       <div className="border-b border-[#e8e8e8]">
-        <div className="max-w-[1800px] mx-auto px-4 h-14 flex items-center justify-between gap-4">
+        <div className="max-w-[1800px] mx-auto px-4 min-h-[64px] py-2 flex items-center justify-between gap-4">
           <div className="flex items-center gap-6 min-w-0">
             <button
               type="button"
@@ -46,7 +46,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
               }}
               title="Show all products"
             >
-              <CostcoLogo height={44} />
+              <CostcoLogo />
             </button>
             <nav className="hidden md:flex items-center gap-5 text-[14px]">
               <a

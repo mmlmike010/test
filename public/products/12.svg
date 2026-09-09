@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#f7f7f7"/>
+  <rect x="120" y="140" width="160" height="130" rx="14" fill="#efebe9"/>
+    <rect x="120" y="140" width="160" height="34" fill="#E31837"/>
+    <text x="200" y="162" text-anchor="middle" fill="#fff" font-family="Arial" font-size="13" font-weight="700">TRAIL MIX</text>
+    <circle cx="160" cy="210" r="12" fill="#6d4c41"/>
+    <circle cx="190" cy="200" r="10" fill="#c0392b"/>
+    <circle cx="220" cy="214" r="11" fill="#f4d03f"/>
+    <circle cx="245" cy="202" r="9" fill="#8d6e63"/>
+    <circle cx="175" cy="232" r="8" fill="#3e2723"/>
+    <circle cx="210" cy="238" r="9" fill="#c4a062"/>
+</svg>

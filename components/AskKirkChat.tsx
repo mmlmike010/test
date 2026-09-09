@@ -491,22 +491,19 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
     <aside className="fixed inset-y-0 right-0 z-50 w-full max-w-[420px] lg:static lg:z-40 lg:w-[400px] xl:w-[440px] lg:max-w-none shrink-0 bg-white border-l border-costco-border h-full flex flex-col shadow-[-12px_0_28px_rgba(0,0,0,0.08)]">
       <div className="shrink-0 border-b border-costco-border bg-white">
         <div className="h-[3px] bg-costco-red" />
-        <div className="px-4 py-3 flex items-start justify-between gap-2">
+        <div className="px-4 py-2.5 flex items-center justify-between gap-2">
           <div className="flex items-center gap-3 min-w-0">
-            <KirkMark size={44} />
+            <KirkMark size={40} />
             <div className="min-w-0">
-              <p className="text-[10px] font-bold tracking-[0.18em] text-costco-red uppercase">
-                Ask
-              </p>
-              <h2 className="kirk-script text-[34px] leading-none text-costco-navy -mt-0.5">
-                Kirk
+              <h2 className="text-[18px] font-black tracking-tight text-[#1a1a1a] leading-none">
+                <span className="text-costco-red">Ask</span> Kirk
               </h2>
-              <p className="text-[11px] text-[#666] mt-1 truncate">
-                Kirkland Signature assistant
+              <p className="text-[10px] font-bold tracking-[0.16em] text-costco-blue uppercase mt-1">
+                Kirkland Signature
               </p>
               <p className="flex items-center gap-1.5 text-[11px] text-[#2e7d32] font-semibold mt-0.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#2e7d32]" />
-                Available now · Same-Day
+                Available · Same-Day Brooklyn
               </p>
             </div>
           </div>
@@ -547,16 +544,16 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             return (
               <div
                 key={message.id}
-                className="bg-white border border-[#e4e4e4] px-4 py-3.5"
+                className="bg-white border border-[#e4e4e4] border-l-[3px] border-l-costco-red px-4 py-3.5"
               >
                 <div className="flex items-center gap-2 mb-2">
                   <KirkMark size={28} />
                   <div>
                     <p className="text-[13px] font-bold text-[#1a1a1a]">
-                      Welcome back
+                      Kirk
                     </p>
                     <p className="text-[10px] font-bold tracking-[0.14em] text-costco-blue uppercase">
-                      Member shopping help
+                      Same-Day shopping help
                     </p>
                   </div>
                 </div>
@@ -580,7 +577,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
               className={`max-w-[82%] px-3.5 py-2.5 text-[13px] leading-relaxed ${
                 message.role === "user"
                   ? "bg-costco-blue text-white"
-                  : "bg-white text-[#1a1a1a] border border-[#e4e4e4]"
+                  : "bg-white text-[#1a1a1a] border border-[#e4e4e4] border-l-[3px] border-l-costco-red"
               }`}
             >
               <p className="whitespace-pre-line">{message.content}</p>
@@ -752,7 +749,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             type="button"
             onClick={() => void sendMessage(input)}
             disabled={!input.trim() || isLoading}
-            className="h-11 px-3.5 bg-costco-red text-white rounded-full font-bold hover:bg-costco-red-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1 text-sm min-w-[72px] justify-center"
+            className="h-11 px-3.5 bg-costco-blue text-white rounded-full font-bold hover:bg-costco-blue-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1 text-sm min-w-[72px] justify-center"
           >
             <Send className="w-4 h-4" />
             Send

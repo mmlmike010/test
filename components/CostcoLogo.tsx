@@ -1,49 +1,35 @@
-/** Text reconstruction of the Costco Wholesale lockup (red wordmark, three blue rules, blue WHOLESALE). */
+/** Costco Wholesale lockup: red COSTCO, three blue rules, blue WHOLESALE. */
 export default function CostcoLogo({
-  height = 52,
-  title = "Costco Wholesale",
+  compact = false,
 }: {
-  height?: number;
-  title?: string;
+  compact?: boolean;
 }) {
-  const width = Math.round(height * (220 / 72));
   return (
-    <svg
-      role="img"
-      aria-label={title}
-      width={width}
-      height={height}
-      viewBox="0 0 220 72"
-      className="block"
+    <span
+      className="inline-flex flex-col items-center leading-none"
+      aria-label="Costco Wholesale"
     >
-      <title>{title}</title>
-      <text
-        x="110"
-        y="34"
-        textAnchor="middle"
-        fill="#E31837"
-        fontFamily="Arial Black, Arial, Helvetica, sans-serif"
-        fontWeight="900"
-        fontSize="34"
-        letterSpacing="0.5"
+      <span
+        className={`font-black tracking-tight text-[#E31837] ${
+          compact ? "text-[26px]" : "text-[32px]"
+        }`}
+        style={{ fontFamily: "Arial Black, Arial, Helvetica, sans-serif" }}
       >
         COSTCO
-      </text>
-      <rect x="16" y="40" width="188" height="2.4" fill="#005DAA" />
-      <rect x="16" y="45.2" width="188" height="2.4" fill="#005DAA" />
-      <rect x="16" y="50.4" width="188" height="2.4" fill="#005DAA" />
-      <text
-        x="110"
-        y="68"
-        textAnchor="middle"
-        fill="#005DAA"
-        fontFamily="Arial, Helvetica, sans-serif"
-        fontWeight="700"
-        fontSize="11"
-        letterSpacing="5.5"
+      </span>
+      <span className={`flex flex-col w-full ${compact ? "gap-[2px] my-[3px]" : "gap-[2.5px] my-1"}`}>
+        <span className="block h-[2.5px] bg-[#005DAA]" />
+        <span className="block h-[2.5px] bg-[#005DAA]" />
+        <span className="block h-[2.5px] bg-[#005DAA]" />
+      </span>
+      <span
+        className={`font-bold text-[#005DAA] ${
+          compact ? "text-[8px] tracking-[0.38em]" : "text-[9px] tracking-[0.42em]"
+        }`}
+        style={{ fontFamily: "Arial, Helvetica, sans-serif" }}
       >
         WHOLESALE
-      </text>
-    </svg>
+      </span>
+    </span>
   );
 }

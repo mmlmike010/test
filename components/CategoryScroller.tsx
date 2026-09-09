@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { categories } from "@/lib/data/products";
 import { useCatalogStore } from "@/lib/store/catalog";
 
@@ -33,12 +32,11 @@ export default function CategoryScroller() {
                     : "ring-transparent group-hover:ring-[#c5d8ea]"
                 }`}
               >
-                <Image
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
                   src={category.image}
                   alt=""
-                  fill
-                  className="object-cover"
-                  sizes="84px"
+                  className="absolute inset-0 w-full h-full object-cover"
                 />
               </div>
               <span

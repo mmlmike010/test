@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#f7f7f7"/>
+  <rect x="145" y="150" width="110" height="80" rx="14" fill="#263238"/>
+    <circle cx="200" cy="190" r="26" fill="#455a64"/>
+    <circle cx="200" cy="190" r="16" fill="#90caf9"/>
+    <circle cx="200" cy="190" r="7" fill="#0d47a1"/>
+    <rect x="230" y="158" width="16" height="10" rx="2" fill="#ff8f00"/>
+    <text x="200" y="280" text-anchor="middle" fill="#37474f" font-family="Arial" font-size="14" font-weight="700">4K CAMERA</text>
+</svg>

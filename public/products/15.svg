@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#f7f7f7"/>
+  <path d="M90 250 Q140 160 200 210 Q260 160 310 250 Z" fill="#c47a3a"/>
+    <path d="M110 248 Q150 190 200 220 Q250 190 290 248" fill="#6d4c41"/>
+    <ellipse cx="200" cy="255" rx="110" ry="22" fill="#e8c99a"/>
+    <text x="200" y="120" text-anchor="middle" fill="#6d4c41" font-family="Arial" font-size="14" font-weight="700">CROISSANTS</text>
+    <text x="200" y="310" text-anchor="middle" fill="#8d6e63" font-family="Arial" font-size="12">12 CT</text>
+</svg>

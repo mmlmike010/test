@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#f7f7f7"/>
+  <rect x="110" y="130" width="180" height="130" rx="10" fill="#263238"/>
+    <rect x="122" y="142" width="156" height="106" rx="6" fill="#37474f"/>
+    <rect x="140" y="160" width="120" height="70" rx="4" fill="#90caf9" opacity=".35"/>
+    <text x="200" y="300" text-anchor="middle" fill="#455a64" font-family="Arial" font-size="14" font-weight="700">LAPTOP SLEEVE</text>
+</svg>
