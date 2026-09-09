@@ -695,14 +695,14 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
         <p className="text-[10px] font-bold tracking-[0.14em] text-[#8a8a8a] uppercase mb-1.5">
           Members often ask
         </p>
-        <div className="flex gap-1.5 mb-2.5 overflow-x-auto scrollbar-hide pb-0.5">
+        <div className="flex flex-wrap gap-1.5 mb-2.5 content-start">
           {suggestionChips.map((chip) => (
             <button
               key={chip}
               type="button"
               onClick={() => void sendMessage(chip)}
               disabled={isLoading}
-              className="px-2.5 py-1 bg-white hover:bg-[#e8f2fa] hover:border-costco-blue hover:text-costco-blue disabled:opacity-50 text-[#333] text-[11px] leading-snug rounded-full transition-colors border border-[#d0d0d0] whitespace-nowrap shrink-0"
+              className="px-2.5 py-1 bg-white hover:bg-[#e8f2fa] hover:border-costco-blue hover:text-costco-blue disabled:opacity-50 text-[#333] text-[11px] leading-snug rounded-full transition-colors border border-[#d0d0d0]"
             >
               {chip}
             </button>
