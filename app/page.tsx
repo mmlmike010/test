@@ -13,7 +13,7 @@ export default function Home() {
   const [isKirkOpen, setIsKirkOpen] = useState(true);
 
   return (
-    <div className="h-dvh bg-costco-bg flex flex-col overflow-hidden">
+    <div className="h-dvh bg-[#f6f7f8] flex flex-col overflow-hidden">
       <Header onAskKirkClick={() => setIsKirkOpen(true)} />
       <PromoBanner />
 

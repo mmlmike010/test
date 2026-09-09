@@ -24,11 +24,11 @@ export default function CartDrawer() {
         onClick={closeCart}
       />
       <aside className="relative w-full max-w-[400px] h-full bg-white shadow-2xl flex flex-col">
-        <div className="px-4 py-3.5 border-b border-costco-border flex items-center justify-between shrink-0">
+        <div className="px-4 py-3 border-b border-[#e5e5e5] flex items-center justify-between shrink-0">
           <div>
             <h2 className="font-bold text-[#1a1a1a] text-[17px]">Cart</h2>
             <p className="text-[12px] text-[#666]">
-              {totalItems} item{totalItems === 1 ? "" : "s"} · Same-Day
+              {totalItems} item{totalItems === 1 ? "" : "s"} · Same-Day Brooklyn
             </p>
           </div>
           <button
@@ -128,7 +128,7 @@ export default function CartDrawer() {
             <button
               type="button"
               onClick={closeCart}
-              className="flex-1 py-2.5 bg-costco-blue text-white rounded-[3px] font-bold hover:bg-costco-blue-hover"
+              className="flex-1 py-3 bg-costco-blue text-white rounded-[3px] font-bold hover:bg-costco-blue-hover text-[15px]"
             >
               {items.length ? "Continue shopping" : "Browse products"}
             </button>

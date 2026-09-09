@@ -37,7 +37,7 @@ export default function ProductDetailModal({
         role="dialog"
         aria-modal="true"
         aria-label={`${product.brand} ${product.name}`}
-        className="relative w-full sm:max-w-2xl max-h-[92vh] overflow-y-auto bg-white shadow-2xl"
+        className="relative w-full sm:max-w-2xl max-h-[92vh] overflow-y-auto bg-white shadow-2xl sm:rounded-[8px]"
       >
         <div className="sticky top-0 z-10 flex items-center justify-between px-4 py-3 border-b border-costco-border bg-white">
           <p className="text-[11px] font-bold text-[#666] uppercase tracking-[0.14em]">

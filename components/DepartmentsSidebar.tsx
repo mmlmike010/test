@@ -16,12 +16,12 @@ export default function DepartmentsSidebar({
   return (
     <aside
       className={`${
-        compact ? "w-[200px]" : "w-[232px]"
-      } hidden md:block shrink-0 bg-white border-r border-costco-border h-full overflow-y-auto`}
+        compact ? "w-[184px]" : "w-[220px]"
+      } hidden md:block shrink-0 bg-white border-r border-[#e5e5e5] h-full overflow-y-auto`}
     >
-      <div className="py-4 px-3">
-        <div className="flex items-center justify-between mb-2 px-2">
-          <h2 className="text-[15px] font-bold text-[#1a1a1a]">Departments</h2>
+      <div className="py-3 px-2">
+        <div className="flex items-center justify-between mb-1 px-2">
+          <h2 className="text-[14px] font-bold text-[#1a1a1a]">Departments</h2>
           {selected && (
             <button
               type="button"
@@ -48,7 +48,7 @@ export default function DepartmentsSidebar({
                       setQuery("");
                       void search();
                     }}
-                    className={`w-full text-left block px-3 py-2 text-[13px] truncate transition-colors border-l-[3px] ${
+                    className={`w-full text-left block px-2.5 py-[7px] text-[13px] truncate transition-colors border-l-[3px] ${
                       active
                         ? "border-costco-blue bg-[#e8f2fa] text-costco-blue font-bold"
                         : "border-transparent text-[#333] hover:bg-[#f6f6f6] hover:text-costco-blue"

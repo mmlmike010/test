@@ -490,30 +490,30 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
 
   return (
     <>
-    <aside className="fixed inset-y-0 right-0 z-50 w-full max-w-[420px] lg:static lg:z-40 lg:w-[400px] xl:w-[440px] lg:max-w-none shrink-0 bg-white border-l border-costco-border h-full flex flex-col shadow-[-12px_0_28px_rgba(0,0,0,0.08)]">
-      <div className="shrink-0 border-b border-costco-border bg-white">
+    <aside className="fixed inset-y-0 right-0 z-50 w-full max-w-[420px] lg:static lg:z-40 lg:w-[380px] xl:w-[420px] lg:max-w-none shrink-0 bg-white border-l border-[#e5e5e5] h-full flex flex-col shadow-[-8px_0_24px_rgba(0,0,0,0.08)]">
+      <div className="shrink-0 border-b border-[#e5e5e5] bg-white">
         <div className="h-[3px] bg-costco-red" />
-        <div className="px-4 py-2.5 flex items-center justify-between gap-2">
-          <div className="flex items-center gap-3 min-w-0">
-            <KirkMark size={40} />
+        <div className="px-3.5 py-2 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <KirkMark size={36} />
             <div className="min-w-0">
-              <h2 className="text-[18px] font-black tracking-tight text-[#1a1a1a] leading-none">
+              <h2 className="text-[17px] font-black tracking-tight text-[#1a1a1a] leading-none">
                 <span className="text-costco-red">Ask</span> Kirk
               </h2>
-              <p className="text-[10px] font-bold tracking-[0.16em] text-costco-blue uppercase mt-1">
+              <p className="text-[10px] font-bold tracking-[0.14em] text-costco-blue uppercase mt-[3px]">
                 Kirkland Signature
               </p>
-              <p className="flex items-center gap-1.5 text-[11px] text-[#2e7d32] font-semibold mt-0.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#2e7d32]" />
+              <p className="flex items-center gap-1.5 text-[11px] text-[#188038] font-semibold mt-0.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#188038]" />
                 Available · Same-Day Brooklyn
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-1 shrink-0">
+          <div className="flex items-center gap-0.5 shrink-0">
             <button
               type="button"
               onClick={handleReset}
-              className="px-2.5 py-1.5 text-[12px] font-bold text-[#333] hover:bg-gray-100 rounded-[3px] transition-colors flex items-center gap-1"
+              className="px-2 py-1.5 text-[12px] font-bold text-[#333] hover:bg-[#f4f4f4] rounded-[3px] transition-colors flex items-center gap-1"
               title="Reset"
             >
               <RefreshCw className="w-3.5 h-3.5" />
@@ -522,7 +522,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             <button
               type="button"
               onClick={onClose}
-              className="px-2.5 py-1.5 text-[12px] font-bold text-[#333] hover:bg-gray-100 rounded-[3px] transition-colors flex items-center gap-1"
+              className="px-2 py-1.5 text-[12px] font-bold text-[#333] hover:bg-[#f4f4f4] rounded-[3px] transition-colors flex items-center gap-1"
               title="Close"
             >
               <X className="w-3.5 h-3.5" />
@@ -534,10 +534,10 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
           <button
             type="button"
             onClick={openCart}
-            className="mx-4 mb-3 w-[calc(100%-2rem)] flex items-center justify-between rounded-[3px] bg-[#e8f2fa] border border-[#c5d8ea] px-3 py-2 text-left"
+            className="mx-3.5 mb-2.5 w-[calc(100%-1.75rem)] flex items-center justify-between rounded-[3px] bg-[#e8f2fa] border border-[#c5d8ea] px-3 py-1.5 text-left"
           >
             <span className="text-[12px] font-bold text-costco-blue">
-              Cart · {kirkCartCount} item{kirkCartCount === 1 ? "" : "s"}
+              View cart · {kirkCartCount} item{kirkCartCount === 1 ? "" : "s"}
             </span>
             <span className="text-[13px] font-bold text-[#1a1a1a] tabular-nums">
               ${kirkCartSubtotal.toFixed(2)}
@@ -553,14 +553,14 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
         </div>
       )}
 
-      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3.5 bg-[#f4f4f4] min-h-0">
+      <div className="flex-1 overflow-y-auto px-3.5 py-3.5 space-y-3 bg-[#f6f7f8] min-h-0">
         {messages.map((message) => {
           const isWelcome = message.id.startsWith("welcome-");
           if (isWelcome) {
             return (
               <div
                 key={message.id}
-                className="bg-white border border-[#ededed] border-l-[3px] border-l-costco-red rounded-2xl px-4 py-3.5 shadow-[0_2px_8px_rgba(0,0,0,0.04)]"
+                className="bg-white border border-[#e8e8e8] border-l-[3px] border-l-costco-red rounded-[12px] px-3.5 py-3 shadow-[0_1px_4px_rgba(0,0,0,0.04)]"
               >
                 <div className="flex items-center gap-2 mb-2">
                   <KirkMark size={28} />
@@ -668,7 +668,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
       </div>
 
       {(isRecording || isTranscribing || isSpeaking) && (
-        <div className="px-4 py-2 border-t border-[#eee] bg-[#fff8f8] text-[12px] text-[#333] flex items-center gap-2 shrink-0">
+        <div className="px-3.5 py-1.5 border-t border-[#eee] bg-[#fff8f8] text-[12px] text-[#333] flex items-center gap-2 shrink-0">
           {isSpeaking ? (
             <>
               <span className="inline-flex items-end gap-[3px] h-3.5 text-costco-red">
@@ -691,24 +691,24 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
         </div>
       )}
 
-      <div className="px-4 pt-3 pb-3.5 border-t border-costco-border bg-white shrink-0">
-        <p className="text-[10px] font-bold tracking-[0.14em] text-[#888] uppercase mb-2">
+      <div className="px-3.5 pt-2.5 pb-3 border-t border-[#e5e5e5] bg-white shrink-0">
+        <p className="text-[10px] font-bold tracking-[0.14em] text-[#8a8a8a] uppercase mb-1.5">
           Members often ask
         </p>
-        <div className="flex flex-wrap gap-1.5 mb-3 content-start">
+        <div className="flex gap-1.5 mb-2.5 overflow-x-auto scrollbar-hide pb-0.5">
           {suggestionChips.map((chip) => (
             <button
               key={chip}
               type="button"
               onClick={() => void sendMessage(chip)}
               disabled={isLoading}
-              className="px-2.5 py-1 bg-white hover:bg-[#e8f2fa] hover:border-costco-blue hover:text-costco-blue disabled:opacity-50 text-[#333] text-[11px] leading-snug rounded-full transition-colors border border-[#d0d0d0]"
+              className="px-2.5 py-1 bg-white hover:bg-[#e8f2fa] hover:border-costco-blue hover:text-costco-blue disabled:opacity-50 text-[#333] text-[11px] leading-snug rounded-full transition-colors border border-[#d0d0d0] whitespace-nowrap shrink-0"
             >
               {chip}
             </button>
           ))}
         </div>
-        <div className="flex gap-2 items-stretch">
+        <div className="flex gap-1.5 items-stretch">
           <input
             type="text"
             value={input}
@@ -721,7 +721,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                   ? "Listening…"
                   : "Ask Kirk for a cart"
             }
-            className="flex-1 min-w-0 h-11 px-3.5 border border-[#c8c8c8] rounded-full text-sm text-[#1a1a1a] placeholder:text-[#888] focus:outline-none focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15"
+            className="flex-1 min-w-0 h-10 px-3.5 border border-[#c4c4c4] rounded-full text-[14px] text-[#1a1a1a] placeholder:text-[#8a8a8a] focus:outline-none focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15"
             disabled={isLoading || isRecording || isTranscribing}
           />
           <button
@@ -735,10 +735,10 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
               else void startRecording();
             }}
             disabled={isLoading || isTranscribing}
-            className={`h-11 px-2.5 border transition-colors text-[11px] font-bold flex flex-col items-center justify-center gap-0.5 min-w-[56px] rounded-full ${
+            className={`h-10 px-2 border transition-colors text-[10px] font-bold flex flex-col items-center justify-center gap-0.5 min-w-[52px] rounded-full ${
               isRecording || isSpeaking
                 ? "bg-costco-red text-white border-costco-red kirk-listening"
-                : "border-[#c8c8c8] hover:bg-gray-50 text-[#333]"
+                : "border-[#c4c4c4] hover:bg-[#f6f6f6] text-[#333]"
             }`}
             title={
               isSpeaking
@@ -765,9 +765,9 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             type="button"
             onClick={() => void sendMessage(input)}
             disabled={!input.trim() || isLoading}
-            className="h-11 px-3.5 bg-costco-blue text-white rounded-full font-bold hover:bg-costco-blue-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1 text-sm min-w-[72px] justify-center"
+            className="h-10 px-3 bg-costco-blue text-white rounded-full font-bold hover:bg-costco-blue-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1 text-[13px] min-w-[68px] justify-center"
           >
-            <Send className="w-4 h-4" />
+            <Send className="w-3.5 h-3.5" />
             Send
           </button>
         </div>

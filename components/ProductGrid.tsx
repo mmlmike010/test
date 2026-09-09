@@ -29,10 +29,10 @@ function AddControl({ product }: { product: Product }) {
         type="button"
         onClick={add}
         aria-label={`Add ${product.name}`}
-        className={`absolute bottom-2 right-2 w-9 h-9 rounded-full bg-white border-2 shadow-sm flex items-center justify-center ${
+        className={`absolute bottom-2 right-2 w-8 h-8 rounded-full bg-white border-[1.5px] shadow-[0_1px_4px_rgba(0,0,0,0.12)] flex items-center justify-center ${
           justAdded
             ? "border-green-600 text-green-600"
-            : "border-costco-blue text-costco-blue hover:bg-[#e8f2fa]"
+            : "border-[#0a5ea8] text-[#0a5ea8] hover:bg-[#e8f2fa]"
         }`}
       >
         {justAdded ? <Check className="w-4 h-4" /> : <Plus className="w-5 h-5" />}
@@ -42,7 +42,7 @@ function AddControl({ product }: { product: Product }) {
 
   return (
     <div
-      className="absolute bottom-2 right-2 h-9 flex items-center rounded-full bg-costco-blue text-white shadow-sm overflow-hidden"
+      className="absolute bottom-2 right-2 h-8 flex items-center rounded-full bg-[#0a5ea8] text-white shadow-[0_1px_4px_rgba(0,0,0,0.16)] overflow-hidden"
       onClick={(e) => e.stopPropagation()}
     >
       <button
@@ -88,42 +88,44 @@ function ProductCard({
           onOpen();
         }
       }}
-      className="bg-white text-left cursor-pointer rounded-2xl border border-[#ededed] shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_14px_rgba(0,0,0,0.08)] transition-shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-costco-blue/40 overflow-hidden"
+      className="bg-white text-left cursor-pointer rounded-[16px] border border-[#e8e8e8] hover:shadow-[0_2px_10px_rgba(0,0,0,0.08)] transition-shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-costco-blue/40 overflow-hidden"
     >
       <div className="relative aspect-square bg-white">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={product.image}
           alt={`${product.brand} ${product.name}`}
-          className="absolute inset-0 w-full h-full object-contain p-3"
+          className="absolute inset-0 w-full h-full object-contain p-2"
         />
         {membersOnly && product.savings > 0 && (
-          <div className="absolute top-2 left-2 bg-costco-red text-white px-1.5 py-0.5 text-[10px] font-bold tracking-wide">
+          <div className="absolute top-2 left-2 bg-costco-red text-white px-1.5 py-[2px] text-[10px] font-bold tracking-wide rounded-[2px]">
             MEMBERS ONLY
           </div>
         )}
         <AddControl product={product} />
       </div>
-      <div className="px-3 pb-3 pt-1">
-        <div className="flex items-baseline gap-2 flex-wrap">
-          <span className="text-[18px] font-bold text-[#1a1a1a] tabular-nums leading-none">
+      <div className="px-2.5 pb-3 pt-1">
+        <div className="flex items-baseline gap-1.5 flex-wrap">
+          <span className="text-[20px] font-bold text-[#1a1a1a] tabular-nums leading-none">
             ${product.price.toFixed(2)}
           </span>
-          <span className="text-[13px] text-[#888] line-through tabular-nums">
+          <span className="text-[13px] text-[#8a8a8a] line-through tabular-nums">
             ${product.originalPrice.toFixed(2)}
           </span>
         </div>
         {product.savings > 0 && (
-          <p className="text-[12px] font-bold text-[#2e7d32] mt-1">
+          <p className="text-[13px] font-semibold text-[#188038] mt-0.5">
             Save ${product.savings.toFixed(2)}
           </p>
         )}
-        <p className="text-[12px] text-[#555] mt-1.5">{product.brand}</p>
-        <h3 className="text-[14px] font-normal text-[#1a1a1a] leading-snug mt-0.5 line-clamp-2 min-h-[2.5rem]">
+        <p className="text-[13px] text-[#555] mt-1.5 leading-snug">
+          {product.brand}
+        </p>
+        <h3 className="text-[14px] font-normal text-[#242424] leading-snug mt-0.5 line-clamp-2 min-h-[2.5rem]">
           {product.name}
         </h3>
-        <p className="text-[12px] text-[#777] capitalize">{product.category}</p>
-        <div className="mt-1.5">
+        <p className="text-[12px] text-[#6b6b6b] capitalize">{product.category}</p>
+        <div className="mt-1">
           <StarRating
             rating={product.rating}
             reviewCount={product.reviewCount}
@@ -159,13 +161,13 @@ export default function ProductGrid() {
   ].filter(Boolean);
 
   return (
-    <div className="bg-costco-bg p-5 lg:px-6 lg:py-5">
-      <div className="mb-4 flex items-end justify-between gap-3 flex-wrap">
+    <div className="bg-[#f6f7f8] p-4 lg:px-5 lg:py-4">
+      <div className="mb-3 flex items-end justify-between gap-3 flex-wrap">
         <div>
-          <h2 className="text-[22px] lg:text-[26px] font-bold text-[#1a1a1a] tracking-tight">
+          <h2 className="text-[22px] lg:text-[24px] font-bold text-[#1a1a1a] tracking-tight">
             {titleBits.length ? titleBits.join(" · ") : "Member Only Savings"}
           </h2>
-          <p className="text-[13px] text-[#666] mt-1">
+          <p className="text-[13px] text-[#666] mt-0.5">
             {loading
               ? "Searching…"
               : `${filtered.length} item${filtered.length === 1 ? "" : "s"}`}
@@ -210,7 +212,7 @@ export default function ProductGrid() {
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3">
           {(savings.length ? savings : filtered).map((product) => (
             <ProductCard
               key={product.id}
@@ -223,19 +225,24 @@ export default function ProductGrid() {
       )}
 
       {!department && !tag && !q.trim() && filtered.length > 0 && (
-        <div className="mt-8 bg-costco-blue px-6 py-7 text-white">
-          <div className="text-[11px] font-bold tracking-[0.16em] uppercase text-white/80 mb-2">
+        <div className="mt-6 bg-costco-blue px-5 py-5 text-white rounded-[3px]">
+          <div className="text-[11px] font-bold tracking-[0.14em] uppercase text-white/75 mb-1.5">
             Warehouse event
           </div>
-          <h3 className="text-[26px] font-bold tracking-tight mb-1">
+          <h3 className="text-[22px] font-bold tracking-tight mb-1">
             Buy More Save More
           </h3>
-          <p className="text-white/85 text-sm max-w-xl">
+          <p className="text-white/85 text-[13px] max-w-xl">
             Member deals on household staples this week. Ask Kirk to build the
             cart — or browse departments on the left.
           </p>
         </div>
       )}
+
+      <footer className="mt-8 pt-4 border-t border-[#e0e0e0] text-[11px] text-[#777] flex flex-wrap items-center justify-between gap-2">
+        <p>Same-Day Delivery powered by Instacart · Costco membership required</p>
+        <p>Prices and availability for 11217 Brooklyn</p>
+      </footer>
 
       {selected && (
         <ProductDetailModal

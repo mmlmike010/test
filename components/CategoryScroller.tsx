@@ -10,8 +10,8 @@ export default function CategoryScroller() {
   const search = useCatalogStore((s) => s.search);
 
   return (
-    <div className="bg-white border-b border-costco-border py-4">
-      <div className="flex gap-5 overflow-x-auto scrollbar-hide px-5">
+    <div className="bg-white border-b border-[#ececec]">
+      <div className="flex gap-4 overflow-x-auto scrollbar-hide px-4 py-3.5">
         {categories.map((category) => {
           const active = tag === category.id;
           return (
@@ -23,13 +23,13 @@ export default function CategoryScroller() {
                 setQuery("");
                 void search();
               }}
-              className="flex flex-col items-center gap-2 min-w-[92px] group"
+              className="flex flex-col items-center gap-1.5 min-w-[76px] group"
             >
               <div
-                className={`relative w-[84px] h-[84px] rounded-full overflow-hidden bg-white ring-2 ring-offset-2 ${
+                className={`relative w-[72px] h-[72px] rounded-full overflow-hidden bg-[#f3f3f3] ring-2 ring-offset-2 ${
                   active
                     ? "ring-costco-blue"
-                    : "ring-[#e6e6e6] group-hover:ring-[#c5d8ea]"
+                    : "ring-transparent group-hover:ring-[#c5d8ea]"
                 }`}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -40,7 +40,7 @@ export default function CategoryScroller() {
                 />
               </div>
               <span
-                className={`text-[12px] text-center leading-tight max-w-[96px] ${
+                className={`text-[12px] text-center leading-tight max-w-[84px] ${
                   active
                     ? "text-costco-blue font-bold"
                     : "text-[#333] font-medium"
