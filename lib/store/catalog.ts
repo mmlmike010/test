@@ -1,0 +1,50 @@
+"use client";
+
+import { create } from "zustand";
+import type { Product } from "@/lib/data/products";
+
+type CatalogState = {
+  q: string;
+  department: string | null;
+  tag: string | null;
+  results: Product[];
+  loading: boolean;
+  error: string | null;
+  setQuery: (q: string) => void;
+  setDepartment: (department: string | null) => void;
+  setTag: (tag: string | null) => void;
+  clearFilters: () => void;
+  search: () => Promise<void>;
+};
+
+export const useCatalogStore = create<CatalogState>((set, get) => ({
+  q: "",
+  department: null,
+  tag: null,
+  results: [],
+  loading: false,
+  error: null,
+  setQuery: (q) => set({ q }),
+  setDepartment: (department) => set({ department, tag: null }),
+  setTag: (tag) => set({ tag, department: null }),
+  clearFilters: () => set({ q: "", department: null, tag: null }),
+  search: async () => {
+    const { q, department, tag } = get();
+    set({ loading: true, error: null });
+    try {
+      const params = new URLSearchParams();
+      if (q.trim()) params.set("q", q.trim());
+      if (department) params.set("department", department);
+      if (tag) params.set("tag", tag);
+      const res = await fetch(`/api/products?${params.toString()}`);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Search failed");
+      set({ results: data.products || [], loading: false });
+    } catch (e) {
+      set({
+        loading: false,
+        error: e instanceof Error ? e.message : "Search failed",
+      });
+    }
+  },
+}));
