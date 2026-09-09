@@ -28,7 +28,7 @@ export default function CartDrawer() {
           <div>
             <h2 className="font-bold text-[#1a1a1a] text-[17px]">Cart</h2>
             <p className="text-[12px] text-[#666]">
-              {totalItems} item{totalItems === 1 ? "" : "s"} · Same-Day Brooklyn
+              {totalItems} item{totalItems === 1 ? "" : "s"} · Delivery 8:48–9:18pm
             </p>
           </div>
           <button
@@ -128,9 +128,9 @@ export default function CartDrawer() {
             <button
               type="button"
               onClick={closeCart}
-              className="flex-1 py-3 bg-costco-blue text-white rounded-[3px] font-bold hover:bg-costco-blue-hover text-[15px]"
+              className="flex-1 py-3 bg-costco-red text-white rounded-[3px] font-bold hover:bg-costco-red-hover text-[15px]"
             >
-              {items.length ? "Continue shopping" : "Browse products"}
+              {items.length ? "Go to checkout" : "Browse products"}
             </button>
           </div>
           <p className="text-[11px] text-[#888] text-center">

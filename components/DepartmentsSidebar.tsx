@@ -21,7 +21,9 @@ export default function DepartmentsSidebar({
     >
       <div className="py-3 px-2">
         <div className="flex items-center justify-between mb-1 px-2">
-          <h2 className="text-[14px] font-bold text-[#1a1a1a]">Departments</h2>
+          <h2 className="text-[13px] font-bold text-[#1a1a1a] tracking-wide uppercase">
+            Shop
+          </h2>
           {selected && (
             <button
               type="button"

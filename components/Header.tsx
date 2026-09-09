@@ -161,7 +161,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
 
           <button
             type="button"
-            className="hidden xl:flex text-left items-center gap-2 px-1.5 py-0.5 rounded-md hover:bg-[#f6f6f6]"
+            className="hidden lg:flex text-left items-center gap-2 px-1.5 py-0.5 rounded-md hover:bg-[#f6f6f6]"
           >
             <Clock className="w-[18px] h-[18px] text-costco-blue shrink-0" />
             <span>

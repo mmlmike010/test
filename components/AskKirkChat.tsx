@@ -492,20 +492,17 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
     <>
     <aside className="fixed inset-y-0 right-0 z-50 w-full max-w-[420px] lg:static lg:z-40 lg:w-[380px] xl:w-[420px] lg:max-w-none shrink-0 bg-white border-l border-[#e5e5e5] h-full flex flex-col shadow-[-8px_0_24px_rgba(0,0,0,0.08)]">
       <div className="shrink-0 border-b border-[#e5e5e5] bg-white">
-        <div className="h-[3px] bg-costco-red" />
-        <div className="px-3.5 py-2 flex items-center justify-between gap-2">
+        <div className="bg-costco-red px-3.5 py-2 flex items-center justify-between gap-2">
           <div className="flex items-center gap-2.5 min-w-0">
-            <KirkMark size={36} />
+            <span className="inline-flex items-center justify-center rounded-full bg-white shrink-0" style={{ width: 34, height: 34 }}>
+              <KirkMark size={30} />
+            </span>
             <div className="min-w-0">
-              <h2 className="text-[17px] font-black tracking-tight text-[#1a1a1a] leading-none">
-                <span className="text-costco-red">Ask</span> Kirk
+              <h2 className="text-[16px] font-black tracking-tight text-white leading-none">
+                Ask Kirk
               </h2>
-              <p className="text-[10px] font-bold tracking-[0.14em] text-costco-blue uppercase mt-[3px]">
+              <p className="text-[10px] font-bold tracking-[0.12em] text-white/80 uppercase mt-[3px]">
                 Kirkland Signature
-              </p>
-              <p className="flex items-center gap-1.5 text-[11px] text-[#188038] font-semibold mt-0.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#188038]" />
-                Available · Same-Day Brooklyn
               </p>
             </div>
           </div>
@@ -513,7 +510,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             <button
               type="button"
               onClick={handleReset}
-              className="px-2 py-1.5 text-[12px] font-bold text-[#333] hover:bg-[#f4f4f4] rounded-[3px] transition-colors flex items-center gap-1"
+              className="px-2 py-1.5 text-[12px] font-bold text-white hover:bg-white/15 rounded-[3px] transition-colors flex items-center gap-1"
               title="Reset"
             >
               <RefreshCw className="w-3.5 h-3.5" />
@@ -522,7 +519,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             <button
               type="button"
               onClick={onClose}
-              className="px-2 py-1.5 text-[12px] font-bold text-[#333] hover:bg-[#f4f4f4] rounded-[3px] transition-colors flex items-center gap-1"
+              className="px-2 py-1.5 text-[12px] font-bold text-white hover:bg-white/15 rounded-[3px] transition-colors flex items-center gap-1"
               title="Close"
             >
               <X className="w-3.5 h-3.5" />
@@ -530,11 +527,15 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             </button>
           </div>
         </div>
+        <p className="px-3.5 py-1.5 flex items-center gap-1.5 text-[11px] text-[#188038] font-semibold bg-[#f6f7f8] border-b border-[#ececec]">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#188038]" />
+          Available · Same-Day Brooklyn
+        </p>
         {kirkCartCount > 0 && (
           <button
             type="button"
             onClick={openCart}
-            className="mx-3.5 mb-2.5 w-[calc(100%-1.75rem)] flex items-center justify-between rounded-[3px] bg-[#e8f2fa] border border-[#c5d8ea] px-3 py-1.5 text-left"
+            className="mx-3.5 my-2 w-[calc(100%-1.75rem)] flex items-center justify-between rounded-[3px] bg-[#e8f2fa] border border-[#c5d8ea] px-3 py-1.5 text-left"
           >
             <span className="text-[12px] font-bold text-costco-blue">
               View cart · {kirkCartCount} item{kirkCartCount === 1 ? "" : "s"}

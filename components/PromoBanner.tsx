@@ -9,7 +9,7 @@ export default function PromoBanner() {
           <span className="font-bold">$10 monthly credit</span>
           <span className="text-white/75">
             {" "}
-            · Executive members · $150 min spend
+            · Executive members · $150 min · Prices higher than warehouse
           </span>
         </p>
       </div>

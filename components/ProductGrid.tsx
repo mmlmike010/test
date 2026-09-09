@@ -125,6 +125,9 @@ function ProductCard({
           {product.name}
         </h3>
         <p className="text-[12px] text-[#6b6b6b] capitalize">{product.category}</p>
+        <p className="text-[12px] text-[#188038] mt-0.5">
+          {product.inStock ? "Many in stock" : "Out of stock"}
+        </p>
         <div className="mt-1">
           <StarRating
             rating={product.rating}
