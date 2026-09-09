@@ -58,12 +58,11 @@ const art = {
     <text x="200" y="186" text-anchor="middle" fill="#333" font-family="Arial" font-size="9">TOMATO</text>
     <text x="200" y="200" text-anchor="middle" fill="#333" font-family="Arial" font-size="9">BASIL</text>
     <ellipse cx="200" cy="248" rx="18" ry="10" fill="#2e7d32"/>`),
-  5: svg(`<rect x="130" y="150" width="140" height="90" rx="16" fill="#f0e0c0"/>
-    <rect x="138" y="158" width="124" height="74" rx="12" fill="#e8c57a"/>
-    <ellipse cx="200" cy="195" rx="40" ry="18" fill="#d4a017"/>
-    <rect x="170" y="118" width="60" height="40" rx="4" fill="#005DAA"/>
-    <text x="200" y="142" text-anchor="middle" fill="#fff" font-family="Arial" font-size="11" font-weight="700">SABRA</text>
-    <rect x="130" y="236" width="140" height="12" rx="2" fill="#c9a227"/>`),
+  5: svg(`<rect x="105" y="155" width="190" height="120" rx="18" fill="#e8c57a"/>
+    <ellipse cx="200" cy="205" rx="58" ry="24" fill="#d4a017"/>
+    <rect x="155" y="100" width="90" height="56" rx="6" fill="#005DAA"/>
+    <text x="200" y="134" text-anchor="middle" fill="#fff" font-family="Arial" font-size="16" font-weight="700">SABRA</text>
+    <rect x="105" y="268" width="190" height="16" rx="3" fill="#c9a227"/>`),
   6: svg(`<rect x="140" y="120" width="120" height="170" rx="18" fill="#6d4c41"/>
     <rect x="150" y="132" width="100" height="80" rx="8" fill="#efebe9"/>
     <circle cx="175" cy="168" r="14" fill="#c9a66b"/>
@@ -79,11 +78,11 @@ const art = {
     <ellipse cx="235" cy="208" rx="17" ry="12" fill="#f4d03f"/>
     <ellipse cx="190" cy="240" rx="15" ry="10" fill="#1e8449"/>
     <text x="200" y="160" text-anchor="middle" fill="#fff" font-family="Arial" font-size="12" font-weight="700">5 BEAN</text>`),
-  8: svg(`<rect x="145" y="130" width="110" height="150" rx="12" fill="#fafafa"/>
-    <rect x="145" y="130" width="110" height="36" fill="#005DAA"/>
-    <text x="200" y="154" text-anchor="middle" fill="#fff" font-family="Arial" font-size="12" font-weight="700">CHOBANI</text>
-    <ellipse cx="200" cy="220" rx="38" ry="16" fill="#f5f0e6"/>
-    <rect x="145" y="268" width="110" height="12" fill="#e0e0e0"/>`),
+  8: svg(`<rect x="130" y="115" width="140" height="175" rx="14" fill="#eceff1"/>
+    <rect x="130" y="115" width="140" height="48" fill="#005DAA"/>
+    <text x="200" y="146" text-anchor="middle" fill="#fff" font-family="Arial" font-size="16" font-weight="700">CHOBANI</text>
+    <ellipse cx="200" cy="215" rx="48" ry="20" fill="#fff8e1"/>
+    <rect x="130" y="274" width="140" height="16" fill="#90a4ae"/>`),
   9: svg(`<ellipse cx="200" cy="230" rx="110" ry="36" fill="#c9a66b"/>
     <ellipse cx="200" cy="210" rx="108" ry="50" fill="#e8c99a"/>
     <path d="M110 210 Q200 160 290 210" fill="none" stroke="#b08950" stroke-width="3"/>

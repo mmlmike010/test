@@ -2,10 +2,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
   <rect width="400" height="400" fill="#ffffff"/>
   <g transform="translate(200 200) scale(1.55) translate(-200 -200)">
-  <rect x="145" y="130" width="110" height="150" rx="12" fill="#fafafa"/>
-    <rect x="145" y="130" width="110" height="36" fill="#005DAA"/>
-    <text x="200" y="154" text-anchor="middle" fill="#fff" font-family="Arial" font-size="12" font-weight="700">CHOBANI</text>
-    <ellipse cx="200" cy="220" rx="38" ry="16" fill="#f5f0e6"/>
-    <rect x="145" y="268" width="110" height="12" fill="#e0e0e0"/>
+  <rect x="130" y="115" width="140" height="175" rx="14" fill="#eceff1"/>
+    <rect x="130" y="115" width="140" height="48" fill="#005DAA"/>
+    <text x="200" y="146" text-anchor="middle" fill="#fff" font-family="Arial" font-size="16" font-weight="700">CHOBANI</text>
+    <ellipse cx="200" cy="215" rx="48" ry="20" fill="#fff8e1"/>
+    <rect x="130" y="274" width="140" height="16" fill="#90a4ae"/>
   </g>
 </svg>
