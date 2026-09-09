@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
-  <rect width="400" height="400" fill="#f7f7f7"/>
+  <rect width="400" height="400" fill="#ffffff"/>
+  <g transform="translate(200 200) scale(1.55) translate(-200 -200)">
   <rect x="175" y="68" width="50" height="30" rx="4" fill="#4a148c"/>
     <path d="M168 98 L232 98 L222 310 L178 310 Z" fill="#4a148c"/>
     <path d="M178 130 L222 130 L216 280 L184 280 Z" fill="#6a1b9a"/>
     <rect x="188" y="145" width="24" height="70" fill="#f5e6c8"/>
     <text x="200" y="175" text-anchor="middle" fill="#4a148c" font-family="Arial" font-size="8" font-weight="700">CAB</text>
     <text x="200" y="188" text-anchor="middle" fill="#4a148c" font-family="Arial" font-size="7">1.5L</text>
+  </g>
 </svg>

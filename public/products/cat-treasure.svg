@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
-  <rect width="400" height="400" fill="#f7f7f7"/>
-  <rect x="140" y="150" width="120" height="90" rx="8" fill="#f4d03f"/>
-    <rect x="140" y="150" width="120" height="22" fill="#E31837"/>
-    <rect x="190" y="130" width="20" height="40" fill="#c0392b"/>
-    <text x="200" y="280" text-anchor="middle" fill="#b7950b" font-family="Arial" font-size="14" font-weight="700">HUNT</text>
+  <rect width="400" height="400" fill="#f4d03f"/>
+  <rect x="120" y="150" width="160" height="120" rx="10" fill="#f9e79f"/>
+    <rect x="120" y="150" width="160" height="32" fill="#E31837"/>
+    <rect x="185" y="118" width="30" height="50" fill="#c0392b"/>
+    <text x="200" y="172" text-anchor="middle" fill="#fff" font-family="Arial" font-size="18" font-weight="700">HUNT</text>
 </svg>

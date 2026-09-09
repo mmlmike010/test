@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
-  <rect width="400" height="400" fill="#f7f7f7"/>
-  <circle cx="200" cy="200" r="70" fill="#005DAA"/>
-    <text x="200" y="212" text-anchor="middle" fill="#fff" font-family="Arial" font-size="28" font-weight="700">NEW</text>
+  <rect width="400" height="400" fill="#005DAA"/>
+  <text x="200" y="220" text-anchor="middle" fill="#fff" font-family="Arial" font-size="64" font-weight="700">NEW</text>
 </svg>

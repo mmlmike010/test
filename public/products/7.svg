@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
-  <rect width="400" height="400" fill="#f7f7f7"/>
+  <rect width="400" height="400" fill="#ffffff"/>
+  <g transform="translate(200 200) scale(1.55) translate(-200 -200)">
   <rect x="125" y="140" width="150" height="130" rx="12" fill="#fff"/>
     <rect x="125" y="140" width="150" height="28" rx="12" fill="#2e7d32"/>
     <rect x="125" y="156" width="150" height="12" fill="#2e7d32"/>
@@ -9,4 +10,5 @@
     <ellipse cx="235" cy="208" rx="17" ry="12" fill="#f4d03f"/>
     <ellipse cx="190" cy="240" rx="15" ry="10" fill="#1e8449"/>
     <text x="200" y="160" text-anchor="middle" fill="#fff" font-family="Arial" font-size="12" font-weight="700">5 BEAN</text>
+  </g>
 </svg>

@@ -7,7 +7,17 @@ mkdirSync(dir, { recursive: true });
 function svg(body) {
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
-  <rect width="400" height="400" fill="#f7f7f7"/>
+  <rect width="400" height="400" fill="#ffffff"/>
+  <g transform="translate(200 200) scale(1.55) translate(-200 -200)">
+  ${body}
+  </g>
+</svg>`;
+}
+
+function cat(bg, body) {
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="${bg}"/>
   ${body}
 </svg>`;
 }
@@ -183,29 +193,46 @@ const art = {
 };
 
 const cats = {
-  treasure: svg(`<rect x="140" y="150" width="120" height="90" rx="8" fill="#f4d03f"/>
-    <rect x="140" y="150" width="120" height="22" fill="#E31837"/>
-    <rect x="190" y="130" width="20" height="40" fill="#c0392b"/>
-    <text x="200" y="280" text-anchor="middle" fill="#b7950b" font-family="Arial" font-size="14" font-weight="700">HUNT</text>`),
-  trending: svg(`<polyline points="90,260 150,200 190,220 260,130 310,150" fill="none" stroke="#005DAA" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
-    <polygon points="300,110 330,170 270,155" fill="#005DAA"/>`),
-  new: svg(`<circle cx="200" cy="200" r="70" fill="#005DAA"/>
-    <text x="200" y="212" text-anchor="middle" fill="#fff" font-family="Arial" font-size="28" font-weight="700">NEW</text>`),
-  weekly: svg(`<circle cx="200" cy="200" r="72" fill="#E31837"/>
-    <text x="200" y="195" text-anchor="middle" fill="#fff" font-family="Arial" font-size="18" font-weight="700">SAVE</text>
-    <text x="200" y="222" text-anchor="middle" fill="#fff" font-family="Arial" font-size="16">THIS WEEK</text>`),
-  kirkland: svg(`<circle cx="200" cy="200" r="78" fill="#005DAA"/>
-    <text x="200" y="192" text-anchor="middle" fill="#fff" font-family="Arial" font-size="16" font-weight="700">KIRKLAND</text>
-    <text x="200" y="218" text-anchor="middle" fill="#bbdefb" font-family="Arial" font-size="12" letter-spacing="3">SIGNATURE</text>`),
-  recipes: svg(`<circle cx="200" cy="210" r="70" fill="#efebe9"/>
-    <circle cx="200" cy="210" r="48" fill="#fff"/>
-    <circle cx="200" cy="210" r="8" fill="#bdbdbd"/>
-    <rect x="192" y="120" width="16" height="40" fill="#90a4ae"/>`),
-  catering: svg(`<ellipse cx="200" cy="230" rx="110" ry="28" fill="#b0bec5"/>
-    <ellipse cx="200" cy="210" rx="100" ry="50" fill="#eceff1"/>
-    <circle cx="160" cy="205" r="14" fill="#e74c3c"/>
-    <circle cx="200" cy="198" r="12" fill="#27ae60"/>
-    <circle cx="238" cy="208" r="13" fill="#f4d03f"/>`),
+  treasure: cat(
+    "#f4d03f",
+    `<rect x="120" y="150" width="160" height="120" rx="10" fill="#f9e79f"/>
+    <rect x="120" y="150" width="160" height="32" fill="#E31837"/>
+    <rect x="185" y="118" width="30" height="50" fill="#c0392b"/>
+    <text x="200" y="172" text-anchor="middle" fill="#fff" font-family="Arial" font-size="18" font-weight="700">HUNT</text>`
+  ),
+  trending: cat(
+    "#e8f2fa",
+    `<polyline points="70,280 150,190 195,220 280,100 340,130" fill="none" stroke="#005DAA" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+    <polygon points="320,70 360,150 280,130" fill="#005DAA"/>`
+  ),
+  new: cat(
+    "#005DAA",
+    `<text x="200" y="220" text-anchor="middle" fill="#fff" font-family="Arial" font-size="64" font-weight="700">NEW</text>`
+  ),
+  weekly: cat(
+    "#E31837",
+    `<text x="200" y="185" text-anchor="middle" fill="#fff" font-family="Arial" font-size="36" font-weight="700">SAVE</text>
+    <text x="200" y="230" text-anchor="middle" fill="#fff" font-family="Arial" font-size="22">THIS WEEK</text>`
+  ),
+  kirkland: cat(
+    "#005DAA",
+    `<text x="200" y="185" text-anchor="middle" fill="#fff" font-family="Arial" font-size="28" font-weight="700">KIRKLAND</text>
+    <text x="200" y="225" text-anchor="middle" fill="#bbdefb" font-family="Arial" font-size="16" letter-spacing="4">SIGNATURE</text>`
+  ),
+  recipes: cat(
+    "#efebe9",
+    `<circle cx="200" cy="220" r="90" fill="#fff"/>
+    <circle cx="200" cy="220" r="14" fill="#9e9e9e"/>
+    <rect x="186" y="70" width="28" height="70" fill="#78909c"/>`
+  ),
+  catering: cat(
+    "#eceff1",
+    `<ellipse cx="200" cy="250" rx="140" ry="36" fill="#b0bec5"/>
+    <ellipse cx="200" cy="215" rx="130" ry="70" fill="#fff"/>
+    <circle cx="145" cy="210" r="22" fill="#e74c3c"/>
+    <circle cx="200" cy="198" r="20" fill="#27ae60"/>
+    <circle cx="255" cy="212" r="22" fill="#f4d03f"/>`
+  ),
 };
 
 for (const [id, markup] of Object.entries(art)) {

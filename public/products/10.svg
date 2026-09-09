@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
-  <rect width="400" height="400" fill="#f7f7f7"/>
+  <rect width="400" height="400" fill="#ffffff"/>
+  <g transform="translate(200 200) scale(1.55) translate(-200 -200)">
   <rect x="175" y="70" width="50" height="36" rx="6" fill="#3e2723"/>
     <rect x="168" y="106" width="64" height="210" rx="8" fill="#1b5e20"/>
     <rect x="178" y="130" width="44" height="120" fill="#f5e6c8"/>
     <text x="200" y="165" text-anchor="middle" fill="#1b5e20" font-family="Arial" font-size="9" font-weight="700">KIRKLAND</text>
     <text x="200" y="182" text-anchor="middle" fill="#333" font-family="Arial" font-size="8">OLIVE OIL</text>
     <ellipse cx="200" cy="230" rx="12" ry="20" fill="#9ccc65" opacity=".7"/>
+  </g>
 </svg>

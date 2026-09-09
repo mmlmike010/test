@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
-  <rect width="400" height="400" fill="#f7f7f7"/>
+  <rect width="400" height="400" fill="#ffffff"/>
+  <g transform="translate(200 200) scale(1.55) translate(-200 -200)">
   <rect x="115" y="120" width="170" height="160" rx="10" fill="#fff8e1"/>
     <rect x="115" y="120" width="170" height="32" fill="#f9a825"/>
     <text x="200" y="142" text-anchor="middle" fill="#fff" font-family="Arial" font-size="13" font-weight="700">EGGS 24 CT</text>
@@ -9,4 +10,5 @@
     <ellipse cx="240" cy="200" rx="16" ry="22" fill="#fffde7" stroke="#f0e68c" stroke-width="2"/>
     <ellipse cx="180" cy="240" rx="16" ry="22" fill="#fffde7" stroke="#f0e68c" stroke-width="2"/>
     <ellipse cx="220" cy="240" rx="16" ry="22" fill="#fffde7" stroke="#f0e68c" stroke-width="2"/>
+  </g>
 </svg>

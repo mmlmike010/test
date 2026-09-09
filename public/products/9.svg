@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
-  <rect width="400" height="400" fill="#f7f7f7"/>
+  <rect width="400" height="400" fill="#ffffff"/>
+  <g transform="translate(200 200) scale(1.55) translate(-200 -200)">
   <ellipse cx="200" cy="230" rx="110" ry="36" fill="#c9a66b"/>
     <ellipse cx="200" cy="210" rx="108" ry="50" fill="#e8c99a"/>
     <path d="M110 210 Q200 160 290 210" fill="none" stroke="#b08950" stroke-width="3"/>
@@ -8,4 +9,5 @@
     <circle cx="160" cy="200" r="4" fill="#5d4037"/>
     <circle cx="230" cy="195" r="3" fill="#5d4037"/>
     <circle cx="200" cy="215" r="3" fill="#6d4c41"/>
+  </g>
 </svg>

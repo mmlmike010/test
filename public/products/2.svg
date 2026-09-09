@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
-  <rect width="400" height="400" fill="#f7f7f7"/>
+  <rect width="400" height="400" fill="#ffffff"/>
+  <g transform="translate(200 200) scale(1.55) translate(-200 -200)">
   <ellipse cx="200" cy="255" rx="125" ry="55" fill="#d8b56a"/>
     <ellipse cx="155" cy="230" rx="28" ry="18" fill="#c4a062" transform="rotate(-20 155 230)"/>
     <ellipse cx="200" cy="220" rx="26" ry="16" fill="#8b5a2b"/>
@@ -11,4 +12,5 @@
     <rect x="150" y="118" width="100" height="64" rx="6" fill="#E31837"/>
     <text x="200" y="148" text-anchor="middle" fill="#fff" font-family="Arial" font-size="13" font-weight="700">KIRKLAND</text>
     <text x="200" y="168" text-anchor="middle" fill="#fff" font-family="Arial" font-size="12">MIXED NUTS</text>
+  </g>
 </svg>

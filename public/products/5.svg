@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
-  <rect width="400" height="400" fill="#f7f7f7"/>
+  <rect width="400" height="400" fill="#ffffff"/>
+  <g transform="translate(200 200) scale(1.55) translate(-200 -200)">
   <rect x="130" y="150" width="140" height="90" rx="16" fill="#f0e0c0"/>
     <rect x="138" y="158" width="124" height="74" rx="12" fill="#e8c57a"/>
     <ellipse cx="200" cy="195" rx="40" ry="18" fill="#d4a017"/>
     <rect x="170" y="118" width="60" height="40" rx="4" fill="#005DAA"/>
     <text x="200" y="142" text-anchor="middle" fill="#fff" font-family="Arial" font-size="11" font-weight="700">SABRA</text>
     <rect x="130" y="236" width="140" height="12" rx="2" fill="#c9a227"/>
+  </g>
 </svg>

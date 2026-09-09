@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
-  <rect width="400" height="400" fill="#f7f7f7"/>
+  <rect width="400" height="400" fill="#ffffff"/>
+  <g transform="translate(200 200) scale(1.55) translate(-200 -200)">
   <rect x="120" y="110" width="70" height="100" fill="#1565c0"/>
     <rect x="128" y="118" width="54" height="14" fill="#bbdefb"/>
     <rect x="195" y="120" width="70" height="100" fill="#c62828"/>
@@ -8,4 +9,5 @@
     <rect x="155" y="180" width="70" height="100" fill="#2e7d32"/>
     <rect x="163" y="188" width="54" height="14" fill="#c8e6c9"/>
     <text x="200" y="320" text-anchor="middle" fill="#455a64" font-family="Arial" font-size="13" font-weight="700">HARDCOVER MIX</text>
+  </g>
 </svg>
