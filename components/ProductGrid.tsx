@@ -70,11 +70,9 @@ function AddControl({ product }: { product: Product }) {
 
 function ProductCard({
   product,
-  membersOnly,
   onOpen,
 }: {
   product: Product;
-  membersOnly?: boolean;
   onOpen: () => void;
 }) {
   return (
@@ -97,9 +95,9 @@ function ProductCard({
           alt={`${product.brand} ${product.name}`}
           className="absolute inset-0 w-full h-full object-contain p-2"
         />
-        {membersOnly && product.savings > 0 && (
-          <div className="absolute top-2 left-2 bg-costco-red text-white px-1.5 py-[2px] text-[10px] font-bold tracking-wide rounded-[2px]">
-            MEMBERS ONLY
+        {product.savings > 0 && (
+          <div className="absolute top-2 left-2 bg-costco-red text-white px-1.5 py-[3px] text-[11px] font-bold rounded-[4px] leading-none">
+            ${product.savings.toFixed(2)} off
           </div>
         )}
         <AddControl product={product} />
@@ -124,7 +122,6 @@ function ProductCard({
         <h3 className="text-[14px] font-normal text-[#242424] leading-snug mt-0.5 line-clamp-2 min-h-[2.5rem]">
           {product.name}
         </h3>
-        <p className="text-[12px] text-[#6b6b6b] capitalize">{product.category}</p>
         <p className="text-[12px] text-[#188038] mt-0.5">
           {product.inStock ? "Many in stock" : "Out of stock"}
         </p>
@@ -168,13 +165,13 @@ export default function ProductGrid() {
       <div className="mb-3 flex items-end justify-between gap-3 flex-wrap">
         <div>
           <h2 className="text-[22px] lg:text-[24px] font-bold text-[#1a1a1a] tracking-tight">
-            {titleBits.length ? titleBits.join(" · ") : "Member Only Savings"}
+            {titleBits.length ? titleBits.join(" · ") : "Weekly Savings"}
           </h2>
           <p className="text-[13px] text-[#666] mt-0.5">
             {loading
               ? "Searching…"
               : `${filtered.length} item${filtered.length === 1 ? "" : "s"}`}
-            {department || tag || q ? "" : " · 8/24/26–9/20/26"}
+            {department || tag || q ? "" : " · Prices higher than warehouse"}
           </p>
         </div>
         {(department || tag || q) && (
@@ -220,7 +217,6 @@ export default function ProductGrid() {
             <ProductCard
               key={product.id}
               product={product}
-              membersOnly={product.savings > 0}
               onOpen={() => setSelected(product)}
             />
           ))}
@@ -228,16 +224,21 @@ export default function ProductGrid() {
       )}
 
       {!department && !tag && !q.trim() && filtered.length > 0 && (
-        <div className="mt-6 bg-costco-blue px-5 py-5 text-white rounded-[3px]">
-          <div className="text-[11px] font-bold tracking-[0.14em] uppercase text-white/75 mb-1.5">
-            Warehouse event
+        <div className="mt-6 bg-white border border-[#e8e8e8] rounded-[16px] px-5 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div>
+            <p className="text-[11px] font-bold tracking-[0.12em] uppercase text-costco-blue mb-1">
+              Same-Day · Brooklyn
+            </p>
+            <h3 className="text-[20px] font-bold tracking-tight text-[#1a1a1a]">
+              Costco favorites, delivered in as fast as 1 hour
+            </h3>
+            <p className="text-[#555] text-[13px] mt-1 max-w-xl">
+              Ask Kirk to build a cart from this week’s savings, or shop
+              departments on the left.
+            </p>
           </div>
-          <h3 className="text-[22px] font-bold tracking-tight mb-1">
-            Buy More Save More
-          </h3>
-          <p className="text-white/85 text-[13px] max-w-xl">
-            Member deals on household staples this week. Ask Kirk to build the
-            cart — or browse departments on the left.
+          <p className="text-[12px] text-[#666] shrink-0">
+            $10 monthly credit · Executive · $150 min
           </p>
         </div>
       )}

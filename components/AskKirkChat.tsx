@@ -529,7 +529,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
         </div>
         <p className="px-3.5 py-1.5 flex items-center gap-1.5 text-[11px] text-[#188038] font-semibold bg-[#f6f7f8] border-b border-[#ececec]">
           <span className="w-1.5 h-1.5 rounded-full bg-[#188038]" />
-          Available · Same-Day Brooklyn
+          Available now · Delivery 8:48–9:18pm · 11217
         </p>
         {kirkCartCount > 0 && (
           <button

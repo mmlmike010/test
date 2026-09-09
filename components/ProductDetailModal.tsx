@@ -54,13 +54,18 @@ export default function ProductDetailModal({
         </div>
 
         <div className="grid sm:grid-cols-2 gap-0">
-          <div className="relative aspect-square bg-[#f6f6f6] border-b sm:border-b-0 sm:border-r border-[#eee]">
+          <div className="relative aspect-square bg-white border-b sm:border-b-0 sm:border-r border-[#eee]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={product.image}
               alt={`${product.brand} ${product.name}`}
               className="absolute inset-0 w-full h-full object-contain p-6"
             />
+            {product.savings > 0 && (
+              <div className="absolute top-3 left-3 bg-costco-red text-white px-2 py-1 text-[12px] font-bold rounded-[4px]">
+                ${product.savings.toFixed(2)} off
+              </div>
+            )}
           </div>
           <div className="p-5 flex flex-col">
             <p className="text-[13px] text-[#555]">{product.brand}</p>
@@ -88,9 +93,12 @@ export default function ProductDetailModal({
                 Save ${product.savings.toFixed(2)}
               </p>
             )}
-            <p className="text-[12px] text-[#666] mt-2 capitalize">
-              {product.department} · {product.category}
-              {product.inStock ? " · In stock" : " · Out of stock"}
+            <p className="text-[12px] text-[#188038] mt-2">
+              {product.inStock ? "Many in stock" : "Out of stock"}
+              <span className="text-[#666]">
+                {" "}
+                · {product.department}
+              </span>
             </p>
 
             <button

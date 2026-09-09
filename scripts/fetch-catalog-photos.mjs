@@ -16,10 +16,13 @@ const tiles = {
   5: `${CF}/large_a3b82731-4651-476a-a0c3-01c97a17c2c6.png`, // Sabra Classic Hummus
   8: `${CF}/large_1d261a52-dd8e-43be-bb72-139f7dd89094.png`, // Chobani Greek yogurt
   10: `${CF}/large_83cdd023-627e-4ee5-8d7e-6d23e8a79fba.jpeg`, // Kirkland organic EVOO 2L
+  11: `${CF}/large_a21841e9-2cb1-46d8-8d2e-83912a9885b3.jpeg`, // Kirkland organic quinoa 4.5 lb
   12: `${CF}/large_adf25ab7-12db-4804-b050-bcb09de56385.jpeg`, // Kirkland trail mix 4 lb
   14: `${CF}/large_a2cd3f74-f69f-4f72-af14-0f653d8c7e6b.webp`, // Kirkland baby wipes
   15: `${CF}/large_2b963e60-c6a3-4037-8099-6130912fc4c9.jpeg`, // Kirkland bakery croissants 12ct
+  16: `${CF}/large_c15562b6-ac05-4b15-8df9-594e7b216767.jpeg`, // Kirkland Alexander Valley Cabernet
   18: `${CF}/large_a4a5dbcb-d19b-42d0-b34e-eccccfedb1cd.jpeg`, // GoPro HERO11 bundle
+  19: `${CF}/large_dfd7fdff-94b2-41fd-a116-155517311bef.jpeg`, // Kirkland Ultra Clean laundry pacs
   20: `${CF}/large_029a4c28-4763-49fe-b0ee-0e9d1f402fb1.jpeg`, // Kirkland merino crew socks
   21: `${CF}/large_2bacbaac-2b3d-4412-baad-d7bdb17b6080.jpeg`, // Kirkland Colombian 3 lb
   23: `${CF}/large_f2a0a010-0b6e-4d94-bd34-c39fa04626b2.jpeg`, // Kirkland organic eggs 24ct

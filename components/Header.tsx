@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useCartStore } from "@/lib/store/cart";
 import { useCatalogStore } from "@/lib/store/catalog";
-import { ChevronDown, Clock, Search, ShoppingCart, User, X } from "lucide-react";
+import { Clock, Search, ShoppingCart, User, X } from "lucide-react";
 import CostcoLogo from "@/components/CostcoLogo";
 import KirkMark from "@/components/KirkMark";
 
@@ -56,49 +56,42 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
                 </span>
               </span>
             </button>
-            <nav className="hidden lg:flex items-center gap-4 text-[13px]">
+            <nav className="hidden lg:flex items-center gap-5 text-[14px]">
               <a
                 href="#"
                 className="text-costco-blue font-bold border-b-[3px] border-costco-blue py-3"
               >
-                Same-Day
+                Shop
               </a>
               <a href="#" className="text-[#333] hover:text-costco-blue py-3">
-                Costco Warehouse
+                Lists
               </a>
               <a href="#" className="text-[#333] hover:text-costco-blue py-3">
-                Costco Spirits
-              </a>
-              <a
-                href="#"
-                className="text-[#333] hover:text-costco-blue py-3 inline-flex items-center gap-0.5"
-              >
-                More
-                <ChevronDown className="w-3.5 h-3.5" />
+                Recipes
               </a>
             </nav>
           </div>
           <div className="flex items-center gap-2 shrink-0">
-            <button
-              type="button"
-              className="hidden sm:inline-flex px-2.5 py-1.5 bg-costco-blue text-white rounded-[3px] text-[11px] font-bold hover:bg-costco-blue-hover"
+            <a
+              href="#"
+              className="hidden md:inline text-[13px] text-costco-blue font-semibold hover:underline"
             >
-              Back to Costco.com
-            </button>
-            <button
-              type="button"
-              className="hidden md:inline-flex px-2.5 py-1.5 bg-costco-blue text-white rounded-[3px] text-[11px] font-bold hover:bg-costco-blue-hover"
+              Pricing & fees
+            </a>
+            <a
+              href="#"
+              className="hidden sm:inline text-[13px] text-costco-blue font-semibold hover:underline"
             >
-              Pricing & Return Policy
-            </button>
+              Join Costco Today
+            </a>
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 text-[#333] text-[12px] font-semibold hover:text-costco-blue"
+              className="inline-flex items-center gap-1.5 text-[#333] text-[13px] font-semibold hover:text-costco-blue"
             >
               <span className="w-7 h-7 rounded-full border border-[#c8c8c8] bg-white flex items-center justify-center">
                 <User className="w-4 h-4" />
               </span>
-              <span className="hidden sm:inline">Sign In / Register</span>
+              <span className="hidden sm:inline">Sign in</span>
             </button>
           </div>
         </div>
