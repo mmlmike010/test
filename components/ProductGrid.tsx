@@ -4,52 +4,68 @@ import { useEffect, useState } from "react";
 import type { Product } from "@/lib/data/products";
 import { useCartStore } from "@/lib/store/cart";
 import { useCatalogStore } from "@/lib/store/catalog";
-import { Check, Plus } from "lucide-react";
+import { Check, Minus, Plus } from "lucide-react";
 import Image from "next/image";
 import StarRating from "@/components/StarRating";
 import ProductDetailModal from "@/components/ProductDetailModal";
 
-function AddButton({
-  productId,
-  onAdd,
-}: {
-  productId: string;
-  onAdd: () => void;
-}) {
+function AddControl({ product }: { product: Product }) {
   const qty = useCartStore(
-    (s) => s.items.find((i) => i.product.id === productId)?.quantity || 0
+    (s) => s.items.find((i) => i.product.id === product.id)?.quantity || 0
   );
+  const addItem = useCartStore((s) => s.addItem);
+  const updateQuantity = useCartStore((s) => s.updateQuantity);
   const [justAdded, setJustAdded] = useState(false);
 
-  const handle = (e: React.MouseEvent) => {
+  const add = (e: React.MouseEvent) => {
     e.stopPropagation();
-    onAdd();
+    addItem(product);
     setJustAdded(true);
-    window.setTimeout(() => setJustAdded(false), 1200);
+    window.setTimeout(() => setJustAdded(false), 900);
   };
 
+  if (qty === 0) {
+    return (
+      <button
+        type="button"
+        onClick={add}
+        aria-label={`Add ${product.name}`}
+        className={`absolute bottom-2 right-2 w-9 h-9 rounded-full bg-white border-2 shadow-sm flex items-center justify-center ${
+          justAdded
+            ? "border-green-600 text-green-600"
+            : "border-costco-blue text-costco-blue hover:bg-[#e8f2fa]"
+        }`}
+      >
+        {justAdded ? <Check className="w-4 h-4" /> : <Plus className="w-5 h-5" />}
+      </button>
+    );
+  }
+
   return (
-    <button
-      type="button"
-      onClick={handle}
-      className={`w-full py-2 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2 ${
-        justAdded
-          ? "bg-green-600 text-white"
-          : "bg-[#0060A9] text-white hover:bg-blue-800"
-      }`}
+    <div
+      className="absolute bottom-2 right-2 h-9 flex items-center rounded-full bg-costco-blue text-white shadow-sm overflow-hidden"
+      onClick={(e) => e.stopPropagation()}
     >
-      {justAdded ? (
-        <>
-          <Check className="w-4 h-4" />
-          Added{qty > 0 ? ` · ${qty}` : ""}
-        </>
-      ) : (
-        <>
-          <Plus className="w-4 h-4" />
-          {qty > 0 ? `Add · ${qty} in cart` : "Add"}
-        </>
-      )}
-    </button>
+      <button
+        type="button"
+        className="w-8 h-9 flex items-center justify-center hover:bg-costco-blue-hover"
+        onClick={() => updateQuantity(product.id, qty - 1)}
+        aria-label="Decrease quantity"
+      >
+        <Minus className="w-3.5 h-3.5" />
+      </button>
+      <span className="min-w-[1.25rem] text-center text-sm font-bold tabular-nums">
+        {qty}
+      </span>
+      <button
+        type="button"
+        className="w-8 h-9 flex items-center justify-center hover:bg-costco-blue-hover"
+        onClick={add}
+        aria-label="Increase quantity"
+      >
+        <Plus className="w-3.5 h-3.5" />
+      </button>
+    </div>
   );
 }
 
@@ -62,8 +78,6 @@ function ProductCard({
   membersOnly?: boolean;
   onOpen: () => void;
 }) {
-  const addItem = useCartStore((s) => s.addItem);
-
   return (
     <div
       role="button"
@@ -75,53 +89,48 @@ function ProductCard({
           onOpen();
         }
       }}
-      className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden border border-gray-100 text-left cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0060A9]/40"
+      className="bg-white text-left cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-costco-blue/40"
     >
-      <div className="relative aspect-square bg-gray-100">
+      <div className="relative aspect-square bg-white border border-[#eee]">
         <Image
           src={product.image}
           alt={`${product.brand} ${product.name}`}
           fill
-          className="object-cover"
+          className="object-contain p-3"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 20vw"
         />
         {membersOnly && product.savings > 0 && (
-          <div className="absolute top-2 left-2 bg-[#CC0000] text-white px-2 py-1 rounded text-[10px] font-bold tracking-wide">
+          <div className="absolute top-2 left-2 bg-costco-red text-white px-1.5 py-0.5 text-[10px] font-bold tracking-wide">
             MEMBERS ONLY
           </div>
         )}
+        <AddControl product={product} />
       </div>
-      <div className="p-3.5">
-        <div className="mb-2">
-          <div className="flex items-baseline gap-2 mb-1 flex-wrap">
-            <span className="text-xl font-bold text-gray-900">
-              ${product.price.toFixed(2)}
-            </span>
-            <span className="text-sm text-gray-400 line-through">
-              ${product.originalPrice.toFixed(2)}
-            </span>
-          </div>
-          <div className="inline-block bg-green-100 text-green-800 px-2 py-0.5 rounded text-[11px] font-semibold">
-            ${product.savings.toFixed(2)} OFF
-          </div>
+      <div className="pt-2.5 pb-1 px-0.5">
+        <div className="flex items-baseline gap-2 flex-wrap">
+          <span className="text-[20px] font-bold text-[#1a1a1a] tabular-nums leading-none">
+            ${product.price.toFixed(2)}
+          </span>
+          <span className="text-[13px] text-[#888] line-through tabular-nums">
+            ${product.originalPrice.toFixed(2)}
+          </span>
         </div>
-        <p className="text-[11px] font-medium text-[#0060A9] mb-0.5">
-          {product.brand}
-        </p>
-        <h3 className="text-sm font-semibold text-gray-900 mb-1 line-clamp-2 min-h-[2.5rem]">
+        {product.savings > 0 && (
+          <p className="text-[12px] font-bold text-[#2e7d32] mt-1">
+            Save ${product.savings.toFixed(2)}
+          </p>
+        )}
+        <p className="text-[12px] text-[#555] mt-1.5">{product.brand}</p>
+        <h3 className="text-[14px] text-[#1a1a1a] leading-snug mt-0.5 line-clamp-2 min-h-[2.5rem]">
           {product.name}
         </h3>
-        <div className="mb-2">
+        <div className="mt-1.5">
           <StarRating
             rating={product.rating}
             reviewCount={product.reviewCount}
             size="sm"
           />
         </div>
-        <p className="text-xs text-gray-500 mb-3 capitalize">
-          {product.department} · {product.category}
-        </p>
-        <AddButton productId={product.id} onAdd={() => addItem(product)} />
       </div>
     </div>
   );
@@ -151,27 +160,23 @@ export default function ProductGrid() {
   ].filter(Boolean);
 
   return (
-    <div className="bg-gray-50 p-5 lg:p-6">
-      <div className="mb-5 flex items-center justify-between gap-3 flex-wrap">
+    <div className="bg-costco-bg p-5 lg:px-6 lg:py-5">
+      <div className="mb-4 flex items-end justify-between gap-3 flex-wrap">
         <div>
-          <h2 className="text-xl lg:text-2xl font-bold text-gray-900">
-            {titleBits.length
-              ? titleBits.join(" · ")
-              : "Member Only Savings"}
+          <h2 className="text-[22px] lg:text-[26px] font-bold text-[#1a1a1a] tracking-tight">
+            {titleBits.length ? titleBits.join(" · ") : "Member Only Savings"}
           </h2>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-[13px] text-[#666] mt-1">
             {loading
               ? "Searching…"
               : `${filtered.length} item${filtered.length === 1 ? "" : "s"}`}
-            {department || tag || q
-              ? ""
-              : " · 8/24/26-9/20/26"}
+            {department || tag || q ? "" : " · 8/24/26–9/20/26"}
           </p>
         </div>
         {(department || tag || q) && (
           <button
             type="button"
-            className="text-sm text-[#0060A9] font-semibold hover:underline"
+            className="text-sm text-costco-blue font-bold hover:underline"
             onClick={() => {
               clearFilters();
               void search();
@@ -183,20 +188,20 @@ export default function ProductGrid() {
       </div>
 
       {error && (
-        <div className="mb-4 rounded-lg border border-red-200 bg-red-50 text-red-700 px-3 py-2 text-sm">
+        <div className="mb-4 border border-red-200 bg-red-50 text-red-700 px-3 py-2 text-sm">
           {error}
         </div>
       )}
 
       {!loading && filtered.length === 0 ? (
-        <div className="bg-white border border-dashed border-gray-300 rounded-xl p-10 text-center">
-          <p className="text-gray-900 font-semibold mb-1">No products found</p>
-          <p className="text-sm text-gray-500 mb-4">
+        <div className="bg-white border border-dashed border-[#ccc] p-10 text-center">
+          <p className="text-[#1a1a1a] font-bold mb-1">No products found</p>
+          <p className="text-sm text-[#666] mb-4">
             Try another department or a broader search.
           </p>
           <button
             type="button"
-            className="px-4 py-2 rounded-full bg-[#0060A9] text-white text-sm font-semibold"
+            className="px-5 py-2 bg-costco-blue text-white text-sm font-bold rounded-[3px]"
             onClick={() => {
               clearFilters();
               void search();
@@ -206,7 +211,7 @@ export default function ProductGrid() {
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-x-5 gap-y-8">
           {(savings.length ? savings : filtered).map((product) => (
             <ProductCard
               key={product.id}
@@ -219,18 +224,18 @@ export default function ProductGrid() {
       )}
 
       {!department && !tag && !q.trim() && filtered.length > 0 && (
-        <>
-          <div className="mt-6 bg-gradient-to-r from-[#0060A9] to-blue-700 rounded-xl p-6 text-white">
-            <div className="text-xs font-semibold mb-2 tracking-wide opacity-90">
-              WAREHOUSE EVENT
-            </div>
-            <h3 className="text-2xl font-bold mb-2">Buy More Save More</h3>
-            <p className="text-blue-100 text-sm">
-              Member deals on household staples this week. Ask Kirk to build the
-              cart — or browse departments on the left.
-            </p>
+        <div className="mt-8 bg-costco-blue px-6 py-7 text-white">
+          <div className="text-[11px] font-bold tracking-[0.16em] uppercase text-white/80 mb-2">
+            Warehouse event
           </div>
-        </>
+          <h3 className="text-[26px] font-bold tracking-tight mb-1">
+            Buy More Save More
+          </h3>
+          <p className="text-white/85 text-sm max-w-xl">
+            Member deals on household staples this week. Ask Kirk to build the
+            cart — or browse departments on the left.
+          </p>
+        </div>
       )}
 
       {selected && (

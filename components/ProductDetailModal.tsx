@@ -1,12 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { X } from "lucide-react";
+import { X, Check, Plus, Star } from "lucide-react";
 import type { Product } from "@/lib/data/products";
 import { useCartStore } from "@/lib/store/cart";
 import StarRating from "@/components/StarRating";
 import { useState } from "react";
-import { Check, Plus, Star } from "lucide-react";
 
 export default function ProductDetailModal({
   product,
@@ -31,7 +30,7 @@ export default function ProductDetailModal({
     <div className="fixed inset-0 z-[70] flex items-end sm:items-center justify-center">
       <button
         type="button"
-        className="absolute inset-0 bg-black/40"
+        className="absolute inset-0 bg-black/45"
         aria-label="Close product"
         onClick={onClose}
       />
@@ -39,10 +38,10 @@ export default function ProductDetailModal({
         role="dialog"
         aria-modal="true"
         aria-label={`${product.brand} ${product.name}`}
-        className="relative w-full sm:max-w-2xl max-h-[92vh] overflow-y-auto bg-white sm:rounded-2xl shadow-2xl"
+        className="relative w-full sm:max-w-2xl max-h-[92vh] overflow-y-auto bg-white shadow-2xl"
       >
-        <div className="sticky top-0 z-10 flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-white/95 backdrop-blur">
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+        <div className="sticky top-0 z-10 flex items-center justify-between px-4 py-3 border-b border-costco-border bg-white">
+          <p className="text-[11px] font-bold text-[#666] uppercase tracking-[0.14em]">
             Item details
           </p>
           <button
@@ -51,23 +50,23 @@ export default function ProductDetailModal({
             className="p-2 rounded-full hover:bg-gray-100"
             aria-label="Close"
           >
-            <X className="w-5 h-5 text-gray-600" />
+            <X className="w-5 h-5 text-[#555]" />
           </button>
         </div>
 
         <div className="grid sm:grid-cols-2 gap-0">
-          <div className="relative aspect-square bg-gray-50 border-b sm:border-b-0 sm:border-r border-gray-100">
+          <div className="relative aspect-square bg-white border-b sm:border-b-0 sm:border-r border-[#eee]">
             <Image
               src={product.image}
               alt={`${product.brand} ${product.name}`}
               fill
-              className="object-cover"
+              className="object-contain p-6"
               sizes="(max-width: 640px) 100vw, 320px"
             />
           </div>
           <div className="p-5 flex flex-col">
-            <p className="text-sm font-medium text-[#0060A9]">{product.brand}</p>
-            <h2 className="text-xl font-bold text-gray-900 mt-0.5 leading-snug">
+            <p className="text-[13px] text-[#555]">{product.brand}</p>
+            <h2 className="text-[22px] font-bold text-[#1a1a1a] mt-0.5 leading-snug">
               {product.name}
             </h2>
             <div className="mt-2">
@@ -79,19 +78,19 @@ export default function ProductDetailModal({
             </div>
 
             <div className="mt-4 flex items-baseline gap-2 flex-wrap">
-              <span className="text-2xl font-bold text-gray-900">
+              <span className="text-[28px] font-bold text-[#1a1a1a] tabular-nums leading-none">
                 ${product.price.toFixed(2)}
               </span>
-              <span className="text-sm text-gray-400 line-through">
+              <span className="text-sm text-[#888] line-through tabular-nums">
                 ${product.originalPrice.toFixed(2)}
               </span>
-              {product.savings > 0 && (
-                <span className="inline-block bg-green-100 text-green-800 px-2 py-0.5 rounded text-[11px] font-semibold">
-                  ${product.savings.toFixed(2)} OFF
-                </span>
-              )}
             </div>
-            <p className="text-xs text-gray-500 mt-1 capitalize">
+            {product.savings > 0 && (
+              <p className="text-[13px] font-bold text-[#2e7d32] mt-1">
+                Save ${product.savings.toFixed(2)}
+              </p>
+            )}
+            <p className="text-[12px] text-[#666] mt-2 capitalize">
               {product.department} · {product.category}
               {product.inStock ? " · In stock" : " · Out of stock"}
             </p>
@@ -99,10 +98,10 @@ export default function ProductDetailModal({
             <button
               type="button"
               onClick={onAdd}
-              className={`mt-5 w-full py-3 rounded-xl font-semibold transition-colors flex items-center justify-center gap-2 ${
+              className={`mt-5 w-full py-3 font-bold transition-colors flex items-center justify-center gap-2 rounded-[3px] ${
                 justAdded
                   ? "bg-green-600 text-white"
-                  : "bg-[#0060A9] text-white hover:bg-blue-800"
+                  : "bg-costco-blue text-white hover:bg-costco-blue-hover"
               }`}
             >
               {justAdded ? (
@@ -120,18 +119,18 @@ export default function ProductDetailModal({
           </div>
         </div>
 
-        <div className="px-5 pb-6 pt-2 border-t border-gray-100">
-          <h3 className="text-sm font-bold text-gray-900 mb-1">
+        <div className="px-5 pb-6 pt-4 border-t border-[#eee]">
+          <h3 className="text-[15px] font-bold text-[#1a1a1a] mb-1">
             Member reviews
           </h3>
-          <p className="text-xs text-gray-500 mb-4">
+          <p className="text-[12px] text-[#666] mb-4">
             Based on {product.reviewCount.toLocaleString()} ratings
           </p>
           <ul className="space-y-3">
             {product.reviews.map((r, idx) => (
               <li
                 key={`${r.author}-${idx}`}
-                className="rounded-xl border border-gray-200 bg-gray-50/80 px-3.5 py-3"
+                className="border border-[#e8e8e8] bg-[#fafafa] px-3.5 py-3"
               >
                 <div className="flex items-center justify-between gap-2 mb-1">
                   <div className="flex items-center gap-0.5">
@@ -146,13 +145,13 @@ export default function ProductDetailModal({
                       />
                     ))}
                   </div>
-                  <span className="text-[10px] text-gray-400">{r.date}</span>
+                  <span className="text-[10px] text-[#999]">{r.date}</span>
                 </div>
-                <p className="text-sm font-semibold text-gray-900">{r.title}</p>
-                <p className="text-xs text-gray-600 mt-0.5 leading-relaxed">
+                <p className="text-sm font-bold text-[#1a1a1a]">{r.title}</p>
+                <p className="text-[13px] text-[#555] mt-0.5 leading-relaxed">
                   {r.body}
                 </p>
-                <p className="text-[11px] text-gray-500 mt-1.5">{r.author}</p>
+                <p className="text-[11px] text-[#777] mt-1.5">{r.author}</p>
               </li>
             ))}
           </ul>

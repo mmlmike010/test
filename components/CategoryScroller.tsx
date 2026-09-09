@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { categories } from "@/lib/data/products";
 import { useCatalogStore } from "@/lib/store/catalog";
 
@@ -10,8 +11,8 @@ export default function CategoryScroller() {
   const search = useCatalogStore((s) => s.search);
 
   return (
-    <div className="bg-white border-b border-gray-200 py-4">
-      <div className="flex gap-4 overflow-x-auto scrollbar-hide px-4">
+    <div className="bg-white border-b border-costco-border py-4">
+      <div className="flex gap-5 overflow-x-auto scrollbar-hide px-5">
         {categories.map((category) => {
           const active = tag === category.id;
           return (
@@ -23,22 +24,28 @@ export default function CategoryScroller() {
                 setQuery("");
                 void search();
               }}
-              className={`flex flex-col items-center gap-2 min-w-[100px] transition-opacity ${
-                active ? "opacity-100" : "hover:opacity-80"
-              }`}
+              className="flex flex-col items-center gap-2 min-w-[92px] group"
             >
               <div
-                className={`w-20 h-20 rounded-full flex items-center justify-center text-3xl shadow-sm border ${
+                className={`relative w-[84px] h-[84px] rounded-full overflow-hidden bg-[#f3f3f3] ring-2 ring-offset-2 ${
                   active
-                    ? "bg-[#0060A9] text-white border-[#0060A9]"
-                    : "bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200"
+                    ? "ring-costco-blue"
+                    : "ring-transparent group-hover:ring-[#c5d8ea]"
                 }`}
               >
-                {category.icon}
+                <Image
+                  src={category.image}
+                  alt=""
+                  fill
+                  className="object-cover"
+                  sizes="84px"
+                />
               </div>
               <span
-                className={`text-xs font-medium text-center ${
-                  active ? "text-[#0060A9] font-semibold" : "text-gray-700"
+                className={`text-[12px] text-center leading-tight max-w-[96px] ${
+                  active
+                    ? "text-costco-blue font-bold"
+                    : "text-[#333] font-medium"
                 }`}
               >
                 {category.name}

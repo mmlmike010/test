@@ -16,16 +16,16 @@ export default function DepartmentsSidebar({
   return (
     <aside
       className={`${
-        compact ? "w-48" : "w-56"
-      } shrink-0 bg-white border-r border-gray-200 h-[calc(100vh-132px)] overflow-y-auto sticky top-[132px]`}
+        compact ? "w-[200px]" : "w-[232px]"
+      } hidden md:block shrink-0 bg-white border-r border-costco-border h-full overflow-y-auto`}
     >
-      <div className="p-3">
-        <div className="flex items-center justify-between mb-3 px-2">
-          <h2 className="text-base font-bold text-gray-900">Departments</h2>
+      <div className="py-4 px-3">
+        <div className="flex items-center justify-between mb-2 px-2">
+          <h2 className="text-[15px] font-bold text-[#1a1a1a]">Departments</h2>
           {selected && (
             <button
               type="button"
-              className="text-[11px] text-[#0060A9] font-medium"
+              className="text-[11px] text-costco-blue font-bold hover:underline"
               onClick={() => {
                 setDepartment(null);
                 void search();
@@ -36,7 +36,7 @@ export default function DepartmentsSidebar({
           )}
         </div>
         <nav>
-          <ul className="space-y-0.5">
+          <ul>
             {departments.map((dept) => {
               const active = selected === dept;
               return (
@@ -48,10 +48,10 @@ export default function DepartmentsSidebar({
                       setQuery("");
                       void search();
                     }}
-                    className={`w-full text-left block px-2 py-1.5 text-[13px] rounded truncate transition-colors ${
+                    className={`w-full text-left block px-3 py-2 text-[13px] truncate transition-colors border-l-[3px] ${
                       active
-                        ? "bg-[#0060A9] text-white font-semibold"
-                        : "text-gray-700 hover:bg-blue-50 hover:text-[#0060A9]"
+                        ? "border-costco-blue bg-[#e8f2fa] text-costco-blue font-bold"
+                        : "border-transparent text-[#333] hover:bg-[#f6f6f6] hover:text-costco-blue"
                     }`}
                     title={dept}
                   >

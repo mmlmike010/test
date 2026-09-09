@@ -1,29 +1,27 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Great_Vibes } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const kirkland = Great_Vibes({
+  weight: "400",
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: "--font-kirkland",
 });
 
 export const metadata: Metadata = {
   title: "Costco Same-Day | Ask Kirk",
-  description: "Costco Same-Day delivery powered by Instacart with Ask Kirk shopping assistant",
+  description:
+    "Costco Same-Day delivery powered by Instacart with Ask Kirk shopping assistant",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="en" className={`${kirkland.variable} h-full antialiased`}>
+      <body className="min-h-full flex flex-col font-sans">{children}</body>
     </html>
   );
 }

@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useCartStore } from "@/lib/store/cart";
 import { products } from "@/lib/data/products";
+import KirkMark from "@/components/KirkMark";
 
 interface Message {
   id: string;
@@ -487,64 +488,104 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
 
   return (
     <>
-    <aside className="w-[380px] xl:w-[400px] shrink-0 bg-white border-l border-gray-200 h-[calc(100vh-132px)] sticky top-[132px] flex flex-col z-40 shadow-[-8px_0_24px_rgba(0,0,0,0.06)]">
-      <div className="bg-[#0060A9] text-white px-4 py-3 flex items-center justify-between shrink-0">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-full bg-white/15 border border-white/30 flex items-center justify-center text-lg">
-            🛒
+    <aside className="fixed inset-y-0 right-0 z-50 w-full max-w-[420px] lg:static lg:z-40 lg:w-[400px] xl:w-[440px] lg:max-w-none shrink-0 bg-white border-l border-costco-border h-full flex flex-col shadow-[-12px_0_28px_rgba(0,0,0,0.08)]">
+      <div className="shrink-0 border-b border-costco-border bg-white">
+        <div className="h-[3px] bg-costco-red" />
+        <div className="px-4 py-3 flex items-start justify-between gap-2">
+          <div className="flex items-center gap-3 min-w-0">
+            <KirkMark size={44} />
+            <div className="min-w-0">
+              <p className="text-[10px] font-bold tracking-[0.18em] text-costco-red uppercase">
+                Ask
+              </p>
+              <h2 className="kirk-script text-[34px] leading-none text-costco-navy -mt-0.5">
+                Kirk
+              </h2>
+              <p className="text-[11px] text-[#666] mt-1 truncate">
+                Kirkland Signature assistant
+              </p>
+              <p className="flex items-center gap-1.5 text-[11px] text-[#2e7d32] font-semibold mt-0.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#2e7d32]" />
+                Available now · Same-Day
+              </p>
+            </div>
           </div>
-          <div>
-            <h2 className="font-bold text-sm tracking-wide">ASK KIRK</h2>
-            <p className="text-[11px] text-blue-100">Same-Day shopping</p>
+          <div className="flex items-center gap-1 shrink-0">
+            <button
+              type="button"
+              onClick={handleReset}
+              className="px-2.5 py-1.5 text-[12px] font-bold text-[#333] hover:bg-gray-100 rounded-[3px] transition-colors flex items-center gap-1"
+              title="Reset"
+            >
+              <RefreshCw className="w-3.5 h-3.5" />
+              Reset
+            </button>
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-2.5 py-1.5 text-[12px] font-bold text-[#333] hover:bg-gray-100 rounded-[3px] transition-colors flex items-center gap-1"
+              title="Close"
+            >
+              <X className="w-3.5 h-3.5" />
+              Close
+            </button>
           </div>
-        </div>
-        <div className="flex items-center gap-1">
-          <button
-            type="button"
-            onClick={handleReset}
-            className="px-2 py-1 text-xs hover:bg-white/10 rounded transition-colors flex items-center gap-1"
-            title="Reset"
-          >
-            <RefreshCw className="w-3.5 h-3.5" />
-            Reset
-          </button>
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-2 py-1 text-xs hover:bg-white/10 rounded transition-colors flex items-center gap-1"
-            title="Close"
-          >
-            <X className="w-3.5 h-3.5" />
-            Close
-          </button>
         </div>
       </div>
 
       {cartNotice && (
-        <div className="mx-3 mt-3 flex items-center gap-2 rounded-lg bg-green-50 border border-green-200 text-green-800 px-3 py-2 text-xs font-medium shrink-0">
+        <div className="mx-4 mt-3 flex items-center gap-2 bg-[#eef7ee] border border-[#b7d7b0] text-[#1e5b24] px-3 py-2 text-[12px] font-semibold shrink-0">
           <ShoppingCart className="w-3.5 h-3.5" />
           {cartNotice}
         </div>
       )}
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-[#f3f4f6] min-h-0">
-        {messages.map((message) => (
+      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3.5 bg-[#f4f4f4] min-h-0">
+        {messages.map((message) => {
+          const isWelcome = message.id.startsWith("welcome-");
+          if (isWelcome) {
+            return (
+              <div
+                key={message.id}
+                className="bg-white border border-[#e4e4e4] px-4 py-3.5"
+              >
+                <div className="flex items-center gap-2 mb-2">
+                  <KirkMark size={28} />
+                  <div>
+                    <p className="text-[13px] font-bold text-[#1a1a1a]">
+                      Welcome back
+                    </p>
+                    <p className="text-[10px] font-bold tracking-[0.14em] text-costco-blue uppercase">
+                      Member shopping help
+                    </p>
+                  </div>
+                </div>
+                <p className="text-[13px] leading-relaxed text-[#333] whitespace-pre-line">
+                  {message.content}
+                </p>
+              </div>
+            );
+          }
+          return (
           <div
             key={message.id}
-            className={`flex ${
+            className={`flex gap-2 ${
               message.role === "user" ? "justify-end" : "justify-start"
             }`}
           >
+            {message.role === "assistant" && (
+              <KirkMark size={28} className="mt-0.5 shrink-0" />
+            )}
             <div
-              className={`max-w-[88%] rounded-2xl px-3.5 py-2.5 text-[13px] leading-relaxed ${
+              className={`max-w-[82%] px-3.5 py-2.5 text-[13px] leading-relaxed ${
                 message.role === "user"
-                  ? "bg-[#0060A9] text-white rounded-br-md whitespace-pre-line"
-                  : "bg-white text-gray-900 shadow-sm border border-gray-200 rounded-bl-md"
+                  ? "bg-costco-blue text-white"
+                  : "bg-white text-[#1a1a1a] border border-[#e4e4e4]"
               }`}
             >
               <p className="whitespace-pre-line">{message.content}</p>
               {message.imageUrl && (
-                <div className="mt-2.5 overflow-hidden rounded-xl border border-gray-100">
+                <div className="mt-2.5 overflow-hidden border border-[#e8e8e8] bg-white">
                   <button
                     type="button"
                     onClick={() => setLightboxUrl(message.imageUrl || null)}
@@ -557,45 +598,47 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                       alt="Recipe inspiration"
                       className="w-full h-auto max-h-[320px] object-cover group-hover:opacity-95 transition-opacity"
                     />
-                    <span className="absolute bottom-2 right-2 rounded-full bg-black/55 text-white text-[10px] font-medium px-2 py-0.5 opacity-80 group-hover:opacity-100">
+                    <span className="absolute bottom-2 right-2 bg-black/60 text-white text-[10px] font-bold px-2 py-0.5">
                       Enlarge
                     </span>
                   </button>
-                  <p className="text-[10px] text-gray-500 px-2 py-1 bg-gray-50">
-                    Grok Imagine · tap to enlarge
+                  <p className="text-[10px] text-[#666] px-2.5 py-1.5 bg-[#fafafa] border-t border-[#eee] font-semibold tracking-wide uppercase">
+                    Recipe inspiration · tap to enlarge
                   </p>
                 </div>
               )}
             </div>
           </div>
-        ))}
+          );
+        })}
         {isLoading && (
-          <div className="flex justify-start">
-            <div className="bg-white border border-gray-200 rounded-2xl rounded-bl-md px-3.5 py-3 shadow-sm max-w-[88%]">
+          <div className="flex justify-start gap-2">
+            <KirkMark size={28} className="mt-0.5 shrink-0" />
+            <div className="bg-white border border-[#e4e4e4] px-3.5 py-3 max-w-[82%]">
               <div className="flex gap-1.5 items-center">
-                <span className="text-[11px] text-gray-500 mr-1">Kirk</span>
-                <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" />
+                <span className="text-[11px] text-[#666] mr-1 font-semibold">Kirk</span>
+                <div className="w-1.5 h-1.5 bg-[#999] rounded-full animate-bounce" />
                 <div
-                  className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce"
+                  className="w-1.5 h-1.5 bg-[#999] rounded-full animate-bounce"
                   style={{ animationDelay: "0.12s" }}
                 />
                 <div
-                  className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce"
+                  className="w-1.5 h-1.5 bg-[#999] rounded-full animate-bounce"
                   style={{ animationDelay: "0.24s" }}
                 />
               </div>
               {pendingInspire && (
-                <div className="mt-2.5 flex items-center gap-2 rounded-xl border border-[#0060A9]/15 bg-gradient-to-r from-sky-50 via-white to-amber-50 px-2.5 py-2">
-                  <div className="relative flex h-7 w-7 items-center justify-center rounded-lg bg-[#0060A9]/10 overflow-hidden shrink-0">
-                    <Sparkles className="w-3.5 h-3.5 text-[#0060A9] animate-pulse" />
+                <div className="mt-2.5 flex items-center gap-2 border border-costco-blue/20 bg-[#eef5fb] px-2.5 py-2">
+                  <div className="relative flex h-7 w-7 items-center justify-center bg-costco-blue/10 overflow-hidden shrink-0">
+                    <Sparkles className="w-3.5 h-3.5 text-costco-blue animate-pulse" />
                     <span className="pointer-events-none absolute inset-0 -translate-x-full animate-[shimmer_1.6s_infinite] bg-gradient-to-r from-transparent via-white/70 to-transparent" />
                   </div>
                   <div className="min-w-0">
-                    <p className="text-[11px] font-medium text-[#0060A9]">
+                    <p className="text-[11px] font-bold text-costco-blue">
                       Generating image…
                     </p>
-                    <p className="text-[10px] text-gray-500 truncate">
-                      Grok Imagine
+                    <p className="text-[10px] text-[#666] truncate">
+                      Recipe inspiration
                     </p>
                   </div>
                 </div>
@@ -603,11 +646,42 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             </div>
           </div>
         )}
-        {error && <p className="text-[11px] text-red-600 px-1">{error}</p>}
+        {error && (
+          <p className="text-[12px] text-costco-red bg-[#fff5f6] border border-[#f3c5cb] px-3 py-2">
+            {error}
+          </p>
+        )}
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="px-3 pt-3 pb-3 border-t border-gray-200 bg-white shrink-0">
+      {(isRecording || isTranscribing || isSpeaking) && (
+        <div className="px-4 py-2 border-t border-[#eee] bg-[#fff8f8] text-[12px] text-[#333] flex items-center gap-2 shrink-0">
+          {isSpeaking ? (
+            <>
+              <span className="inline-flex items-end gap-[3px] h-3.5 text-costco-red">
+                <span className="kirk-eq-bar" />
+                <span className="kirk-eq-bar" style={{ animationDelay: "0.12s" }} />
+                <span className="kirk-eq-bar" style={{ animationDelay: "0.24s" }} />
+              </span>
+              <span className="font-semibold">Kirk is speaking…</span>
+            </>
+          ) : isTranscribing ? (
+            <span className="font-semibold text-[#555]">Transcribing your request…</span>
+          ) : (
+            <>
+              <span className="w-2 h-2 rounded-full bg-costco-red kirk-listening" />
+              <span className="font-semibold">
+                Listening — pause to send. Kirk will read the reply aloud.
+              </span>
+            </>
+          )}
+        </div>
+      )}
+
+      <div className="px-4 pt-3 pb-3.5 border-t border-costco-border bg-white shrink-0">
+        <p className="text-[10px] font-bold tracking-[0.14em] text-[#888] uppercase mb-2">
+          Members often ask
+        </p>
         <div className="flex flex-wrap gap-1.5 mb-3 content-start">
           {suggestionChips.map((chip) => (
             <button
@@ -615,7 +689,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
               type="button"
               onClick={() => void sendMessage(chip)}
               disabled={isLoading}
-              className="px-2.5 py-1 bg-gray-50 hover:bg-gray-100 disabled:opacity-50 text-gray-700 text-[11px] leading-snug rounded-full transition-colors border border-gray-200"
+              className="px-2.5 py-1 bg-white hover:bg-[#e8f2fa] hover:border-costco-blue hover:text-costco-blue disabled:opacity-50 text-[#333] text-[11px] leading-snug rounded-full transition-colors border border-[#d0d0d0]"
             >
               {chip}
             </button>
@@ -634,7 +708,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                   ? "Listening…"
                   : "Ask Kirk for a cart"
             }
-            className="flex-1 min-w-0 px-3 py-2.5 border border-gray-300 rounded-xl text-sm focus:outline-none focus:border-[#0060A9] focus:ring-1 focus:ring-[#0060A9]/30"
+            className="flex-1 min-w-0 h-11 px-3.5 border border-[#c8c8c8] rounded-full text-sm text-[#1a1a1a] placeholder:text-[#888] focus:outline-none focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15"
             disabled={isLoading || isRecording || isTranscribing}
           />
           <button
@@ -648,10 +722,10 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
               else void startRecording();
             }}
             disabled={isLoading || isTranscribing}
-            className={`px-2.5 border rounded-xl transition-colors text-[11px] font-medium flex flex-col items-center justify-center gap-0.5 min-w-[56px] ${
+            className={`h-11 px-2.5 border transition-colors text-[11px] font-bold flex flex-col items-center justify-center gap-0.5 min-w-[56px] rounded-full ${
               isRecording || isSpeaking
-                ? "bg-red-600 text-white border-red-600"
-                : "border-gray-300 hover:bg-gray-50 text-gray-700"
+                ? "bg-costco-red text-white border-costco-red kirk-listening"
+                : "border-[#c8c8c8] hover:bg-gray-50 text-[#333]"
             }`}
             title={
               isSpeaking
@@ -678,7 +752,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             type="button"
             onClick={() => void sendMessage(input)}
             disabled={!input.trim() || isLoading}
-            className="px-3 bg-[#0060A9] text-white rounded-xl font-semibold hover:bg-blue-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1 text-sm min-w-[72px] justify-center"
+            className="h-11 px-3.5 bg-costco-red text-white rounded-full font-bold hover:bg-costco-red-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1 text-sm min-w-[72px] justify-center"
           >
             <Send className="w-4 h-4" />
             Send
@@ -696,7 +770,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
       >
         <button
           type="button"
-          className="absolute top-4 right-4 rounded-full bg-white/90 text-gray-800 px-3 py-1.5 text-sm font-semibold shadow"
+          className="absolute top-4 right-4 bg-white text-[#1a1a1a] px-3 py-1.5 text-sm font-bold shadow"
           onClick={() => setLightboxUrl(null)}
         >
           Close
@@ -705,7 +779,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
         <img
           src={lightboxUrl}
           alt="Recipe inspiration enlarged"
-          className="max-h-[90vh] max-w-[min(920px,96vw)] rounded-2xl shadow-2xl object-contain"
+          className="max-h-[90vh] max-w-[min(920px,96vw)] shadow-2xl object-contain bg-white"
           onClick={(e) => e.stopPropagation()}
         />
       </div>

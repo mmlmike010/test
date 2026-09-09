@@ -840,13 +840,55 @@ export const departments = [
 ];
 
 export const categories = [
-  { id: "treasure", name: "Treasure Hunt", icon: "🎁" },
-  { id: "trending", name: "Trending", icon: "📈" },
-  { id: "new", name: "What's New", icon: "✨" },
-  { id: "weekly", name: "Weekly Savings", icon: "💰" },
-  { id: "kirkland", name: "Kirkland Signature", icon: "⭐" },
-  { id: "recipes", name: "Recipes", icon: "🍳" },
-  { id: "catering", name: "Catering", icon: "🍱" },
+  {
+    id: "treasure",
+    name: "Treasure Hunt",
+    icon: "🎁",
+    image:
+      "https://images.unsplash.com/photo-1513885535751-8b9238bd345a?w=200&h=200&fit=crop",
+  },
+  {
+    id: "trending",
+    name: "Trending",
+    icon: "📈",
+    image:
+      "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200&h=200&fit=crop",
+  },
+  {
+    id: "new",
+    name: "What's New",
+    icon: "✨",
+    image:
+      "https://images.unsplash.com/photo-1506617420156-8e4536971650?w=200&h=200&fit=crop",
+  },
+  {
+    id: "weekly",
+    name: "Weekly Savings",
+    icon: "💰",
+    image:
+      "https://images.unsplash.com/photo-1607082349566-187342175e2f?w=200&h=200&fit=crop",
+  },
+  {
+    id: "kirkland",
+    name: "Kirkland Signature",
+    icon: "⭐",
+    image:
+      "https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=200&h=200&fit=crop",
+  },
+  {
+    id: "recipes",
+    name: "Recipes",
+    icon: "🍳",
+    image:
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=200&h=200&fit=crop",
+  },
+  {
+    id: "catering",
+    name: "Catering",
+    icon: "🍱",
+    image:
+      "https://images.unsplash.com/photo-1555244162-803834f70033?w=200&h=200&fit=crop",
+  },
 ];
 
 export type ProductFilters = {
