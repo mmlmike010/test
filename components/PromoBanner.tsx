@@ -20,7 +20,7 @@ export default function PromoBanner() {
             document.querySelector("main")?.scrollTo({ top: 0 });
           }}
         >
-          Member Only Savings · 8/24/26 – 9/20/26 · Sale ends in 10 days
+          Member Only Savings · 8/24/26 – 9/21/26 · Sale ends in 10 days
         </button>
         <p className="hidden sm:block text-[#555] shrink-0">
           <span className="font-bold text-[#1a1a1a]">$10 monthly credit</span>

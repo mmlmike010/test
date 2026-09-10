@@ -8,6 +8,7 @@ import GoldStarMembershipCard from "@/components/GoldStarMembershipCard";
 import InstacartMark from "@/components/InstacartMark";
 import { departments } from "@/lib/data/products";
 import { aisleLabel } from "@/lib/ui/aisleLabels";
+import { productSize } from "@/lib/ui/packSize";
 import { useCatalogStore } from "@/lib/store/catalog";
 import { useCartStore } from "@/lib/store/cart";
 import {
@@ -379,7 +380,7 @@ function CheckoutSheet() {
   const ready = signedIn && membershipAdded && items.length > 0;
 
   return (
-    <StoreSheet title="Checkout" onClose={() => setSheet(null)}>
+    <StoreSheet title="Checkout" onClose={() => setSheet(null)} wide>
       <div className="px-4 py-4 space-y-3">
         {orderPlaced ? (
           <div className="rounded-[12px] border border-[#b7d7b0] bg-[#eef7ee] px-3.5 py-4">
@@ -443,6 +444,40 @@ function CheckoutSheet() {
               <p className="text-[12px] text-[#555] leading-snug">
                 Special request: {specialRequest}
               </p>
+            )}
+            {items.length > 0 && (
+              <div className="rounded-[12px] border border-[#e0e0e0] overflow-hidden">
+                <p className="px-3.5 py-2 text-[12px] font-bold text-[#666] bg-[#f6f6f6] border-b border-[#ececec]">
+                  {items.length} item{items.length === 1 ? "" : "s"}
+                </p>
+                {items.map(({ product, quantity }) => (
+                  <div
+                    key={product.id}
+                    className="flex gap-3 px-3.5 py-2.5 border-b border-[#f0f0f0] last:border-b-0"
+                  >
+                    <div className="relative w-14 h-14 overflow-hidden bg-white border border-[#eee] rounded-[10px] shrink-0">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={product.image}
+                        alt=""
+                        className="absolute inset-0 w-full h-full object-contain p-1"
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[13px] text-[#242424] leading-snug line-clamp-2">
+                        {product.brand} {product.name}
+                      </p>
+                      <p className="text-[12px] text-[#72767E] mt-0.5">
+                        {quantity} × ${product.price.toFixed(2)}
+                        {productSize(product.id) ? ` · ${productSize(product.id)}` : ""}
+                      </p>
+                    </div>
+                    <p className="text-[14px] font-bold text-[#1a1a1a] tabular-nums shrink-0">
+                      ${(product.price * quantity).toFixed(2)}
+                    </p>
+                  </div>
+                ))}
+              </div>
             )}
             <div className="flex items-end justify-between pt-1">
               <span className="text-[#555] text-[13px] font-semibold">

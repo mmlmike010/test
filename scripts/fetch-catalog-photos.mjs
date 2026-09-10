@@ -13,7 +13,9 @@ const CF = "https://d2lnr5mha7bycj.cloudfront.net/product-image/file";
  *  Tiles 6 and 7 are composed in compose-remaining-tiles.mjs (full Kirkland
  *  labels over Costco Same-Day jar/tub photography).
  *  Tiles 13 and 22 are also composed there from pack photography (seat cover,
- *  black laptop sleeve) with source-brand marks covered. */
+ *  black laptop sleeve) with source-brand marks covered.
+ *  Tile 19 is reprinted in compose-detergent-170.mjs (170 LOADS on the
+ *  real Kirkland Ultra Clean bottle — do not write the 146-load source). */
 const tiles = {
   2: `${CF}/large_6f376933-2b60-43ab-92ba-091277d87719.jpeg`, // Kirkland Heart Healthy Mixed Nuts 36 oz
   3: `${CF}/large_be581b7c-a021-4dcd-9460-10660cd7b6ec.png`, // Hunt's diced tomatoes
@@ -27,7 +29,6 @@ const tiles = {
   15: `${CF}/large_2b963e60-c6a3-4037-8099-6130912fc4c9.jpeg`, // Kirkland bakery croissants 12ct
   16: `${CF}/large_c15562b6-ac05-4b15-8df9-594e7b216767.jpeg`, // Kirkland Alexander Valley Cabernet
   18: `${CF}/large_a4a5dbcb-d19b-42d0-b34e-eccccfedb1cd.jpeg`, // GoPro HERO11 bundle
-  19: `${CF}/large_fc09f4a9-8ad0-4983-9451-bdbe70fcf0d9.jpeg`, // Kirkland Ultra Clean HE liquid detergent
   20: `${CF}/large_029a4c28-4763-49fe-b0ee-0e9d1f402fb1.jpeg`, // Kirkland merino crew socks
   21: `${CF}/large_2bacbaac-2b3d-4412-baad-d7bdb17b6080.jpeg`, // Kirkland Colombian 3 lb
   23: `${CF}/large_f2a0a010-0b6e-4d94-bd34-c39fa04626b2.jpeg`, // Kirkland organic eggs 24ct
@@ -85,6 +86,10 @@ for (const [id, url] of Object.entries(tiles)) {
   buffers[id] = buf;
   await toTile(buf, join(dir, `${id}.png`));
   console.log("ok", buf.length);
+}
+
+if (!buffers["19"]) {
+  buffers["19"] = await sharp(join(dir, "19.png")).toBuffer();
 }
 
 for (const [name, id] of Object.entries(categories)) {

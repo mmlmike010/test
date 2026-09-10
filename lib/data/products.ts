@@ -634,7 +634,7 @@ export const products: Product[] = [
     price: 17.99,
     originalPrice: 22.99,
     savings: 5.0,
-    image: "/products/19.png?v=2",
+    image: "/products/19.png?v=3",
     inStock: true,
     tags: ["cleaning", "kirkland", "treasure"],
     rating: 3.8,
@@ -899,7 +899,7 @@ export const categories: ShopCategory[] = [
   {
     id: "household",
     name: "Household",
-    image: "/products/cat-household.jpg?v=1",
+    image: "/products/cat-household.jpg?v=2",
     department: "Cleaning",
   },
   {

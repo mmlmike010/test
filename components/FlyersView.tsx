@@ -47,7 +47,7 @@ export default function FlyersView() {
           Weekly Ad
         </h1>
         <p className="text-[13px] text-[#666] mt-0.5">
-          Valid 8/24/26 – 9/20/26 · Costco · 11217 Brooklyn
+          Valid 8/24/26 – 9/21/26 · Costco · 11217 Brooklyn
         </p>
       </div>
 

@@ -163,7 +163,7 @@ export default function ProductGrid() {
     {
       tag: "weekly",
       title: "Member Only Savings",
-      subtitle: "8/24/26 – 9/20/26",
+      subtitle: "8/24/26 – 9/21/26",
       badge: "Sale ends in 10 days",
       image: "/products/hero-weekly.jpg?v=18",
       wash: "#7a3a3c",
