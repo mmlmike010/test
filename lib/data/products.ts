@@ -844,7 +844,7 @@ export const categories = [
     id: "again",
     name: "Buy it again",
     icon: "🛒",
-    image: "/products/cat-again.jpg",
+    image: "/products/cat-again.jpg?v=2",
   },
   {
     id: "treasure",
