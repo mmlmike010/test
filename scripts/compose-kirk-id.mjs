@@ -16,7 +16,7 @@ const marble = Buffer.from(await res.arrayBuffer());
 
 const texture = await sharp(marble)
   .resize(W, H, { fit: "cover", position: "centre" })
-  .modulate({ brightness: 0.62, saturation: 0.18 })
+  .modulate({ brightness: 0.48, saturation: 0.22 })
   .toBuffer();
 
 const grade = await sharp({
@@ -24,7 +24,7 @@ const grade = await sharp({
     width: W,
     height: H,
     channels: 4,
-    background: { r: 96, g: 112, b: 128, alpha: 0.55 },
+    background: { r: 72, g: 92, b: 112, alpha: 0.62 },
   },
 })
   .png()
