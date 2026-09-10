@@ -53,7 +53,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
                   Same-Day
                 </span>
                 <span className="text-[10px] text-[#6b6b6b] mt-0.5 tracking-wide inline-flex items-center gap-1">
-                  <InstacartMark size={11} />
+                  <InstacartMark size={14} />
                   Powered by Instacart
                 </span>
               </span>
