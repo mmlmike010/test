@@ -911,31 +911,31 @@ export const categories: ShopCategory[] = [
   {
     id: "auto",
     name: "Auto",
-    image: "/products/13.png?v=4",
+    image: "/products/cat-auto.jpg?v=1",
     department: "Auto Accessories",
   },
   {
     id: "books",
     name: "Books",
-    image: "/products/17.png?v=5",
+    image: "/products/cat-books.jpg?v=1",
     department: "Books",
   },
   {
     id: "cameras",
     name: "Cameras",
-    image: "/products/18.png",
+    image: "/products/cat-cameras.jpg?v=1",
     department: "Cameras & Camcorders",
   },
   {
     id: "clothing",
     name: "Clothing",
-    image: "/products/20.png",
+    image: "/products/cat-clothing.jpg?v=1",
     department: "Clothing & Shoes",
   },
   {
     id: "computers",
     name: "Computers",
-    image: "/products/22.png?v=3",
+    image: "/products/cat-computers.jpg?v=1",
     department: "Computers",
   },
 ];
