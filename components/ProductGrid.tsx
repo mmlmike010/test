@@ -222,7 +222,10 @@ export default function ProductGrid() {
     {
       title: "Member Only Savings",
       items: filtered.filter(
-        (p) => p.department === "Weekly Savings" || p.tags?.includes("weekly")
+        (p) =>
+          // Same exclusion as filterProducts({ tag: "weekly" }) — flyer pages stay four deals.
+          p.id !== "1" &&
+          (p.department === "Weekly Savings" || p.tags?.includes("weekly"))
       ),
       onShowAll: () => showAisle({ tag: "weekly" }),
     },
