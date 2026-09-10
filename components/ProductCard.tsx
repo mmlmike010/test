@@ -86,7 +86,7 @@ export default function ProductCard({
           onOpen();
         }
       }}
-      className={`bg-white text-left cursor-pointer rounded-[12px] border border-[#eee] hover:shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition-shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-costco-blue/40 overflow-hidden ${
+      className={`bg-white text-left cursor-pointer rounded-[12px] hover:shadow-[0_2px_8px_rgba(0,0,0,0.08)] transition-shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-costco-blue/40 overflow-hidden ${
         compact ? "w-[188px] shrink-0" : ""
       }`}
     >
