@@ -54,20 +54,8 @@ export const ROOM_SCENES: RoomScene[] = [
 export const DEFAULT_FURNITURE_ID = "25";
 export const PATIO_FURNITURE_ID = "28";
 
-export function isSceneId(value: string | null | undefined): value is SceneId {
-  return ROOM_SCENES.some((s) => s.id === value);
-}
-
-export function seeInMyRoomHref(opts?: {
-  productId?: string | null;
-  sceneId?: SceneId;
-  upload?: boolean;
-}): string {
-  const params = new URLSearchParams();
-  params.set("product", opts?.productId || DEFAULT_FURNITURE_ID);
-  if (opts?.sceneId) params.set("scene", opts.sceneId);
-  if (opts?.upload) params.set("upload", "1");
-  return `/see-in-my-room?${params.toString()}`;
+export function seeInMyRoomHref(productId?: string | null): string {
+  return `/see-in-my-room?product=${productId || DEFAULT_FURNITURE_ID}`;
 }
 
 export function isFurnitureProduct(product: Product): boolean {
