@@ -166,21 +166,25 @@ export default function ProductGrid() {
       subtitle: "8/24/26 – 9/20/26",
       badge: "Sale ends in 10 days",
       image: "/products/hero-weekly.jpg?v=18",
+      wash: "#7a3a3c",
     },
     {
       tag: "kirkland",
       title: "Kirkland Signature",
       image: "/products/hero-kirkland.jpg?v=18",
+      wash: "#3d5470",
     },
     {
       tag: "trending",
       title: "This week's featured items",
       image: "/products/hero-new.jpg?v=18",
+      wash: "#7a6d52",
     },
     {
       tag: "treasure",
       title: "Discounts on household favorites",
       image: "/products/hero-treasure.jpg?v=18",
+      wash: "#5a443c",
     },
   ] as const;
   const activeCollection = collectionTiles.find((tile) => tile.tag === tag);
@@ -340,12 +344,15 @@ export default function ProductGrid() {
             Shop
           </button>
           {activeCollection && (
-            <div className="relative mb-4 h-[168px] sm:h-[200px] lg:h-[220px] rounded-[16px] overflow-hidden bg-[#f3f3f3]">
+            <div
+              className="relative mb-4 h-[168px] sm:h-[200px] lg:h-[220px] rounded-[16px] overflow-hidden"
+              style={{ background: activeCollection.wash }}
+            >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={activeCollection.image}
                 alt=""
-                className="absolute inset-0 w-full h-full object-cover"
+                className="absolute inset-0 w-full h-full object-contain"
               />
               <span className="absolute inset-0 bg-gradient-to-t from-black/58 via-black/15 to-black/10" />
               {"badge" in activeCollection && activeCollection.badge && (
