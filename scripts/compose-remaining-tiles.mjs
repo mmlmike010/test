@@ -39,18 +39,20 @@ function xml(text) {
 }
 
 function kirkLabel({ w, h, title, line2 = "", size = "", fill = "#005DAA" }) {
-  const titleSize = title.length > 12 ? Math.round(w * 0.092) : Math.round(w * 0.11);
-  const line2Size = Math.round(w * 0.088);
+  const titleSize = title.length > 12 ? Math.round(w * 0.11) : Math.round(w * 0.13);
+  const line2Size = Math.round(w * 0.1);
+  const band = Math.round(h * 0.3);
   return Buffer.from(`<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
-  <rect width="${w}" height="${h}" fill="#ffffff"/>
-  <rect x="0.75" y="0.75" width="${w - 1.5}" height="${h - 1.5}" fill="none" stroke="#d8d8d8" stroke-width="1.5"/>
-  <rect width="${w}" height="${Math.round(h * 0.34)}" fill="${fill}"/>
-  <text x="${w / 2}" y="${h * 0.16}" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="${Math.round(w * 0.12)}" font-weight="800">KIRKLAND</text>
-  <text x="${w / 2}" y="${h * 0.275}" text-anchor="middle" fill="#d6e6f4" font-family="Arial, Helvetica, sans-serif" font-size="${Math.round(w * 0.055)}" letter-spacing="2.4" font-weight="700">SIGNATURE</text>
-  <text x="${w / 2}" y="${h * 0.54}" text-anchor="middle" fill="#1a1a1a" font-family="Arial, Helvetica, sans-serif" font-size="${titleSize}" font-weight="800">${xml(title)}</text>
-  ${line2 ? `<text x="${w / 2}" y="${h * 0.7}" text-anchor="middle" fill="#1a1a1a" font-family="Arial, Helvetica, sans-serif" font-size="${line2Size}" font-weight="800">${xml(line2)}</text>` : ""}
-  ${size ? `<text x="${w / 2}" y="${h * 0.88}" text-anchor="middle" fill="#555555" font-family="Arial, Helvetica, sans-serif" font-size="${Math.round(w * 0.058)}" font-weight="700">${xml(size)}</text>` : ""}
+  <rect width="${w}" height="${h}" fill="#F6F3EA"/>
+  <rect x="1" y="1" width="${w - 2}" height="${h - 2}" fill="none" stroke="#C9C2B0" stroke-width="1.25"/>
+  <rect width="${w}" height="${band}" fill="${fill}"/>
+  <text x="${w / 2}" y="${band * 0.48}" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="${Math.round(w * 0.105)}" font-weight="800">KIRKLAND</text>
+  <text x="${w / 2}" y="${band * 0.78}" text-anchor="middle" fill="#F3E3A3" font-family="Arial, Helvetica, sans-serif" font-size="${Math.round(w * 0.048)}" letter-spacing="2.2" font-weight="700">SIGNATURE</text>
+  <line x1="14" y1="${band + 8}" x2="${w - 14}" y2="${band + 8}" stroke="#C9A227" stroke-width="1.5"/>
+  <text x="${w / 2}" y="${h * 0.52}" text-anchor="middle" fill="#1a1a1a" font-family="Arial, Helvetica, sans-serif" font-size="${titleSize}" font-weight="800">${xml(title)}</text>
+  ${line2 ? `<text x="${w / 2}" y="${h * 0.68}" text-anchor="middle" fill="#1a1a1a" font-family="Arial, Helvetica, sans-serif" font-size="${line2Size}" font-weight="800">${xml(line2)}</text>` : ""}
+  ${size ? `<text x="${w / 2}" y="${h * 0.88}" text-anchor="middle" fill="#5a564c" font-family="Arial, Helvetica, sans-serif" font-size="${Math.round(w * 0.055)}" font-weight="700">${xml(size)}</text>` : ""}
 </svg>`);
 }
 
@@ -64,21 +66,33 @@ async function composeJars() {
 
   const beanLabel = await sharp(
     kirkLabel({
-      w: 268,
-      h: 292,
+      w: 236,
+      h: 268,
       title: "FIVE BEAN",
       line2: "SALAD",
-      size: "2 × 35.5 OZ",
+      size: "15 OZ",
       fill: "#1B5E20",
     })
   )
     .png()
     .toBuffer();
 
+  const burstCover = await sharp({
+    create: {
+      width: 18,
+      height: 24,
+      channels: 3,
+      background: { r: 246, g: 243, b: 234 },
+    },
+  })
+    .png()
+    .toBuffer();
+
   const fiveBean = await sharp(paisley)
     .composite([
-      { input: beanLabel, left: 28, top: 150 },
-      { input: beanLabel, left: 304, top: 150 },
+      { input: burstCover, left: 28, top: 246 },
+      { input: beanLabel, left: 36, top: 166 },
+      { input: beanLabel, left: 328, top: 166 },
     ])
     .jpeg({ quality: 92 })
     .toBuffer();
@@ -86,11 +100,11 @@ async function composeJars() {
 
   const lentilLabel = await sharp(
     kirkLabel({
-      w: 424,
-      h: 248,
+      w: 476,
+      h: 198,
       title: "COOKED LENTILS",
       line2: "& CHICKPEAS",
-      size: "READY TO EAT",
+      size: "17 OZ · READY TO EAT",
       fill: "#5D4037",
     })
   )
@@ -98,7 +112,7 @@ async function composeJars() {
     .toBuffer();
 
   const lentils = await sharp(salad)
-    .composite([{ input: lentilLabel, left: 88, top: 186 }])
+    .composite([{ input: lentilLabel, left: 62, top: 214 }])
     .jpeg({ quality: 92 })
     .toBuffer();
   await toTile(lentils, join(dir, "6.png"));
