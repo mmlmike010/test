@@ -969,8 +969,11 @@ export function filterProducts(filters: ProductFilters = {}): Product[] {
           tags.includes("kirkland")
         );
       if (tag === "recipes")
-        return ["pasta sauce", "cooking oil", "grains", "canned tomatoes"].includes(
-          p.category
+        return (
+          tags.includes("recipes") ||
+          ["pasta sauce", "cooking oil", "grains", "canned tomatoes"].includes(
+            p.category
+          )
         );
       if (tag === "catering")
         return (

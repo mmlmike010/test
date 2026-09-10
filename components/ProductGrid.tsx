@@ -10,6 +10,7 @@ import ProductCard from "@/components/ProductCard";
 import ProductDetailModal from "@/components/ProductDetailModal";
 import CategoryScroller from "@/components/CategoryScroller";
 import InstacartMark from "@/components/InstacartMark";
+import RecipesView from "@/components/RecipesView";
 
 type Aisle = {
   title: string;
@@ -135,6 +136,7 @@ export default function ProductGrid() {
     void search();
   }, [search]);
 
+  const recipesView = tag === "recipes" && !q.trim();
   const filteredView = Boolean(department || tag || q.trim());
   const filtered = filterProducts({
     q,
@@ -148,6 +150,7 @@ export default function ProductGrid() {
     kirkland: "Kirkland Signature",
     new: "What's New",
     again: "Buy it again",
+    recipes: "Recipes",
   };
   const collectionTiles = [
     {
@@ -312,7 +315,9 @@ export default function ProductGrid() {
         </>
       )}
 
-      {filteredView && (
+      {recipesView && <RecipesView />}
+
+      {filteredView && !recipesView && (
         <>
           <button
             type="button"
@@ -472,6 +477,18 @@ export default function ProductGrid() {
           <a href="#" className="text-costco-blue font-semibold hover:underline">
             Pricing & fees
           </a>
+          <button
+            type="button"
+            className="text-costco-blue font-semibold hover:underline"
+            onClick={() => {
+              setQuery("");
+              setTag("recipes");
+              void search();
+              document.querySelector("main")?.scrollTo({ top: 0 });
+            }}
+          >
+            Recipes
+          </button>
           <a href="#" className="text-costco-blue font-semibold hover:underline">
             Departments
           </a>

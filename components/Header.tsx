@@ -18,9 +18,14 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
   const q = useCatalogStore((s) => s.q);
   const setQuery = useCatalogStore((s) => s.setQuery);
   const search = useCatalogStore((s) => s.search);
+  const setTag = useCatalogStore((s) => s.setTag);
   const clearFilters = useCatalogStore((s) => s.clearFilters);
   const department = useCatalogStore((s) => s.department);
   const tag = useCatalogStore((s) => s.tag);
+  const onRecipes = tag === "recipes";
+  const scrollShop = () => {
+    document.querySelector("main")?.scrollTo({ top: 0 });
+  };
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -59,21 +64,45 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
               </span>
             </button>
             <nav className="hidden lg:flex items-center gap-5 text-[14px]">
-              <a
-                href="#"
-                className="text-costco-blue font-bold border-b-[3px] border-costco-blue py-3"
+              <button
+                type="button"
+                aria-current={!onRecipes ? "page" : undefined}
+                className={
+                  onRecipes
+                    ? "text-[#333] hover:text-costco-blue py-3"
+                    : "text-costco-blue font-bold border-b-[3px] border-costco-blue py-3"
+                }
+                onClick={() => {
+                  clearFilters();
+                  void search();
+                  scrollShop();
+                }}
               >
                 Shop
-              </a>
+              </button>
               <a href="#" className="text-[#333] hover:text-costco-blue py-3">
                 Flyers
               </a>
               <a href="#" className="text-[#333] hover:text-costco-blue py-3">
                 Lists
               </a>
-              <a href="#" className="text-[#333] hover:text-costco-blue py-3">
+              <button
+                type="button"
+                aria-current={onRecipes ? "page" : undefined}
+                className={
+                  onRecipes
+                    ? "text-costco-blue font-bold border-b-[3px] border-costco-blue py-3"
+                    : "text-[#333] hover:text-costco-blue py-3"
+                }
+                onClick={() => {
+                  setQuery("");
+                  setTag("recipes");
+                  void search();
+                  scrollShop();
+                }}
+              >
                 Recipes
-              </a>
+              </button>
             </nav>
           </div>
           <div className="flex items-center gap-3 shrink-0">
@@ -116,7 +145,10 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
             <input
               type="search"
               value={q}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={(e) => {
+                if (tag === "recipes") setTag(null);
+                setQuery(e.target.value);
+              }}
               placeholder="Search products"
               className="w-full h-11 pl-11 pr-10 bg-[#f6f6f6] border border-[#d8d8d8] rounded-full text-[15px] text-[#222] placeholder:text-[#8a8a8a] focus:outline-none focus:bg-white focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15"
             />
