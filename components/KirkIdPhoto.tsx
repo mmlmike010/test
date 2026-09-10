@@ -9,7 +9,7 @@ export default function KirkIdPhoto({ className = "" }: { className?: string }) 
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="/kirk/id-backdrop.jpg?v=2"
+        src="/kirk/id-backdrop.jpg?v=3"
         alt=""
         className="absolute inset-0 h-full w-full object-cover"
       />

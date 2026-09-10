@@ -3,9 +3,7 @@
 import { useState } from "react";
 import Header from "@/components/Header";
 import PromoBanner from "@/components/PromoBanner";
-import DepartmentsSidebar, {
-  MobileAisles,
-} from "@/components/DepartmentsSidebar";
+import { MobileAisles } from "@/components/DepartmentsSidebar";
 import ProductGrid from "@/components/ProductGrid";
 import AskKirkChat from "@/components/AskKirkChat";
 import CartDrawer from "@/components/CartDrawer";
@@ -19,8 +17,6 @@ export default function Home() {
       <PromoBanner />
 
       <div className="flex flex-1 min-h-0">
-        <DepartmentsSidebar compact={isKirkOpen} />
-
         <main className="flex-1 min-w-0 overflow-y-auto overflow-x-hidden">
           <MobileAisles />
           <ProductGrid />

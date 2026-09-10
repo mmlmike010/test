@@ -908,6 +908,36 @@ export const categories: ShopCategory[] = [
     image: "/products/cat-baby.jpg?v=1",
     department: "Babies",
   },
+  {
+    id: "auto",
+    name: "Auto",
+    image: "/products/13.png?v=4",
+    department: "Auto Accessories",
+  },
+  {
+    id: "books",
+    name: "Books",
+    image: "/products/17.png?v=5",
+    department: "Books",
+  },
+  {
+    id: "cameras",
+    name: "Cameras",
+    image: "/products/18.png",
+    department: "Cameras & Camcorders",
+  },
+  {
+    id: "clothing",
+    name: "Clothing",
+    image: "/products/20.png",
+    department: "Clothing & Shoes",
+  },
+  {
+    id: "computers",
+    name: "Computers",
+    image: "/products/22.png?v=3",
+    department: "Computers",
+  },
 ];
 
 export type ProductFilters = {

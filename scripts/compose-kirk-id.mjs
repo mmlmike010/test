@@ -45,10 +45,39 @@ const lighting = await sharp(
   .png()
   .toBuffer();
 
+const grainRes = await fetch(
+  "https://raw.githubusercontent.com/prabhasp/ali-khasro/master/lokta/paper2.jpg"
+);
+if (!grainRes.ok) throw new Error(`${grainRes.status} grain`);
+const grain = await sharp(Buffer.from(await grainRes.arrayBuffer()))
+  .resize(W, H, { fit: "cover" })
+  .modulate({ brightness: 0.7, saturation: 0.15 })
+  .toBuffer();
+const grainLayer = await sharp(grain)
+  .ensureAlpha()
+  .composite([
+    {
+      input: await sharp({
+        create: {
+          width: W,
+          height: H,
+          channels: 4,
+          background: { r: 0, g: 0, b: 0, alpha: 0.72 },
+        },
+      })
+        .png()
+        .toBuffer(),
+      blend: "dest-in",
+    },
+  ])
+  .png()
+  .toBuffer();
+
 await sharp(texture)
   .composite([
     { input: grade, blend: "over" },
     { input: lighting, blend: "over" },
+    { input: grainLayer, blend: "overlay" },
   ])
   .jpeg({ quality: 90 })
   .toFile(join(dir, "id-backdrop.jpg"));
