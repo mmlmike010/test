@@ -8,6 +8,7 @@ import { useCartStore } from "@/lib/store/cart";
 import ProductCard from "@/components/ProductCard";
 import ProductDetailModal from "@/components/ProductDetailModal";
 import type { Product } from "@/lib/data/products";
+import { kirkDrawerOffset, useSessionStore } from "@/lib/store/session";
 
 export default function RecipeDetailDrawer({
   recipe,
@@ -19,6 +20,7 @@ export default function RecipeDetailDrawer({
   const addItem = useCartStore((s) => s.addItem);
   const [justAdded, setJustAdded] = useState(false);
   const [selected, setSelected] = useState<Product | null>(null);
+  const kirkOpen = useSessionStore((s) => s.kirkOpen);
 
   const ingredients = recipe.ingredientIds
     .map((id) => products.find((p) => p.id === id))
@@ -32,7 +34,9 @@ export default function RecipeDetailDrawer({
   };
 
   return (
-    <div className="fixed inset-0 z-[70] flex justify-end">
+    <div
+      className={`fixed inset-0 z-[70] flex justify-end ${kirkDrawerOffset(kirkOpen)}`}
+    >
       <button
         type="button"
         className="absolute inset-0 bg-black/40"

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Header from "@/components/Header";
 import PromoBanner from "@/components/PromoBanner";
 import { MobileAisles } from "@/components/DepartmentsSidebar";
@@ -8,11 +8,12 @@ import ProductGrid from "@/components/ProductGrid";
 import AskKirkChat from "@/components/AskKirkChat";
 import CartDrawer from "@/components/CartDrawer";
 import { hydrateLists } from "@/lib/store/lists";
-import { hydrateSession } from "@/lib/store/session";
+import { hydrateSession, useSessionStore } from "@/lib/store/session";
 import StoreSheets from "@/components/StoreSheets";
 
 export default function Home() {
-  const [isKirkOpen, setIsKirkOpen] = useState(true);
+  const isKirkOpen = useSessionStore((s) => s.kirkOpen);
+  const setKirkOpen = useSessionStore((s) => s.setKirkOpen);
 
   useEffect(() => {
     hydrateLists();
@@ -21,7 +22,7 @@ export default function Home() {
 
   return (
     <div className="h-dvh bg-[#f6f7f8] flex flex-col overflow-hidden">
-      <Header onAskKirkClick={() => setIsKirkOpen(true)} />
+      <Header onAskKirkClick={() => setKirkOpen(true)} />
       <PromoBanner />
 
       <div className="flex flex-1 min-h-0">
@@ -36,11 +37,11 @@ export default function Home() {
               type="button"
               aria-label="Close Ask Kirk"
               className="lg:hidden fixed inset-0 z-[35] bg-black/40"
-              onClick={() => setIsKirkOpen(false)}
+              onClick={() => setKirkOpen(false)}
             />
             <AskKirkChat
               isOpen={isKirkOpen}
-              onClose={() => setIsKirkOpen(false)}
+              onClose={() => setKirkOpen(false)}
             />
           </>
         )}

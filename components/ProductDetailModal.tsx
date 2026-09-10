@@ -8,6 +8,7 @@ import StarRating from "@/components/StarRating";
 import ProductCard from "@/components/ProductCard";
 import { productSize } from "@/lib/ui/packSize";
 import { aisleLabel } from "@/lib/ui/aisleLabels";
+import { kirkDrawerOffset, useSessionStore } from "@/lib/store/session";
 import { useRef, useState } from "react";
 
 export default function ProductDetailModal({
@@ -24,6 +25,7 @@ export default function ProductDetailModal({
   );
   const [justAdded, setJustAdded] = useState(false);
   const scrollerRef = useRef<HTMLDivElement>(null);
+  const kirkOpen = useSessionStore((s) => s.kirkOpen);
 
   const related = products
     .filter(
@@ -47,7 +49,9 @@ export default function ProductDetailModal({
   };
 
   return (
-    <div className="fixed inset-0 z-[70] flex justify-end">
+    <div
+      className={`fixed inset-0 z-[70] flex justify-end ${kirkDrawerOffset(kirkOpen)}`}
+    >
       <button
         type="button"
         className="absolute inset-0 bg-black/40"

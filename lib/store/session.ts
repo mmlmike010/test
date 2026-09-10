@@ -93,6 +93,8 @@ function writeSession(state: Persisted) {
 type SessionState = Persisted & {
   sheet: StoreSheet;
   orderPlaced: boolean;
+  kirkOpen: boolean;
+  setKirkOpen: (open: boolean) => void;
   setSheet: (sheet: StoreSheet) => void;
   signIn: (displayName: string, email: string) => void;
   signOut: () => void;
@@ -121,6 +123,8 @@ export const useSessionStore = create<SessionState>((set, get) => ({
   ...fallback,
   sheet: null,
   orderPlaced: false,
+  kirkOpen: true,
+  setKirkOpen: (kirkOpen) => set({ kirkOpen }),
   setSheet: (sheet) => set({ sheet }),
   signIn: (displayName, email) => {
     const next = {
@@ -199,4 +203,9 @@ export function deliveryWindow(windowId: string): DeliveryWindow {
 
 export function formatAddress(address: DeliveryAddress): string {
   return `${address.zip} ${address.city}`;
+}
+
+/** Leave the Ask Kirk rail uncovered on desktop. Matches AskKirkChat widths. */
+export function kirkDrawerOffset(open: boolean) {
+  return open ? "lg:right-[380px] xl:right-[420px]" : "";
 }
