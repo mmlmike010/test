@@ -174,7 +174,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
             <span className="hidden sm:inline font-bold text-[13px] text-[#333]">
               Cart
             </span>
-            <span className="absolute -top-1.5 -right-1 min-w-[20px] h-[20px] px-1 bg-costco-blue text-white text-[11px] font-bold rounded-full flex items-center justify-center">
+            <span className="absolute -top-1.5 -right-1 min-w-[20px] h-[20px] px-1 bg-[#0AAD0A] text-white text-[11px] font-bold rounded-full flex items-center justify-center">
               {totalItems}
             </span>
           </button>

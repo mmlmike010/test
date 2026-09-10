@@ -1,11 +1,12 @@
 "use client";
 
 import { X, Check, Plus, Star } from "lucide-react";
-import type { Product } from "@/lib/data/products";
+import { products, type Product } from "@/lib/data/products";
 import { useCartStore } from "@/lib/store/cart";
 import StarRating from "@/components/StarRating";
+import ProductCard from "@/components/ProductCard";
 import { productSize } from "@/lib/ui/packSize";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 export default function ProductDetailModal({
   product,
@@ -14,16 +15,33 @@ export default function ProductDetailModal({
   product: Product;
   onClose: () => void;
 }) {
+  const [current, setCurrent] = useState(product);
   const addItem = useCartStore((s) => s.addItem);
   const qty = useCartStore(
-    (s) => s.items.find((i) => i.product.id === product.id)?.quantity || 0
+    (s) => s.items.find((i) => i.product.id === current.id)?.quantity || 0
   );
   const [justAdded, setJustAdded] = useState(false);
+  const scrollerRef = useRef<HTMLDivElement>(null);
+
+  const related = products
+    .filter(
+      (p) =>
+        p.id !== current.id &&
+        (p.department === current.department ||
+          p.category === current.category)
+    )
+    .slice(0, 4);
 
   const onAdd = () => {
-    addItem(product);
+    addItem(current);
     setJustAdded(true);
     window.setTimeout(() => setJustAdded(false), 1200);
+  };
+
+  const openRelated = (next: Product) => {
+    setCurrent(next);
+    setJustAdded(false);
+    scrollerRef.current?.scrollTo({ top: 0 });
   };
 
   return (
@@ -37,7 +55,7 @@ export default function ProductDetailModal({
       <div
         role="dialog"
         aria-modal="true"
-        aria-label={`${product.brand} ${product.name}`}
+        aria-label={`${current.brand} ${current.name}`}
         className="relative w-full max-w-[480px] h-full bg-white shadow-2xl flex flex-col"
       >
         <div className="sticky top-0 z-10 flex items-center justify-between px-4 py-3 border-b border-costco-border bg-white shrink-0">
@@ -52,76 +70,94 @@ export default function ProductDetailModal({
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto min-h-0">
+        <div ref={scrollerRef} className="flex-1 overflow-y-auto min-h-0">
           <div className="relative aspect-square bg-white border-b border-[#eee]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={product.image}
-              alt={`${product.brand} ${product.name}`}
+              src={current.image}
+              alt={`${current.brand} ${current.name}`}
               className="absolute inset-0 w-full h-full object-contain p-8"
             />
-            {product.savings > 0 && (
+            {current.savings > 0 && (
               <div className="absolute top-3 left-3 bg-costco-red text-white px-2 py-1 text-[12px] font-bold rounded-[4px]">
-                ${product.savings.toFixed(2)} off
+                ${current.savings.toFixed(2)} off
               </div>
             )}
           </div>
           <div className="p-5 flex flex-col">
             <h2 className="text-[22px] font-bold text-[#1a1a1a] leading-snug">
-              {product.brand} {product.name}
+              {current.brand} {current.name}
             </h2>
-            {productSize(product.id) && (
+            {productSize(current.id) && (
               <p className="text-[14px] text-[#6b6b6b] mt-1">
-                {productSize(product.id)}
+                {productSize(current.id)}
               </p>
             )}
             <div className="mt-2">
               <StarRating
-                rating={product.rating}
-                reviewCount={product.reviewCount}
+                rating={current.rating}
+                reviewCount={current.reviewCount}
                 size="md"
               />
             </div>
 
             <div className="mt-4 flex items-baseline gap-2 flex-wrap">
               <span className="text-[28px] font-bold text-[#1a1a1a] tabular-nums leading-none">
-                ${product.price.toFixed(2)}
+                ${current.price.toFixed(2)}
               </span>
               <span className="text-[15px] text-[#8a8a8a]">each</span>
               <span className="text-sm text-[#888] line-through tabular-nums">
-                ${product.originalPrice.toFixed(2)}
+                ${current.originalPrice.toFixed(2)}
               </span>
             </div>
-            {product.savings > 0 && (
+            {current.savings > 0 && (
               <p className="text-[13px] font-bold text-[#2e7d32] mt-1">
-                Save ${product.savings.toFixed(2)}
+                Save ${current.savings.toFixed(2)}
               </p>
             )}
             <p className="text-[12px] text-[#188038] mt-2">
-              {product.inStock ? "Many in stock" : "Out of stock"}
+              {current.inStock ? "Many in stock" : "Out of stock"}
               <span className="text-[#666]">
                 {" "}
-                · {product.department}
+                · {current.department}
               </span>
             </p>
             <div className="mt-5 pt-4 border-t border-[#eee]">
               <h3 className="text-[15px] font-bold text-[#1a1a1a]">Details</h3>
               <p className="text-[13px] text-[#555] mt-1.5 leading-snug">
-                {product.department}
-                {product.category ? ` · ${product.category}` : ""}
+                {current.department}
+                {current.category ? ` · ${current.category}` : ""}
               </p>
             </div>
           </div>
+
+        {related.length > 0 && (
+          <div className="px-5 pb-5">
+            <h3 className="text-[15px] font-bold text-[#1a1a1a] mb-2.5">
+              Related items
+            </h3>
+            <div className="flex gap-2.5 overflow-x-auto scrollbar-hide -mx-1 px-1 pb-1">
+              {related.map((item) => (
+                <ProductCard
+                  key={item.id}
+                  product={item}
+                  compact
+                  onOpen={() => openRelated(item)}
+                />
+              ))}
+            </div>
+          </div>
+        )}
 
         <div className="px-5 pb-6 pt-4 border-t border-[#eee]">
           <h3 className="text-[15px] font-bold text-[#1a1a1a] mb-1">
             Member reviews
           </h3>
           <p className="text-[12px] text-[#666] mb-4">
-            Based on {product.reviewCount.toLocaleString()} ratings
+            Based on {current.reviewCount.toLocaleString()} ratings
           </p>
           <ul className="space-y-3">
-            {product.reviews.map((r, idx) => (
+            {current.reviews.map((r, idx) => (
               <li
                 key={`${r.author}-${idx}`}
                 className="border border-[#e8e8e8] bg-[#fafafa] rounded-[12px] px-3.5 py-3"

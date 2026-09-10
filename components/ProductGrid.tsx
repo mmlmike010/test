@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { ChevronRight } from "lucide-react";
 import { categories, filterProducts } from "@/lib/data/products";
 import type { Product } from "@/lib/data/products";
 import { useCatalogStore } from "@/lib/store/catalog";
@@ -34,10 +35,11 @@ function AisleRow({
         </h2>
         <button
           type="button"
-          className="text-[14px] text-costco-blue font-bold hover:underline shrink-0"
+          className="inline-flex items-center gap-0.5 text-[14px] text-costco-blue font-bold hover:underline shrink-0"
           onClick={onShowAll}
         >
           Show all
+          <ChevronRight className="w-4 h-4" aria-hidden="true" />
         </button>
       </div>
       <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-1 -mx-1 px-1">
@@ -66,6 +68,7 @@ export default function ProductGrid() {
   const setQuery = useCatalogStore((s) => s.setQuery);
   const clearFilters = useCatalogStore((s) => s.clearFilters);
   const [selected, setSelected] = useState<Product | null>(null);
+  const [sort, setSort] = useState<"relevance" | "price">("relevance");
 
   useEffect(() => {
     void search();
@@ -85,6 +88,13 @@ export default function ProductGrid() {
     tagLabel,
     q.trim() ? `“${q.trim()}”` : null,
   ].filter(Boolean);
+
+  const shown = useMemo(() => {
+    if (sort === "price") {
+      return [...filtered].sort((a, b) => a.price - b.price);
+    }
+    return filtered;
+  }, [filtered, sort]);
 
   const showAisle = (next: { department?: string; tag?: string }) => {
     setQuery("");
@@ -156,22 +166,22 @@ export default function ProductGrid() {
             {[
               {
                 title: "Weekly Savings",
-                image: "/products/hero-weekly.jpg?v=5",
+                image: "/products/hero-weekly.jpg?v=6",
                 onClick: () => showAisle({ tag: "weekly" }),
               },
               {
                 title: "Kirkland Signature",
-                image: "/products/hero-kirkland.jpg?v=5",
+                image: "/products/hero-kirkland.jpg?v=6",
                 onClick: () => showAisle({ tag: "kirkland" }),
               },
               {
                 title: "What's New",
-                image: "/products/hero-new.jpg?v=5",
+                image: "/products/hero-new.jpg?v=6",
                 onClick: () => showAisle({ tag: "new" }),
               },
               {
                 title: "Treasure Hunt",
-                image: "/products/hero-treasure.jpg?v=5",
+                image: "/products/hero-treasure.jpg?v=6",
                 onClick: () => showAisle({ tag: "treasure" }),
               },
             ].map((tile) => (
@@ -187,9 +197,15 @@ export default function ProductGrid() {
                   alt=""
                   className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
-                <span className="absolute inset-x-0 bottom-0 h-[42%] bg-gradient-to-t from-black/55 via-black/20 to-transparent" />
-                <span className="absolute bottom-3.5 left-3.5 right-3.5 text-[20px] sm:text-[24px] font-bold text-white leading-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.55)]">
-                  {tile.title}
+                <span className="absolute inset-x-0 bottom-0 h-[48%] bg-gradient-to-t from-black/62 via-black/22 to-transparent" />
+                <span className="absolute bottom-3.5 left-3.5 right-3.5">
+                  <span className="block text-[20px] sm:text-[24px] font-bold text-white leading-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.55)]">
+                    {tile.title}
+                  </span>
+                  <span className="mt-1 inline-flex items-center gap-0.5 text-[13px] font-bold text-white">
+                    Shop
+                    <ChevronRight className="w-4 h-4" aria-hidden="true" />
+                  </span>
                 </span>
               </button>
             ))}
@@ -219,16 +235,44 @@ export default function ProductGrid() {
                 {loading ? " · Updating…" : ""}
               </p>
             </div>
-            <button
-              type="button"
-              className="text-sm text-costco-blue font-bold hover:underline"
-              onClick={() => {
-                clearFilters();
-                void search();
-              }}
-            >
-              Clear filters
-            </button>
+            <div className="flex items-center gap-2 flex-wrap">
+              <div
+                className="inline-flex items-center rounded-full border border-[#d8d8d8] bg-white p-0.5"
+                role="group"
+                aria-label="Sort items"
+              >
+                {(
+                  [
+                    ["relevance", "Relevance"],
+                    ["price", "Price"],
+                  ] as const
+                ).map(([value, label]) => (
+                  <button
+                    key={value}
+                    type="button"
+                    aria-pressed={sort === value}
+                    onClick={() => setSort(value)}
+                    className={`px-3 py-1.5 text-[12px] font-bold rounded-full ${
+                      sort === value
+                        ? "bg-[#e8f2fa] text-costco-blue"
+                        : "text-[#555] hover:bg-[#f6f6f6]"
+                    }`}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+              <button
+                type="button"
+                className="text-sm text-costco-blue font-bold hover:underline"
+                onClick={() => {
+                  clearFilters();
+                  void search();
+                }}
+              >
+                Clear filters
+              </button>
+            </div>
           </div>
 
           {!loading && filtered.length === 0 ? (
@@ -250,7 +294,7 @@ export default function ProductGrid() {
             </div>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3">
-              {filtered.map((product) => (
+              {shown.map((product) => (
                 <ProductCard
                   key={product.id}
                   product={product}
@@ -287,6 +331,7 @@ export default function ProductGrid() {
 
       {selected && (
         <ProductDetailModal
+          key={selected.id}
           product={selected}
           onClose={() => setSelected(null)}
         />
