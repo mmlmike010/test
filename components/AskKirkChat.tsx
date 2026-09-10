@@ -15,7 +15,13 @@ import { useRouter } from "next/navigation";
 import { useCartStore } from "@/lib/store/cart";
 import { products } from "@/lib/data/products";
 import { usePlaceInRoomStore } from "@/lib/store/placeInRoom";
-import { seeInMyRoomHref, wantsPlaceInRoom } from "@/lib/placeInRoom";
+import {
+  parsePlaceInRoomAsk,
+  pickFurnitureProduct,
+  seeInMyRoomHref,
+  wantsPlaceInRoom,
+  type SceneId,
+} from "@/lib/placeInRoom";
 import KirkMark from "@/components/KirkMark";
 import CostcoLogo from "@/components/CostcoLogo";
 import GoldStarMark from "@/components/GoldStarMark";
@@ -232,8 +238,15 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
     }
   };
 
-  const openSeeInMyRoom = () => {
-    router.push(seeInMyRoomHref(lastFurnitureId));
+  const openSeeInMyRoom = (intent?: { sceneId?: SceneId; upload?: boolean }) => {
+    const product = pickFurnitureProduct(intent?.sceneId, lastFurnitureId);
+    router.push(
+      seeInMyRoomHref({
+        productId: product.id,
+        sceneId: intent?.sceneId,
+        upload: intent?.upload,
+      })
+    );
   };
 
   const sendMessage = async (text: string) => {
@@ -241,8 +254,9 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
     if (!trimmed || isLoading) return;
 
     if (wantsPlaceInRoom(trimmed)) {
+      const intent = parsePlaceInRoomAsk(trimmed, lastFurnitureId);
       setInput("");
-      openSeeInMyRoom();
+      openSeeInMyRoom({ sceneId: intent.sceneId, upload: intent.upload });
       return;
     }
 
@@ -727,19 +741,75 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
         </div>
       )}
 
-      <div className="px-3.5 pt-2.5 pb-3 border-t border-[#e5e5e5] bg-white shrink-0">
+      <div className="px-3.5 pt-2.5 pb-3 border-t border-[#e5e5e5] bg-white shrink-0 max-h-[48vh] overflow-y-auto">
+        <div className="flex items-center gap-2 mb-1.5">
+          <p className="text-[11px] font-bold text-[#666]">Ask Costco</p>
+          <span className="inline-flex items-center rounded-full bg-costco-ai-pill px-2 py-[3px] text-[10px] font-bold text-costco-blue">
+            ✦ AI
+          </span>
+        </div>
+        <p className="text-[12px] text-[#1a1a1a] mb-2">
+          Visualize this sofa before you buy — pick a space:
+        </p>
+        <div className="flex flex-col gap-1.5 mb-2.5">
+          {(
+            [
+              {
+                label: "See this in my room",
+                sceneId: undefined,
+                upload: false,
+                accent: "blue",
+              },
+              {
+                label: "Stage my patio / landscape",
+                sceneId: "patio" as const,
+                upload: false,
+                accent: "red",
+              },
+              {
+                label: "Try living room template",
+                sceneId: "living-room" as const,
+                upload: false,
+                accent: "blue",
+              },
+              {
+                label: "Upload a room photo",
+                sceneId: undefined,
+                upload: true,
+                accent: "blue",
+              },
+            ] as const
+          ).map((chip) => (
+            <button
+              key={chip.label}
+              type="button"
+              onClick={() =>
+                openSeeInMyRoom({
+                  sceneId: chip.sceneId,
+                  upload: chip.upload,
+                })
+              }
+              disabled={isLoading}
+              className="flex h-[44px] w-full items-center gap-3 rounded-full border border-costco-border bg-costco-chip pl-3.5 pr-4 text-left disabled:opacity-50"
+            >
+              <span
+                className={`flex size-7 shrink-0 items-center justify-center rounded-[14px] text-[12px] font-bold text-white ${
+                  chip.accent === "red" ? "bg-costco-red" : "bg-costco-blue"
+                }`}
+                aria-hidden="true"
+              >
+                ★
+              </span>
+              <span className="text-[13px] font-semibold text-[#1a1a1a]">
+                {chip.label}
+              </span>
+            </button>
+          ))}
+        </div>
         <p className="text-[11px] font-bold text-[#666] mb-1.5">
           Members often ask
         </p>
         <div className="flex flex-wrap gap-1.5 mb-2.5 content-start">
-          <button
-            type="button"
-            onClick={openSeeInMyRoom}
-            disabled={isLoading}
-            className="px-2.5 py-1 bg-[#e8f2fa] hover:bg-[#dceaf6] hover:border-costco-blue text-costco-blue disabled:opacity-50 text-[11px] leading-snug rounded-full transition-colors border border-costco-blue font-bold max-w-full"
-          >
-            See it in my room
-          </button>
           {suggestionChips.map((chip) => (
             <button
               key={chip}

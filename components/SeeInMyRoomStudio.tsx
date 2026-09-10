@@ -1,10 +1,16 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { ChevronLeft, Sparkles, Upload } from "lucide-react";
 import type { Product } from "@/lib/data/products";
-import { defaultSceneForProduct } from "@/lib/placeInRoom";
+import {
+  ROOM_SCENES,
+  defaultSceneForProduct,
+  getScene,
+  type SceneId,
+} from "@/lib/placeInRoom";
+import { usePlaceInRoomStore } from "@/lib/store/placeInRoom";
 
 function readImageAsDataUrl(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -18,14 +24,33 @@ function readImageAsDataUrl(file: File): Promise<string> {
   });
 }
 
-export default function SeeInMyRoomStudio({ product }: { product: Product }) {
-  const [roomUrl, setRoomUrl] = useState<string | null>(null);
+export default function SeeInMyRoomStudio({
+  product,
+  initialScene,
+  startUpload,
+}: {
+  product: Product;
+  initialScene?: SceneId;
+  startUpload?: boolean;
+}) {
+  const [sceneId, setSceneId] = useState<SceneId>(
+    initialScene || defaultSceneForProduct(product)
+  );
+  const [roomUrl, setRoomUrl] = useState<string | null>(() => {
+    const pending = usePlaceInRoomStore.getState().pendingRoomImage;
+    if (pending) usePlaceInRoomStore.getState().setPendingRoomImage(null);
+    return pending;
+  });
   const [mergedUrl, setMergedUrl] = useState<string | null>(null);
   const [imagineMode, setImagineMode] = useState<string | null>(null);
   const [loading, setLoading] = useState<"generate" | "upload" | null>(null);
   const [error, setError] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
-  const sceneId = defaultSceneForProduct(product);
+  const scene = getScene(sceneId);
+
+  useEffect(() => {
+    if (startUpload) fileRef.current?.click();
+  }, [startUpload]);
 
   const onUpload = async (file: File) => {
     setError(null);
@@ -82,16 +107,24 @@ export default function SeeInMyRoomStudio({ product }: { product: Product }) {
         Shop
       </Link>
 
-      <h1 className="text-[22px] lg:text-[24px] font-bold text-[#1a1a1a] tracking-tight">
-        See it in my room
-      </h1>
-      <p className="text-[13px] text-[#666] mt-1 mb-4">
-        Tap Place in room — Grok Imagine generates a space around this sofa.
-        Upload is optional if you want your own photo.
+      <div className="flex items-center justify-between gap-2 mb-1">
+        <h1 className="text-[22px] lg:text-[24px] font-bold text-[#1a1a1a] tracking-tight">
+          See in my room
+        </h1>
+        <span className="inline-flex items-center gap-1 rounded-full bg-costco-ai-pill px-2 py-[3px] text-costco-blue">
+          <span className="text-[10px] font-bold" aria-hidden="true">
+            ✦
+          </span>
+          <span className="text-[11px] font-semibold">AI staging</span>
+        </span>
+      </div>
+      <p className="text-[13px] text-costco-text-muted mt-1 mb-4">
+        Pick a Costco room template or upload a photo. Place in room lets Grok
+        Imagine generate the space around this sofa — no upload required.
       </p>
 
       <div className="grid sm:grid-cols-2 gap-3 mb-3">
-        <section className="bg-white border border-[#eee] rounded-[12px] overflow-hidden">
+        <section className="bg-white border border-costco-border rounded-[12px] overflow-hidden">
           <p className="px-3.5 py-2 text-[12px] font-bold text-[#555] border-b border-[#eee]">
             Product photo
           </p>
@@ -108,15 +141,14 @@ export default function SeeInMyRoomStudio({ product }: { product: Product }) {
           </p>
         </section>
 
-        <section className="bg-white border border-[#eee] rounded-[12px] overflow-hidden">
+        <section className="bg-white border border-costco-border rounded-[12px] overflow-hidden">
           <p className="px-3.5 py-2 text-[12px] font-bold text-[#555] border-b border-[#eee]">
-            Your room{" "}
-            <span className="font-semibold text-[#888]">(optional)</span>
+            {roomUrl ? "Your room" : `${scene.label} template`}
           </p>
           <button
             type="button"
             onClick={() => fileRef.current?.click()}
-            className="relative block w-full aspect-[4/3] bg-[#f6f7f8] text-left"
+            className="relative block w-full aspect-[4/3] bg-costco-bg text-left"
           >
             {roomUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
@@ -126,13 +158,18 @@ export default function SeeInMyRoomStudio({ product }: { product: Product }) {
                 className="absolute inset-0 w-full h-full object-cover"
               />
             ) : (
-              <span className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-[#555]">
-                <Upload className="w-6 h-6 text-costco-blue" aria-hidden="true" />
-                <span className="text-[13px] font-bold text-costco-blue">
-                  Upload a room photo
+              <>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={scene.image}
+                  alt={`${scene.label} template`}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                <span className="absolute inset-0 flex flex-col items-center justify-center gap-1 bg-black/20 text-white">
+                  <Upload className="w-5 h-5" aria-hidden="true" />
+                  <span className="text-[13px] font-bold">Upload photo</span>
                 </span>
-                <span className="text-[12px] text-[#777]">JPG or PNG</span>
-              </span>
+              </>
             )}
           </button>
           <input
@@ -148,12 +185,47 @@ export default function SeeInMyRoomStudio({ product }: { product: Product }) {
         </section>
       </div>
 
+      <div className="flex flex-wrap gap-1.5 mb-3">
+        {ROOM_SCENES.map((s) => {
+          const active = s.id === sceneId && !roomUrl;
+          return (
+            <button
+              key={s.id}
+              type="button"
+              onClick={() => {
+                setSceneId(s.id);
+                setRoomUrl(null);
+                setMergedUrl(null);
+              }}
+              className={`rounded-full px-3 py-2 text-[12px] font-semibold ${
+                active
+                  ? "bg-costco-blue text-white"
+                  : "border border-costco-border bg-costco-chip text-[#1a1a1a]"
+              }`}
+            >
+              {s.label}
+            </button>
+          );
+        })}
+        <button
+          type="button"
+          onClick={() => fileRef.current?.click()}
+          className={`rounded-full px-3 py-2 text-[12px] font-semibold ${
+            roomUrl
+              ? "bg-costco-blue text-white"
+              : "border border-costco-border bg-costco-chip text-[#1a1a1a]"
+          }`}
+        >
+          Upload photo
+        </button>
+      </div>
+
       <div className="flex flex-wrap items-center gap-2">
         <button
           type="button"
           onClick={() => void merge(false)}
           disabled={loading !== null}
-          className="w-full sm:w-auto min-w-[200px] h-12 px-5 rounded-full bg-costco-blue text-white text-[15px] font-bold hover:bg-costco-blue-hover disabled:opacity-50"
+          className="w-full sm:w-auto min-w-[200px] h-12 px-5 rounded-[8px] bg-costco-blue text-white text-[15px] font-semibold hover:bg-costco-blue-hover disabled:opacity-50"
         >
           {loading === "generate" ? "Grok Imagine is placing…" : "Place in room"}
         </button>
@@ -162,7 +234,7 @@ export default function SeeInMyRoomStudio({ product }: { product: Product }) {
             type="button"
             onClick={() => void merge(true)}
             disabled={loading !== null}
-            className="w-full sm:w-auto h-12 px-5 rounded-full border border-costco-blue bg-white text-costco-blue text-[15px] font-bold hover:bg-[#e8f2fa] disabled:opacity-50"
+            className="w-full sm:w-auto h-12 px-5 rounded-[8px] border border-costco-blue bg-white text-costco-blue text-[15px] font-semibold hover:bg-costco-chip disabled:opacity-50"
           >
             {loading === "upload"
               ? "Grok Imagine is merging…"
@@ -177,9 +249,9 @@ export default function SeeInMyRoomStudio({ product }: { product: Product }) {
         </p>
       )}
 
-      <section className="mt-4 bg-white border border-[#eee] rounded-[12px] overflow-hidden">
+      <section className="mt-4 rounded-[12px] border-2 border-costco-blue bg-white overflow-hidden">
         <div className="px-3.5 py-2 flex items-center justify-between border-b border-[#eee]">
-          <p className="text-[12px] font-bold text-[#555]">Merged result</p>
+          <p className="text-[16px] font-bold text-[#1a1a1a]">See in my room</p>
           {imagineMode && (
             <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-costco-blue">
               <Sparkles className="w-3 h-3" aria-hidden="true" />
@@ -187,19 +259,19 @@ export default function SeeInMyRoomStudio({ product }: { product: Product }) {
             </span>
           )}
         </div>
-        <div className="relative aspect-video bg-[#f3f3f3]">
+        <div className="relative aspect-video bg-costco-bg">
           {mergedUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={mergedUrl}
-              alt={`${product.name} placed in a generated room`}
+              alt={`${product.name} placed in ${scene.label}`}
               className="absolute inset-0 w-full h-full object-contain bg-white"
             />
           ) : (
-            <p className="absolute inset-0 flex items-center justify-center text-[13px] text-[#777] px-4 text-center">
+            <p className="absolute inset-0 flex items-center justify-center text-[13px] text-[#555] px-4 text-center">
               {loading
                 ? "Grok Imagine is generating the room and placing the sofa…"
-                : "Tap Place in room — no upload needed."}
+                : `${scene.label} template · tap Place in room`}
             </p>
           )}
         </div>

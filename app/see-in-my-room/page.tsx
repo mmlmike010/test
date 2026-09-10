@@ -8,6 +8,7 @@ import { products } from "@/lib/data/products";
 import {
   DEFAULT_FURNITURE_ID,
   isFurnitureProduct,
+  isSceneId,
 } from "@/lib/placeInRoom";
 
 function SeeInMyRoomPageInner() {
@@ -17,6 +18,9 @@ function SeeInMyRoomPageInner() {
     products.find((p) => p.id === requested && isFurnitureProduct(p)) ||
     products.find((p) => p.id === DEFAULT_FURNITURE_ID) ||
     products.find(isFurnitureProduct);
+  const rawScene = params.get("scene");
+  const scene = isSceneId(rawScene) ? rawScene : undefined;
+  const startUpload = params.get("upload") === "1";
 
   if (!product) {
     return (
@@ -28,7 +32,11 @@ function SeeInMyRoomPageInner() {
 
   return (
     <StoreChrome>
-      <SeeInMyRoomStudio product={product} />
+      <SeeInMyRoomStudio
+        product={product}
+        initialScene={scene}
+        startUpload={startUpload}
+      />
     </StoreChrome>
   );
 }

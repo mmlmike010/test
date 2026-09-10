@@ -8,8 +8,8 @@ import ProductCard from "@/components/ProductCard";
 import { productSize } from "@/lib/ui/packSize";
 import { aisleLabel } from "@/lib/ui/aisleLabels";
 import { useRef, useState } from "react";
-import { useRouter } from "next/navigation";
-import { isFurnitureProduct, seeInMyRoomHref } from "@/lib/placeInRoom";
+import SeeInMyRoomCard from "@/components/SeeInMyRoomCard";
+import { isFurnitureProduct } from "@/lib/placeInRoom";
 import { usePlaceInRoomStore } from "@/lib/store/placeInRoom";
 
 export default function ProductDetailModal({
@@ -26,8 +26,8 @@ export default function ProductDetailModal({
   );
   const [justAdded, setJustAdded] = useState(false);
   const scrollerRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
   const setLastFurniture = usePlaceInRoomStore((s) => s.setLastProduct);
+  const furniture = isFurnitureProduct(current);
 
   const related = products
     .filter(
@@ -49,12 +49,6 @@ export default function ProductDetailModal({
     setCurrent(next);
     setJustAdded(false);
     scrollerRef.current?.scrollTo({ top: 0 });
-  };
-
-  const openSeeInMyRoom = () => {
-    setLastFurniture(current.id);
-    router.push(seeInMyRoomHref(current.id));
-    onClose();
   };
 
   return (
@@ -141,14 +135,12 @@ export default function ProductDetailModal({
                 · {aisleLabel(current.department)}
               </span>
             </p>
-            {isFurnitureProduct(current) && (
-              <button
-                type="button"
-                onClick={openSeeInMyRoom}
-                className="mt-4 w-full h-11 rounded-full bg-costco-blue text-white text-[14px] font-bold hover:bg-costco-blue-hover"
-              >
-                See it in my room
-              </button>
+            {furniture && (
+              <SeeInMyRoomCard
+                key={current.id}
+                product={current}
+                onNavigate={onClose}
+              />
             )}
             <div className="mt-5 pt-4 border-t border-[#eee]">
               <h3 className="text-[15px] font-bold text-[#1a1a1a]">Details</h3>
@@ -226,17 +218,29 @@ export default function ProductDetailModal({
           <button
             type="button"
             onClick={onAdd}
-            className={`flex-1 py-3 font-bold transition-colors flex items-center justify-center gap-2 rounded-full ${
-              justAdded
-                ? "bg-[#099809] text-white"
-                : "bg-[#0AAD0A] text-white hover:bg-[#099809]"
+            className={`flex-1 py-3 font-bold transition-colors flex items-center justify-center gap-2 ${
+              furniture
+                ? `rounded-[8px] ${
+                    justAdded
+                      ? "bg-costco-red-hover text-white"
+                      : "bg-costco-red text-white hover:bg-costco-red-hover"
+                  }`
+                : `rounded-full ${
+                    justAdded
+                      ? "bg-[#099809] text-white"
+                      : "bg-[#0AAD0A] text-white hover:bg-[#099809]"
+                  }`
             }`}
           >
             {justAdded ? (
               <>
                 <Check className="w-4 h-4" />
-                Added{qty > 0 ? ` · ${qty} in cart` : ""}
+                {furniture
+                  ? "Added to cart"
+                  : `Added${qty > 0 ? ` · ${qty} in cart` : ""}`}
               </>
+            ) : furniture ? (
+              "Add to cart"
             ) : (
               <>
                 <Plus className="w-4 h-4" />
