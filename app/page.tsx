@@ -33,7 +33,7 @@ export default function Home() {
             <button
               type="button"
               aria-label="Close Ask Kirk"
-              className="lg:hidden fixed inset-0 z-40 bg-black/40"
+              className="lg:hidden fixed inset-0 z-[35] bg-black/40"
               onClick={() => setIsKirkOpen(false)}
             />
             <AskKirkChat

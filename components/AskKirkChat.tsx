@@ -491,7 +491,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
 
   return (
     <>
-    <aside className="fixed inset-y-0 right-0 z-50 w-full max-w-[420px] lg:static lg:z-40 lg:w-[380px] xl:w-[420px] lg:max-w-none shrink-0 bg-white border-l border-[#e5e5e5] h-full flex flex-col">
+    <aside className="fixed inset-y-0 right-0 z-40 w-full max-w-[420px] lg:static lg:z-30 lg:w-[380px] xl:w-[420px] lg:max-w-none shrink-0 bg-white border-l border-[#e5e5e5] h-full flex flex-col">
       <div className="shrink-0 border-b border-[#e5e5e5] bg-white">
         <div className="bg-costco-red px-3.5 py-3 flex items-center justify-between gap-2">
           <div className="flex items-center gap-2.5 min-w-0">
