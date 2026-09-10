@@ -79,7 +79,8 @@ function stagingPrompt(product: Product, sceneId: SceneId, uploaded: boolean): s
     : setting;
   return [
     `Virtual staging / place-in-room composite for a Costco furniture SKU.`,
-    `Place this exact product into ${roomBit}: ${sku}.`,
+    `One reference image is a real product photograph of ${sku} — preserve that exact sofa/furniture: fabric color, cushion shape, arms, legs, and silhouette. Do not replace it with a different design.`,
+    `Place that photographed SKU into ${roomBit}.`,
     `The furniture must look physically present: correct scale, grounded on the floor, natural contact shadows, matching light direction.`,
     `Photorealistic interior/exterior catalog photo. No people, no text overlays, no invented logos, no watermark.`,
   ].join(" ");
@@ -172,24 +173,26 @@ export async function stageFurnitureWithImagine(opts: {
   const uploaded = Boolean(opts.roomImage);
   const prompt = stagingPrompt(product, opts.sceneId, uploaded);
 
+  const skuBuf = await loadLocalOrRemote(product.image);
+  if (!skuBuf) {
+    console.error("Imagine staging needs a photographic SKU at", product.image);
+    return null;
+  }
+  const skuUri = await toJpegDataUri(skuBuf);
+
   const refs: string[] = [];
   const roomBuf = await loadLocalOrRemote(opts.roomImage || scene.image);
   if (roomBuf) refs.push(await toJpegDataUri(roomBuf));
-  const skuBuf = await loadLocalOrRemote(product.image);
-  if (skuBuf) refs.push(await toJpegDataUri(skuBuf));
+  refs.push(skuUri);
 
-  // Prefer edits: room (+ SKU) in, staged environment out — real compositing.
-  if (refs.length) {
-    try {
-      const edited = await imagineEdits(opts.apiKey, prompt, refs);
-      if (edited) return { url: edited, model: IMAGINE_MODEL, mode: "edits" };
-      if (refs.length > 1) {
-        const roomOnly = await imagineEdits(opts.apiKey, prompt, [refs[0]!]);
-        if (roomOnly) return { url: roomOnly, model: IMAGINE_MODEL, mode: "edits" };
-      }
-    } catch (err) {
-      console.error("Imagine edits threw", err);
-    }
+  // Prefer edits: room + photographed SKU in, staged environment out.
+  try {
+    const edited = await imagineEdits(opts.apiKey, prompt, refs);
+    if (edited) return { url: edited, model: IMAGINE_MODEL, mode: "edits" };
+    const skuOnly = await imagineEdits(opts.apiKey, prompt, [skuUri]);
+    if (skuOnly) return { url: skuOnly, model: IMAGINE_MODEL, mode: "edits" };
+  } catch (err) {
+    console.error("Imagine edits threw", err);
   }
 
   try {

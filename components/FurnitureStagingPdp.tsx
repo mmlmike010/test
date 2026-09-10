@@ -10,6 +10,7 @@ import {
   ROOM_SCENES,
   defaultSceneForProduct,
   getScene,
+  placementStyle,
   type SceneId,
 } from "@/lib/placeInRoom";
 
@@ -169,6 +170,15 @@ function FurnitureStagingBody({
                     }
                     className="absolute inset-0 w-full h-full object-cover"
                   />
+                  {!stagedUrl && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={product.image}
+                      alt=""
+                      className="absolute object-contain drop-shadow-[0_12px_18px_rgba(0,0,0,0.28)]"
+                      style={placementStyle(scene.placement)}
+                    />
+                  )}
                   {loading && (
                     <div className="absolute inset-0 bg-white/70 flex flex-col items-center justify-center gap-2">
                       <Sparkles className="w-5 h-5 text-costco-blue animate-pulse" />
