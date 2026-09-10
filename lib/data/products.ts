@@ -481,7 +481,7 @@ export const products: Product[] = [
     savings: 5.0,
     image: "/products/14.png",
     inStock: true,
-    tags: ["babies", "kirkland"],
+    tags: ["babies", "kirkland", "treasure"],
     rating: 4.7,
     reviewCount: 236,
     reviews: [
@@ -636,7 +636,7 @@ export const products: Product[] = [
     savings: 5.0,
     image: "/products/19.png?v=2",
     inStock: true,
-    tags: ["cleaning", "kirkland"],
+    tags: ["cleaning", "kirkland", "treasure"],
     rating: 3.8,
     reviewCount: 218,
     reviews: [
@@ -698,7 +698,7 @@ export const products: Product[] = [
     savings: 4.5,
     image: "/products/21.png",
     inStock: true,
-    tags: ["coffee", "kirkland"],
+    tags: ["coffee", "kirkland", "treasure"],
     rating: 4.0,
     reviewCount: 365,
     reviews: [

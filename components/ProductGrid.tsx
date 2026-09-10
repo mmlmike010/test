@@ -112,7 +112,7 @@ export default function ProductGrid() {
     {
       tag: "treasure",
       title: "Discounts on household favorites",
-      image: "/products/hero-treasure.jpg?v=16",
+      image: "/products/hero-treasure.jpg?v=17",
     },
   ] as const;
   const activeCollection = collectionTiles.find((tile) => tile.tag === tag);
