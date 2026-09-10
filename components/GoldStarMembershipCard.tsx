@@ -37,7 +37,7 @@ export default function GoldStarMembershipCard() {
         Scan at the warehouse
       </p>
       <div className="relative px-3 pt-2.5 pb-1 flex gap-3 items-center">
-        <KirkIdPhoto className="w-[64px] aspect-[3/4] rounded-[2px] border-[3px] border-white shadow-[0_1px_2px_rgba(26,18,8,0.28)] shrink-0" />
+        <KirkIdPhoto className="w-[84px] aspect-[3/4] rounded-[2px] border-[3px] border-white shadow-[0_1px_2px_rgba(26,18,8,0.28)] shrink-0" />
         <div className="min-w-0">
           <p className="text-[20px] font-black tracking-tight text-[#1a1a1a] leading-none">
             KIRK
