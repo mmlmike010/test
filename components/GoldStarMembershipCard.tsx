@@ -1,6 +1,6 @@
 import CostcoLogo from "@/components/CostcoLogo";
 import GoldStarMark from "@/components/GoldStarMark";
-import KirkMark from "@/components/KirkMark";
+import KirkIdPhoto from "@/components/KirkIdPhoto";
 import MembershipBarcode from "@/components/MembershipBarcode";
 
 /** Landscape Gold Star card at CR80 credit-card proportion. Visual only. */
@@ -40,9 +40,7 @@ export default function GoldStarMembershipCard() {
             </p>
           </div>
         </div>
-        <div className="w-[22%] max-w-[84px] self-stretch min-h-0 rounded-[3px] border border-[#c9b27a] bg-[#efe6c8] flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.55)]">
-          <KirkMark size={40} />
-        </div>
+        <KirkIdPhoto className="w-[22%] max-w-[84px] self-stretch min-h-0 rounded-[3px] border border-[#c9b27a] shrink-0" />
       </div>
       <div className="px-3 pb-1.5 shrink-0">
         <MembershipBarcode className="h-5 w-full text-[#1a1a1a]" />

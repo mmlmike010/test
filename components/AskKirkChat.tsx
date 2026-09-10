@@ -498,28 +498,13 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
       <div className="shrink-0 border-b border-[#e5e5e5] bg-[#f7f1de]">
         <div className="h-[6px] bg-costco-red" />
         <div className="h-[3px] bg-gradient-to-r from-[#a3841c] via-[#f3e3a3] to-[#a3841c]" />
-        <div className="px-3.5 pt-2.5 pb-2 flex items-center justify-between gap-2">
-          <CostcoLogo compact />
-          <div className="flex items-center gap-2 shrink-0">
-            <GoldStarMark size={22} />
-            <div className="text-right leading-none">
-              <p className="text-[10px] font-extrabold tracking-[0.22em] text-costco-red uppercase">
-                Gold Star
-              </p>
-              <p className="mt-1 text-[9px] font-bold tracking-[0.18em] text-costco-blue uppercase">
-                Membership
-              </p>
-              <p className="mt-1 text-[9px] font-semibold tabular-nums tracking-[0.12em] text-[#666]">
-                111 847 11217
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="px-3.5 pb-2.5 flex items-center justify-between gap-2">
+        <div className="px-3.5 py-2 flex items-center justify-between gap-2">
           <div className="flex items-center gap-2.5 min-w-0">
-            <KirkMark size={32} className="shrink-0" />
+            <CostcoLogo compact />
+            <span className="w-px h-8 bg-[#d4c194] shrink-0" />
+            <KirkMark size={28} className="shrink-0" />
             <div className="min-w-0">
-              <h2 className="text-[17px] font-black tracking-tight text-[#1a1a1a] leading-none">
+              <h2 className="text-[16px] font-black tracking-tight text-[#1a1a1a] leading-none">
                 Ask Kirk
               </h2>
               <p className="mt-1 text-[10px] font-bold tracking-[0.16em] text-costco-blue uppercase">
@@ -527,7 +512,11 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-0.5 shrink-0">
+          <div className="flex items-center gap-1 shrink-0">
+            <GoldStarMark size={18} />
+            <p className="hidden xl:block text-[9px] font-semibold tabular-nums tracking-[0.1em] text-[#666] pr-1">
+              111 847 11217
+            </p>
             <button
               type="button"
               onClick={handleReset}

@@ -165,7 +165,7 @@ async function composeJasons() {
     svg(
       pw,
       ph,
-      `<path d="M78 86 C78 58 102 44 138 44 L262 44 C298 44 322 58 322 86 L372 528 C372 556 350 570 320 570 L80 570 C50 570 28 556 28 528 Z" fill="#fff"/>`
+      `<path d="M82 92 C80 56 108 40 146 40 L254 40 C292 40 318 56 318 92 L378 526 C380 556 354 572 322 572 L78 572 C46 572 20 556 22 526 Z" fill="#fff"/>`
     )
   )
     .png()
@@ -174,8 +174,8 @@ async function composeJasons() {
   const paperGrey = await sharp(paperBytes)
     .resize(pw, ph, { fit: "cover", position: "centre" })
     .greyscale()
-    .modulate({ brightness: 1.05, saturation: 0.4 })
-    .sharpen(1.2)
+    .modulate({ brightness: 1.02, saturation: 0.35 })
+    .sharpen(1.6)
     .removeAlpha()
     .toBuffer();
   const purpleWash = await sharp({
@@ -183,7 +183,7 @@ async function composeJasons() {
       width: pw,
       height: ph,
       channels: 3,
-      background: { r: 92, g: 40, b: 116 },
+      background: { r: 102, g: 54, b: 92 },
     },
   })
     .jpeg()
@@ -209,8 +209,8 @@ async function composeJasons() {
     </linearGradient>
   </defs>
   <rect width="${pw}" height="${ph}" fill="url(#sheen)"/>
-  <path d="M78 86 C78 58 102 44 138 44 L262 44 C298 44 322 58 322 86 L328 118 L72 118 Z" fill="url(#cuff)"/>
-  <path d="M86 108 L314 108" stroke="#e8d4f0" stroke-opacity="0.22" stroke-width="2"/>
+  <path d="M82 92 C80 56 108 40 146 40 L254 40 C292 40 318 56 318 92 L324 124 L76 124 Z" fill="url(#cuff)"/>
+  <path d="M90 114 L310 114" stroke="#e8d4f0" stroke-opacity="0.2" stroke-width="2"/>
   <path d="M70 210 C120 198 180 222 210 206" fill="none" stroke="#2a1438" stroke-opacity="0.12" stroke-width="3"/>
   <path d="M240 340 C280 328 320 352 350 336" fill="none" stroke="#2a1438" stroke-opacity="0.1" stroke-width="3"/>
   <path d="M48 430 C90 418 130 442 168 424" fill="none" stroke="#2a1438" stroke-opacity="0.1" stroke-width="2"/>
@@ -226,10 +226,10 @@ async function composeJasons() {
   const bagAlpha = await sharp(bagMask).extractChannel("alpha").toBuffer();
   const film = await sharp(body).joinChannel(bagAlpha).png().toBuffer();
 
-  const winW = 168;
-  const winH = 148;
+  const winW = 214;
+  const winH = 188;
   const winX = Math.round((pw - winW) / 2);
-  const winY = 168;
+  const winY = 156;
   const loaf = await sharp(seededPack)
     .extract({ left: 230, top: 165, width: 140, height: 120 })
     .resize(winW, winH, { fit: "cover", position: "centre" })
@@ -273,13 +273,13 @@ async function composeJasons() {
       ph,
       `
   <rect x="${winX - 6}" y="${winY - 6}" width="${winW + 12}" height="${winH + 12}" rx="10" ry="10" fill="#2a1040"/>
-  <text x="${pw / 2}" y="138" text-anchor="middle" fill="#f4e6c0" font-family="Georgia, Times New Roman, serif" font-size="34" font-weight="700">Jason's</text>
-  <text x="${pw / 2}" y="158" text-anchor="middle" fill="#d4b8e8" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="800" letter-spacing="4">SOURDOUGH</text>
-  <text x="${pw / 2}" y="368" text-anchor="middle" fill="#f4e6c0" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="800" letter-spacing="1.4">GRAINS &amp; SEEDS</text>
-  <text x="${pw / 2}" y="390" text-anchor="middle" fill="#e8d4f4" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="800" letter-spacing="2.2">CIABATTIN</text>
-  <rect x="${pw / 2 - 74}" y="404" width="148" height="26" rx="2" fill="#C9A227"/>
-  <text x="${pw / 2}" y="422" text-anchor="middle" fill="#2a1040" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="800" letter-spacing="1.2">RECIPE NO 11</text>
-  <text x="${pw / 2}" y="454" text-anchor="middle" fill="#c9a8d8" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="700" letter-spacing="1.6">24 OZ</text>
+  <text x="${pw / 2}" y="128" text-anchor="middle" fill="#f4e6c0" font-family="Georgia, Times New Roman, serif" font-size="34" font-weight="700">Jason's</text>
+  <text x="${pw / 2}" y="148" text-anchor="middle" fill="#d8c0c8" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="800" letter-spacing="4">SOURDOUGH</text>
+  <text x="${pw / 2}" y="386" text-anchor="middle" fill="#f4e6c0" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="800" letter-spacing="1.4">GRAINS &amp; SEEDS</text>
+  <text x="${pw / 2}" y="408" text-anchor="middle" fill="#e4d0d6" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="800" letter-spacing="2.2">CIABATTIN</text>
+  <rect x="${pw / 2 - 74}" y="422" width="148" height="26" rx="2" fill="#C9A227"/>
+  <text x="${pw / 2}" y="440" text-anchor="middle" fill="#2a1040" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="800" letter-spacing="1.2">RECIPE NO 11</text>
+  <text x="${pw / 2}" y="472" text-anchor="middle" fill="#c8b0b8" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="700" letter-spacing="1.6">24 OZ</text>
 `
     )
   )
