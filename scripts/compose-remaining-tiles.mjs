@@ -148,15 +148,32 @@ ${inner}
 }
 
 async function composeJasons() {
-  // Photographic seeded loaf in a purple windowed bag. Cover every
-  // competing mark; the loaf crop must stay inside the window.
+  // Stand-up Recipe No 11 pouch. Window crop stays inside the Izzio
+  // crumb so competing marks never leak.
   const seededPack = await download(
     `${CF}/large_d2b0fee4-2249-4950-9b3a-b167df3fdc0e.jpg`
   );
 
+  const winW = 292;
+  const winH = 268;
+  const winX = 254;
+  const winY = 214;
   const loaf = await sharp(seededPack)
     .extract({ left: 230, top: 165, width: 140, height: 120 })
-    .resize(344, 330, { fit: "cover", position: "centre" })
+    .resize(winW, winH, { fit: "cover", position: "centre" })
+    .png()
+    .toBuffer();
+  const windowMask = await sharp(
+    svg(
+      winW,
+      winH,
+      `<rect width="${winW}" height="${winH}" rx="18" ry="18" fill="#fff"/>`
+    )
+  )
+    .png()
+    .toBuffer();
+  const loafWindow = await sharp(loaf)
+    .composite([{ input: windowMask, blend: "dest-in" }])
     .png()
     .toBuffer();
 
@@ -166,27 +183,37 @@ async function composeJasons() {
       800,
       `
   <defs>
-    <linearGradient id="film" x1="0" y1="0" x2="0.18" y2="1">
-      <stop offset="0" stop-color="#6a3388"/>
-      <stop offset="0.4" stop-color="#3a1658"/>
-      <stop offset="1" stop-color="#241038"/>
+    <linearGradient id="film" x1="0" y1="0" x2="0.2" y2="1">
+      <stop offset="0" stop-color="#5d2a7a"/>
+      <stop offset="0.38" stop-color="#3b1554"/>
+      <stop offset="1" stop-color="#1f0c30"/>
     </linearGradient>
     <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#ffffff" stop-opacity="0.14"/>
-      <stop offset="0.35" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.16"/>
+      <stop offset="0.32" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0.08"/>
+    </linearGradient>
+    <linearGradient id="crimp" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4a2066"/>
+      <stop offset="1" stop-color="#2d1144"/>
     </linearGradient>
     <filter id="shadow" x="-18%" y="-8%" width="136%" height="130%">
-      <feDropShadow dx="0" dy="14" stdDeviation="14" flood-color="#000000" flood-opacity="0.18"/>
+      <feDropShadow dx="0" dy="16" stdDeviation="12" flood-color="#000000" flood-opacity="0.16"/>
     </filter>
   </defs>
-  <path d="M248 92 L286 56 L514 56 L552 92 L592 708 Q400 752 208 708 Z" fill="url(#film)" filter="url(#shadow)"/>
-  <path d="M248 92 L286 56 L514 56 L552 92 L592 708 Q400 752 208 708 Z" fill="url(#sheen)"/>
-  <rect x="228" y="228" width="344" height="330" fill="#ffffff"/>
-  <text x="400" y="128" text-anchor="middle" fill="#f4e6c0" font-family="Georgia, Times New Roman, serif" font-size="44" font-weight="700">Jason's</text>
-  <text x="400" y="162" text-anchor="middle" fill="#d4b8e8" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="800" letter-spacing="4">SOURDOUGH</text>
-  <text x="400" y="600" text-anchor="middle" fill="#f4e6c0" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="800" letter-spacing="1.4">GRAINS &amp; SEEDS</text>
-  <text x="400" y="626" text-anchor="middle" fill="#d4b8e8" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="700" letter-spacing="1.8">RECIPE NO 11 · 24 OZ</text>
-  <text x="400" y="688" text-anchor="middle" fill="#c9a8d8" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700" letter-spacing="2.2">CIABATTIN</text>
+  <path d="M236 108 C236 86 252 72 274 72 L526 72 C548 72 564 86 564 108 L596 686 C596 716 548 742 400 742 C252 742 204 716 204 686 Z" fill="url(#film)" filter="url(#shadow)"/>
+  <path d="M236 108 C236 86 252 72 274 72 L526 72 C548 72 564 86 564 108 L596 686 C596 716 548 742 400 742 C252 742 204 716 204 686 Z" fill="url(#sheen)"/>
+  <path d="M274 72 L526 72 C548 72 564 86 564 108 L236 108 C236 86 252 72 274 72 Z" fill="url(#crimp)"/>
+  <path d="M262 90 L538 90" stroke="#c9a8d8" stroke-opacity="0.35" stroke-width="2"/>
+  <path d="M268 98 L532 98" stroke="#c9a8d8" stroke-opacity="0.2" stroke-width="1.5"/>
+  <rect x="${winX - 3}" y="${winY - 3}" width="${winW + 6}" height="${winH + 6}" rx="20" ry="20" fill="#2a1040"/>
+  <text x="400" y="148" text-anchor="middle" fill="#f4e6c0" font-family="Georgia, Times New Roman, serif" font-size="42" font-weight="700">Jason's</text>
+  <text x="400" y="176" text-anchor="middle" fill="#d4b8e8" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="800" letter-spacing="5">SOURDOUGH</text>
+  <text x="400" y="530" text-anchor="middle" fill="#f4e6c0" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="800" letter-spacing="1.6">GRAINS &amp; SEEDS</text>
+  <text x="400" y="556" text-anchor="middle" fill="#e8d4f4" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="800" letter-spacing="2.4">CIABATTIN</text>
+  <rect x="318" y="576" width="164" height="28" rx="3" fill="#C9A227"/>
+  <text x="400" y="595" text-anchor="middle" fill="#2a1040" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="800" letter-spacing="1.4">RECIPE NO 11</text>
+  <text x="400" y="632" text-anchor="middle" fill="#c9a8d8" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="700" letter-spacing="1.8">24 OZ</text>
 `
     )
   )
@@ -203,7 +230,7 @@ async function composeJasons() {
   })
     .composite([
       { input: bag, left: 0, top: 0 },
-      { input: loaf, left: 228, top: 228 },
+      { input: loafWindow, left: winX, top: winY },
     ])
     .png({ compressionLevel: 8 })
     .toFile(join(dir, "9.png"));

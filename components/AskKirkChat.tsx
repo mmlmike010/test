@@ -495,10 +495,8 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
   return (
     <>
     <aside className="fixed inset-y-0 right-0 z-40 w-full max-w-[420px] lg:static lg:z-30 lg:w-[380px] xl:w-[420px] lg:max-w-none shrink-0 bg-white border-l border-[#e5e5e5] h-full flex flex-col">
-      <div className="shrink-0 border-b border-[#e5e5e5] bg-[#fafafa]">
-        <div className="h-2 bg-costco-red" />
-        <div className="h-[7px] bg-[#2a2a2a]" />
-        <div className="h-[3px] bg-[#C9A227]" />
+      <div className="shrink-0 border-b border-[#e5e5e5] bg-white">
+        <div className="h-[6px] bg-costco-red" />
         <div className="px-3.5 pt-2.5 pb-2 flex items-center justify-between gap-2">
           <CostcoLogo compact />
           <div className="flex items-center gap-2 shrink-0">
@@ -592,9 +590,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                 key={message.id}
                 className="bg-white border border-[#e8e8e8] rounded-[8px] overflow-hidden shadow-[0_2px_8px_rgba(0,0,0,0.08)]"
               >
-                <div className="h-[8px] bg-costco-red" />
-                <div className="h-[7px] bg-[#2a2a2a]" />
-                <div className="h-[3px] bg-[#C9A227]" />
+                <div className="h-[6px] bg-costco-red" />
                 <div className="px-3.5 py-3">
                 <div className="flex items-center justify-between gap-3 mb-3">
                   <CostcoLogo compact />
@@ -610,8 +606,10 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-2 mb-2">
-                  <KirkMark size={28} />
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-[56px] h-[68px] rounded-[3px] border border-[#d8d8d8] bg-[#f3f3f3] flex items-center justify-center shrink-0">
+                    <KirkMark size={36} />
+                  </div>
                   <div>
                     <p className="text-[16px] font-black tracking-tight text-[#1a1a1a] leading-none">
                       KIRK
@@ -642,7 +640,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                   </div>
                 </div>
                 </div>
-                <div className="h-[8px] bg-costco-blue" />
+                <div className="h-[6px] bg-costco-blue" />
               </div>
             );
           }

@@ -167,22 +167,22 @@ export default function ProductGrid() {
             {[
               {
                 title: "Weekly Savings",
-                image: "/products/hero-weekly.jpg?v=8",
+                image: "/products/hero-weekly.jpg?v=9",
                 onClick: () => showAisle({ tag: "weekly" }),
               },
               {
                 title: "Kirkland Signature",
-                image: "/products/hero-kirkland.jpg?v=8",
+                image: "/products/hero-kirkland.jpg?v=9",
                 onClick: () => showAisle({ tag: "kirkland" }),
               },
               {
                 title: "What's New",
-                image: "/products/hero-new.jpg?v=8",
+                image: "/products/hero-new.jpg?v=9",
                 onClick: () => showAisle({ tag: "new" }),
               },
               {
                 title: "Treasure Hunt",
-                image: "/products/hero-treasure.jpg?v=8",
+                image: "/products/hero-treasure.jpg?v=9",
                 onClick: () => showAisle({ tag: "treasure" }),
               },
             ].map((tile) => (
@@ -198,7 +198,7 @@ export default function ProductGrid() {
                   alt=""
                   className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
-                <span className="absolute inset-x-0 bottom-0 h-[48%] bg-gradient-to-t from-black/62 via-black/22 to-transparent" />
+                <span className="absolute inset-x-0 bottom-0 h-[40%] bg-gradient-to-t from-black/56 via-black/16 to-transparent" />
                 <span className="absolute bottom-3.5 left-3.5 right-3.5">
                   <span className="block text-[20px] sm:text-[24px] font-bold text-white leading-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.55)]">
                     {tile.title}
