@@ -492,16 +492,16 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
     <>
     <aside className="fixed inset-y-0 right-0 z-50 w-full max-w-[420px] lg:static lg:z-40 lg:w-[380px] xl:w-[420px] lg:max-w-none shrink-0 bg-white border-l border-[#e5e5e5] h-full flex flex-col">
       <div className="shrink-0 border-b border-[#e5e5e5] bg-white">
-        <div className="bg-costco-red px-3.5 py-2.5 flex items-center justify-between gap-2">
+        <div className="bg-costco-red px-3.5 py-3 flex items-center justify-between gap-2">
           <div className="flex items-center gap-2.5 min-w-0">
-            <span className="inline-flex items-center justify-center rounded-full bg-white shrink-0" style={{ width: 36, height: 36 }}>
-              <KirkMark size={32} />
+            <span className="inline-flex items-center justify-center rounded-full bg-white shrink-0" style={{ width: 38, height: 38 }}>
+              <KirkMark size={34} />
             </span>
             <div className="min-w-0">
-              <h2 className="text-[16px] font-black tracking-tight text-white leading-none">
+              <h2 className="text-[17px] font-black tracking-tight text-white leading-none">
                 Ask Kirk
               </h2>
-              <p className="text-[11px] font-semibold text-white/85 mt-[3px]">
+              <p className="text-[11px] font-semibold text-white/90 mt-[4px]">
                 Kirkland Signature · Same-Day
               </p>
             </div>
@@ -527,7 +527,8 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             </button>
           </div>
         </div>
-        <p className="px-3.5 py-1.5 flex items-center gap-1.5 text-[11px] text-[#188038] font-semibold bg-[#f6f7f8] border-b border-[#ececec]">
+        <div className="h-[3px] bg-costco-blue" />
+        <p className="px-3.5 py-1.5 flex items-center gap-1.5 text-[11px] text-[#188038] font-semibold bg-[#f3f3f3] border-b border-[#ececec]">
           <span className="w-1.5 h-1.5 rounded-full bg-[#188038]" />
           Available now · Delivery 8:48–9:18pm · 11217
         </p>
@@ -561,8 +562,10 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             return (
               <div
                 key={message.id}
-                className="bg-white border border-[#e8e8e8] rounded-[16px] px-3.5 py-3 shadow-[0_1px_4px_rgba(0,0,0,0.04)]"
+                className="bg-white border border-[#e8e8e8] rounded-[16px] overflow-hidden shadow-[0_1px_4px_rgba(0,0,0,0.04)]"
               >
+                <div className="h-[3px] bg-costco-red" />
+                <div className="px-3.5 py-3">
                 <div className="flex items-center gap-2 mb-2">
                   <KirkMark size={28} />
                   <div>
@@ -577,6 +580,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                 <p className="text-[13px] leading-relaxed text-[#333] whitespace-pre-line">
                   {message.content}
                 </p>
+                </div>
               </div>
             );
           }
