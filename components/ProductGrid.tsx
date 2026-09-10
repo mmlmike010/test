@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { categories, filterProducts } from "@/lib/data/products";
+import { aisleLabel } from "@/lib/ui/aisleLabels";
 import type { Product } from "@/lib/data/products";
 import { useCatalogStore } from "@/lib/store/catalog";
 import ProductCard from "@/components/ProductCard";
@@ -121,7 +122,7 @@ export default function ProductGrid() {
       tag
     : null;
   const titleBits = [
-    department,
+    department ? aisleLabel(department) : null,
     tagLabel,
     q.trim() ? `“${q.trim()}”` : null,
   ].filter(Boolean);
@@ -183,7 +184,7 @@ export default function ProductGrid() {
       onShowAll: () => showAisle({ tag: "treasure" }),
     },
     {
-      title: "Bakery & Desserts",
+      title: "Bakery",
       items: filtered.filter((p) => p.department === "Bakery & Desserts"),
       onShowAll: () => showAisle({ department: "Bakery & Desserts" }),
     },

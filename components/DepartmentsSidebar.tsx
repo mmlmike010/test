@@ -3,6 +3,7 @@
 import { ChevronRight } from "lucide-react";
 import { departments } from "@/lib/data/products";
 import { useCatalogStore } from "@/lib/store/catalog";
+import { aisleLabel } from "@/lib/ui/aisleLabels";
 
 const aisleThumbs: Record<string, string> = {
   "What's New": "/products/cat-new.jpg?v=2",
@@ -52,7 +53,7 @@ export function MobileAisles() {
                   : "bg-white border-[#d0d0d0] text-[#333]"
               }`}
             >
-              {dept}
+              {aisleLabel(dept)}
             </button>
           );
         })}
@@ -113,7 +114,7 @@ export default function DepartmentsSidebar({
                         ? "border-costco-blue bg-[#e8f2fa] text-costco-blue font-bold"
                         : "border-transparent text-[#333] hover:bg-[#f6f6f6] hover:text-costco-blue"
                     }`}
-                    title={dept}
+                    title={aisleLabel(dept)}
                   >
                     <span className="flex items-center gap-2 min-w-0">
                       {!compact && (
@@ -124,7 +125,9 @@ export default function DepartmentsSidebar({
                           className="w-10 h-10 rounded-full object-cover bg-[#f3f3f3] border border-[#ececec] shrink-0"
                         />
                       )}
-                      <span className="leading-snug line-clamp-2">{dept}</span>
+                      <span className="leading-snug line-clamp-2">
+                        {aisleLabel(dept)}
+                      </span>
                     </span>
                     <ChevronRight
                       className={`w-3.5 h-3.5 shrink-0 ${

@@ -6,6 +6,7 @@ import { useCartStore } from "@/lib/store/cart";
 import StarRating from "@/components/StarRating";
 import ProductCard from "@/components/ProductCard";
 import { productSize } from "@/lib/ui/packSize";
+import { aisleLabel } from "@/lib/ui/aisleLabels";
 import { useRef, useState } from "react";
 
 export default function ProductDetailModal({
@@ -125,13 +126,13 @@ export default function ProductDetailModal({
               {current.inStock ? "Many in stock" : "Out of stock"}
               <span className="text-[#666]">
                 {" "}
-                · {current.department}
+                · {aisleLabel(current.department)}
               </span>
             </p>
             <div className="mt-5 pt-4 border-t border-[#eee]">
               <h3 className="text-[15px] font-bold text-[#1a1a1a]">Details</h3>
               <p className="text-[13px] text-[#555] mt-1.5 leading-snug">
-                {current.department}
+                {aisleLabel(current.department)}
                 {current.category ? ` · ${current.category}` : ""}
               </p>
             </div>
