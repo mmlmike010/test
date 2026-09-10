@@ -23,7 +23,7 @@ export default function FlyersView() {
   const search = useCatalogStore((s) => s.search);
   const [page, setPage] = useState<(typeof pages)[number] | null>(null);
   const [selected, setSelected] = useState<Product | null>(null);
-  const deals = filterProducts({ tag: "weekly" }).filter((p) => p.id !== "1");
+  const deals = filterProducts({ tag: "weekly" });
 
   return (
     <div>

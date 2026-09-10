@@ -4,19 +4,12 @@ import KirkIdPhoto from "@/components/KirkIdPhoto";
 import MembershipBarcode from "@/components/MembershipBarcode";
 import MembershipQr from "@/components/MembershipQr";
 
-/** Costco digital membership card (app Card tab). Visual only. */
+/** Costco app Card tab. Visual only. */
 export default function GoldStarMembershipCard() {
   return (
-    <div className="relative bg-[#f3ead0] border border-[#c9b27a] rounded-[8px] overflow-hidden shadow-[0_2px_10px_rgba(26,18,8,0.14)] flex flex-col">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/kirk/card-stock.jpg?v=2"
-        alt=""
-        className="absolute inset-0 h-full w-full object-cover"
-      />
-      <div className="relative h-[5px] bg-costco-red shrink-0" />
-      <div className="relative h-[2px] bg-gradient-to-r from-[#a3841c] via-[#f3e3a3] to-[#a3841c] shrink-0" />
-      <div className="relative px-3 pt-2.5 flex items-start justify-between gap-2">
+    <div className="relative bg-white border border-[#e5e5e5] rounded-[12px] overflow-hidden shadow-[0_2px_10px_rgba(0,0,0,0.08)] flex flex-col">
+      <div className="h-[4px] bg-costco-red shrink-0" />
+      <div className="px-3 pt-2.5 flex items-start justify-between gap-2">
         <CostcoLogo compact />
         <div className="flex items-center gap-1 shrink-0 pt-0.5">
           <GoldStarMark size={16} />
@@ -30,14 +23,14 @@ export default function GoldStarMembershipCard() {
           </div>
         </div>
       </div>
-      <div className="relative flex justify-center px-3 pt-2.5 pb-1">
-        <MembershipQr className="h-[136px] w-[136px] border border-[#d8c89a] bg-white p-2" />
+      <div className="relative flex justify-center px-3 pt-3 pb-1">
+        <MembershipQr className="h-[148px] w-[148px] border border-[#ececec] bg-white p-2" />
       </div>
-      <p className="relative text-center text-[10px] font-semibold text-[#555] tracking-wide">
+      <p className="relative text-center text-[10px] font-semibold text-[#666] tracking-wide">
         Scan at the warehouse
       </p>
       <div className="relative px-3 pt-2.5 pb-1 flex gap-3 items-center">
-        <KirkIdPhoto className="w-[84px] aspect-[3/4] rounded-[2px] border-[3px] border-white shadow-[0_1px_2px_rgba(26,18,8,0.28)] shrink-0" />
+        <KirkIdPhoto className="w-[72px] aspect-[3/4] rounded-[4px] border border-[#e8e8e8] shrink-0" />
         <div className="min-w-0">
           <p className="text-[20px] font-black tracking-tight text-[#1a1a1a] leading-none">
             KIRK
@@ -53,7 +46,7 @@ export default function GoldStarMembershipCard() {
           </p>
         </div>
       </div>
-      <div className="relative px-3 pb-2 pt-1">
+      <div className="relative px-3 pb-2.5 pt-1">
         <MembershipBarcode className="h-5 w-full text-[#1a1a1a]" />
         <div className="mt-1 flex items-center justify-between gap-2">
           <span className="inline-flex h-4 items-center rounded-[2px] bg-costco-red px-1.5 text-[8px] font-black tracking-wide text-white">
@@ -64,7 +57,7 @@ export default function GoldStarMembershipCard() {
           </p>
         </div>
       </div>
-      <div className="relative h-[5px] bg-costco-blue shrink-0" />
+      <div className="h-[4px] bg-costco-blue shrink-0" />
     </div>
   );
 }

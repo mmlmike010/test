@@ -961,7 +961,11 @@ export function filterProducts(filters: ProductFilters = {}): Product[] {
         return p.department === "Trending" || tags.includes("trending");
       if (tag === "new") return p.department === "What's New" || tags.includes("new");
       if (tag === "weekly")
-        return p.department === "Weekly Savings" || tags.includes("weekly");
+        // id 1 is Ancient Grains shot as Mixed Berry — keep it off weekly merch.
+        return (
+          p.id !== "1" &&
+          (p.department === "Weekly Savings" || tags.includes("weekly"))
+        );
       if (tag === "kirkland")
         return (
           p.department === "Kirkland Signature" ||
