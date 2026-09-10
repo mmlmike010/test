@@ -2,6 +2,7 @@ import CostcoLogo from "@/components/CostcoLogo";
 import GoldStarMark from "@/components/GoldStarMark";
 import KirkIdPhoto from "@/components/KirkIdPhoto";
 import MembershipBarcode from "@/components/MembershipBarcode";
+import MembershipQr from "@/components/MembershipQr";
 
 /** Landscape Gold Star card at CR80 credit-card proportion. Visual only. */
 export default function GoldStarMembershipCard() {
@@ -15,7 +16,7 @@ export default function GoldStarMembershipCard() {
       />
       <div className="relative h-[5px] bg-costco-red shrink-0" />
       <div className="relative h-[2px] bg-gradient-to-r from-[#a3841c] via-[#f3e3a3] to-[#a3841c] shrink-0" />
-      <div className="relative flex-1 min-h-0 px-3 pt-2 pb-1.5 flex gap-2.5">
+      <div className="relative flex-1 min-h-0 px-3 pt-2 pb-1 flex gap-2.5">
         <div className="min-w-0 flex-1 flex flex-col">
           <div className="flex items-start justify-between gap-2">
             <CostcoLogo compact />
@@ -42,21 +43,24 @@ export default function GoldStarMembershipCard() {
               111 847 11217
             </p>
             <p className="text-[8px] font-semibold tracking-[0.08em] text-[#777] uppercase">
-              Member Since 2019
+              Member Since 2019 · Expires 09/27
             </p>
           </div>
         </div>
-        <KirkIdPhoto className="w-[26%] max-w-[92px] aspect-[3/4] self-start mt-0.5 rounded-[2px] border-[3px] border-white shadow-[0_1px_2px_rgba(26,18,8,0.28)] shrink-0" />
+        <KirkIdPhoto className="w-[28%] max-w-[96px] aspect-[3/4] self-start mt-0.5 rounded-[2px] border-[3px] border-white shadow-[0_1px_2px_rgba(26,18,8,0.28)] shrink-0" />
       </div>
-      <div className="relative px-3 pb-1.5 shrink-0">
-        <MembershipBarcode className="h-5 w-full text-[#1a1a1a]" />
-        <div className="mt-1 flex items-center justify-between gap-2">
-          <span className="inline-flex h-4 items-center rounded-[2px] bg-costco-red px-1.5 text-[8px] font-black tracking-wide text-white">
-            MEMBER
-          </span>
-          <p className="text-[9px] text-[#555] font-semibold tabular-nums tracking-wide">
-            GS · 11217 · BROOKLYN
-          </p>
+      <div className="relative px-3 pb-1.5 shrink-0 flex items-end gap-2">
+        <MembershipQr className="h-11 w-11 shrink-0 border border-[#d8c89a] bg-white p-[3px]" />
+        <div className="min-w-0 flex-1">
+          <MembershipBarcode className="h-5 w-full text-[#1a1a1a]" />
+          <div className="mt-1 flex items-center justify-between gap-2">
+            <span className="inline-flex h-4 items-center rounded-[2px] bg-costco-red px-1.5 text-[8px] font-black tracking-wide text-white">
+              MEMBER
+            </span>
+            <p className="text-[9px] text-[#555] font-semibold tabular-nums tracking-wide">
+              GS · 11217 · BROOKLYN
+            </p>
+          </div>
         </div>
       </div>
       <div className="relative h-[5px] bg-costco-blue shrink-0" />
