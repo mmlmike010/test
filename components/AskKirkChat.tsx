@@ -574,9 +574,9 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             return (
               <div
                 key={message.id}
-                className="bg-white border border-[#e8e8e8] rounded-[16px] overflow-hidden shadow-[0_1px_4px_rgba(0,0,0,0.04)]"
+                className="bg-white border border-[#e8e8e8] rounded-[12px] overflow-hidden"
               >
-                <div className="h-[3px] bg-costco-red" />
+                <div className="h-[4px] bg-costco-red" />
                 <div className="px-3.5 py-3">
                 <div className="flex items-center gap-2 mb-2">
                   <KirkMark size={28} />
@@ -592,27 +592,16 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                 <p className="text-[13px] leading-relaxed text-[#333] whitespace-pre-line">
                   {message.content}
                 </p>
-                <div className="mt-2.5 overflow-hidden rounded-[6px] border border-[#e5e5e5] bg-white">
-                  <div className="h-[4px] bg-costco-red" />
-                  <div className="flex items-center justify-between gap-2 bg-[#fafafa] px-2.5 py-2">
-                    <span className="inline-flex h-5 items-center rounded-[2px] bg-costco-red px-1.5 text-[9px] font-black tracking-wide text-white">
-                      MEMBER
-                    </span>
-                    <p className="text-[11px] text-[#555] font-semibold min-w-0">
-                      Same-Day requires a Costco membership
-                    </p>
-                  </div>
-                  <div className="flex items-center justify-between px-2.5 py-1.5 border-t border-[#eee]">
-                    <span className="text-[10px] font-extrabold tracking-[0.18em] text-costco-red uppercase">
-                      Gold Star
-                    </span>
-                    <span className="text-[10px] font-bold text-costco-blue tabular-nums">
-                      11217 · Brooklyn
-                    </span>
-                  </div>
-                  <div className="h-[4px] bg-costco-blue" />
+                <div className="mt-2.5 flex items-center justify-between gap-2 border-t border-[#eee] pt-2.5">
+                  <span className="inline-flex h-5 items-center rounded-[2px] bg-costco-red px-1.5 text-[9px] font-black tracking-wide text-white">
+                    MEMBER
+                  </span>
+                  <p className="text-[11px] text-[#555] font-semibold min-w-0 text-right">
+                    Gold Star · 11217 Brooklyn
+                  </p>
                 </div>
                 </div>
+                <div className="h-[4px] bg-costco-blue" />
               </div>
             );
           }
