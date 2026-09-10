@@ -30,7 +30,7 @@ const paper = await download(
 
 const booth = await sharp(marble)
   .resize(W, H, { fit: "cover", position: "centre" })
-  .modulate({ brightness: 1.28, saturation: 0.18 })
+  .modulate({ brightness: 0.72, saturation: 0.2 })
   .toBuffer();
 
 const grade = await sharp(
@@ -39,14 +39,14 @@ const grade = await sharp(
     H,
     `<defs>
       <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#eef3f7" stop-opacity="0.42"/>
-        <stop offset="0.4" stop-color="#c5d0da" stop-opacity="0.08"/>
-        <stop offset="1" stop-color="#5a6570" stop-opacity="0.34"/>
+        <stop offset="0" stop-color="#d7e0e8" stop-opacity="0.28"/>
+        <stop offset="0.38" stop-color="#8a97a4" stop-opacity="0.12"/>
+        <stop offset="1" stop-color="#3a4450" stop-opacity="0.42"/>
       </linearGradient>
-      <radialGradient id="flash" cx="46%" cy="22%" r="70%">
-        <stop offset="0" stop-color="#ffffff" stop-opacity="0.55"/>
-        <stop offset="0.5" stop-color="#ffffff" stop-opacity="0.06"/>
-        <stop offset="1" stop-color="#2c343c" stop-opacity="0.18"/>
+      <radialGradient id="flash" cx="42%" cy="20%" r="68%">
+        <stop offset="0" stop-color="#ffffff" stop-opacity="0.38"/>
+        <stop offset="0.55" stop-color="#ffffff" stop-opacity="0.04"/>
+        <stop offset="1" stop-color="#1c242c" stop-opacity="0.28"/>
       </radialGradient>
     </defs>
     <rect width="${W}" height="${H}" fill="url(#g)"/>
@@ -66,19 +66,19 @@ const badge = await sharp(
         <stop offset="1" stop-color="#B01024"/>
       </linearGradient>
     </defs>
-    <circle cx="210" cy="268" r="92" fill="url(#disc)"/>
-    <circle cx="210" cy="268" r="92" fill="none" stroke="#8C1218" stroke-width="2"/>
-    <text x="210" y="308" text-anchor="middle" fill="#ffffff" font-family="Georgia, Times New Roman, serif" font-size="118" font-style="italic" font-weight="600">K</text>`
+    <circle cx="210" cy="292" r="118" fill="url(#disc)"/>
+    <circle cx="210" cy="292" r="118" fill="none" stroke="#7a1018" stroke-width="3"/>
+    <text x="210" y="344" text-anchor="middle" fill="#ffffff" font-family="Georgia, Times New Roman, serif" font-size="148" font-style="italic" font-weight="600">K</text>`
   )
 )
   .png()
   .toBuffer();
 
-const badgeSoft = await sharp(badge).blur(0.55).png().toBuffer();
+const badgeSoft = await sharp(badge).blur(0.45).png().toBuffer();
 
 const grain = await sharp(paper)
   .resize(W, H, { fit: "cover" })
-  .modulate({ brightness: 0.82, saturation: 0.18 })
+  .modulate({ brightness: 0.7, saturation: 0.16 })
   .toBuffer();
 const grainLayer = await sharp(grain)
   .ensureAlpha()
@@ -89,7 +89,7 @@ const grainLayer = await sharp(grain)
           width: W,
           height: H,
           channels: 4,
-          background: { r: 0, g: 0, b: 0, alpha: 0.76 },
+          background: { r: 0, g: 0, b: 0, alpha: 0.7 },
         },
       })
         .png()
