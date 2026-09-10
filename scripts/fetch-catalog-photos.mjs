@@ -68,7 +68,8 @@ async function toTile(buf, outPath) {
 }
 
 async function toCategoryDisc(buf, outPath) {
-  await sharp(buf)
+  const trimmed = await sharp(buf).trim({ threshold: 16 }).toBuffer();
+  await sharp(trimmed)
     .resize(320, 320, { fit: "cover", position: "centre" })
     .jpeg({ quality: 86 })
     .toFile(outPath);

@@ -156,22 +156,22 @@ export default function ProductGrid() {
             {[
               {
                 title: "Weekly Savings",
-                image: "/products/hero-weekly.jpg?v=4",
+                image: "/products/hero-weekly.jpg?v=5",
                 onClick: () => showAisle({ tag: "weekly" }),
               },
               {
                 title: "Kirkland Signature",
-                image: "/products/hero-kirkland.jpg?v=4",
+                image: "/products/hero-kirkland.jpg?v=5",
                 onClick: () => showAisle({ tag: "kirkland" }),
               },
               {
                 title: "What's New",
-                image: "/products/hero-new.jpg?v=4",
+                image: "/products/hero-new.jpg?v=5",
                 onClick: () => showAisle({ tag: "new" }),
               },
               {
                 title: "Treasure Hunt",
-                image: "/products/hero-treasure.jpg?v=4",
+                image: "/products/hero-treasure.jpg?v=5",
                 onClick: () => showAisle({ tag: "treasure" }),
               },
             ].map((tile) => (

@@ -5,10 +5,10 @@ import { departments } from "@/lib/data/products";
 import { useCatalogStore } from "@/lib/store/catalog";
 
 const aisleThumbs: Record<string, string> = {
-  "What's New": "/products/cat-new.jpg",
-  "Weekly Savings": "/products/cat-weekly.jpg",
-  Trending: "/products/cat-trending.jpg",
-  "Kirkland Signature": "/products/cat-kirkland.jpg",
+  "What's New": "/products/cat-new.jpg?v=2",
+  "Weekly Savings": "/products/cat-weekly.jpg?v=2",
+  Trending: "/products/cat-trending.jpg?v=2",
+  "Kirkland Signature": "/products/cat-kirkland.jpg?v=2",
   "Auto Accessories": "/products/13.png",
   Babies: "/products/14.png",
   "Bakery & Desserts": "/products/15.png",

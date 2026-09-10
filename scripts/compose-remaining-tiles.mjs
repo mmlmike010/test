@@ -166,8 +166,8 @@ async function composeJasons() {
   );
 
   const loaf = await sharp(seededPack)
-    .extract({ left: 184, top: 138, width: 232, height: 198 })
-    .resize(420, 380, { fit: "cover" })
+    .extract({ left: 188, top: 140, width: 224, height: 176 })
+    .resize(520, 400, { fit: "cover" })
     .png()
     .toBuffer();
 
@@ -187,14 +187,13 @@ async function composeJasons() {
       <stop offset="1" stop-color="#2f1148"/>
     </linearGradient>
   </defs>
-  <rect x="190" y="412" width="420" height="168" rx="8" fill="#ffffff" stroke="#d8d8d8" stroke-width="1"/>
-  <rect x="190" y="412" width="420" height="58" rx="8" fill="url(#sleeve)"/>
-  <rect x="190" y="454" width="420" height="16" fill="url(#sleeve)"/>
-  <text x="400" y="462" text-anchor="middle" fill="#f4e6c0" font-family="Georgia, Times New Roman, serif" font-size="28" font-weight="700">Jason's</text>
-  <text x="400" y="480" text-anchor="middle" fill="#d8c4ea" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="800" letter-spacing="2.6">SOURDOUGH</text>
-  <text x="400" y="524" text-anchor="middle" fill="#2f1148" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="800" letter-spacing="1">GRAINS &amp; SEEDS</text>
-  <text x="400" y="548" text-anchor="middle" fill="#5a2474" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" letter-spacing="1.6">RECIPE NO 11 · CIABATTIN</text>
-  <text x="400" y="576" text-anchor="middle" fill="#777777" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700">24 OZ</text>
+  <rect x="148" y="392" width="504" height="98" rx="6" fill="#ffffff" stroke="#d8d8d8" stroke-width="1"/>
+  <rect x="148" y="392" width="504" height="40" rx="6" fill="url(#sleeve)"/>
+  <rect x="148" y="420" width="504" height="12" fill="url(#sleeve)"/>
+  <text x="400" y="420" text-anchor="middle" fill="#f4e6c0" font-family="Georgia, Times New Roman, serif" font-size="24" font-weight="700">Jason's</text>
+  <text x="400" y="458" text-anchor="middle" fill="#2f1148" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="800" letter-spacing="1.1">GRAINS &amp; SEEDS</text>
+  <text x="400" y="478" text-anchor="middle" fill="#5a2474" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700" letter-spacing="1.5">RECIPE NO 11 · 24 OZ</text>
+  <rect x="140" y="488" width="520" height="36" fill="#ffffff"/>
 `
     )
   )
@@ -210,7 +209,7 @@ async function composeJasons() {
     },
   })
     .composite([
-      { input: loaf, left: 190, top: 170 },
+      { input: loaf, left: 140, top: 120 },
       { input: print, left: 0, top: 0 },
     ])
     .png({ compressionLevel: 8 })

@@ -495,17 +495,25 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
     <aside className="fixed inset-y-0 right-0 z-40 w-full max-w-[420px] lg:static lg:z-30 lg:w-[380px] xl:w-[420px] lg:max-w-none shrink-0 bg-white border-l border-[#e5e5e5] h-full flex flex-col">
       <div className="shrink-0 border-b border-[#e5e5e5] bg-white">
         <div className="h-2 bg-costco-red" />
-        <div className="px-3.5 py-2.5 flex items-center justify-between gap-2">
+        <div className="px-3.5 pt-2.5 pb-2 flex items-center justify-between gap-2">
+          <CostcoLogo compact />
+          <div className="text-right leading-none shrink-0">
+            <p className="text-[10px] font-extrabold tracking-[0.22em] text-costco-red uppercase">
+              Gold Star
+            </p>
+            <p className="mt-1 text-[9px] font-bold tracking-[0.18em] text-costco-blue uppercase">
+              Membership
+            </p>
+          </div>
+        </div>
+        <div className="px-3.5 pb-2.5 flex items-center justify-between gap-2">
           <div className="flex items-center gap-2.5 min-w-0">
-            <KirkMark size={36} className="shrink-0" />
+            <KirkMark size={32} className="shrink-0" />
             <div className="min-w-0">
               <h2 className="text-[17px] font-black tracking-tight text-[#1a1a1a] leading-none">
                 Ask Kirk
               </h2>
-              <p className="mt-1 text-[10px] font-extrabold tracking-[0.18em] text-costco-red uppercase">
-                Gold Star Membership
-              </p>
-              <p className="mt-[3px] text-[9px] font-bold tracking-[0.22em] text-costco-blue uppercase">
+              <p className="mt-1 text-[10px] font-bold tracking-[0.16em] text-costco-blue uppercase">
                 Kirkland Signature
               </p>
             </div>
