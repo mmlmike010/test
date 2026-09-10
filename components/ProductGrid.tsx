@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { filterProducts } from "@/lib/data/products";
+import { categories, filterProducts } from "@/lib/data/products";
 import type { Product } from "@/lib/data/products";
 import { useCatalogStore } from "@/lib/store/catalog";
 import ProductCard from "@/components/ProductCard";
@@ -77,9 +77,12 @@ export default function ProductGrid() {
     department: department || undefined,
     tag: tag || undefined,
   });
+  const tagLabel = tag
+    ? categories.find((c) => c.id === tag)?.name || tag
+    : null;
   const titleBits = [
     department,
-    tag ? tag.replace(/^\w/, (c) => c.toUpperCase()) : null,
+    tagLabel,
     q.trim() ? `“${q.trim()}”` : null,
   ].filter(Boolean);
 
