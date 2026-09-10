@@ -10,11 +10,11 @@ import ProductDetailModal from "@/components/ProductDetailModal";
 
 const pages = [
   {
-    src: "/products/flyer-page-1.jpg?v=2",
+    src: "/products/flyer-page-1.jpg?v=3",
     label: "Page 1 · Coupon book",
   },
   {
-    src: "/products/flyer-page-2.jpg?v=2",
+    src: "/products/flyer-page-2.jpg?v=3",
     label: "Page 2 · Flyer deals",
   },
 ] as const;
@@ -77,7 +77,7 @@ export default function FlyersView() {
       <div className="mb-3 flex items-end justify-between gap-3">
         <div>
           <h2 className="text-[18px] lg:text-[20px] font-bold text-[#1a1a1a] tracking-tight">
-            Flyer deals Aug 24–Sep 20
+            Flyer deals Aug 24–Sep 21
           </h2>
           <p className="text-[13px] text-[#666] mt-0.5">
             {deals.length} item{deals.length === 1 ? "" : "s"} · Same-Day · 11217

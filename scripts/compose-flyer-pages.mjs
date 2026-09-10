@@ -28,7 +28,7 @@ async function headerBar() {
   <rect width="${W}" height="112" fill="#E31837"/>
   <text x="32" y="48" font-family="Arial, Helvetica, sans-serif" font-size="36" font-weight="800" fill="#ffffff">COSTCO</text>
   <text x="32" y="82" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700" fill="#ffffff">Warehouse Coupon Book</text>
-  <text x="${W - 32}" y="46" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700" fill="#ffffff">8/24/26 – 9/20/26</text>
+  <text x="${W - 32}" y="46" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700" fill="#ffffff">8/24/26 – 9/21/26</text>
   <text x="${W - 32}" y="70" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" fill="#F3E3A3">Gold Star · Same-Day</text>
   <text x="${W - 32}" y="90" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#ffffff">Sale ends in 10 days</text>
 `
@@ -108,7 +108,7 @@ async function coupon({
   <text x="${w - 10}" y="19" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700" fill="#F3E3A3">LIMIT 2</text>
   <text x="12" y="${photoBox + 48}" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" fill="#005DAA">${xml(brand)}</text>
   <text x="12" y="${photoBox + 70}" font-family="Arial, Helvetica, sans-serif" font-size="${featured ? 20 : 16}" font-weight="800" fill="#1A1A1A">${xml(name)}</text>
-  <text x="12" y="${photoBox + 90}" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">${xml(size)} · 8/24/26–9/20/26</text>
+  <text x="12" y="${photoBox + 90}" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">${xml(size)} · 8/24/26–9/21/26</text>
   <text x="12" y="${h - 28}" font-family="Arial, Helvetica, sans-serif" font-size="${featured ? 36 : 28}" font-weight="800" fill="#1A1A1A">$${xml(price)}</text>
   <text x="${featured ? 148 : 122}" y="${h - 30}" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#888888">$${xml(was)}</text>
   <rect x="${w - 96}" y="${h - 48}" width="84" height="26" rx="3" fill="#E31837"/>
@@ -175,7 +175,7 @@ const coverIntro = await sharp(
     `
   <rect width="${W}" height="88" fill="#ffffff"/>
   <text x="32" y="36" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="800" fill="#1A1A1A">Member Only Savings</text>
-  <text x="32" y="62" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#555555">Valid 8/24/26 – 9/20/26 · While supplies last · Page 1 of 2</text>
+  <text x="32" y="62" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#555555">Valid 8/24/26 – 9/21/26 · While supplies last · Page 1 of 2</text>
 `
   )
 )
@@ -215,7 +215,7 @@ const pageIntro = await sharp(
     64,
     `
   <rect width="${W}" height="64" fill="#ffffff"/>
-  <text x="32" y="40" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="800" fill="#1A1A1A">Flyer deals · Aug 24 – Sep 20</text>
+  <text x="32" y="40" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="800" fill="#1A1A1A">Flyer deals · Aug 24 – Sep 21</text>
 `
   )
 )

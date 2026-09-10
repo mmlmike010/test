@@ -12,7 +12,7 @@ const aisleThumbs: Record<string, string> = {
   "Kirkland Signature": "/products/cat-kirkland.jpg?v=2",
   "Auto Accessories": "/products/13.png",
   Babies: "/products/14.png",
-  "Bakery & Desserts": "/products/15.png",
+  "Bakery & Desserts": "/products/15.png?v=2",
   "Beer, Wine & Spirits": "/products/16.png",
   Books: "/products/17.png",
   "Cameras & Camcorders": "/products/18.png",

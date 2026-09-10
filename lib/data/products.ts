@@ -510,7 +510,7 @@ export const products: Product[] = [
     price: 8.99,
     originalPrice: 11.99,
     savings: 3.0,
-    image: "/products/15.png",
+    image: "/products/15.png?v=2",
     inStock: true,
     tags: ["bakery", "kirkland"],
     rating: 3.9,
@@ -875,7 +875,7 @@ export const categories: ShopCategory[] = [
   {
     id: "bakery",
     name: "Bakery",
-    image: "/products/cat-bakery.jpg?v=1",
+    image: "/products/cat-bakery.jpg?v=2",
     department: "Bakery & Desserts",
   },
   {

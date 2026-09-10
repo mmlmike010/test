@@ -15,7 +15,10 @@ const CF = "https://d2lnr5mha7bycj.cloudfront.net/product-image/file";
  *  Tiles 13 and 22 are also composed there from pack photography (seat cover,
  *  black laptop sleeve) with source-brand marks covered.
  *  Tile 19 is reprinted in compose-detergent-170.mjs (170 LOADS on the
- *  real Kirkland Ultra Clean bottle — do not write the 146-load source). */
+ *  real Kirkland Ultra Clean bottle — do not write the 146-load source).
+ *  Tile 15 is composed in compose-chocolate-croissants.mjs (chocolate
+ *  pastry crop on the real 12ct clamshell die-cut — do not write the
+ *  butter croissant source or a La Boulangère bag). */
 const tiles = {
   2: `${CF}/large_6f376933-2b60-43ab-92ba-091277d87719.jpeg`, // Kirkland Heart Healthy Mixed Nuts 36 oz
   3: `${CF}/large_be581b7c-a021-4dcd-9460-10660cd7b6ec.png`, // Hunt's diced tomatoes
@@ -26,7 +29,6 @@ const tiles = {
   11: `${CF}/large_a21841e9-2cb1-46d8-8d2e-83912a9885b3.jpeg`, // Kirkland organic quinoa 4.5 lb
   12: `${CF}/large_adf25ab7-12db-4804-b050-bcb09de56385.jpeg`, // Kirkland trail mix 4 lb
   14: `${CF}/large_a2cd3f74-f69f-4f72-af14-0f653d8c7e6b.webp`, // Kirkland baby wipes
-  15: `${CF}/large_2b963e60-c6a3-4037-8099-6130912fc4c9.jpeg`, // Kirkland bakery croissants 12ct
   16: `${CF}/large_c15562b6-ac05-4b15-8df9-594e7b216767.jpeg`, // Kirkland Alexander Valley Cabernet
   18: `${CF}/large_a4a5dbcb-d19b-42d0-b34e-eccccfedb1cd.jpeg`, // GoPro HERO11 bundle
   20: `${CF}/large_029a4c28-4763-49fe-b0ee-0e9d1f402fb1.jpeg`, // Kirkland merino crew socks
@@ -88,6 +90,9 @@ for (const [id, url] of Object.entries(tiles)) {
   console.log("ok", buf.length);
 }
 
+if (!buffers["15"]) {
+  buffers["15"] = await sharp(join(dir, "15.png")).toBuffer();
+}
 if (!buffers["19"]) {
   buffers["19"] = await sharp(join(dir, "19.png")).toBuffer();
 }
