@@ -25,6 +25,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
   const setQuery = useCatalogStore((s) => s.setQuery);
   const search = useCatalogStore((s) => s.search);
   const setTag = useCatalogStore((s) => s.setTag);
+  const setDepartment = useCatalogStore((s) => s.setDepartment);
   const clearFilters = useCatalogStore((s) => s.clearFilters);
   const department = useCatalogStore((s) => s.department);
   const tag = useCatalogStore((s) => s.tag);
@@ -192,9 +193,12 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
               type="search"
               value={q}
               onChange={(e) => {
-                if (tag === "recipes" || tag === "flyers" || tag === "lists")
+                const next = e.target.value;
+                if (next.trim() && (tag || department)) {
                   setTag(null);
-                setQuery(e.target.value);
+                  setDepartment(null);
+                }
+                setQuery(next);
               }}
               placeholder="Search products"
               className="w-full h-11 pl-11 pr-10 bg-[#f6f6f6] border border-[#d8d8d8] rounded-full text-[15px] text-[#222] placeholder:text-[#8a8a8a] focus:outline-none focus:bg-white focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15"
