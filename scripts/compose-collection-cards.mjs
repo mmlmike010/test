@@ -3,7 +3,7 @@ import sharp from "sharp";
 
 const dir = join(process.cwd(), "public", "products");
 const W = 1400;
-const H = 640;
+const H = 788;
 const MARBLE =
   "https://raw.githubusercontent.com/bx5974/bullet3/master/data/kitchens/fatihrmutfak/marble.jpg";
 const WOOD =
@@ -66,8 +66,8 @@ async function kitchenScene({ cabinetBright, counterBright, counterSat }) {
   <defs>
     <linearGradient id="plane" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#fff" stop-opacity="0"/>
-      <stop offset="0.36" stop-color="#fff" stop-opacity="0"/>
-      <stop offset="0.54" stop-color="#fff" stop-opacity="1"/>
+      <stop offset="0.34" stop-color="#fff" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#fff" stop-opacity="1"/>
       <stop offset="1" stop-color="#fff" stop-opacity="1"/>
     </linearGradient>
   </defs>
@@ -97,9 +97,9 @@ async function kitchenScene({ cabinetBright, counterBright, counterSat }) {
       <stop offset="1" stop-color="#4a3a2c" stop-opacity="0.18"/>
     </linearGradient>
     <linearGradient id="ledge" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0.5" stop-color="#fff6e8" stop-opacity="0"/>
-      <stop offset="0.535" stop-color="#fff6e8" stop-opacity="0.35"/>
-      <stop offset="0.55" stop-color="#fff6e8" stop-opacity="0"/>
+      <stop offset="0.47" stop-color="#fff6e8" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#fff6e8" stop-opacity="0.35"/>
+      <stop offset="0.52" stop-color="#fff6e8" stop-opacity="0"/>
     </linearGradient>
   </defs>
   <rect width="${W}" height="${H}" fill="url(#window)"/>
@@ -217,9 +217,9 @@ await composeStillLife(
   "hero-weekly.jpg",
   { cabinetBright: 0.7, counterBright: 1.08, counterSat: 0.86 },
   [
-    { id: 4, w: 400, h: 510, x: 392, y: 98 },
-    { id: 3, w: 390, h: 490, x: 538, y: 110 },
-    { id: 5, w: 370, h: 460, x: 718, y: 132 },
+    { id: 4, w: 380, h: 540, x: 268, y: 188 },
+    { id: 3, w: 370, h: 520, x: 508, y: 204 },
+    { id: 5, w: 350, h: 490, x: 778, y: 228 },
   ]
 );
 
@@ -227,9 +227,9 @@ await composeStillLife(
   "hero-kirkland.jpg",
   { cabinetBright: 0.64, counterBright: 1.04, counterSat: 0.78 },
   [
-    { id: 10, w: 260, h: 530, x: 400, y: 62 },
-    { id: 11, w: 430, h: 510, x: 498, y: 78 },
-    { id: 2, w: 370, h: 460, x: 738, y: 124 },
+    { id: 10, w: 240, h: 580, x: 288, y: 148 },
+    { id: 11, w: 410, h: 560, x: 458, y: 164 },
+    { id: 2, w: 360, h: 500, x: 800, y: 218 },
   ]
 );
 
@@ -237,9 +237,9 @@ await composeStillLife(
   "hero-new.jpg",
   { cabinetBright: 0.74, counterBright: 1.12, counterSat: 0.7 },
   [
-    { id: 23, w: 430, h: 450, x: 368, y: 148 },
-    { id: 1, w: 390, h: 520, x: 528, y: 78 },
-    { id: 8, w: 340, h: 430, x: 758, y: 158 },
+    { id: 23, w: 410, h: 480, x: 238, y: 248 },
+    { id: 1, w: 380, h: 560, x: 498, y: 168 },
+    { id: 8, w: 330, h: 460, x: 820, y: 258 },
   ]
 );
 
@@ -247,8 +247,8 @@ await composeStillLife(
   "hero-treasure.jpg",
   { cabinetBright: 0.6, counterBright: 1.02, counterSat: 0.68 },
   [
-    { id: 19, w: 280, h: 520, x: 388, y: 78 },
-    { id: 21, w: 410, h: 500, x: 518, y: 88 },
-    { id: 14, w: 360, h: 400, x: 748, y: 178 },
+    { id: 19, w: 260, h: 560, x: 268, y: 168 },
+    { id: 21, w: 400, h: 540, x: 478, y: 178 },
+    { id: 14, w: 350, h: 440, x: 810, y: 288 },
   ]
 );

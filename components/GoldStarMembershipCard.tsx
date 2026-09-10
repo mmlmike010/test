@@ -25,9 +25,6 @@ export default function GoldStarMembershipCard() {
           </div>
         </div>
         <div className="mt-2.5 flex items-center gap-3">
-          <div className="w-[52px] h-[64px] rounded-[3px] border border-[#c9b27a] bg-[#efe6c8] flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.55)]">
-            <KirkMark size={34} />
-          </div>
           <div className="min-w-0 flex-1">
             <p className="text-[17px] font-black tracking-tight text-[#1a1a1a] leading-none">
               KIRK
@@ -41,6 +38,9 @@ export default function GoldStarMembershipCard() {
             <p className="mt-0.5 text-[9px] font-semibold tracking-[0.08em] text-[#777] uppercase">
               Member Since 2019
             </p>
+          </div>
+          <div className="w-[52px] h-[64px] rounded-[3px] border border-[#c9b27a] bg-[#efe6c8] flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.55)]">
+            <KirkMark size={34} />
           </div>
         </div>
         <div className="mt-2.5">

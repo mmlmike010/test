@@ -181,22 +181,22 @@ export default function ProductGrid() {
                   title: "Member Only Savings",
                   subtitle: "7/27/26 – 8/23/26",
                   badge: "Sale ends in 14 days",
-                  image: "/products/hero-weekly.jpg?v=13",
+                  image: "/products/hero-weekly.jpg?v=14",
                   onClick: () => showAisle({ tag: "weekly" }),
                 },
                 {
                   title: "Kirkland Signature",
-                  image: "/products/hero-kirkland.jpg?v=13",
+                  image: "/products/hero-kirkland.jpg?v=14",
                   onClick: () => showAisle({ tag: "kirkland" }),
                 },
                 {
                   title: "This week's featured items",
-                  image: "/products/hero-new.jpg?v=13",
+                  image: "/products/hero-new.jpg?v=14",
                   onClick: () => showAisle({ tag: "trending" }),
                 },
                 {
                   title: "Discounts on household favorites",
-                  image: "/products/hero-treasure.jpg?v=13",
+                  image: "/products/hero-treasure.jpg?v=14",
                   onClick: () => showAisle({ tag: "treasure" }),
                 },
               ] as const
@@ -205,7 +205,7 @@ export default function ProductGrid() {
                 key={tile.title}
                 type="button"
                 onClick={tile.onClick}
-                className="relative h-[220px] sm:h-[260px] lg:h-[280px] rounded-[16px] overflow-hidden text-left group bg-[#f3f3f3]"
+                className="relative aspect-video rounded-[16px] overflow-hidden text-left group bg-[#f3f3f3]"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
