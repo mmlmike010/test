@@ -495,19 +495,13 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
   return (
     <>
     <aside className="fixed inset-y-0 right-0 z-40 w-full max-w-[420px] lg:static lg:z-30 lg:w-[380px] xl:w-[420px] lg:max-w-none shrink-0 bg-white border-l border-[#e5e5e5] h-full flex flex-col">
-      <div className="relative shrink-0 border-b border-[#e5e5e5] bg-[#f7f1de] overflow-hidden">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/kirk/card-stock.jpg?v=2"
-          alt=""
-          className="absolute inset-0 h-full w-full object-cover"
-        />
-        <div className="relative h-[6px] bg-costco-red" />
-        <div className="relative h-[3px] bg-gradient-to-r from-[#a3841c] via-[#f3e3a3] to-[#a3841c]" />
-        <div className="relative px-3.5 py-2 flex items-center justify-between gap-2">
+      <div className="relative shrink-0 border-b border-[#e5e5e5] bg-white">
+        <div className="h-[6px] bg-costco-red" />
+        <div className="h-[3px] bg-gradient-to-r from-[#a3841c] via-[#f3e3a3] to-[#a3841c]" />
+        <div className="px-3.5 py-2 flex items-center justify-between gap-2">
           <div className="flex items-center gap-2.5 min-w-0">
             <CostcoLogo compact />
-            <span className="w-px h-8 bg-[#d4c194] shrink-0" />
+            <span className="w-px h-8 bg-[#d8d8d8] shrink-0" />
             <KirkMark size={28} className="shrink-0" />
             <div className="min-w-0">
               <h2 className="text-[16px] font-black tracking-tight text-[#1a1a1a] leading-none">
@@ -543,8 +537,8 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             </button>
           </div>
         </div>
-        <div className="relative h-2 bg-costco-blue" />
-        <p className="relative px-3.5 py-1.5 flex items-center gap-1.5 text-[11px] text-[#188038] font-semibold bg-[#f3f3f3] border-b border-[#ececec]">
+        <div className="h-2 bg-costco-blue" />
+        <p className="px-3.5 py-1.5 flex items-center gap-1.5 text-[11px] text-[#188038] font-semibold bg-[#f3f3f3] border-b border-[#ececec]">
           <span className="w-1.5 h-1.5 rounded-full bg-[#0AAD0A]" />
           Delivery 8:48–9:18pm · 11217 Brooklyn · Membership required
         </p>
@@ -552,7 +546,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
           <button
             type="button"
             onClick={openCart}
-            className="relative mx-3.5 my-2 w-[calc(100%-1.75rem)] flex items-center justify-between rounded-full bg-[#e8f2fa] border border-[#c5d8ea] px-3.5 py-2 text-left hover:bg-[#dceaf6]"
+            className="mx-3.5 my-2 w-[calc(100%-1.75rem)] flex items-center justify-between rounded-full bg-[#e8f2fa] border border-[#c5d8ea] px-3.5 py-2 text-left hover:bg-[#dceaf6]"
           >
             <span className="flex items-center gap-2 min-w-0">
               <ShoppingCart className="w-3.5 h-3.5 text-costco-blue shrink-0" />

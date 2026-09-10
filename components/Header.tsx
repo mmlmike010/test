@@ -71,6 +71,9 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
               <a href="#" className="text-[#333] hover:text-costco-blue py-3">
                 Lists
               </a>
+              <a href="#" className="text-[#333] hover:text-costco-blue py-3">
+                Recipes
+              </a>
             </nav>
           </div>
           <div className="flex items-center gap-3 shrink-0">
