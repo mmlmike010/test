@@ -174,15 +174,15 @@ export default function ProductGrid() {
                 key={tile.title}
                 type="button"
                 onClick={tile.onClick}
-                className="relative h-[168px] sm:h-[200px] rounded-[16px] overflow-hidden text-left group bg-[#f3f3f3]"
+                className="relative h-[168px] sm:h-[200px] rounded-[16px] overflow-hidden text-left group bg-[#f4f6f7] border border-[#ececec]"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={tile.image}
                   alt=""
-                  className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-300"
+                  className="absolute inset-0 w-full h-full object-contain p-2 group-hover:scale-[1.04] transition-transform duration-300"
                 />
-                <span className="absolute inset-x-0 bottom-0 h-[46%] bg-gradient-to-t from-black/70 to-transparent" />
+                <span className="absolute inset-x-0 bottom-0 h-[42%] bg-gradient-to-t from-black/65 to-transparent" />
                 <span className="absolute bottom-3 left-3 right-3 text-[18px] sm:text-[21px] font-bold text-white leading-tight drop-shadow">
                   {tile.title}
                 </span>

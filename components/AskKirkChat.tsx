@@ -493,21 +493,20 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
     <>
     <aside className="fixed inset-y-0 right-0 z-40 w-full max-w-[420px] lg:static lg:z-30 lg:w-[380px] xl:w-[420px] lg:max-w-none shrink-0 bg-white border-l border-[#e5e5e5] h-full flex flex-col">
       <div className="shrink-0 border-b border-[#e5e5e5] bg-white">
-        <div className="bg-costco-red px-3.5 py-3 flex items-center justify-between gap-2">
+        <div className="h-[5px] bg-costco-red" />
+        <div className="px-3.5 py-2.5 flex items-center justify-between gap-2">
           <div className="flex items-center gap-2.5 min-w-0">
-            <span className="inline-flex items-center justify-center rounded-full bg-white shrink-0" style={{ width: 38, height: 38 }}>
-              <KirkMark size={34} />
-            </span>
+            <KirkMark size={36} className="shrink-0" />
             <div className="min-w-0">
-              <h2 className="text-[17px] font-black tracking-tight text-white leading-none">
+              <h2 className="text-[17px] font-black tracking-tight text-[#1a1a1a] leading-none">
                 Ask Kirk
               </h2>
-              <p className="mt-[6px] leading-none">
-                <span className="block text-[10px] font-extrabold tracking-[0.24em] text-white uppercase">
+              <p className="mt-[5px] leading-none">
+                <span className="block text-[10px] font-extrabold tracking-[0.24em] text-costco-red uppercase">
                   Kirkland
                 </span>
-                <span className="block w-[72px] h-px bg-white/70 my-[3px]" />
-                <span className="block text-[9px] font-bold tracking-[0.32em] text-white/85 uppercase">
+                <span className="block w-[72px] h-px bg-costco-blue my-[3px]" />
+                <span className="block text-[9px] font-bold tracking-[0.32em] text-costco-blue uppercase">
                   Signature
                 </span>
               </p>
@@ -517,7 +516,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             <button
               type="button"
               onClick={handleReset}
-              className="px-2 py-1.5 text-[12px] font-bold text-white hover:bg-white/15 rounded-[3px] transition-colors flex items-center gap-1"
+              className="px-2 py-1.5 text-[12px] font-bold text-[#555] hover:bg-[#f3f3f3] rounded-[3px] transition-colors flex items-center gap-1"
               title="Reset"
             >
               <RefreshCw className="w-3.5 h-3.5" />
@@ -526,7 +525,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             <button
               type="button"
               onClick={onClose}
-              className="p-1.5 text-white hover:bg-white/15 rounded-full transition-colors"
+              className="p-1.5 text-[#555] hover:bg-[#f3f3f3] rounded-full transition-colors"
               title="Close"
               aria-label="Close Ask Kirk"
             >
@@ -534,7 +533,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             </button>
           </div>
         </div>
-        <div className="h-[3px] bg-costco-blue" />
+        <div className="h-[5px] bg-costco-blue" />
         <p className="px-3.5 py-1.5 flex items-center gap-1.5 text-[11px] text-[#188038] font-semibold bg-[#f3f3f3] border-b border-[#ececec]">
           <span className="w-1.5 h-1.5 rounded-full bg-[#0AAD0A]" />
           Delivery 8:48–9:18pm · 11217 Brooklyn · Membership required
@@ -593,17 +592,25 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                 <p className="text-[13px] leading-relaxed text-[#333] whitespace-pre-line">
                   {message.content}
                 </p>
-                <div className="mt-2.5 overflow-hidden rounded-[8px] border border-[#e5e5e5]">
-                  <div className="h-[3px] bg-costco-red" />
-                  <div className="flex items-center gap-2 bg-[#f7f7f7] px-2.5 py-1.5">
-                    <span className="inline-flex h-5 items-center rounded-[3px] bg-costco-red px-1.5 text-[9px] font-black tracking-wide text-white">
+                <div className="mt-2.5 overflow-hidden rounded-[6px] border border-[#e5e5e5] bg-white">
+                  <div className="h-[4px] bg-costco-red" />
+                  <div className="flex items-center justify-between gap-2 bg-[#fafafa] px-2.5 py-2">
+                    <span className="inline-flex h-5 items-center rounded-[2px] bg-costco-red px-1.5 text-[9px] font-black tracking-wide text-white">
                       MEMBER
                     </span>
-                    <p className="text-[11px] text-[#555] font-semibold">
+                    <p className="text-[11px] text-[#555] font-semibold min-w-0">
                       Same-Day requires a Costco membership
                     </p>
                   </div>
-                  <div className="h-[3px] bg-costco-blue" />
+                  <div className="flex items-center justify-between px-2.5 py-1.5 border-t border-[#eee]">
+                    <span className="text-[10px] font-extrabold tracking-[0.18em] text-costco-red uppercase">
+                      Gold Star
+                    </span>
+                    <span className="text-[10px] font-bold text-costco-blue tabular-nums">
+                      11217 · Brooklyn
+                    </span>
+                  </div>
+                  <div className="h-[4px] bg-costco-blue" />
                 </div>
                 </div>
               </div>

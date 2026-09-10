@@ -74,10 +74,10 @@ export default function CartDrawer() {
                     </span>
                   </p>
                   <div className="mt-2 flex items-center justify-between gap-2">
-                    <div className="flex items-center border border-[#c8c8c8] rounded-full overflow-hidden h-8">
+                    <div className="flex items-center rounded-full overflow-hidden h-8 bg-[#0AAD0A] text-white">
                       <button
                         type="button"
-                        className="w-8 h-8 flex items-center justify-center hover:bg-gray-50"
+                        className="w-8 h-8 flex items-center justify-center hover:bg-[#099809]"
                         onClick={() => updateQuantity(product.id, quantity - 1)}
                         aria-label="Decrease quantity"
                       >
@@ -88,7 +88,7 @@ export default function CartDrawer() {
                       </span>
                       <button
                         type="button"
-                        className="w-8 h-8 flex items-center justify-center hover:bg-gray-50"
+                        className="w-8 h-8 flex items-center justify-center hover:bg-[#099809]"
                         onClick={() => updateQuantity(product.id, quantity + 1)}
                         aria-label="Increase quantity"
                       >

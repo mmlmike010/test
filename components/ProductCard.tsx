@@ -25,7 +25,7 @@ function AddControl({ product }: { product: Product }) {
       <button
         type="button"
         onClick={add}
-        aria-label={`Add ${product.name}`}
+        aria-label={`Add 1 ct ${product.name}`}
         className={`absolute bottom-2 right-2 w-8 h-8 rounded-full bg-white border-[1.5px] shadow-[0_1px_4px_rgba(0,0,0,0.12)] flex items-center justify-center ${
           justAdded
             ? "border-[#0AAD0A] text-[#0AAD0A]"
@@ -85,7 +85,7 @@ export default function ProductCard({
           onOpen();
         }
       }}
-      className={`bg-white text-left cursor-pointer rounded-[16px] border border-[#e8e8e8] hover:shadow-[0_2px_10px_rgba(0,0,0,0.08)] transition-shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-costco-blue/40 overflow-hidden ${
+      className={`bg-white text-left cursor-pointer rounded-[12px] border border-[#eee] hover:shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition-shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-costco-blue/40 overflow-hidden ${
         compact ? "w-[188px] shrink-0" : ""
       }`}
     >

@@ -91,7 +91,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
               <span className="w-7 h-7 rounded-full border border-[#c8c8c8] bg-white flex items-center justify-center">
                 <User className="w-4 h-4" />
               </span>
-              <span className="hidden sm:inline">Sign in</span>
+              <span className="hidden sm:inline">Sign In / Register</span>
             </button>
           </div>
         </div>
