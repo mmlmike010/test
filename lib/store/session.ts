@@ -1,0 +1,202 @@
+"use client";
+
+import { create } from "zustand";
+
+export type StoreSheet =
+  | "pricing"
+  | "membership"
+  | "signin"
+  | "delivery"
+  | "departments"
+  | "request"
+  | "checkout"
+  | null;
+
+export type DeliveryWindow = {
+  id: string;
+  label: string;
+  when: string;
+};
+
+export type DeliveryAddress = {
+  line1: string;
+  city: string;
+  zip: string;
+};
+
+export const DELIVERY_WINDOWS: DeliveryWindow[] = [
+  { id: "tonight-early", label: "8:48–9:18pm", when: "Today" },
+  { id: "tonight-late", label: "9:30–10:00pm", when: "Today" },
+  { id: "tomorrow-am", label: "8:00–8:30am", when: "Tomorrow" },
+];
+
+export const DEFAULT_ADDRESS: DeliveryAddress = {
+  line1: "184 6th Ave",
+  city: "Brooklyn",
+  zip: "11217",
+};
+
+export const KIRK_MEMBERSHIP = "111 847 11217";
+export const KIRK_NAME = "Kirk";
+export const KIRK_EMAIL = "kirk@member.local";
+
+const KEY = "costco-sameday-session";
+
+type Persisted = {
+  signedIn: boolean;
+  displayName: string;
+  email: string;
+  membershipAdded: boolean;
+  membershipNumber: string;
+  windowId: string;
+  address: DeliveryAddress;
+  specialRequest: string;
+};
+
+const fallback: Persisted = {
+  signedIn: false,
+  displayName: "",
+  email: "",
+  membershipAdded: false,
+  membershipNumber: "",
+  windowId: DELIVERY_WINDOWS[0].id,
+  address: DEFAULT_ADDRESS,
+  specialRequest: "",
+};
+
+function readSession(): Persisted {
+  if (typeof window === "undefined") return fallback;
+  try {
+    const raw = window.localStorage.getItem(KEY);
+    if (!raw) return fallback;
+    const parsed = JSON.parse(raw) as Partial<Persisted>;
+    const windowOk = DELIVERY_WINDOWS.some((w) => w.id === parsed.windowId);
+    return {
+      ...fallback,
+      ...parsed,
+      windowId: windowOk ? parsed.windowId! : fallback.windowId,
+      address: {
+        ...DEFAULT_ADDRESS,
+        ...(parsed.address || {}),
+      },
+    };
+  } catch {
+    return fallback;
+  }
+}
+
+function writeSession(state: Persisted) {
+  if (typeof window === "undefined") return;
+  window.localStorage.setItem(KEY, JSON.stringify(state));
+}
+
+type SessionState = Persisted & {
+  sheet: StoreSheet;
+  orderPlaced: boolean;
+  setSheet: (sheet: StoreSheet) => void;
+  signIn: (displayName: string, email: string) => void;
+  signOut: () => void;
+  addMembership: (number: string) => void;
+  removeMembership: () => void;
+  setDelivery: (windowId: string, address: DeliveryAddress) => void;
+  setSpecialRequest: (note: string) => void;
+  placeOrder: () => void;
+  clearOrder: () => void;
+};
+
+function persistable(state: SessionState): Persisted {
+  return {
+    signedIn: state.signedIn,
+    displayName: state.displayName,
+    email: state.email,
+    membershipAdded: state.membershipAdded,
+    membershipNumber: state.membershipNumber,
+    windowId: state.windowId,
+    address: state.address,
+    specialRequest: state.specialRequest,
+  };
+}
+
+export const useSessionStore = create<SessionState>((set, get) => ({
+  ...fallback,
+  sheet: null,
+  orderPlaced: false,
+  setSheet: (sheet) => set({ sheet }),
+  signIn: (displayName, email) => {
+    const next = {
+      ...get(),
+      signedIn: true,
+      displayName: displayName.trim() || KIRK_NAME,
+      email: email.trim() || KIRK_EMAIL,
+      sheet: null as StoreSheet,
+    };
+    writeSession(persistable(next));
+    set(next);
+  },
+  signOut: () => {
+    const next = {
+      ...get(),
+      signedIn: false,
+      displayName: "",
+      email: "",
+      orderPlaced: false,
+      sheet: null as StoreSheet,
+    };
+    writeSession(persistable(next));
+    set(next);
+  },
+  addMembership: (number) => {
+    const cleaned = number.replace(/\s+/g, " ").trim();
+    const next = {
+      ...get(),
+      membershipAdded: true,
+      membershipNumber: cleaned || KIRK_MEMBERSHIP,
+      sheet: null as StoreSheet,
+    };
+    writeSession(persistable(next));
+    set(next);
+  },
+  removeMembership: () => {
+    const next = {
+      ...get(),
+      membershipAdded: false,
+      membershipNumber: "",
+      sheet: null as StoreSheet,
+    };
+    writeSession(persistable(next));
+    set(next);
+  },
+  setDelivery: (windowId, address) => {
+    const next = {
+      ...get(),
+      windowId,
+      address: {
+        line1: address.line1.trim() || DEFAULT_ADDRESS.line1,
+        city: address.city.trim() || DEFAULT_ADDRESS.city,
+        zip: address.zip.trim() || DEFAULT_ADDRESS.zip,
+      },
+      sheet: null as StoreSheet,
+    };
+    writeSession(persistable(next));
+    set(next);
+  },
+  setSpecialRequest: (note) => {
+    const next = { ...get(), specialRequest: note.trim(), sheet: null as StoreSheet };
+    writeSession(persistable(next));
+    set(next);
+  },
+  placeOrder: () => set({ orderPlaced: true }),
+  clearOrder: () => set({ orderPlaced: false }),
+}));
+
+export function hydrateSession() {
+  useSessionStore.setState({ ...readSession(), sheet: null, orderPlaced: false });
+}
+
+export function deliveryWindow(windowId: string): DeliveryWindow {
+  return DELIVERY_WINDOWS.find((w) => w.id === windowId) || DELIVERY_WINDOWS[0];
+}
+
+export function formatAddress(address: DeliveryAddress): string {
+  return `${address.zip} ${address.city}`;
+}

@@ -13,6 +13,7 @@ import InstacartMark from "@/components/InstacartMark";
 import RecipesView from "@/components/RecipesView";
 import FlyersView from "@/components/FlyersView";
 import ListsView from "@/components/ListsView";
+import { formatAddress, useSessionStore } from "@/lib/store/session";
 
 type Aisle = {
   title: string;
@@ -133,6 +134,8 @@ export default function ProductGrid() {
   const clearFilters = useCatalogStore((s) => s.clearFilters);
   const [selected, setSelected] = useState<Product | null>(null);
   const [sort, setSort] = useState<"relevance" | "price">("relevance");
+  const setSheet = useSessionStore((s) => s.setSheet);
+  const address = useSessionStore((s) => s.address);
 
   useEffect(() => {
     void search();
@@ -456,12 +459,13 @@ export default function ProductGrid() {
                 >
                   Browse store
                 </button>
-                <a
-                  href="#"
+                <button
+                  type="button"
                   className="text-[13px] text-costco-blue font-bold hover:underline"
+                  onClick={() => setSheet("request")}
                 >
                   Add a special request
-                </a>
+                </button>
               </div>
             </div>
           ) : (
@@ -480,9 +484,13 @@ export default function ProductGrid() {
 
       <footer className="mt-8 pt-5 border-t border-[#e0e0e0] text-[12px] text-[#666]">
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 mb-2">
-          <a href="#" className="text-costco-blue font-semibold hover:underline">
+          <button
+            type="button"
+            className="text-costco-blue font-semibold hover:underline"
+            onClick={() => setSheet("pricing")}
+          >
             Pricing & fees
-          </a>
+          </button>
           <button
             type="button"
             className="text-costco-blue font-semibold hover:underline"
@@ -495,9 +503,13 @@ export default function ProductGrid() {
           >
             Recipes
           </button>
-          <a href="#" className="text-costco-blue font-semibold hover:underline">
+          <button
+            type="button"
+            className="text-costco-blue font-semibold hover:underline"
+            onClick={() => setSheet("departments")}
+          >
             Departments
-          </a>
+          </button>
           <button
             type="button"
             className="text-costco-blue font-semibold hover:underline"
@@ -528,7 +540,7 @@ export default function ProductGrid() {
             <InstacartMark size={12} />
             Same-Day Delivery powered by Instacart · Costco membership required
           </p>
-          <p>Prices, fees, and availability for 11217 Brooklyn</p>
+          <p>Prices, fees, and availability for {formatAddress(address)}</p>
         </div>
       </footer>
 

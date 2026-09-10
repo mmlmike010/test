@@ -8,12 +8,15 @@ import ProductGrid from "@/components/ProductGrid";
 import AskKirkChat from "@/components/AskKirkChat";
 import CartDrawer from "@/components/CartDrawer";
 import { hydrateLists } from "@/lib/store/lists";
+import { hydrateSession } from "@/lib/store/session";
+import StoreSheets from "@/components/StoreSheets";
 
 export default function Home() {
   const [isKirkOpen, setIsKirkOpen] = useState(true);
 
   useEffect(() => {
     hydrateLists();
+    hydrateSession();
   }, []);
 
   return (
@@ -44,6 +47,7 @@ export default function Home() {
       </div>
 
       <CartDrawer />
+      <StoreSheets />
     </div>
   );
 }

@@ -7,6 +7,12 @@ import { ChevronDown, Clock, Search, ShoppingCart, User, X } from "lucide-react"
 import CostcoLogo from "@/components/CostcoLogo";
 import KirkMark from "@/components/KirkMark";
 import InstacartMark from "@/components/InstacartMark";
+import GoldStarMark from "@/components/GoldStarMark";
+import {
+  deliveryWindow,
+  formatAddress,
+  useSessionStore,
+} from "@/lib/store/session";
 
 interface HeaderProps {
   onAskKirkClick: () => void;
@@ -26,6 +32,14 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
   const onFlyers = tag === "flyers";
   const onLists = tag === "lists";
   const onShop = !onRecipes && !onFlyers && !onLists;
+  const setSheet = useSessionStore((s) => s.setSheet);
+  const signedIn = useSessionStore((s) => s.signedIn);
+  const displayName = useSessionStore((s) => s.displayName);
+  const membershipAdded = useSessionStore((s) => s.membershipAdded);
+  const membershipNumber = useSessionStore((s) => s.membershipNumber);
+  const windowId = useSessionStore((s) => s.windowId);
+  const address = useSessionStore((s) => s.address);
+  const slot = deliveryWindow(windowId);
   const tabClass = (active: boolean) =>
     active
       ? "text-costco-blue font-bold border-b-[3px] border-costco-blue py-3"
@@ -125,26 +139,39 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
             </nav>
           </div>
           <div className="flex items-center gap-3 shrink-0">
-            <a
-              href="#"
+            <button
+              type="button"
               className="hidden md:inline text-[13px] text-costco-blue font-semibold hover:underline"
+              onClick={() => setSheet("pricing")}
             >
               Pricing & fees
-            </a>
-            <a
-              href="#"
-              className="hidden sm:inline text-[13px] text-costco-blue font-semibold hover:underline"
+            </button>
+            <button
+              type="button"
+              className="hidden sm:inline-flex items-center gap-1 text-[13px] text-costco-blue font-semibold hover:underline"
+              onClick={() => setSheet("membership")}
             >
-              Add Costco
-            </a>
+              {membershipAdded ? (
+                <>
+                  <GoldStarMark size={14} />
+                  Gold Star
+                  <span className="hidden xl:inline"> · {membershipNumber}</span>
+                </>
+              ) : (
+                "Add membership"
+              )}
+            </button>
             <button
               type="button"
               className="inline-flex items-center gap-1.5 text-[#333] text-[13px] font-semibold hover:text-costco-blue"
+              onClick={() => setSheet("signin")}
             >
               <span className="w-7 h-7 rounded-full border border-[#c8c8c8] bg-white flex items-center justify-center">
                 <User className="w-4 h-4" />
               </span>
-              <span className="hidden sm:inline">Sign In / Register</span>
+              <span className="hidden sm:inline">
+                {signedIn ? displayName : "Sign In / Register"}
+              </span>
             </button>
           </div>
         </div>
@@ -207,15 +234,16 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
           <button
             type="button"
             className="hidden lg:flex text-left items-center gap-1.5 px-1.5 py-0.5 rounded-md hover:bg-[#f6f6f6]"
+            onClick={() => setSheet("delivery")}
           >
             <Clock className="w-[18px] h-[18px] text-costco-blue shrink-0" />
             <span>
               <span className="block text-[13px] text-[#333] leading-tight">
                 <span className="text-[#666]">Delivery </span>
-                <span className="font-bold">8:48–9:18pm</span>
+                <span className="font-bold">{slot.label}</span>
               </span>
               <span className="block text-[12px] text-[#666] leading-tight">
-                11217 · Brooklyn
+                {formatAddress(address)}
               </span>
             </span>
             <ChevronDown className="w-4 h-4 text-[#666] shrink-0" />

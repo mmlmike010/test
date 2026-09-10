@@ -17,6 +17,11 @@ import KirkMark from "@/components/KirkMark";
 import CostcoLogo from "@/components/CostcoLogo";
 import GoldStarMark from "@/components/GoldStarMark";
 import GoldStarMembershipCard from "@/components/GoldStarMembershipCard";
+import {
+  deliveryWindow,
+  formatAddress,
+  useSessionStore,
+} from "@/lib/store/session";
 
 interface Message {
   id: string;
@@ -105,6 +110,9 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
   const getSnapshot = useCartStore((state) => state.getSnapshot);
   const kirkCartCount = useCartStore((state) => state.getTotalItems());
   const kirkCartSubtotal = useCartStore((state) => state.getSubtotal());
+  const kirkWindow = deliveryWindow(useSessionStore((s) => s.windowId));
+  const kirkAddress = useSessionStore((s) => s.address);
+  const kirkMember = useSessionStore((s) => s.membershipAdded);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -540,7 +548,8 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
         <div className="h-2 bg-costco-blue" />
         <p className="px-3.5 py-1.5 flex items-center gap-1.5 text-[11px] text-[#188038] font-semibold bg-[#f3f3f3] border-b border-[#ececec]">
           <span className="w-1.5 h-1.5 rounded-full bg-[#0AAD0A]" />
-          Delivery 8:48–9:18pm · 11217 Brooklyn · Membership required
+          Delivery {kirkWindow.label} · {formatAddress(kirkAddress)} ·{" "}
+          {kirkMember ? "Gold Star" : "Membership required"}
         </p>
         {kirkCartCount > 0 && (
           <button

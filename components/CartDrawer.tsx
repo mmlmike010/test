@@ -3,6 +3,11 @@
 import { Minus, Plus, ShoppingCart, Trash2, X } from "lucide-react";
 import { useCartStore } from "@/lib/store/cart";
 import { productSize } from "@/lib/ui/packSize";
+import {
+  deliveryWindow,
+  formatAddress,
+  useSessionStore,
+} from "@/lib/store/session";
 
 export default function CartDrawer() {
   const isOpen = useCartStore((s) => s.isOpen);
@@ -13,6 +18,11 @@ export default function CartDrawer() {
   const clearCart = useCartStore((s) => s.clearCart);
   const subtotal = useCartStore((s) => s.getSubtotal());
   const totalItems = useCartStore((s) => s.getTotalItems());
+  const setSheet = useSessionStore((s) => s.setSheet);
+  const windowId = useSessionStore((s) => s.windowId);
+  const address = useSessionStore((s) => s.address);
+  const specialRequest = useSessionStore((s) => s.specialRequest);
+  const slot = deliveryWindow(windowId);
 
   if (!isOpen) return null;
 
@@ -31,8 +41,8 @@ export default function CartDrawer() {
               Cart
             </h2>
             <p className="text-[12px] text-[#188038] font-semibold mt-1.5">
-              {totalItems} item{totalItems === 1 ? "" : "s"} · Delivery
-              8:48–9:18pm
+              {totalItems} item{totalItems === 1 ? "" : "s"} · Delivery{" "}
+              {slot.label} · {formatAddress(address)}
             </p>
           </div>
           <button
@@ -128,6 +138,11 @@ export default function CartDrawer() {
                   </div>
                 </div>
               ))}
+              {specialRequest && (
+                <p className="mt-3 text-[12px] text-[#555] leading-snug">
+                  Special request: {specialRequest}
+                </p>
+              )}
               <button
                 type="button"
                 onClick={closeCart}
@@ -160,7 +175,14 @@ export default function CartDrawer() {
             )}
             <button
               type="button"
-              onClick={closeCart}
+              onClick={() => {
+                if (!items.length) {
+                  closeCart();
+                  return;
+                }
+                closeCart();
+                setSheet("checkout");
+              }}
               className="flex-1 py-3 bg-[#0AAD0A] text-white rounded-full font-bold hover:bg-[#099809] text-[15px]"
             >
               {items.length ? "Go to checkout" : "Browse products"}
