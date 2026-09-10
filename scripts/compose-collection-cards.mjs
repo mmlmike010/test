@@ -202,8 +202,8 @@ await composeStillLife(
   "hero-treasure.jpg",
   { brightness: 1.0, saturation: 0.7 },
   [
-    { id: 18, w: 440, h: 480, x: 410, y: 72 },
-    { id: 21, w: 380, h: 500, x: 568, y: 58 },
-    { id: 22, w: 340, h: 380, x: 788, y: 132 },
+    { id: 19, w: 280, h: 500, x: 428, y: 68 },
+    { id: 21, w: 400, h: 500, x: 548, y: 62 },
+    { id: 14, w: 360, h: 400, x: 778, y: 148 },
   ]
 );
