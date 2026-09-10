@@ -81,8 +81,18 @@ export default function ProductGrid() {
     department: department || undefined,
     tag: tag || undefined,
   });
+  const liveCollectionName: Record<string, string> = {
+    weekly: "Member Only Savings",
+    trending: "This week's featured items",
+    treasure: "Discounts on household favorites",
+    kirkland: "Kirkland Signature",
+    new: "What's New",
+    again: "Buy it again",
+  };
   const tagLabel = tag
-    ? categories.find((c) => c.id === tag)?.name || tag
+    ? liveCollectionName[tag] ||
+      categories.find((c) => c.id === tag)?.name ||
+      tag
     : null;
   const titleBits = [
     department,
@@ -111,7 +121,7 @@ export default function ProductGrid() {
       onShowAll: () => showAisle({ tag: "again" }),
     },
     {
-      title: "Weekly Savings",
+      title: "Member Only Savings",
       items: filtered.filter(
         (p) => p.department === "Weekly Savings" || p.tags?.includes("weekly")
       ),
@@ -135,14 +145,14 @@ export default function ProductGrid() {
       onShowAll: () => showAisle({ tag: "new" }),
     },
     {
-      title: "Trending",
+      title: "This week's featured items",
       items: filtered.filter(
         (p) => p.department === "Trending" || p.tags?.includes("trending")
       ),
       onShowAll: () => showAisle({ tag: "trending" }),
     },
     {
-      title: "Treasure Hunt",
+      title: "Discounts on household favorites",
       items: filtered.filter((p) => p.tags?.includes("treasure")),
       onShowAll: () => showAisle({ tag: "treasure" }),
     },
@@ -164,28 +174,32 @@ export default function ProductGrid() {
       {!filteredView && (
         <>
           <section className="mb-5 grid grid-cols-2 xl:grid-cols-4 gap-3">
-            {[
-              {
-                title: "Weekly Savings",
-                image: "/products/hero-weekly.jpg?v=9",
-                onClick: () => showAisle({ tag: "weekly" }),
-              },
-              {
-                title: "Kirkland Signature",
-                image: "/products/hero-kirkland.jpg?v=9",
-                onClick: () => showAisle({ tag: "kirkland" }),
-              },
-              {
-                title: "What's New",
-                image: "/products/hero-new.jpg?v=9",
-                onClick: () => showAisle({ tag: "new" }),
-              },
-              {
-                title: "Treasure Hunt",
-                image: "/products/hero-treasure.jpg?v=9",
-                onClick: () => showAisle({ tag: "treasure" }),
-              },
-            ].map((tile) => (
+            {(
+              [
+                {
+                  title: "Member Only Savings",
+                  subtitle: "7/27/26 – 8/23/26",
+                  badge: "Sale ends in 14 days",
+                  image: "/products/hero-weekly.jpg?v=9",
+                  onClick: () => showAisle({ tag: "weekly" }),
+                },
+                {
+                  title: "Kirkland Signature",
+                  image: "/products/hero-kirkland.jpg?v=9",
+                  onClick: () => showAisle({ tag: "kirkland" }),
+                },
+                {
+                  title: "This week's featured items",
+                  image: "/products/hero-new.jpg?v=9",
+                  onClick: () => showAisle({ tag: "trending" }),
+                },
+                {
+                  title: "Discounts on household favorites",
+                  image: "/products/hero-treasure.jpg?v=9",
+                  onClick: () => showAisle({ tag: "treasure" }),
+                },
+              ] as const
+            ).map((tile) => (
               <button
                 key={tile.title}
                 type="button"
@@ -198,11 +212,21 @@ export default function ProductGrid() {
                   alt=""
                   className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
-                <span className="absolute inset-x-0 bottom-0 h-[40%] bg-gradient-to-t from-black/56 via-black/16 to-transparent" />
+                <span className="absolute inset-x-0 bottom-0 h-[46%] bg-gradient-to-t from-black/62 via-black/20 to-transparent" />
+                {"badge" in tile && tile.badge && (
+                  <span className="absolute top-3 left-3 inline-flex items-center rounded-full bg-white px-2 py-1 text-[11px] font-bold text-costco-red shadow-[0_1px_3px_rgba(0,0,0,0.12)]">
+                    {tile.badge}
+                  </span>
+                )}
                 <span className="absolute bottom-3.5 left-3.5 right-3.5">
-                  <span className="block text-[20px] sm:text-[24px] font-bold text-white leading-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.55)]">
+                  <span className="block text-[20px] sm:text-[22px] font-bold text-white leading-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.55)]">
                     {tile.title}
                   </span>
+                  {"subtitle" in tile && tile.subtitle && (
+                    <span className="mt-0.5 block text-[12px] font-semibold text-white/90">
+                      {tile.subtitle}
+                    </span>
+                  )}
                   <span className="mt-1 inline-flex items-center gap-0.5 text-[13px] font-bold text-white">
                     Shop
                     <ChevronRight className="w-4 h-4" aria-hidden="true" />
