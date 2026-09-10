@@ -622,6 +622,9 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                     <p className="mt-0.5 text-[11px] font-semibold text-costco-blue tabular-nums tracking-wide">
                       111 847 11217
                     </p>
+                    <p className="mt-0.5 text-[10px] font-semibold tracking-[0.08em] text-[#777] uppercase">
+                      Member Since 2019
+                    </p>
                   </div>
                 </div>
                 <p className="text-[13px] leading-relaxed text-[#333] whitespace-pre-line">

@@ -156,7 +156,7 @@ async function composeJasons() {
 
   const loaf = await sharp(seededPack)
     .extract({ left: 230, top: 165, width: 140, height: 120 })
-    .resize(400, 380, { fit: "cover", position: "centre" })
+    .resize(344, 330, { fit: "cover", position: "centre" })
     .png()
     .toBuffer();
 
@@ -166,22 +166,27 @@ async function composeJasons() {
       800,
       `
   <defs>
-    <linearGradient id="film" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#5c2a7a"/>
-      <stop offset="0.5" stop-color="#3a1658"/>
-      <stop offset="1" stop-color="#2a0f42"/>
+    <linearGradient id="film" x1="0" y1="0" x2="0.18" y2="1">
+      <stop offset="0" stop-color="#6a3388"/>
+      <stop offset="0.4" stop-color="#3a1658"/>
+      <stop offset="1" stop-color="#241038"/>
     </linearGradient>
-    <filter id="shadow" x="-15%" y="-8%" width="130%" height="130%">
-      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#000000" flood-opacity="0.16"/>
+    <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.14"/>
+      <stop offset="0.35" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="shadow" x="-18%" y="-8%" width="136%" height="130%">
+      <feDropShadow dx="0" dy="14" stdDeviation="14" flood-color="#000000" flood-opacity="0.18"/>
     </filter>
   </defs>
-  <rect x="176" y="48" width="448" height="704" rx="12" fill="url(#film)" filter="url(#shadow)"/>
-  <rect x="200" y="220" width="400" height="380" rx="2" fill="#ffffff"/>
-  <text x="400" y="132" text-anchor="middle" fill="#f4e6c0" font-family="Georgia, Times New Roman, serif" font-size="48" font-weight="700">Jason's</text>
-  <text x="400" y="168" text-anchor="middle" fill="#d4b8e8" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="800" letter-spacing="4.2">SOURDOUGH</text>
-  <text x="400" y="640" text-anchor="middle" fill="#f4e6c0" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="800" letter-spacing="1.5">GRAINS &amp; SEEDS</text>
-  <text x="400" y="668" text-anchor="middle" fill="#d4b8e8" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" letter-spacing="2">RECIPE NO 11 · 24 OZ</text>
-  <text x="400" y="720" text-anchor="middle" fill="#c9a8d8" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="700" letter-spacing="2.4">CIABATTIN</text>
+  <path d="M248 92 L286 56 L514 56 L552 92 L592 708 Q400 752 208 708 Z" fill="url(#film)" filter="url(#shadow)"/>
+  <path d="M248 92 L286 56 L514 56 L552 92 L592 708 Q400 752 208 708 Z" fill="url(#sheen)"/>
+  <rect x="228" y="228" width="344" height="330" fill="#ffffff"/>
+  <text x="400" y="128" text-anchor="middle" fill="#f4e6c0" font-family="Georgia, Times New Roman, serif" font-size="44" font-weight="700">Jason's</text>
+  <text x="400" y="162" text-anchor="middle" fill="#d4b8e8" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="800" letter-spacing="4">SOURDOUGH</text>
+  <text x="400" y="600" text-anchor="middle" fill="#f4e6c0" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="800" letter-spacing="1.4">GRAINS &amp; SEEDS</text>
+  <text x="400" y="626" text-anchor="middle" fill="#d4b8e8" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="700" letter-spacing="1.8">RECIPE NO 11 · 24 OZ</text>
+  <text x="400" y="688" text-anchor="middle" fill="#c9a8d8" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700" letter-spacing="2.2">CIABATTIN</text>
 `
     )
   )
@@ -198,7 +203,7 @@ async function composeJasons() {
   })
     .composite([
       { input: bag, left: 0, top: 0 },
-      { input: loaf, left: 200, top: 220 },
+      { input: loaf, left: 228, top: 228 },
     ])
     .png({ compressionLevel: 8 })
     .toFile(join(dir, "9.png"));

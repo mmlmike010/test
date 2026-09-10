@@ -27,7 +27,7 @@ function AddControl({ product }: { product: Product }) {
         type="button"
         onClick={add}
         aria-label={`Add 1 ct ${product.name}`}
-        className={`absolute bottom-2 right-2 w-8 h-8 rounded-full bg-white border-[1.5px] shadow-[0_1px_4px_rgba(0,0,0,0.12)] flex items-center justify-center ${
+        className={`absolute bottom-2 right-2 w-9 h-9 rounded-full bg-white border-[1.5px] shadow-[0_1px_4px_rgba(0,0,0,0.12)] flex items-center justify-center ${
           justAdded
             ? "border-[#0AAD0A] text-[#0AAD0A]"
             : "border-[#0AAD0A] text-[#0AAD0A] hover:bg-[#e8f8e8]"
@@ -40,7 +40,7 @@ function AddControl({ product }: { product: Product }) {
 
   return (
     <div
-      className="absolute bottom-2 right-2 h-8 flex items-center rounded-full bg-[#0AAD0A] text-white shadow-[0_1px_4px_rgba(0,0,0,0.16)] overflow-hidden"
+      className="absolute bottom-2 right-2 h-9 flex items-center rounded-full bg-[#0AAD0A] text-white shadow-[0_1px_4px_rgba(0,0,0,0.16)] overflow-hidden"
       onClick={(e) => e.stopPropagation()}
     >
       <button
