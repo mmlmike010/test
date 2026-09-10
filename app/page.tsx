@@ -6,7 +6,6 @@ import PromoBanner from "@/components/PromoBanner";
 import DepartmentsSidebar, {
   MobileAisles,
 } from "@/components/DepartmentsSidebar";
-import CategoryScroller from "@/components/CategoryScroller";
 import ProductGrid from "@/components/ProductGrid";
 import AskKirkChat from "@/components/AskKirkChat";
 import CartDrawer from "@/components/CartDrawer";
@@ -24,7 +23,6 @@ export default function Home() {
 
         <main className="flex-1 min-w-0 overflow-y-auto overflow-x-hidden">
           <MobileAisles />
-          <CategoryScroller />
           <ProductGrid />
         </main>
 

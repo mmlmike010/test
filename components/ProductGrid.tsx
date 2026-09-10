@@ -7,6 +7,7 @@ import type { Product } from "@/lib/data/products";
 import { useCatalogStore } from "@/lib/store/catalog";
 import ProductCard from "@/components/ProductCard";
 import ProductDetailModal from "@/components/ProductDetailModal";
+import CategoryScroller from "@/components/CategoryScroller";
 import InstacartMark from "@/components/InstacartMark";
 
 type Aisle = {
@@ -173,7 +174,7 @@ export default function ProductGrid() {
 
       {!filteredView && (
         <>
-          <section className="mb-5 grid grid-cols-2 xl:grid-cols-4 gap-3">
+          <section className="mb-5 grid grid-cols-2 gap-3">
             {(
               [
                 {
@@ -204,7 +205,7 @@ export default function ProductGrid() {
                 key={tile.title}
                 type="button"
                 onClick={tile.onClick}
-                className="relative h-[196px] sm:h-[236px] rounded-[16px] overflow-hidden text-left group bg-[#f3f3f3]"
+                className="relative h-[220px] sm:h-[260px] lg:h-[280px] rounded-[16px] overflow-hidden text-left group bg-[#f3f3f3]"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
@@ -219,7 +220,7 @@ export default function ProductGrid() {
                   </span>
                 )}
                 <span className="absolute bottom-3.5 left-3.5 right-3.5">
-                  <span className="block text-[20px] sm:text-[22px] font-bold text-white leading-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.55)]">
+                  <span className="block text-[20px] sm:text-[24px] font-bold text-white leading-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.55)]">
                     {tile.title}
                   </span>
                   {"subtitle" in tile && tile.subtitle && (
@@ -236,6 +237,10 @@ export default function ProductGrid() {
             ))}
           </section>
 
+          <div className="-mx-4 lg:-mx-5 mb-5">
+            <CategoryScroller />
+          </div>
+
           {aisles.map((aisle) => (
             <AisleRow
               key={aisle.title}
@@ -250,6 +255,9 @@ export default function ProductGrid() {
 
       {filteredView && (
         <>
+          <div className="-mx-4 lg:-mx-5 mb-4">
+            <CategoryScroller />
+          </div>
           <div className="mb-3 flex items-end justify-between gap-3 flex-wrap">
             <div>
               <h2 className="text-[22px] lg:text-[24px] font-bold text-[#1a1a1a] tracking-tight">

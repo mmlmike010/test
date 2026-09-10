@@ -839,54 +839,74 @@ export const departments = [
   "Prepared Foods",
 ];
 
-export const categories = [
+export type ShopCategory = {
+  id: string;
+  name: string;
+  image: string;
+  tag?: string;
+  department?: string;
+};
+
+export const categories: ShopCategory[] = [
   {
     id: "again",
     name: "Buy it again",
-    icon: "🛒",
-    image: "/products/cat-again.jpg?v=2",
-  },
-  {
-    id: "treasure",
-    name: "Treasure Hunt",
-    icon: "🎁",
-    image: "/products/cat-treasure.jpg?v=2",
-  },
-  {
-    id: "trending",
-    name: "Trending",
-    icon: "📈",
-    image: "/products/cat-trending.jpg?v=2",
-  },
-  {
-    id: "new",
-    name: "What's New",
-    icon: "✨",
-    image: "/products/cat-new.jpg?v=2",
-  },
-  {
-    id: "weekly",
-    name: "Weekly Savings",
-    icon: "💰",
-    image: "/products/cat-weekly.jpg?v=2",
+    image: "/products/cat-again.jpg?v=3",
+    tag: "again",
   },
   {
     id: "kirkland",
     name: "Kirkland Signature",
-    icon: "⭐",
-    image: "/products/cat-kirkland.jpg?v=2",
+    image: "/products/cat-kirkland.jpg?v=3",
+    tag: "kirkland",
   },
   {
-    id: "recipes",
-    name: "Recipes",
-    icon: "🍳",
-    image: "/products/cat-recipes.jpg?v=2",
+    id: "weekly",
+    name: "Member savings",
+    image: "/products/cat-weekly.jpg?v=3",
+    tag: "weekly",
   },
   {
-    id: "catering",
-    name: "Catering",
-    icon: "🍱",
-    image: "/products/cat-catering.jpg?v=2",
+    id: "dairy",
+    name: "Dairy & Eggs",
+    image: "/products/cat-dairy.jpg?v=1",
+    department: "Dairy & Eggs",
+  },
+  {
+    id: "bakery",
+    name: "Bakery",
+    image: "/products/cat-bakery.jpg?v=1",
+    department: "Bakery & Desserts",
+  },
+  {
+    id: "prepared",
+    name: "Prepared foods",
+    image: "/products/cat-prepared.jpg?v=1",
+    department: "Prepared Foods",
+  },
+  {
+    id: "coffee",
+    name: "Coffee",
+    image: "/products/cat-coffee.jpg?v=1",
+    department: "Coffee",
+  },
+  {
+    id: "wine",
+    name: "Wine & spirits",
+    image: "/products/cat-wine.jpg?v=1",
+    department: "Beer, Wine & Spirits",
+  },
+  {
+    id: "household",
+    name: "Household",
+    image: "/products/cat-household.jpg?v=1",
+    department: "Cleaning",
+  },
+  {
+    id: "babies",
+    name: "Baby",
+    image: "/products/cat-baby.jpg?v=1",
+    department: "Babies",
   },
 ];
 

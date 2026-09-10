@@ -5,7 +5,9 @@ import { useCatalogStore } from "@/lib/store/catalog";
 
 export default function CategoryScroller() {
   const tag = useCatalogStore((s) => s.tag);
+  const department = useCatalogStore((s) => s.department);
   const setTag = useCatalogStore((s) => s.setTag);
+  const setDepartment = useCatalogStore((s) => s.setDepartment);
   const setQuery = useCatalogStore((s) => s.setQuery);
   const search = useCatalogStore((s) => s.search);
 
@@ -13,13 +15,19 @@ export default function CategoryScroller() {
     <div className="bg-white border-b border-[#ececec]">
       <div className="flex gap-5 overflow-x-auto scrollbar-hide px-4 py-3.5">
         {categories.map((category) => {
-          const active = tag === category.id;
+          const active = category.department
+            ? department === category.department
+            : tag === (category.tag ?? category.id);
           return (
             <button
               key={category.id}
               type="button"
               onClick={() => {
-                setTag(active ? null : category.id);
+                if (category.department) {
+                  setDepartment(active ? null : category.department);
+                } else {
+                  setTag(active ? null : (category.tag ?? category.id));
+                }
                 setQuery("");
                 void search();
               }}

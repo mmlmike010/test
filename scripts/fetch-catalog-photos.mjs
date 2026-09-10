@@ -34,13 +34,15 @@ const tiles = {
 };
 
 const categories = {
-  "cat-treasure": 18,
-  "cat-trending": 5,
-  "cat-new": 23,
   "cat-weekly": 3,
   "cat-kirkland": 10,
-  "cat-recipes": 4,
-  "cat-catering": 24,
+  "cat-dairy": 23,
+  "cat-bakery": 15,
+  "cat-prepared": 24,
+  "cat-coffee": 21,
+  "cat-wine": 16,
+  "cat-household": 19,
+  "cat-baby": 14,
 };
 
 async function download(url) {
