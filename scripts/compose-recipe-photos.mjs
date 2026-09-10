@@ -26,8 +26,7 @@ async function plated(url, outName, position = "centre") {
 }
 
 await plated(`${GH}/smoothie-bowl/smoothie-bowl-aerial.jpg`, "recipe-yogurt.jpg");
-await plated(`${GH}/egg-toast/egg-toast-stacked.jpg`, "recipe-eggs.jpg", "entropy");
+await plated(`${GH}/tomato_fritatta_aerial.jpg`, "recipe-eggs.jpg", "south");
 await plated(`${GH}/fried_rice.jpeg`, "recipe-quinoa.jpg");
 await plated(`${GH}/tomato-pasta/tomato-penne-plated.jpeg`, "recipe-pasta.jpg");
-await plated(`${GH}/jambalaya/jambalaya-plated.jpeg`, "recipe-chicken.jpg");
 await plated(`${GH}/cheeseboard/cheeseboard.jpeg`, "recipe-board.jpg");
