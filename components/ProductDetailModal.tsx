@@ -1,6 +1,6 @@
 "use client";
 
-import { X, Check, Plus, Star } from "lucide-react";
+import { X, Minus, Plus, Star } from "lucide-react";
 import SaveHeart from "@/components/SaveHeart";
 import { products, type Product } from "@/lib/data/products";
 import { useCartStore } from "@/lib/store/cart";
@@ -20,10 +20,10 @@ export default function ProductDetailModal({
 }) {
   const [current, setCurrent] = useState(product);
   const addItem = useCartStore((s) => s.addItem);
+  const updateQuantity = useCartStore((s) => s.updateQuantity);
   const qty = useCartStore(
     (s) => s.items.find((i) => i.product.id === current.id)?.quantity || 0
   );
-  const [justAdded, setJustAdded] = useState(false);
   const scrollerRef = useRef<HTMLDivElement>(null);
   const kirkOpen = useSessionStore((s) => s.kirkOpen);
 
@@ -38,13 +38,10 @@ export default function ProductDetailModal({
 
   const onAdd = () => {
     addItem(current);
-    setJustAdded(true);
-    window.setTimeout(() => setJustAdded(false), 1200);
   };
 
   const openRelated = (next: Product) => {
     setCurrent(next);
-    setJustAdded(false);
     scrollerRef.current?.scrollTo({ top: 0 });
   };
 
@@ -213,27 +210,38 @@ export default function ProductDetailModal({
             </p>
             <p className="text-[12px] text-[#8a8a8a] mt-0.5">each</p>
           </div>
-          <button
-            type="button"
-            onClick={onAdd}
-            className={`flex-1 py-3 font-bold transition-colors flex items-center justify-center gap-2 rounded-full ${
-              justAdded
-                ? "bg-[#099809] text-white"
-                : "bg-[#0AAD0A] text-white hover:bg-[#099809]"
-            }`}
-          >
-            {justAdded ? (
-              <>
-                <Check className="w-4 h-4" />
-                Added{qty > 0 ? ` · ${qty} in cart` : ""}
-              </>
-            ) : (
-              <>
+          {qty === 0 ? (
+            <button
+              type="button"
+              onClick={onAdd}
+              className="flex-1 h-12 font-bold transition-colors flex items-center justify-center gap-2 rounded-full bg-[#0AAD0A] text-white hover:bg-[#099809]"
+            >
+              <Plus className="w-4 h-4" />
+              Add
+            </button>
+          ) : (
+            <div className="flex-1 h-12 flex items-center justify-between rounded-full bg-[#0AAD0A] text-white overflow-hidden">
+              <button
+                type="button"
+                className="w-14 h-12 flex items-center justify-center hover:bg-[#099809]"
+                onClick={() => updateQuantity(current.id, qty - 1)}
+                aria-label="Decrease quantity"
+              >
+                <Minus className="w-4 h-4" />
+              </button>
+              <span className="text-[16px] font-bold tabular-nums min-w-[1.5rem] text-center">
+                {qty}
+              </span>
+              <button
+                type="button"
+                className="w-14 h-12 flex items-center justify-center hover:bg-[#099809]"
+                onClick={onAdd}
+                aria-label="Increase quantity"
+              >
                 <Plus className="w-4 h-4" />
-                {qty > 0 ? `Add · ${qty} in cart` : "Add"}
-              </>
-            )}
-          </button>
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
