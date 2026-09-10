@@ -54,7 +54,7 @@ export default function GoldStarMembershipCard() {
         <KirkIdPhoto className="w-[34%] max-w-[118px] aspect-[3/4] self-start mt-0.5 rounded-[2px] border-[3px] border-white shadow-[0_1px_2px_rgba(26,18,8,0.28)] shrink-0" />
       </div>
       <div className="relative px-3 pb-1.5 shrink-0 flex items-end gap-2">
-        <MembershipQr className="h-12 w-12 shrink-0 border border-[#d8c89a] bg-white p-[3px]" />
+        <MembershipQr className="h-14 w-14 shrink-0 border border-[#d8c89a] bg-white p-[3px]" />
         <div className="min-w-0 flex-1">
           <MembershipBarcode className="h-5 w-full text-[#1a1a1a]" />
           <div className="mt-1 flex items-center justify-between gap-2">

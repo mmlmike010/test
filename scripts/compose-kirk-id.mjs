@@ -66,9 +66,10 @@ const badge = await sharp(
         <stop offset="1" stop-color="#B01024"/>
       </linearGradient>
     </defs>
-    <circle cx="210" cy="292" r="118" fill="url(#disc)"/>
-    <circle cx="210" cy="292" r="118" fill="none" stroke="#7a1018" stroke-width="3"/>
-    <text x="210" y="344" text-anchor="middle" fill="#ffffff" font-family="Georgia, Times New Roman, serif" font-size="148" font-style="italic" font-weight="600">K</text>`
+    <circle cx="210" cy="268" r="118" fill="url(#disc)"/>
+    <circle cx="210" cy="268" r="118" fill="none" stroke="#7a1018" stroke-width="3"/>
+    <text x="210" y="320" text-anchor="middle" fill="#ffffff" font-family="Georgia, Times New Roman, serif" font-size="148" font-style="italic" font-weight="600">K</text>
+    <text x="210" y="528" text-anchor="middle" fill="#e8eef2" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="800" letter-spacing="3.2">COSTCO · 09/19</text>`
   )
 )
   .png()

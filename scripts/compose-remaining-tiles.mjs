@@ -262,7 +262,7 @@ async function composeJasons() {
   <text x="${pw / 2}" y="88" text-anchor="middle" fill="#f7ead2" font-family="Georgia, Times New Roman, serif" font-size="42" font-weight="700">Jason's</text>
   <text x="${pw / 2}" y="112" text-anchor="middle" fill="#f0d8c8" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="800" letter-spacing="5">SOURDOUGH</text>
   <text x="${pw / 2}" y="396" text-anchor="middle" fill="#f7ead2" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="800" letter-spacing="1.6">GRAINS &amp; SEEDS</text>
-  <text x="${pw / 2}" y="418" text-anchor="middle" fill="#f0d8c8" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="800" letter-spacing="2.4">CIABATTIN</text>
+  <text x="${pw / 2}" y="418" text-anchor="middle" fill="#f0d8c8" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="800" letter-spacing="2.8">TASTE THE MAGIC</text>
   <rect x="${pw / 2 - 82}" y="430" width="164" height="28" rx="2" fill="#C9A227"/>
   <text x="${pw / 2}" y="450" text-anchor="middle" fill="#3a1830" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="800" letter-spacing="1.4">RECIPE NO 11</text>
   <text x="${pw / 2}" y="484" text-anchor="middle" fill="#f0d8c8" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" letter-spacing="1.8">24 OZ</text>
