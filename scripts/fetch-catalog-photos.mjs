@@ -8,12 +8,13 @@ mkdirSync(dir, { recursive: true });
 const CF = "https://d2lnr5mha7bycj.cloudfront.net/product-image/file";
 
 /** Exact brand / item-type matches only — never a competing logo on a Kirkland SKU.
+ *  Tile 1 is composed in compose-mixed-berry-granola.mjs (bowl crop on a new
+ *  Kirkland Mixed Berry pouch — do not write the Ancient Grains source here).
  *  Tiles 6 and 7 are composed in compose-remaining-tiles.mjs (full Kirkland
  *  labels over Costco Same-Day jar/tub photography).
  *  Tiles 13 and 22 are also composed there from pack photography (seat cover,
  *  black laptop sleeve) with source-brand marks covered. */
 const tiles = {
-  1: `${CF}/large_5bbadc9e-09c1-49aa-86ec-de31a36d08e5.jpeg`, // Kirkland organic granola
   2: `${CF}/large_6f376933-2b60-43ab-92ba-091277d87719.jpeg`, // Kirkland Heart Healthy Mixed Nuts 36 oz
   3: `${CF}/large_be581b7c-a021-4dcd-9460-10660cd7b6ec.png`, // Hunt's diced tomatoes
   4: `${CF}/large_d22ae167-8690-49ee-9681-ab73cdf2ded7.png`, // Mutti basil sauce

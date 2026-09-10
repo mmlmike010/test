@@ -34,7 +34,7 @@ export const products: Product[] = [
     price: 5.29,
     originalPrice: 6.83,
     savings: 1.54,
-    image: "/products/1.png",
+    image: "/products/1.png?v=2",
     inStock: true,
     tags: ["weekly", "trending"],
     rating: 4.2,
@@ -961,7 +961,7 @@ export function filterProducts(filters: ProductFilters = {}): Product[] {
         return p.department === "Trending" || tags.includes("trending");
       if (tag === "new") return p.department === "What's New" || tags.includes("new");
       if (tag === "weekly")
-        // id 1 is Ancient Grains shot as Mixed Berry — keep it off weekly merch.
+        // id 1 is composed Mixed Berry — keep it off weekly so flyer pages stay the four printed deals.
         return (
           p.id !== "1" &&
           (p.department === "Weekly Savings" || tags.includes("weekly"))
