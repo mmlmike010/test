@@ -13,6 +13,8 @@ async function download(url) {
   return Buffer.from(await res.arrayBuffer());
 }
 
+const woodBytes = await download(WOOD);
+
 async function punchedPack(id, maxW, maxH) {
   const trimmed = await sharp(join(dir, `${id}.png`))
     .trim({ threshold: 16 })
@@ -59,8 +61,7 @@ async function packWithShadow(pack) {
 }
 
 async function tableTop({ brightness, saturation }) {
-  const wood = await download(WOOD);
-  const surface = await sharp(wood)
+  const surface = await sharp(woodBytes)
     .resize(Math.round(W * 2.1), Math.round(H * 2.1), {
       fit: "cover",
       position: "centre",
@@ -138,40 +139,40 @@ async function composeStillLife(outName, grade, layout) {
 
 await composeStillLife(
   "hero-weekly.jpg",
-  { brightness: 0.9, saturation: 1.08 },
+  { brightness: 0.94, saturation: 1.06 },
   [
-    { id: 4, w: 620, h: 560, x: -30, y: 36 },
-    { id: 3, w: 580, h: 540, x: 380, y: 52 },
-    { id: 5, w: 560, h: 520, x: 820, y: 60 },
+    { id: 4, w: 420, h: 520, x: 430, y: 56 },
+    { id: 3, w: 400, h: 500, x: 560, y: 68 },
+    { id: 5, w: 400, h: 480, x: 740, y: 78 },
   ]
 );
 
 await composeStillLife(
   "hero-kirkland.jpg",
-  { brightness: 0.82, saturation: 0.9 },
+  { brightness: 0.9, saturation: 0.92 },
   [
-    { id: 10, w: 420, h: 600, x: -10, y: 8 },
-    { id: 11, w: 680, h: 600, x: 250, y: 16 },
-    { id: 2, w: 600, h: 540, x: 780, y: 52 },
+    { id: 10, w: 280, h: 560, x: 430, y: 24 },
+    { id: 11, w: 460, h: 540, x: 520, y: 40 },
+    { id: 2, w: 400, h: 500, x: 760, y: 70 },
   ]
 );
 
 await composeStillLife(
   "hero-new.jpg",
-  { brightness: 1.06, saturation: 0.86 },
+  { brightness: 1.08, saturation: 0.88 },
   [
-    { id: 23, w: 720, h: 540, x: -60, y: 58 },
-    { id: 1, w: 600, h: 580, x: 360, y: 20 },
-    { id: 8, w: 520, h: 500, x: 880, y: 72 },
+    { id: 23, w: 460, h: 480, x: 400, y: 78 },
+    { id: 1, w: 420, h: 540, x: 540, y: 32 },
+    { id: 8, w: 360, h: 460, x: 780, y: 88 },
   ]
 );
 
 await composeStillLife(
   "hero-treasure.jpg",
-  { brightness: 0.62, saturation: 0.78 },
+  { brightness: 0.92, saturation: 0.84 },
   [
-    { id: 18, w: 700, h: 540, x: -40, y: 48 },
-    { id: 21, w: 600, h: 560, x: 380, y: 40 },
-    { id: 22, w: 500, h: 430, x: 880, y: 110 },
+    { id: 18, w: 460, h: 500, x: 400, y: 58 },
+    { id: 21, w: 400, h: 520, x: 560, y: 48 },
+    { id: 22, w: 360, h: 400, x: 790, y: 120 },
   ]
 );
