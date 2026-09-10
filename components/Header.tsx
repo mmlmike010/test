@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useCartStore } from "@/lib/store/cart";
 import { useCatalogStore } from "@/lib/store/catalog";
-import { Clock, Search, ShoppingCart, User, X } from "lucide-react";
+import { ChevronDown, Clock, Search, ShoppingCart, User, X } from "lucide-react";
 import CostcoLogo from "@/components/CostcoLogo";
 import KirkMark from "@/components/KirkMark";
 
@@ -34,6 +34,16 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
 
   return (
     <header className="bg-white border-b border-[#e5e5e5] sticky top-0 z-50 shrink-0">
+      <div className="bg-[#f3f3f3] border-b border-[#e8e8e8]">
+        <div className="max-w-[1800px] mx-auto px-3 sm:px-4 h-[28px] flex items-center justify-between text-[12px]">
+          <a href="#" className="text-costco-blue font-semibold hover:underline">
+            ← Back to Costco.com
+          </a>
+          <p className="hidden sm:block text-[#666]">
+            Warehouse prices may differ · Membership required
+          </p>
+        </div>
+      </div>
       <div className="border-b border-[#ececec]">
         <div className="max-w-[1800px] mx-auto px-3 sm:px-4 h-[52px] flex items-center justify-between gap-3">
           <div className="flex items-center gap-4 min-w-0">
@@ -67,11 +77,11 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
                 Lists
               </a>
               <a href="#" className="text-[#333] hover:text-costco-blue py-3">
-                Recipes
+                Flyers
               </a>
             </nav>
           </div>
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-3 shrink-0">
             <a
               href="#"
               className="hidden md:inline text-[13px] text-costco-blue font-semibold hover:underline"
@@ -154,7 +164,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
 
           <button
             type="button"
-            className="hidden lg:flex text-left items-center gap-2 px-1.5 py-0.5 rounded-md hover:bg-[#f6f6f6]"
+            className="hidden lg:flex text-left items-center gap-1.5 px-1.5 py-0.5 rounded-md hover:bg-[#f6f6f6]"
           >
             <Clock className="w-[18px] h-[18px] text-costco-blue shrink-0" />
             <span>
@@ -166,6 +176,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
                 11217 · Brooklyn
               </span>
             </span>
+            <ChevronDown className="w-4 h-4 text-[#666] shrink-0" />
           </button>
 
           <button

@@ -3,6 +3,44 @@
 import { departments } from "@/lib/data/products";
 import { useCatalogStore } from "@/lib/store/catalog";
 
+export function MobileAisles() {
+  const selected = useCatalogStore((s) => s.department);
+  const setDepartment = useCatalogStore((s) => s.setDepartment);
+  const setQuery = useCatalogStore((s) => s.setQuery);
+  const search = useCatalogStore((s) => s.search);
+
+  return (
+    <div className="md:hidden bg-white border-b border-[#ececec] px-3 py-2">
+      <p className="text-[12px] font-bold text-[#1a1a1a] mb-1.5 px-0.5">
+        Browse aisles
+      </p>
+      <div className="flex gap-1.5 overflow-x-auto scrollbar-hide">
+        {departments.map((dept) => {
+          const active = selected === dept;
+          return (
+            <button
+              key={dept}
+              type="button"
+              onClick={() => {
+                setDepartment(active ? null : dept);
+                setQuery("");
+                void search();
+              }}
+              className={`shrink-0 px-2.5 py-1 rounded-full text-[12px] border ${
+                active
+                  ? "bg-[#e8f2fa] border-costco-blue text-costco-blue font-bold"
+                  : "bg-white border-[#d0d0d0] text-[#333]"
+              }`}
+            >
+              {dept}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 export default function DepartmentsSidebar({
   compact = false,
 }: {
@@ -21,8 +59,8 @@ export default function DepartmentsSidebar({
     >
       <div className="py-3 px-2">
         <div className="flex items-center justify-between mb-1 px-2">
-          <h2 className="text-[13px] font-bold text-[#1a1a1a] tracking-wide uppercase">
-            Shop
+          <h2 className="text-[13px] font-bold text-[#1a1a1a]">
+            Browse aisles
           </h2>
           {selected && (
             <button

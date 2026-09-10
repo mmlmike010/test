@@ -490,19 +490,19 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
 
   return (
     <>
-    <aside className="fixed inset-y-0 right-0 z-50 w-full max-w-[420px] lg:static lg:z-40 lg:w-[380px] xl:w-[420px] lg:max-w-none shrink-0 bg-white border-l border-[#e5e5e5] h-full flex flex-col shadow-[-8px_0_24px_rgba(0,0,0,0.08)]">
+    <aside className="fixed inset-y-0 right-0 z-50 w-full max-w-[420px] lg:static lg:z-40 lg:w-[380px] xl:w-[420px] lg:max-w-none shrink-0 bg-white border-l border-[#e5e5e5] h-full flex flex-col">
       <div className="shrink-0 border-b border-[#e5e5e5] bg-white">
-        <div className="bg-costco-red px-3.5 py-2 flex items-center justify-between gap-2">
+        <div className="bg-costco-red px-3.5 py-2.5 flex items-center justify-between gap-2">
           <div className="flex items-center gap-2.5 min-w-0">
-            <span className="inline-flex items-center justify-center rounded-full bg-white shrink-0" style={{ width: 34, height: 34 }}>
-              <KirkMark size={30} />
+            <span className="inline-flex items-center justify-center rounded-full bg-white shrink-0" style={{ width: 36, height: 36 }}>
+              <KirkMark size={32} />
             </span>
             <div className="min-w-0">
               <h2 className="text-[16px] font-black tracking-tight text-white leading-none">
                 Ask Kirk
               </h2>
-              <p className="text-[10px] font-bold tracking-[0.12em] text-white/80 uppercase mt-[3px]">
-                Kirkland Signature
+              <p className="text-[11px] font-semibold text-white/85 mt-[3px]">
+                Kirkland Signature · Same-Day
               </p>
             </div>
           </div>
@@ -561,7 +561,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             return (
               <div
                 key={message.id}
-                className="bg-white border border-[#e8e8e8] border-l-[3px] border-l-costco-red rounded-[12px] px-3.5 py-3 shadow-[0_1px_4px_rgba(0,0,0,0.04)]"
+                className="bg-white border border-[#e8e8e8] rounded-[16px] px-3.5 py-3 shadow-[0_1px_4px_rgba(0,0,0,0.04)]"
               >
                 <div className="flex items-center gap-2 mb-2">
                   <KirkMark size={28} />
@@ -693,7 +693,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
       )}
 
       <div className="px-3.5 pt-2.5 pb-3 border-t border-[#e5e5e5] bg-white shrink-0">
-        <p className="text-[10px] font-bold tracking-[0.14em] text-[#8a8a8a] uppercase mb-1.5">
+        <p className="text-[11px] font-bold text-[#666] mb-1.5">
           Members often ask
         </p>
         <div className="flex flex-wrap gap-1.5 mb-2.5 content-start">

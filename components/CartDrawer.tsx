@@ -133,8 +133,9 @@ export default function CartDrawer() {
               {items.length ? "Go to checkout" : "Browse products"}
             </button>
           </div>
-          <p className="text-[11px] text-[#888] text-center">
-            Ask Kirk can add, remove, and open this cart
+          <p className="text-[11px] text-[#888] text-center leading-snug">
+            Service, delivery, and tax calculated at checkout · Membership
+            required · Prices higher than warehouse
           </p>
         </div>
       </aside>

@@ -26,10 +26,10 @@ export default function ProductDetailModal({
   };
 
   return (
-    <div className="fixed inset-0 z-[70] flex items-end sm:items-center justify-center">
+    <div className="fixed inset-0 z-[70] flex justify-end">
       <button
         type="button"
-        className="absolute inset-0 bg-black/45"
+        className="absolute inset-0 bg-black/40"
         aria-label="Close product"
         onClick={onClose}
       />
@@ -37,12 +37,10 @@ export default function ProductDetailModal({
         role="dialog"
         aria-modal="true"
         aria-label={`${product.brand} ${product.name}`}
-        className="relative w-full sm:max-w-2xl max-h-[92vh] overflow-y-auto bg-white shadow-2xl sm:rounded-[8px]"
+        className="relative w-full max-w-[480px] h-full overflow-y-auto bg-white shadow-2xl"
       >
         <div className="sticky top-0 z-10 flex items-center justify-between px-4 py-3 border-b border-costco-border bg-white">
-          <p className="text-[11px] font-bold text-[#666] uppercase tracking-[0.14em]">
-            Item details
-          </p>
+          <p className="text-[13px] font-bold text-[#1a1a1a]">Item details</p>
           <button
             type="button"
             onClick={onClose}
@@ -53,13 +51,13 @@ export default function ProductDetailModal({
           </button>
         </div>
 
-        <div className="grid sm:grid-cols-2 gap-0">
-          <div className="relative aspect-square bg-white border-b sm:border-b-0 sm:border-r border-[#eee]">
+        <div>
+          <div className="relative aspect-square bg-white border-b border-[#eee]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={product.image}
               alt={`${product.brand} ${product.name}`}
-              className="absolute inset-0 w-full h-full object-contain p-6"
+              className="absolute inset-0 w-full h-full object-contain p-8"
             />
             {product.savings > 0 && (
               <div className="absolute top-3 left-3 bg-costco-red text-white px-2 py-1 text-[12px] font-bold rounded-[4px]">

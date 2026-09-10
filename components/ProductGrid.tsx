@@ -5,7 +5,6 @@ import type { Product } from "@/lib/data/products";
 import { useCartStore } from "@/lib/store/cart";
 import { useCatalogStore } from "@/lib/store/catalog";
 import { Check, Minus, Plus } from "lucide-react";
-import StarRating from "@/components/StarRating";
 import ProductDetailModal from "@/components/ProductDetailModal";
 
 function AddControl({ product }: { product: Product }) {
@@ -32,7 +31,7 @@ function AddControl({ product }: { product: Product }) {
         className={`absolute bottom-2 right-2 w-8 h-8 rounded-full bg-white border-[1.5px] shadow-[0_1px_4px_rgba(0,0,0,0.12)] flex items-center justify-center ${
           justAdded
             ? "border-green-600 text-green-600"
-            : "border-[#0a5ea8] text-[#0a5ea8] hover:bg-[#e8f2fa]"
+            : "border-costco-blue text-costco-blue hover:bg-[#e8f2fa]"
         }`}
       >
         {justAdded ? <Check className="w-4 h-4" /> : <Plus className="w-5 h-5" />}
@@ -42,7 +41,7 @@ function AddControl({ product }: { product: Product }) {
 
   return (
     <div
-      className="absolute bottom-2 right-2 h-8 flex items-center rounded-full bg-[#0a5ea8] text-white shadow-[0_1px_4px_rgba(0,0,0,0.16)] overflow-hidden"
+      className="absolute bottom-2 right-2 h-8 flex items-center rounded-full bg-costco-blue text-white shadow-[0_1px_4px_rgba(0,0,0,0.16)] overflow-hidden"
       onClick={(e) => e.stopPropagation()}
     >
       <button
@@ -125,13 +124,6 @@ function ProductCard({
         <p className="text-[12px] text-[#188038] mt-0.5">
           {product.inStock ? "Many in stock" : "Out of stock"}
         </p>
-        <div className="mt-1">
-          <StarRating
-            rating={product.rating}
-            reviewCount={product.reviewCount}
-            size="sm"
-          />
-        </div>
       </div>
     </div>
   );
@@ -244,8 +236,10 @@ export default function ProductGrid() {
       )}
 
       <footer className="mt-8 pt-4 border-t border-[#e0e0e0] text-[11px] text-[#777] flex flex-wrap items-center justify-between gap-2">
-        <p>Same-Day Delivery powered by Instacart · Costco membership required</p>
-        <p>Prices and availability for 11217 Brooklyn</p>
+        <p>
+          Same-Day Delivery powered by Instacart · Costco membership required
+        </p>
+        <p>Prices, fees, and availability for 11217 Brooklyn</p>
       </footer>
 
       {selected && (

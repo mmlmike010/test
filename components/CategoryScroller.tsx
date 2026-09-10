@@ -11,7 +11,7 @@ export default function CategoryScroller() {
 
   return (
     <div className="bg-white border-b border-[#ececec]">
-      <div className="flex gap-4 overflow-x-auto scrollbar-hide px-4 py-3.5">
+      <div className="flex gap-5 overflow-x-auto scrollbar-hide px-4 py-3">
         {categories.map((category) => {
           const active = tag === category.id;
           return (
@@ -23,10 +23,10 @@ export default function CategoryScroller() {
                 setQuery("");
                 void search();
               }}
-              className="flex flex-col items-center gap-1.5 min-w-[76px] group"
+              className="flex flex-col items-center gap-1.5 min-w-[80px] group"
             >
               <div
-                className={`relative w-[72px] h-[72px] rounded-full overflow-hidden bg-[#f3f3f3] ring-2 ring-offset-2 ${
+                className={`relative w-[76px] h-[76px] rounded-full overflow-hidden bg-[#f3f3f3] ring-2 ring-offset-2 ${
                   active
                     ? "ring-costco-blue"
                     : "ring-transparent group-hover:ring-[#c5d8ea]"
