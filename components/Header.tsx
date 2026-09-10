@@ -107,7 +107,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
         </div>
       </div>
 
-      <div className="bg-[#fafafa] border-b border-[#ececec]">
+      <div className="bg-white border-b border-[#ececec]">
       <div className="max-w-[1800px] mx-auto px-3 sm:px-4 py-2">
         <div className="flex items-center gap-2.5">
           <form
@@ -188,7 +188,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
           >
             <ShoppingCart className="w-5 h-5 text-[#333]" />
             <span className="hidden sm:inline font-bold text-[13px] text-[#333]">
-              View cart
+              Cart
             </span>
             <span className="absolute -top-1.5 -right-1 min-w-[20px] h-[20px] px-1 bg-costco-blue text-white text-[11px] font-bold rounded-full flex items-center justify-center">
               {totalItems}

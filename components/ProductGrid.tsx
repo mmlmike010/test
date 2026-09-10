@@ -158,7 +158,7 @@ export default function ProductGrid() {
       <div className="mb-3 flex items-end justify-between gap-3 flex-wrap">
         <div>
           <h2 className="text-[22px] lg:text-[24px] font-bold text-[#1a1a1a] tracking-tight">
-            {titleBits.length ? titleBits.join(" · ") : "Weekly Savings"}
+            {titleBits.length ? titleBits.join(" · ") : "Shop Weekly Savings"}
           </h2>
           <p className="text-[13px] text-[#666] mt-0.5">
             {loading

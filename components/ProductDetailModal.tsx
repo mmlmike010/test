@@ -117,7 +117,7 @@ export default function ProductDetailModal({
               ) : (
                 <>
                   <Plus className="w-4 h-4" />
-                  {qty > 0 ? `Add · ${qty} in cart` : "Add to cart"}
+                  {qty > 0 ? `Add · ${qty} in cart` : "Add"}
                 </>
               )}
             </button>
