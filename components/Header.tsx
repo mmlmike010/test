@@ -84,7 +84,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
               href="#"
               className="hidden sm:inline text-[13px] text-costco-blue font-semibold hover:underline"
             >
-              Join Costco Today
+              Add Costco
             </a>
             <button
               type="button"

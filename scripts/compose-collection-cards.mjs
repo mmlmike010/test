@@ -66,8 +66,8 @@ async function kitchenScene({ cabinetBright, counterBright, counterSat }) {
   <defs>
     <linearGradient id="plane" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#fff" stop-opacity="0"/>
-      <stop offset="0.34" stop-color="#fff" stop-opacity="0"/>
-      <stop offset="0.5" stop-color="#fff" stop-opacity="1"/>
+      <stop offset="0.28" stop-color="#fff" stop-opacity="0"/>
+      <stop offset="0.46" stop-color="#fff" stop-opacity="1"/>
       <stop offset="1" stop-color="#fff" stop-opacity="1"/>
     </linearGradient>
   </defs>
@@ -97,9 +97,9 @@ async function kitchenScene({ cabinetBright, counterBright, counterSat }) {
       <stop offset="1" stop-color="#4a3a2c" stop-opacity="0.18"/>
     </linearGradient>
     <linearGradient id="ledge" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0.47" stop-color="#fff6e8" stop-opacity="0"/>
-      <stop offset="0.5" stop-color="#fff6e8" stop-opacity="0.35"/>
-      <stop offset="0.52" stop-color="#fff6e8" stop-opacity="0"/>
+      <stop offset="0.43" stop-color="#fff6e8" stop-opacity="0"/>
+      <stop offset="0.46" stop-color="#fff6e8" stop-opacity="0.32"/>
+      <stop offset="0.49" stop-color="#fff6e8" stop-opacity="0"/>
     </linearGradient>
   </defs>
   <rect width="${W}" height="${H}" fill="url(#window)"/>
@@ -212,43 +212,44 @@ async function composeStillLife(outName, grade, layout) {
   process.stdout.write(`wrote ${outName}\n`);
 }
 
-// Packs sit on the counter plane (lower half) so the upper bokeh reads as a kitchen.
+// Instacart collection cards are product-forward: packs fill the 16:9
+// frame and overlap, with only a sliver of counter showing underneath.
 await composeStillLife(
   "hero-weekly.jpg",
-  { cabinetBright: 0.7, counterBright: 1.08, counterSat: 0.86 },
+  { cabinetBright: 0.58, counterBright: 1.06, counterSat: 0.86 },
   [
-    { id: 4, w: 380, h: 540, x: 268, y: 188 },
-    { id: 3, w: 370, h: 520, x: 508, y: 204 },
-    { id: 5, w: 350, h: 490, x: 778, y: 228 },
+    { id: 4, w: 460, h: 700, x: 118, y: 48 },
+    { id: 3, w: 500, h: 720, x: 430, y: 28 },
+    { id: 5, w: 430, h: 620, x: 860, y: 118 },
   ]
 );
 
 await composeStillLife(
   "hero-kirkland.jpg",
-  { cabinetBright: 0.64, counterBright: 1.04, counterSat: 0.78 },
+  { cabinetBright: 0.52, counterBright: 1.02, counterSat: 0.78 },
   [
-    { id: 10, w: 240, h: 580, x: 288, y: 148 },
-    { id: 11, w: 410, h: 560, x: 458, y: 164 },
-    { id: 2, w: 360, h: 500, x: 800, y: 218 },
+    { id: 10, w: 300, h: 760, x: 148, y: 8 },
+    { id: 11, w: 520, h: 740, x: 360, y: 18 },
+    { id: 2, w: 440, h: 640, x: 840, y: 108 },
   ]
 );
 
 await composeStillLife(
   "hero-new.jpg",
-  { cabinetBright: 0.74, counterBright: 1.12, counterSat: 0.7 },
+  { cabinetBright: 0.62, counterBright: 1.1, counterSat: 0.7 },
   [
-    { id: 23, w: 410, h: 480, x: 238, y: 248 },
-    { id: 1, w: 380, h: 560, x: 498, y: 168 },
-    { id: 8, w: 330, h: 460, x: 820, y: 258 },
+    { id: 23, w: 520, h: 480, x: 88, y: 248 },
+    { id: 1, w: 480, h: 740, x: 430, y: 12 },
+    { id: 8, w: 400, h: 580, x: 860, y: 158 },
   ]
 );
 
 await composeStillLife(
   "hero-treasure.jpg",
-  { cabinetBright: 0.6, counterBright: 1.02, counterSat: 0.68 },
+  { cabinetBright: 0.5, counterBright: 1.0, counterSat: 0.68 },
   [
-    { id: 19, w: 260, h: 560, x: 268, y: 168 },
-    { id: 21, w: 400, h: 540, x: 478, y: 178 },
-    { id: 14, w: 350, h: 440, x: 810, y: 288 },
+    { id: 19, w: 340, h: 740, x: 128, y: 18 },
+    { id: 21, w: 500, h: 720, x: 380, y: 28 },
+    { id: 14, w: 440, h: 560, x: 840, y: 168 },
   ]
 );
