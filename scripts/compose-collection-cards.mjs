@@ -17,20 +17,20 @@ async function punchedPack(id, maxW, maxH) {
   return sharp(data, { raw: info }).png().toBuffer();
 }
 
-async function blurField(id) {
+async function blurField(id, brightness = 0.78) {
   const trimmed = await sharp(join(dir, `${id}.png`))
     .trim({ threshold: 16 })
     .toBuffer();
   return sharp(trimmed)
     .resize(1400, 640, { fit: "cover", position: "centre" })
     .blur(42)
-    .modulate({ brightness: 0.78, saturation: 0.72 })
+    .modulate({ brightness, saturation: 0.72 })
     .toBuffer();
 }
 
 /** Overlapping packs on a darkened crop — closer to Instacart collection still-lifes. */
-async function composeStillLife(outName, ids, layout) {
-  const bg = await blurField(ids[0]);
+async function composeStillLife(outName, ids, layout, brightness) {
+  const bg = await blurField(ids[0], brightness);
   const layers = [];
   for (const slot of layout) {
     const pack = await punchedPack(slot.id, slot.w, slot.h);
@@ -61,8 +61,13 @@ await composeStillLife("hero-new.jpg", [23, 1, 8], [
   { id: 8, w: 520, h: 500, x: 920, y: 40 },
 ]);
 
-await composeStillLife("hero-treasure.jpg", [18, 21, 22], [
-  { id: 18, w: 680, h: 560, x: -30, y: 8 },
-  { id: 21, w: 600, h: 560, x: 430, y: 20 },
-  { id: 22, w: 500, h: 440, x: 920, y: 80 },
-]);
+await composeStillLife(
+  "hero-treasure.jpg",
+  [21, 18, 22],
+  [
+    { id: 18, w: 680, h: 560, x: -30, y: 8 },
+    { id: 21, w: 600, h: 560, x: 430, y: 20 },
+    { id: 22, w: 500, h: 440, x: 920, y: 80 },
+  ],
+  1.12
+);
