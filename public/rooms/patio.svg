@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <rect width="1280" height="720" fill="#d8e6c8"/>
+  <rect x="0" y="0" width="1280" height="280" fill="#8ec5e8"/>
+  <ellipse cx="1040" cy="90" rx="70" ry="70" fill="#f6e27a"/>
+  <rect x="0" y="280" width="1280" height="80" fill="#6f9a4a"/>
+  <rect x="0" y="360" width="1280" height="360" fill="#c4a06a"/>
+  <g opacity=".25">
+    <path d="M0 400 H1280 M0 440 H1280 M0 480 H1280 M0 520 H1280 M0 560 H1280 M0 600 H1280 M0 640 H1280" stroke="#6b4f2e" stroke-width="3"/>
+  </g>
+  <rect x="80" y="200" width="28" height="200" fill="#5a3d24"/>
+  <ellipse cx="94" cy="190" rx="80" ry="50" fill="#3f7a32"/>
+  <rect x="1100" y="220" width="28" height="180" fill="#5a3d24"/>
+  <ellipse cx="1114" cy="210" rx="70" ry="46" fill="#4a8a38"/>
+  <text x="80" y="680" fill="#3d4a32" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="600">Patio / landscape template</text>
+</svg>

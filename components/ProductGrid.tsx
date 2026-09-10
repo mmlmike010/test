@@ -8,8 +8,11 @@ import type { Product } from "@/lib/data/products";
 import { useCatalogStore } from "@/lib/store/catalog";
 import ProductCard from "@/components/ProductCard";
 import ProductDetailModal from "@/components/ProductDetailModal";
+import FurnitureStagingPdp from "@/components/FurnitureStagingPdp";
 import CategoryScroller from "@/components/CategoryScroller";
 import InstacartMark from "@/components/InstacartMark";
+import { isFurnitureProduct } from "@/lib/placeInRoom";
+import { usePlaceInRoomStore } from "@/lib/store/placeInRoom";
 
 type Aisle = {
   title: string;
@@ -72,6 +75,15 @@ export default function ProductGrid() {
   const clearFilters = useCatalogStore((s) => s.clearFilters);
   const [selected, setSelected] = useState<Product | null>(null);
   const [sort, setSort] = useState<"relevance" | "price">("relevance");
+  const openFurniturePdp = usePlaceInRoomStore((s) => s.openPdp);
+
+  const openProduct = (product: Product) => {
+    if (isFurnitureProduct(product)) {
+      openFurniturePdp(product.id);
+      return;
+    }
+    setSelected(product);
+  };
 
   useEffect(() => {
     void search();
@@ -188,6 +200,11 @@ export default function ProductGrid() {
       items: filtered.filter((p) => p.department === "Bakery & Desserts"),
       onShowAll: () => showAisle({ department: "Bakery & Desserts" }),
     },
+    {
+      title: "Furniture & Outdoor",
+      items: filtered.filter((p) => isFurnitureProduct(p)),
+      onShowAll: () => showAisle({ department: "Furniture & Outdoor" }),
+    },
   ];
 
   return (
@@ -248,7 +265,7 @@ export default function ProductGrid() {
               title={aisle.title}
               items={aisle.items}
               onShowAll={aisle.onShowAll}
-              onOpen={setSelected}
+              onOpen={openProduct}
             />
           ))}
         </>
@@ -372,7 +389,7 @@ export default function ProductGrid() {
                 <ProductCard
                   key={product.id}
                   product={product}
-                  onOpen={() => setSelected(product)}
+                  onOpen={() => openProduct(product)}
                 />
               ))}
             </div>
@@ -411,6 +428,7 @@ export default function ProductGrid() {
           onClose={() => setSelected(null)}
         />
       )}
+      <FurnitureStagingPdp />
     </div>
   );
 }

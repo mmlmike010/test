@@ -818,6 +818,130 @@ export const products: Product[] = [
       },
     ],
   },
+  {
+    id: "25",
+    name: "Fabric Sofa",
+    brand: "Kirkland Signature",
+    category: "living-room",
+    department: "Furniture & Outdoor",
+    price: 1299.99,
+    originalPrice: 1499.99,
+    savings: 200.0,
+    image: "/products/25.svg",
+    inStock: true,
+    tags: ["furniture", "new"],
+    rating: 4.8,
+    reviewCount: 642,
+    reviews: [
+      {
+        author: "M. Rivera",
+        rating: 5,
+        title: "Living room upgrade",
+        body: "Deep seat, holds up to kids and the dog. Looks like the warehouse floor model.",
+        date: "2026-08-14",
+      },
+      {
+        author: "S. Brooks",
+        rating: 5,
+        title: "Member favorite",
+        body: "Better than the specialty-store sofa at twice the price.",
+        date: "2026-07-02",
+      },
+    ],
+  },
+  {
+    id: "26",
+    name: "Queen Upholstered Bed",
+    brand: "Thomasville",
+    category: "bedroom",
+    department: "Furniture & Outdoor",
+    price: 899.99,
+    originalPrice: 1099.99,
+    savings: 200.0,
+    image: "/products/26.svg",
+    inStock: true,
+    tags: ["furniture"],
+    rating: 4.6,
+    reviewCount: 318,
+    reviews: [
+      {
+        author: "L. Kim",
+        rating: 5,
+        title: "Solid frame",
+        body: "Easy to assemble. Headboard looks custom in our bedroom.",
+        date: "2026-06-21",
+      },
+      {
+        author: "A. Patel",
+        rating: 4,
+        title: "Great value",
+        body: "Firm slats, no box spring needed. Warehouse delivery was smooth.",
+        date: "2026-05-09",
+      },
+    ],
+  },
+  {
+    id: "27",
+    name: "Executive Office Chair",
+    brand: "Kirkland Signature",
+    category: "office",
+    department: "Furniture & Outdoor",
+    price: 349.99,
+    originalPrice: 429.99,
+    savings: 80.0,
+    image: "/products/27.svg",
+    inStock: true,
+    tags: ["furniture", "kirkland"],
+    rating: 4.7,
+    reviewCount: 891,
+    reviews: [
+      {
+        author: "T. Morales",
+        rating: 5,
+        title: "All-day sit",
+        body: "Lumbar support is legit. Replaced a $700 chair.",
+        date: "2026-08-03",
+      },
+      {
+        author: "J. Chen",
+        rating: 4,
+        title: "Home office staple",
+        body: "Rolls well on hardwood. Assembly took 20 minutes.",
+        date: "2026-04-18",
+      },
+    ],
+  },
+  {
+    id: "28",
+    name: "Patio Conversation Set",
+    brand: "Kirkland Signature",
+    category: "patio",
+    department: "Furniture & Outdoor",
+    price: 799.99,
+    originalPrice: 999.99,
+    savings: 200.0,
+    image: "/products/28.svg",
+    inStock: true,
+    tags: ["furniture", "outdoor", "new"],
+    rating: 4.5,
+    reviewCount: 274,
+    reviews: [
+      {
+        author: "K. Nguyen",
+        rating: 5,
+        title: "Deck ready",
+        body: "Cushions dry fast after a sprinkle. Seats four comfortably.",
+        date: "2026-07-28",
+      },
+      {
+        author: "R. Foster",
+        rating: 4,
+        title: "Stage the patio",
+        body: "Looks like the showroom set. Table is the right height for drinks.",
+        date: "2026-06-12",
+      },
+    ],
+  },
 ];
 
 export const departments = [
@@ -825,6 +949,7 @@ export const departments = [
   "Weekly Savings",
   "Trending",
   "Kirkland Signature",
+  "Furniture & Outdoor",
   "Auto Accessories",
   "Babies",
   "Bakery & Desserts",
@@ -865,6 +990,12 @@ export const categories: ShopCategory[] = [
     name: "Member savings",
     image: "/products/cat-weekly.jpg?v=3",
     tag: "weekly",
+  },
+  {
+    id: "furniture",
+    name: "Furniture & patio",
+    image: "/products/cat-furniture.svg",
+    department: "Furniture & Outdoor",
   },
   {
     id: "dairy",
@@ -978,6 +1109,12 @@ export function filterProducts(filters: ProductFilters = {}): Product[] {
           ["dips", "nuts", "snacks", "bakery"].includes(p.category)
         );
       if (tag === "again") return tags.includes("again");
+      if (tag === "furniture" || tag === "outdoor")
+        return (
+          p.department === "Furniture & Outdoor" ||
+          tags.includes("furniture") ||
+          tags.includes("outdoor")
+        );
       return tags.includes(tag) || p.department.toLowerCase().includes(tag);
     }
 

@@ -13,6 +13,15 @@ import {
 } from "lucide-react";
 import { useCartStore } from "@/lib/store/cart";
 import { products } from "@/lib/data/products";
+import SuggestedActionChip from "@/components/SuggestedActionChip";
+import { usePlaceInRoomStore } from "@/lib/store/placeInRoom";
+import { useCatalogStore } from "@/lib/store/catalog";
+import {
+  FURNITURE_DEPARTMENT,
+  pickFurnitureProduct,
+  parsePlaceInRoomAsk,
+  wantsPlaceInRoom,
+} from "@/lib/placeInRoom";
 import KirkMark from "@/components/KirkMark";
 import CostcoLogo from "@/components/CostcoLogo";
 import GoldStarMark from "@/components/GoldStarMark";
@@ -24,6 +33,7 @@ interface Message {
   content: string;
   timestamp: Date;
   imageUrl?: string | null;
+  imageKind?: "inspire" | "staging";
 }
 
 interface AskKirkChatProps {
@@ -105,6 +115,9 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
   const getSnapshot = useCartStore((state) => state.getSnapshot);
   const kirkCartCount = useCartStore((state) => state.getTotalItems());
   const kirkCartSubtotal = useCartStore((state) => state.getSubtotal());
+  const lastFurnitureId = usePlaceInRoomStore((s) => s.lastProductId);
+  const openFurniturePdp = usePlaceInRoomStore((s) => s.openPdp);
+  const furnitureDept = useCatalogStore((s) => s.department === FURNITURE_DEPARTMENT);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -226,9 +239,93 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
     }
   };
 
+  const sendStagingAsk = async (text: string) => {
+    const intent = parsePlaceInRoomAsk(text, lastFurnitureId);
+    const product = pickFurnitureProduct(intent.sceneId, lastFurnitureId);
+
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      role: "user",
+      content: text,
+      timestamp: new Date(),
+    };
+    setMessages((prev) => [...prev, userMessage]);
+    setInput("");
+    setError(null);
+
+    if (intent.upload) {
+      openFurniturePdp(product.id, { scene: intent.sceneId, upload: true });
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: (Date.now() + 1).toString(),
+          role: "assistant",
+          content:
+            "Upload a room photo on the PDP — I'll have Grok Imagine place this SKU in your space.",
+          timestamp: new Date(),
+        },
+      ]);
+      return;
+    }
+
+    openFurniturePdp(product.id, { scene: intent.sceneId });
+    setIsLoading(true);
+    setPendingInspire(true);
+    try {
+      const res = await fetch("/api/place-in-room", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          productId: product.id,
+          sceneId: intent.sceneId,
+        }),
+      });
+      const data = (await res.json()) as {
+        imageUrl?: string;
+        mode?: string;
+        error?: string;
+      };
+      if (!res.ok || !data.imageUrl) {
+        throw new Error(data.error || "Grok Imagine staging failed");
+      }
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: (Date.now() + 1).toString(),
+          role: "assistant",
+          content: `Here's ${product.brand} ${product.name} staged in the ${intent.sceneId.replace("-", " ")} — Grok Imagine ${data.mode === "edits" ? "composited" : "generated"} this scene.`,
+          timestamp: new Date(),
+          imageUrl: data.imageUrl,
+          imageKind: "staging",
+        },
+      ]);
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "Grok Imagine staging failed";
+      setError(msg);
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: (Date.now() + 1).toString(),
+          role: "assistant",
+          content:
+            "I couldn't reach Grok Imagine just now. Check that XAI_API_KEY is set and try again — or open See in my room on the furniture PDP.",
+          timestamp: new Date(),
+        },
+      ]);
+    } finally {
+      setIsLoading(false);
+      setPendingInspire(false);
+    }
+  };
+
   const sendMessage = async (text: string) => {
     const trimmed = text.trim();
     if (!trimmed || isLoading) return;
+
+    if (wantsPlaceInRoom(trimmed)) {
+      await sendStagingAsk(trimmed);
+      return;
+    }
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -622,7 +719,11 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={message.imageUrl}
-                      alt="Recipe inspiration"
+                      alt={
+                        message.imageKind === "staging"
+                          ? "Place-in-room staging"
+                          : "Recipe inspiration"
+                      }
                       className="w-full h-auto max-h-[320px] object-cover group-hover:opacity-95 transition-opacity"
                     />
                     <span className="absolute bottom-2 right-2 bg-black/60 text-white text-[10px] font-bold px-2 py-0.5">
@@ -630,7 +731,9 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                     </span>
                   </button>
                   <p className="text-[10px] text-[#666] px-2.5 py-1.5 bg-[#fafafa] border-t border-[#eee] font-semibold tracking-wide uppercase">
-                    Recipe inspiration · tap to enlarge
+                    {message.imageKind === "staging"
+                      ? "Place in room · Grok Imagine · tap to enlarge"
+                      : "Recipe inspiration · tap to enlarge"}
                   </p>
                 </div>
               )}
@@ -665,7 +768,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                       Generating image…
                     </p>
                     <p className="text-[10px] text-[#666] truncate">
-                      Recipe inspiration
+                      Grok Imagine
                     </p>
                   </div>
                 </div>
@@ -706,9 +809,41 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
       )}
 
       <div className="px-3.5 pt-2.5 pb-3 border-t border-[#e5e5e5] bg-white shrink-0">
-        <p className="text-[11px] font-bold text-[#666] mb-1.5">
-          Members often ask
-        </p>
+        <div className="flex items-center gap-2 mb-1.5">
+          <p className="text-[11px] font-bold text-[#666]">
+            {furnitureDept ? "Ask Costco" : "Members often ask"}
+          </p>
+          <span className="inline-flex items-center px-2 py-[3px] rounded-full bg-costco-ai-pill text-[10px] font-bold text-costco-blue">
+            ✦ AI
+          </span>
+        </div>
+        <div className="flex flex-col gap-2.5 mb-2.5">
+          <p className="text-[13px] text-[#1a1a1a]">
+            Visualize this before you buy — pick a space:
+          </p>
+          <SuggestedActionChip
+            label="See this in my room"
+            onClick={() => void sendMessage("See this in my room")}
+            disabled={isLoading}
+          />
+          <SuggestedActionChip
+            label="Stage my patio / landscape"
+            tone="red"
+            onClick={() => void sendMessage("Stage my patio / landscape")}
+            disabled={isLoading}
+          />
+          <SuggestedActionChip
+            label="Try living room template"
+            onClick={() => void sendMessage("Try living room template")}
+            disabled={isLoading}
+          />
+          <SuggestedActionChip
+            label="Upload a room photo"
+            onClick={() => void sendMessage("Upload a room photo")}
+            disabled={isLoading}
+          />
+        </div>
+        {!furnitureDept && (
         <div className="flex flex-wrap gap-1.5 mb-2.5 content-start">
           {suggestionChips.map((chip) => (
             <button
@@ -722,6 +857,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             </button>
           ))}
         </div>
+        )}
         <div className="flex gap-1.5 items-stretch">
           <input
             type="text"
