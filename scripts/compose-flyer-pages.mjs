@@ -5,12 +5,6 @@ const dir = join(process.cwd(), "public", "products");
 const W = 850;
 const H = 1100;
 
-function svg(markup) {
-  return Buffer.from(
-    `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">${markup}</svg>`
-  );
-}
-
 async function headerBar() {
   return sharp(
     Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="118">
