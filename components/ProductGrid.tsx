@@ -11,6 +11,7 @@ import ProductDetailModal from "@/components/ProductDetailModal";
 import CategoryScroller from "@/components/CategoryScroller";
 import InstacartMark from "@/components/InstacartMark";
 import RecipesView from "@/components/RecipesView";
+import FlyersView from "@/components/FlyersView";
 
 type Aisle = {
   title: string;
@@ -137,6 +138,7 @@ export default function ProductGrid() {
   }, [search]);
 
   const recipesView = tag === "recipes" && !q.trim();
+  const flyersView = tag === "flyers" && !q.trim();
   const filteredView = Boolean(department || tag || q.trim());
   const filtered = filterProducts({
     q,
@@ -316,8 +318,9 @@ export default function ProductGrid() {
       )}
 
       {recipesView && <RecipesView />}
+      {flyersView && <FlyersView />}
 
-      {filteredView && !recipesView && (
+      {filteredView && !recipesView && !flyersView && (
         <>
           <button
             type="button"
@@ -492,9 +495,18 @@ export default function ProductGrid() {
           <a href="#" className="text-costco-blue font-semibold hover:underline">
             Departments
           </a>
-          <a href="#" className="text-costco-blue font-semibold hover:underline">
+          <button
+            type="button"
+            className="text-costco-blue font-semibold hover:underline"
+            onClick={() => {
+              setQuery("");
+              setTag("flyers");
+              void search();
+              document.querySelector("main")?.scrollTo({ top: 0 });
+            }}
+          >
             Flyers
-          </a>
+          </button>
           <a href="#" className="text-costco-blue font-semibold hover:underline">
             Lists
           </a>

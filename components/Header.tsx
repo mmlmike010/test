@@ -23,6 +23,12 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
   const department = useCatalogStore((s) => s.department);
   const tag = useCatalogStore((s) => s.tag);
   const onRecipes = tag === "recipes";
+  const onFlyers = tag === "flyers";
+  const onShop = !onRecipes && !onFlyers;
+  const tabClass = (active: boolean) =>
+    active
+      ? "text-costco-blue font-bold border-b-[3px] border-costco-blue py-3"
+      : "text-[#333] hover:text-costco-blue py-3";
   const scrollShop = () => {
     document.querySelector("main")?.scrollTo({ top: 0 });
   };
@@ -66,12 +72,8 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
             <nav className="hidden lg:flex items-center gap-5 text-[14px]">
               <button
                 type="button"
-                aria-current={!onRecipes ? "page" : undefined}
-                className={
-                  onRecipes
-                    ? "text-[#333] hover:text-costco-blue py-3"
-                    : "text-costco-blue font-bold border-b-[3px] border-costco-blue py-3"
-                }
+                aria-current={onShop ? "page" : undefined}
+                className={tabClass(onShop)}
                 onClick={() => {
                   clearFilters();
                   void search();
@@ -80,20 +82,26 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
               >
                 Shop
               </button>
-              <a href="#" className="text-[#333] hover:text-costco-blue py-3">
+              <button
+                type="button"
+                aria-current={onFlyers ? "page" : undefined}
+                className={tabClass(onFlyers)}
+                onClick={() => {
+                  setQuery("");
+                  setTag("flyers");
+                  void search();
+                  scrollShop();
+                }}
+              >
                 Flyers
-              </a>
+              </button>
               <a href="#" className="text-[#333] hover:text-costco-blue py-3">
                 Lists
               </a>
               <button
                 type="button"
                 aria-current={onRecipes ? "page" : undefined}
-                className={
-                  onRecipes
-                    ? "text-costco-blue font-bold border-b-[3px] border-costco-blue py-3"
-                    : "text-[#333] hover:text-costco-blue py-3"
-                }
+                className={tabClass(onRecipes)}
                 onClick={() => {
                   setQuery("");
                   setTag("recipes");
@@ -146,7 +154,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
               type="search"
               value={q}
               onChange={(e) => {
-                if (tag === "recipes") setTag(null);
+                if (tag === "recipes" || tag === "flyers") setTag(null);
                 setQuery(e.target.value);
               }}
               placeholder="Search products"
