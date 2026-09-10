@@ -9,11 +9,11 @@ import ProductDetailModal from "@/components/ProductDetailModal";
 
 const pages = [
   {
-    src: "/products/flyer-page-1.jpg?v=1",
-    label: "Page 1 · Cover",
+    src: "/products/flyer-page-1.jpg?v=2",
+    label: "Page 1 · Coupon book",
   },
   {
-    src: "/products/flyer-page-2.jpg?v=1",
+    src: "/products/flyer-page-2.jpg?v=2",
     label: "Page 2 · Flyer deals",
   },
 ] as const;
