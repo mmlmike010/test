@@ -6,6 +6,7 @@ import { useCatalogStore } from "@/lib/store/catalog";
 import { ChevronDown, Clock, Search, ShoppingCart, User, X } from "lucide-react";
 import CostcoLogo from "@/components/CostcoLogo";
 import KirkMark from "@/components/KirkMark";
+import InstacartMark from "@/components/InstacartMark";
 
 interface HeaderProps {
   onAskKirkClick: () => void;
@@ -51,7 +52,8 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
                 <span className="text-[15px] font-bold text-costco-blue leading-none">
                   Same-Day
                 </span>
-                <span className="text-[10px] text-[#6b6b6b] mt-0.5 tracking-wide">
+                <span className="text-[10px] text-[#6b6b6b] mt-0.5 tracking-wide inline-flex items-center gap-1">
+                  <InstacartMark size={11} />
                   Powered by Instacart
                 </span>
               </span>

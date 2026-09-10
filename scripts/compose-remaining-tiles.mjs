@@ -124,17 +124,6 @@ async function composeHardcovers() {
     .png()
     .toBuffer();
 
-  const badge = await sharp(
-    svg(
-      220,
-      28,
-      `<rect width="220" height="28" rx="3" fill="#E31837"/>
-       <text x="110" y="19" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="800">COSTCO · HARDCOVER MIX</text>`
-    )
-  )
-    .png()
-    .toBuffer();
-
   await sharp({
     create: {
       width: 800,
@@ -146,7 +135,6 @@ async function composeHardcovers() {
     .composite([
       { input: back, left: 118, top: 186 },
       { input: front, left: 292, top: 142 },
-      { input: badge, left: 290, top: 612 },
     ])
     .png({ compressionLevel: 8 })
     .toFile(join(dir, "17.png"));
@@ -177,23 +165,17 @@ async function composeJasons() {
       800,
       `
   <defs>
-    <linearGradient id="twist" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#6a2d86"/>
-      <stop offset="1" stop-color="#3d1758"/>
-    </linearGradient>
     <linearGradient id="sleeve" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#5a2474"/>
-      <stop offset="0.55" stop-color="#431862"/>
       <stop offset="1" stop-color="#2f1148"/>
     </linearGradient>
   </defs>
-  <rect x="148" y="392" width="504" height="98" rx="6" fill="#ffffff" stroke="#d8d8d8" stroke-width="1"/>
-  <rect x="148" y="392" width="504" height="40" rx="6" fill="url(#sleeve)"/>
-  <rect x="148" y="420" width="504" height="12" fill="url(#sleeve)"/>
-  <text x="400" y="420" text-anchor="middle" fill="#f4e6c0" font-family="Georgia, Times New Roman, serif" font-size="24" font-weight="700">Jason's</text>
-  <text x="400" y="458" text-anchor="middle" fill="#2f1148" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="800" letter-spacing="1.1">GRAINS &amp; SEEDS</text>
-  <text x="400" y="478" text-anchor="middle" fill="#5a2474" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700" letter-spacing="1.5">RECIPE NO 11 · 24 OZ</text>
-  <rect x="140" y="488" width="520" height="36" fill="#ffffff"/>
+  <rect x="140" y="318" width="520" height="46" fill="url(#sleeve)"/>
+  <text x="400" y="349" text-anchor="middle" fill="#f4e6c0" font-family="Georgia, Times New Roman, serif" font-size="26" font-weight="700">Jason's</text>
+  <rect x="140" y="364" width="520" height="58" fill="#ffffff"/>
+  <text x="400" y="390" text-anchor="middle" fill="#2f1148" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="800" letter-spacing="1.2">GRAINS &amp; SEEDS</text>
+  <text x="400" y="412" text-anchor="middle" fill="#5a2474" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="700" letter-spacing="1.6">RECIPE NO 11 · 24 OZ</text>
+  <rect x="140" y="500" width="520" height="40" fill="#ffffff"/>
 `
     )
   )

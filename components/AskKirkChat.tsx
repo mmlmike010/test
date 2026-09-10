@@ -15,6 +15,7 @@ import { useCartStore } from "@/lib/store/cart";
 import { products } from "@/lib/data/products";
 import KirkMark from "@/components/KirkMark";
 import CostcoLogo from "@/components/CostcoLogo";
+import GoldStarMark from "@/components/GoldStarMark";
 
 interface Message {
   id: string;
@@ -497,13 +498,16 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
         <div className="h-2 bg-costco-red" />
         <div className="px-3.5 pt-2.5 pb-2 flex items-center justify-between gap-2">
           <CostcoLogo compact />
-          <div className="text-right leading-none shrink-0">
-            <p className="text-[10px] font-extrabold tracking-[0.22em] text-costco-red uppercase">
-              Gold Star
-            </p>
-            <p className="mt-1 text-[9px] font-bold tracking-[0.18em] text-costco-blue uppercase">
-              Membership
-            </p>
+          <div className="flex items-center gap-2 shrink-0">
+            <GoldStarMark size={22} />
+            <div className="text-right leading-none">
+              <p className="text-[10px] font-extrabold tracking-[0.22em] text-costco-red uppercase">
+                Gold Star
+              </p>
+              <p className="mt-1 text-[9px] font-bold tracking-[0.18em] text-costco-blue uppercase">
+                Membership
+              </p>
+            </div>
           </div>
         </div>
         <div className="px-3.5 pb-2.5 flex items-center justify-between gap-2">
@@ -586,13 +590,16 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                 <div className="px-3.5 py-3">
                 <div className="flex items-center justify-between gap-3 mb-3">
                   <CostcoLogo compact />
-                  <div className="text-right leading-none">
-                    <p className="text-[10px] font-extrabold tracking-[0.22em] text-costco-red uppercase">
-                      Gold Star
-                    </p>
-                    <p className="mt-1 text-[9px] font-bold tracking-[0.18em] text-costco-blue uppercase">
-                      Membership
-                    </p>
+                  <div className="flex items-center gap-2">
+                    <GoldStarMark size={22} />
+                    <div className="text-right leading-none">
+                      <p className="text-[10px] font-extrabold tracking-[0.22em] text-costco-red uppercase">
+                        Gold Star
+                      </p>
+                      <p className="mt-1 text-[9px] font-bold tracking-[0.18em] text-costco-blue uppercase">
+                        Membership
+                      </p>
+                    </div>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 mb-2">
@@ -613,7 +620,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                   <span className="inline-flex h-5 items-center rounded-[2px] bg-costco-red px-1.5 text-[9px] font-black tracking-wide text-white">
                     MEMBER
                   </span>
-                  <p className="text-[11px] text-[#555] font-semibold min-w-0 text-right">
+                  <p className="text-[11px] text-[#555] font-semibold min-w-0 text-right tabular-nums">
                     Gold Star · 11217 Brooklyn
                   </p>
                 </div>

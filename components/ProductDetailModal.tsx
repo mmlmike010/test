@@ -1,6 +1,6 @@
 "use client";
 
-import { X, Check, Plus, Star } from "lucide-react";
+import { X, Check, Heart, Plus, Star } from "lucide-react";
 import { products, type Product } from "@/lib/data/products";
 import { useCartStore } from "@/lib/store/cart";
 import StarRating from "@/components/StarRating";
@@ -83,6 +83,12 @@ export default function ProductDetailModal({
                 ${current.savings.toFixed(2)} off
               </div>
             )}
+            <span
+              className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white border border-[#eee] flex items-center justify-center text-[#8a8a8a]"
+              aria-hidden="true"
+            >
+              <Heart className="w-4 h-4" />
+            </span>
           </div>
           <div className="p-5 flex flex-col">
             <h2 className="text-[22px] font-bold text-[#1a1a1a] leading-snug">
@@ -188,11 +194,17 @@ export default function ProductDetailModal({
         </div>
         </div>
 
-        <div className="shrink-0 border-t border-[#eee] bg-white px-5 py-3">
+        <div className="shrink-0 border-t border-[#eee] bg-white px-5 py-3 flex items-center gap-3">
+          <div className="min-w-0">
+            <p className="text-[20px] font-bold text-[#1a1a1a] tabular-nums leading-none">
+              ${current.price.toFixed(2)}
+            </p>
+            <p className="text-[12px] text-[#8a8a8a] mt-0.5">each</p>
+          </div>
           <button
             type="button"
             onClick={onAdd}
-            className={`w-full py-3 font-bold transition-colors flex items-center justify-center gap-2 rounded-full ${
+            className={`flex-1 py-3 font-bold transition-colors flex items-center justify-center gap-2 rounded-full ${
               justAdded
                 ? "bg-[#099809] text-white"
                 : "bg-[#0AAD0A] text-white hover:bg-[#099809]"

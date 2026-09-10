@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Check, Minus, Plus } from "lucide-react";
+import { Check, Heart, Minus, Plus } from "lucide-react";
 import type { Product } from "@/lib/data/products";
 import { useCartStore } from "@/lib/store/cart";
 import { productSize } from "@/lib/ui/packSize";
@@ -102,6 +102,12 @@ export default function ProductCard({
             ${product.savings.toFixed(2)} off
           </div>
         )}
+        <span
+          className="absolute top-1.5 right-1.5 w-7 h-7 rounded-full bg-white/90 border border-[#eee] flex items-center justify-center text-[#8a8a8a]"
+          aria-hidden="true"
+        >
+          <Heart className="w-3.5 h-3.5" />
+        </span>
         <AddControl product={product} />
       </div>
       <div className="px-2.5 pb-3 pt-1">

@@ -7,6 +7,7 @@ import type { Product } from "@/lib/data/products";
 import { useCatalogStore } from "@/lib/store/catalog";
 import ProductCard from "@/components/ProductCard";
 import ProductDetailModal from "@/components/ProductDetailModal";
+import InstacartMark from "@/components/InstacartMark";
 
 type Aisle = {
   title: string;
@@ -322,7 +323,8 @@ export default function ProductGrid() {
           </a>
         </div>
         <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-[#777]">
-          <p>
+          <p className="inline-flex items-center gap-1.5">
+            <InstacartMark size={12} />
             Same-Day Delivery powered by Instacart · Costco membership required
           </p>
           <p>Prices, fees, and availability for 11217 Brooklyn</p>
