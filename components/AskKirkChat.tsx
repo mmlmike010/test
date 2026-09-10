@@ -494,8 +494,10 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
   return (
     <>
     <aside className="fixed inset-y-0 right-0 z-40 w-full max-w-[420px] lg:static lg:z-30 lg:w-[380px] xl:w-[420px] lg:max-w-none shrink-0 bg-white border-l border-[#e5e5e5] h-full flex flex-col">
-      <div className="shrink-0 border-b border-[#e5e5e5] bg-white">
+      <div className="shrink-0 border-b border-[#e5e5e5] bg-[#fafafa]">
         <div className="h-2 bg-costco-red" />
+        <div className="h-[7px] bg-[#2a2a2a]" />
+        <div className="h-[3px] bg-[#C9A227]" />
         <div className="px-3.5 pt-2.5 pb-2 flex items-center justify-between gap-2">
           <CostcoLogo compact />
           <div className="flex items-center gap-2 shrink-0">
@@ -584,9 +586,11 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             return (
               <div
                 key={message.id}
-                className="bg-white border border-[#e8e8e8] rounded-[4px] overflow-hidden shadow-[0_1px_3px_rgba(0,0,0,0.06)]"
+                className="bg-white border border-[#e8e8e8] rounded-[8px] overflow-hidden shadow-[0_2px_8px_rgba(0,0,0,0.08)]"
               >
                 <div className="h-[8px] bg-costco-red" />
+                <div className="h-[7px] bg-[#2a2a2a]" />
+                <div className="h-[3px] bg-[#C9A227]" />
                 <div className="px-3.5 py-3">
                 <div className="flex items-center justify-between gap-3 mb-3">
                   <CostcoLogo compact />
@@ -620,8 +624,8 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                   <span className="inline-flex h-5 items-center rounded-[2px] bg-costco-red px-1.5 text-[9px] font-black tracking-wide text-white">
                     MEMBER
                   </span>
-                  <p className="text-[11px] text-[#555] font-semibold min-w-0 text-right tabular-nums">
-                    Gold Star · 11217 Brooklyn
+                  <p className="text-[11px] text-[#555] font-semibold min-w-0 text-right tabular-nums tracking-wide">
+                    GS · 11217 · BROOKLYN
                   </p>
                 </div>
                 </div>
