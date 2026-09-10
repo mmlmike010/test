@@ -3,7 +3,7 @@ export default function PromoBanner() {
     <div className="bg-[#eef5fb] border-b border-[#d4e3f0] text-[#1a1a1a] shrink-0">
       <div className="max-w-[1800px] mx-auto px-3 sm:px-4 h-[40px] flex items-center justify-between gap-4 text-[13px]">
         <p className="font-bold tracking-tight truncate text-costco-blue">
-          Member Only Savings · 7/27/26 – 8/23/26 · Sale ends in 14 days
+          Member Only Savings · 8/24/26 – 9/20/26 · Sale ends in 10 days
         </p>
         <p className="hidden sm:block text-[#555] shrink-0">
           <span className="font-bold text-[#1a1a1a]">$10 monthly credit</span>

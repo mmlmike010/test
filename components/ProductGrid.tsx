@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { categories, filterProducts } from "@/lib/data/products";
 import type { Product } from "@/lib/data/products";
 import { useCatalogStore } from "@/lib/store/catalog";
@@ -90,6 +90,31 @@ export default function ProductGrid() {
     new: "What's New",
     again: "Buy it again",
   };
+  const collectionTiles = [
+    {
+      tag: "weekly",
+      title: "Member Only Savings",
+      subtitle: "8/24/26 – 9/20/26",
+      badge: "Sale ends in 10 days",
+      image: "/products/hero-weekly.jpg?v=16",
+    },
+    {
+      tag: "kirkland",
+      title: "Kirkland Signature",
+      image: "/products/hero-kirkland.jpg?v=16",
+    },
+    {
+      tag: "trending",
+      title: "This week's featured items",
+      image: "/products/hero-new.jpg?v=16",
+    },
+    {
+      tag: "treasure",
+      title: "Discounts on household favorites",
+      image: "/products/hero-treasure.jpg?v=16",
+    },
+  ] as const;
+  const activeCollection = collectionTiles.find((tile) => tile.tag === tag);
   const tagLabel = tag
     ? liveCollectionName[tag] ||
       categories.find((c) => c.id === tag)?.name ||
@@ -175,36 +200,11 @@ export default function ProductGrid() {
       {!filteredView && (
         <>
           <section className="mb-5 grid grid-cols-2 gap-3">
-            {(
-              [
-                {
-                  title: "Member Only Savings",
-                  subtitle: "7/27/26 – 8/23/26",
-                  badge: "Sale ends in 14 days",
-                  image: "/products/hero-weekly.jpg?v=16",
-                  onClick: () => showAisle({ tag: "weekly" }),
-                },
-                {
-                  title: "Kirkland Signature",
-                  image: "/products/hero-kirkland.jpg?v=16",
-                  onClick: () => showAisle({ tag: "kirkland" }),
-                },
-                {
-                  title: "This week's featured items",
-                  image: "/products/hero-new.jpg?v=16",
-                  onClick: () => showAisle({ tag: "trending" }),
-                },
-                {
-                  title: "Discounts on household favorites",
-                  image: "/products/hero-treasure.jpg?v=16",
-                  onClick: () => showAisle({ tag: "treasure" }),
-                },
-              ] as const
-            ).map((tile) => (
+            {collectionTiles.map((tile) => (
               <button
                 key={tile.title}
                 type="button"
-                onClick={tile.onClick}
+                onClick={() => showAisle({ tag: tile.tag })}
                 className="relative aspect-video rounded-[16px] overflow-hidden text-left group bg-[#f3f3f3]"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -255,14 +255,54 @@ export default function ProductGrid() {
 
       {filteredView && (
         <>
+          <button
+            type="button"
+            onClick={() => {
+              clearFilters();
+              void search();
+            }}
+            className="mb-3 inline-flex items-center gap-0.5 text-[13px] font-bold text-costco-blue hover:underline"
+          >
+            <ChevronLeft className="w-4 h-4" aria-hidden="true" />
+            Shop
+          </button>
+          {activeCollection && (
+            <div className="relative mb-4 h-[132px] sm:h-[156px] rounded-[16px] overflow-hidden bg-[#f3f3f3]">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={activeCollection.image}
+                alt=""
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+              <span className="absolute inset-0 bg-gradient-to-t from-black/58 via-black/15 to-black/10" />
+              {"badge" in activeCollection && activeCollection.badge && (
+                <span className="absolute top-3 left-3 inline-flex items-center rounded-full bg-white px-2 py-1 text-[11px] font-bold text-costco-red shadow-[0_1px_3px_rgba(0,0,0,0.12)]">
+                  {activeCollection.badge}
+                </span>
+              )}
+              <span className="absolute bottom-3 left-3.5 right-3.5">
+                <span className="block text-[22px] sm:text-[26px] font-bold text-white leading-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.55)]">
+                  {activeCollection.title}
+                </span>
+                {"subtitle" in activeCollection &&
+                  activeCollection.subtitle && (
+                    <span className="mt-0.5 block text-[12px] font-semibold text-white/90">
+                      {activeCollection.subtitle}
+                    </span>
+                  )}
+              </span>
+            </div>
+          )}
           <div className="-mx-4 lg:-mx-5 mb-4">
             <CategoryScroller />
           </div>
           <div className="mb-3 flex items-end justify-between gap-3 flex-wrap">
             <div>
-              <h2 className="text-[22px] lg:text-[24px] font-bold text-[#1a1a1a] tracking-tight">
-                {titleBits.join(" · ")}
-              </h2>
+              {!activeCollection && (
+                <h2 className="text-[22px] lg:text-[24px] font-bold text-[#1a1a1a] tracking-tight">
+                  {titleBits.join(" · ")}
+                </h2>
+              )}
               <p className="text-[13px] text-[#666] mt-0.5">
                 {`${filtered.length} item${filtered.length === 1 ? "" : "s"}`}
                 {loading ? " · Updating…" : ""}
