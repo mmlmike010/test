@@ -22,20 +22,58 @@ ${inner}
 }
 
 const src = await download(CF);
+const meta = await sharp(src).metadata();
+const W = meta.width;
+const H = meta.height;
 
-const pw = 420;
-const ph = 700;
-
-// Tight bowl only — raspberries in granola. No Kirkland / Nature's Path / Ancient Grains type.
-const bowl = await sharp(src)
-  .extract({ left: 170, top: 104, width: 160, height: 104 })
-  .resize(228, 228, { fit: "cover", position: "centre" })
-  .modulate({ brightness: 1.03, saturation: 1.12 })
+// Die-cut only — never keep Ancient Grains / Nature's Path RGB.
+const { data, info } = await sharp(src).removeAlpha().raw().toBuffer({
+  resolveWithObject: true,
+});
+// Flood studio white from the corners so the pouch's cream face stays inside the die-cut.
+const bg = Buffer.alloc(W * H);
+const stack = [0, W - 1, (H - 1) * W, H * W - 1];
+const isStudio = (i) => {
+  const r = data[i * 3];
+  const g = data[i * 3 + 1];
+  const b = data[i * 3 + 2];
+  return r >= 248 && g >= 248 && b >= 248;
+};
+while (stack.length) {
+  const i = stack.pop();
+  if (i < 0 || i >= W * H || bg[i] || !isStudio(i)) continue;
+  bg[i] = 1;
+  const x = i % W;
+  const y = (i - x) / W;
+  if (x > 0) stack.push(i - 1);
+  if (x < W - 1) stack.push(i + 1);
+  if (y > 0) stack.push(i - W);
+  if (y < H - 1) stack.push(i + W);
+}
+const alpha = Buffer.alloc(W * H);
+for (let i = 0; i < W * H; i++) alpha[i] = bg[i] ? 0 : 255;
+const maskRgba = Buffer.alloc(W * H * 4);
+for (let i = 0; i < W * H; i++) {
+  maskRgba[i * 4] = 255;
+  maskRgba[i * 4 + 1] = 255;
+  maskRgba[i * 4 + 2] = 255;
+  maskRgba[i * 4 + 3] = alpha[i];
+}
+const pouchMask = await sharp(maskRgba, {
+  raw: { width: W, height: H, channels: 4 },
+})
   .png()
   .toBuffer();
 
+// Tight bowl only — raspberries in granola.
+const bowl = await sharp(src)
+  .extract({ left: 170, top: 104, width: 160, height: 104 })
+  .resize(196, 196, { fit: "cover", position: "centre" })
+  .modulate({ brightness: 1.03, saturation: 1.12 })
+  .png()
+  .toBuffer();
 const circleMask = await sharp(
-  svg(228, 228, `<circle cx="114" cy="114" r="114" fill="#fff"/>`)
+  svg(196, 196, `<circle cx="98" cy="98" r="98" fill="#fff"/>`)
 )
   .png()
   .toBuffer();
@@ -46,68 +84,41 @@ const bowlRound = await sharp(bowl)
 
 const face = await sharp(
   svg(
-    pw,
-    ph,
+    W,
+    H,
     `
-  <rect width="${pw}" height="318" fill="#CFA05A"/>
-  <rect y="318" width="${pw}" height="${ph - 318}" fill="#F6F1E6"/>
+  <rect x="113" y="39" width="381" height="248" fill="#CFA05A"/>
+  <rect x="113" y="287" width="381" height="287" fill="#F6F1E6"/>
+  <defs>
+    <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#3a2410" stop-opacity="0.14"/>
+      <stop offset="0.22" stop-color="#fff8ee" stop-opacity="0.2"/>
+      <stop offset="0.55" stop-color="#fff8ee" stop-opacity="0"/>
+      <stop offset="1" stop-color="#3a2410" stop-opacity="0.16"/>
+    </linearGradient>
+  </defs>
+  <rect x="113" y="39" width="381" height="535" fill="url(#sheen)"/>
+  <rect x="150" y="48" width="308" height="16" rx="3" fill="#b89a68"/>
+  <rect x="162" y="52" width="284" height="7" rx="2" fill="#8e7a52"/>
 `
   )
 )
-  .removeAlpha()
-  .toBuffer();
-
-const pouchD = `M54,38
-  L366,38
-  L366,668
-  C366,682 354,690 338,690
-  L82,690
-  C66,690 54,682 54,668
-  Z`;
-
-const bagMask = await sharp(svg(pw, ph, `<path fill="#fff" d="${pouchD}"/>`))
   .png()
   .toBuffer();
 
-const lighting = svg(
-  pw,
-  ph,
-  `
-  <defs>
-    <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#3a2410" stop-opacity="0.1"/>
-      <stop offset="0.22" stop-color="#fff8ee" stop-opacity="0.2"/>
-      <stop offset="0.55" stop-color="#fff8ee" stop-opacity="0"/>
-      <stop offset="1" stop-color="#3a2410" stop-opacity="0.12"/>
-    </linearGradient>
-  </defs>
-  <rect width="${pw}" height="${ph}" fill="url(#sheen)"/>
-  <rect x="54" y="38" width="312" height="22" fill="#c9b089"/>
-  <rect x="64" y="44" width="292" height="8" rx="3" fill="#9a8864"/>
-  <path d="M70,676 L350,676" fill="none" stroke="#2a1a0c" stroke-opacity="0.1" stroke-width="2"/>
-`
-);
-
-const body = await sharp(face)
-  .composite([{ input: lighting, blend: "over" }])
-  .removeAlpha()
-  .toBuffer();
-const bagAlpha = await sharp(bagMask).extractChannel("alpha").toBuffer();
-const film = await sharp(body).joinChannel(bagAlpha).png().toBuffer();
-
 const print = await sharp(
   svg(
-    pw,
-    ph,
+    W,
+    H,
     `
-  <rect x="78" y="340" width="264" height="52" rx="3" fill="#1a1a1a"/>
-  <text x="210" y="375" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="800" letter-spacing="1.8">KIRKLAND</text>
-  <text x="210" y="418" text-anchor="middle" fill="#3d3226" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="800" letter-spacing="3.6">SIGNATURE</text>
-  <text x="210" y="468" text-anchor="middle" fill="#7A1F3D" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="800">MIXED BERRY</text>
-  <text x="210" y="504" text-anchor="middle" fill="#1a1a1a" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="800" letter-spacing="1.5">ORGANIC GRANOLA</text>
-  <text x="210" y="540" text-anchor="middle" fill="#555555" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700">RASPBERRY · BLUEBERRY · STRAWBERRY</text>
-  <text x="210" y="600" text-anchor="middle" fill="#1a1a1a" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="800">3.5 LB</text>
-  <text x="210" y="628" text-anchor="middle" fill="#666666" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700">NET WT 56 OZ (1.59 kg)</text>
+  <rect x="168" y="308" width="264" height="48" rx="3" fill="#1a1a1a"/>
+  <text x="300" y="341" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="800" letter-spacing="1.6">KIRKLAND</text>
+  <text x="300" y="380" text-anchor="middle" fill="#3d3226" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="800" letter-spacing="3.2">SIGNATURE</text>
+  <text x="300" y="424" text-anchor="middle" fill="#7A1F3D" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="800">MIXED BERRY</text>
+  <text x="300" y="456" text-anchor="middle" fill="#1a1a1a" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="800" letter-spacing="1.4">ORGANIC GRANOLA</text>
+  <text x="300" y="486" text-anchor="middle" fill="#555555" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="700">RASPBERRY · BLUEBERRY · STRAWBERRY</text>
+  <text x="300" y="530" text-anchor="middle" fill="#1a1a1a" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="800">3.5 LB</text>
+  <text x="300" y="552" text-anchor="middle" fill="#666666" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="700">NET WT 56 OZ (1.59 kg)</text>
 `
   )
 )
@@ -115,42 +126,44 @@ const print = await sharp(
   .toBuffer();
 
 const ring = await sharp(
-  svg(
-    240,
-    240,
-    `<circle cx="120" cy="120" r="118" fill="none" stroke="#6a4a28" stroke-width="5"/>`
-  )
+  svg(208, 208, `<circle cx="104" cy="104" r="102" fill="none" stroke="#6a4a28" stroke-width="5"/>`)
 )
   .png()
   .toBuffer();
 
-const bag = await sharp(film)
+const labeled = await sharp(face)
   .composite([
     { input: print, left: 0, top: 0 },
-    { input: ring, left: 90, top: 68 },
-    { input: bowlRound, left: 96, top: 74 },
+    { input: ring, left: 196, top: 72 },
+    { input: bowlRound, left: 202, top: 78 },
   ])
   .png()
   .toBuffer();
 
-const rotated = await sharp(bag)
-  .rotate(-0.6, { background: { r: 0, g: 0, b: 0, alpha: 0 } })
-  .png()
-  .toBuffer();
-const rotMeta = await sharp(rotated).metadata();
-const shadow = await sharp(
-  svg(
-    rotMeta.width,
-    64,
-    `<ellipse cx="${rotMeta.width / 2}" cy="34" rx="${rotMeta.width * 0.28}" ry="11" fill="#000" fill-opacity="0.16"/>`
-  )
-)
-  .blur(12)
+const pouch = await sharp(labeled)
+  .composite([{ input: pouchMask, blend: "dest-in" }])
   .png()
   .toBuffer();
 
-const left = Math.round((800 - rotMeta.width) / 2);
-const top = Math.round((800 - rotMeta.height) / 2) - 6;
+const shadow = await sharp(
+  svg(
+    800,
+    80,
+    `<ellipse cx="400" cy="40" rx="118" ry="12" fill="#000" fill-opacity="0.14"/>`
+  )
+)
+  .blur(10)
+  .png()
+  .toBuffer();
+
+const fitted = await sharp(pouch)
+  .resize(720, 720, { fit: "inside" })
+  .png()
+  .toBuffer();
+const fitMeta = await sharp(fitted).metadata();
+const left = Math.round((800 - fitMeta.width) / 2);
+const top = Math.round((800 - fitMeta.height) / 2) - 8;
+
 await sharp({
   create: {
     width: 800,
@@ -160,10 +173,10 @@ await sharp({
   },
 })
   .composite([
-    { input: shadow, left, top: top + rotMeta.height - 30 },
-    { input: rotated, left, top },
+    { input: shadow, left: 0, top: top + fitMeta.height - 36 },
+    { input: fitted, left, top },
   ])
   .png({ compressionLevel: 8 })
   .toFile(join(dir, "1.png"));
 
-console.log("wrote public/products/1.png");
+console.log("wrote public/products/1.png", { W, H, info: info.width });
