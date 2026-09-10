@@ -1,6 +1,7 @@
 "use client";
 
-import { X, Check, Heart, Plus, Star } from "lucide-react";
+import { X, Check, Plus, Star } from "lucide-react";
+import SaveHeart from "@/components/SaveHeart";
 import { products, type Product } from "@/lib/data/products";
 import { useCartStore } from "@/lib/store/cart";
 import StarRating from "@/components/StarRating";
@@ -86,12 +87,11 @@ export default function ProductDetailModal({
                 ${current.savings.toFixed(2)} off
               </div>
             )}
-            <span
-              className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white border border-[#eee] flex items-center justify-center text-[#8a8a8a]"
-              aria-hidden="true"
-            >
-              <Heart className="w-4 h-4" />
-            </span>
+            <SaveHeart
+              productId={current.id}
+              productName={current.name}
+              className="absolute top-3 right-3 w-9 h-9"
+            />
           </div>
           <div className="p-5 flex flex-col">
             <h2 className="text-[22px] font-bold text-[#1a1a1a] leading-snug">

@@ -1,15 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "@/components/Header";
 import PromoBanner from "@/components/PromoBanner";
 import { MobileAisles } from "@/components/DepartmentsSidebar";
 import ProductGrid from "@/components/ProductGrid";
 import AskKirkChat from "@/components/AskKirkChat";
 import CartDrawer from "@/components/CartDrawer";
+import { hydrateLists } from "@/lib/store/lists";
 
 export default function Home() {
   const [isKirkOpen, setIsKirkOpen] = useState(true);
+
+  useEffect(() => {
+    hydrateLists();
+  }, []);
 
   return (
     <div className="h-dvh bg-[#f6f7f8] flex flex-col overflow-hidden">

@@ -12,6 +12,7 @@ import CategoryScroller from "@/components/CategoryScroller";
 import InstacartMark from "@/components/InstacartMark";
 import RecipesView from "@/components/RecipesView";
 import FlyersView from "@/components/FlyersView";
+import ListsView from "@/components/ListsView";
 
 type Aisle = {
   title: string;
@@ -139,6 +140,7 @@ export default function ProductGrid() {
 
   const recipesView = tag === "recipes" && !q.trim();
   const flyersView = tag === "flyers" && !q.trim();
+  const listsView = tag === "lists" && !q.trim();
   const filteredView = Boolean(department || tag || q.trim());
   const filtered = filterProducts({
     q,
@@ -319,8 +321,9 @@ export default function ProductGrid() {
 
       {recipesView && <RecipesView />}
       {flyersView && <FlyersView />}
+      {listsView && <ListsView />}
 
-      {filteredView && !recipesView && !flyersView && (
+      {filteredView && !recipesView && !flyersView && !listsView && (
         <>
           <button
             type="button"
@@ -507,9 +510,18 @@ export default function ProductGrid() {
           >
             Flyers
           </button>
-          <a href="#" className="text-costco-blue font-semibold hover:underline">
+          <button
+            type="button"
+            className="text-costco-blue font-semibold hover:underline"
+            onClick={() => {
+              setQuery("");
+              setTag("lists");
+              void search();
+              document.querySelector("main")?.scrollTo({ top: 0 });
+            }}
+          >
             Lists
-          </a>
+          </button>
         </div>
         <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-[#777]">
           <p className="inline-flex items-center gap-1.5">

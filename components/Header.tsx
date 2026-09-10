@@ -24,7 +24,8 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
   const tag = useCatalogStore((s) => s.tag);
   const onRecipes = tag === "recipes";
   const onFlyers = tag === "flyers";
-  const onShop = !onRecipes && !onFlyers;
+  const onLists = tag === "lists";
+  const onShop = !onRecipes && !onFlyers && !onLists;
   const tabClass = (active: boolean) =>
     active
       ? "text-costco-blue font-bold border-b-[3px] border-costco-blue py-3"
@@ -95,9 +96,19 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
               >
                 Flyers
               </button>
-              <a href="#" className="text-[#333] hover:text-costco-blue py-3">
+              <button
+                type="button"
+                aria-current={onLists ? "page" : undefined}
+                className={tabClass(onLists)}
+                onClick={() => {
+                  setQuery("");
+                  setTag("lists");
+                  void search();
+                  scrollShop();
+                }}
+              >
                 Lists
-              </a>
+              </button>
               <button
                 type="button"
                 aria-current={onRecipes ? "page" : undefined}
@@ -154,7 +165,8 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
               type="search"
               value={q}
               onChange={(e) => {
-                if (tag === "recipes" || tag === "flyers") setTag(null);
+                if (tag === "recipes" || tag === "flyers" || tag === "lists")
+                  setTag(null);
                 setQuery(e.target.value);
               }}
               placeholder="Search products"

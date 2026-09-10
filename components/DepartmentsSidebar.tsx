@@ -33,6 +33,7 @@ export function MobileAisles() {
   const search = useCatalogStore((s) => s.search);
   const onRecipes = tag === "recipes";
   const onFlyers = tag === "flyers";
+  const onLists = tag === "lists";
 
   return (
     <div className="md:hidden bg-white border-b border-[#ececec] px-3 py-2">
@@ -55,6 +56,22 @@ export function MobileAisles() {
           }`}
         >
           Flyer
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setQuery("");
+            if (onLists) setTag(null);
+            else setTag("lists");
+            void search();
+          }}
+          className={`shrink-0 px-2.5 py-1 rounded-full text-[12px] border ${
+            onLists
+              ? "bg-[#e8f2fa] border-costco-blue text-costco-blue font-bold"
+              : "bg-white border-[#d0d0d0] text-[#333]"
+          }`}
+        >
+          Lists
         </button>
         <button
           type="button"
