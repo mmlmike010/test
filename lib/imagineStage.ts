@@ -2,10 +2,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
 import { products, type Product } from "@/lib/data/products";
-import {
-  getScene,
-  type SceneId,
-} from "@/lib/placeInRoom";
+import { type SceneId } from "@/lib/placeInRoom";
 
 export const IMAGINE_MODEL = "grok-imagine-image-2.0";
 
@@ -74,15 +71,21 @@ function extractImageUrl(data: unknown): string | null {
 function stagingPrompt(product: Product, sceneId: SceneId, uploaded: boolean): string {
   const sku = `${product.brand} ${product.name}`;
   const setting = SCENE_SETTING[sceneId];
-  const roomBit = uploaded
-    ? "the member's uploaded room photograph (keep architecture, perspective, and lighting)"
-    : setting;
+  if (uploaded) {
+    return [
+      `Virtual staging / place-in-room composite for a Costco furniture SKU.`,
+      `One reference image is a real product photograph of ${sku} — preserve that exact sofa/furniture: fabric color, cushion shape, arms, legs, and silhouette. Do not replace it with a different design.`,
+      `Place that photographed SKU into the member's uploaded room photograph (keep architecture, perspective, and lighting).`,
+      `The furniture must look physically present: correct scale, grounded on the floor, natural contact shadows, matching light direction.`,
+      `Photorealistic interior/exterior catalog photo. No people, no text overlays, no invented logos, no watermark.`,
+    ].join(" ");
+  }
   return [
-    `Virtual staging / place-in-room composite for a Costco furniture SKU.`,
-    `One reference image is a real product photograph of ${sku} — preserve that exact sofa/furniture: fabric color, cushion shape, arms, legs, and silhouette. Do not replace it with a different design.`,
-    `Place that photographed SKU into ${roomBit}.`,
+    `Virtual staging / place-in-room. Generate a photorealistic ${setting}.`,
+    `The only reference image is a real product photograph of ${sku} — preserve that exact sofa/furniture: fabric color, cushion shape, arms, legs, and silhouette. Do not invent a different design.`,
+    `Invent the room around that photographed SKU. No uploaded room photo is provided.`,
     `The furniture must look physically present: correct scale, grounded on the floor, natural contact shadows, matching light direction.`,
-    `Photorealistic interior/exterior catalog photo. No people, no text overlays, no invented logos, no watermark.`,
+    `Photorealistic interior catalog photo. No people, no text overlays, no invented logos, no watermark.`,
   ].join(" ");
 }
 
@@ -169,7 +172,6 @@ export async function stageFurnitureWithImagine(opts: {
   const product = products.find((p) => p.id === opts.productId);
   if (!product) return null;
 
-  const scene = getScene(opts.sceneId);
   const uploaded = Boolean(opts.roomImage);
   const prompt = stagingPrompt(product, opts.sceneId, uploaded);
 
@@ -180,15 +182,17 @@ export async function stageFurnitureWithImagine(opts: {
   }
   const skuUri = await toJpegDataUri(skuBuf);
 
-  const refs: string[] = [];
-  const roomBuf = await loadLocalOrRemote(opts.roomImage || scene.image);
-  if (roomBuf) refs.push(await toJpegDataUri(roomBuf));
-  refs.push(skuUri);
-
-  // Prefer edits: room + photographed SKU in, staged environment out.
+  // Upload path: composite into the member photo. One-click path: Imagine
+  // generates the room around the photographed SKU (no local room template).
   try {
-    const edited = await imagineEdits(opts.apiKey, prompt, refs);
-    if (edited) return { url: edited, model: IMAGINE_MODEL, mode: "edits" };
+    if (uploaded && opts.roomImage) {
+      const roomBuf = await loadLocalOrRemote(opts.roomImage);
+      if (roomBuf) {
+        const roomUri = await toJpegDataUri(roomBuf);
+        const edited = await imagineEdits(opts.apiKey, prompt, [roomUri, skuUri]);
+        if (edited) return { url: edited, model: IMAGINE_MODEL, mode: "edits" };
+      }
+    }
     const skuOnly = await imagineEdits(opts.apiKey, prompt, [skuUri]);
     if (skuOnly) return { url: skuOnly, model: IMAGINE_MODEL, mode: "edits" };
   } catch (err) {

@@ -22,17 +22,10 @@ export default function SeeInMyRoomStudio({ product }: { product: Product }) {
   const [roomUrl, setRoomUrl] = useState<string | null>(null);
   const [mergedUrl, setMergedUrl] = useState<string | null>(null);
   const [imagineMode, setImagineMode] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<"generate" | "upload" | null>(null);
   const [error, setError] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const sceneId = defaultSceneForProduct(product);
-  const itemWord = /sofa/i.test(product.name)
-    ? "sofa"
-    : /bed/i.test(product.name)
-      ? "bed"
-      : /chair/i.test(product.name)
-        ? "chair"
-        : "item";
 
   const onUpload = async (file: File) => {
     setError(null);
@@ -45,12 +38,12 @@ export default function SeeInMyRoomStudio({ product }: { product: Product }) {
     }
   };
 
-  const merge = async () => {
-    if (!roomUrl) {
+  const merge = async (useUpload: boolean) => {
+    if (useUpload && !roomUrl) {
       setError("Upload a room photo first.");
       return;
     }
-    setLoading(true);
+    setLoading(useUpload ? "upload" : "generate");
     setError(null);
     try {
       const res = await fetch("/api/place-in-room", {
@@ -59,7 +52,7 @@ export default function SeeInMyRoomStudio({ product }: { product: Product }) {
         body: JSON.stringify({
           productId: product.id,
           sceneId,
-          roomImage: roomUrl,
+          ...(useUpload && roomUrl ? { roomImage: roomUrl } : {}),
         }),
       });
       const data = (await res.json()) as {
@@ -71,11 +64,11 @@ export default function SeeInMyRoomStudio({ product }: { product: Product }) {
         throw new Error(data.error || "Grok Imagine staging failed");
       }
       setMergedUrl(data.imageUrl);
-      setImagineMode(data.mode || "edits");
+      setImagineMode(data.mode || (useUpload ? "edits" : "generations"));
     } catch (e) {
       setError(e instanceof Error ? e.message : "Grok Imagine staging failed");
     } finally {
-      setLoading(false);
+      setLoading(null);
     }
   };
 
@@ -93,7 +86,8 @@ export default function SeeInMyRoomStudio({ product }: { product: Product }) {
         See it in my room
       </h1>
       <p className="text-[13px] text-[#666] mt-1 mb-4">
-        Upload a photo of your space. Grok Imagine places this SKU in the room.
+        Tap Place in room — Grok Imagine generates a space around this sofa.
+        Upload is optional if you want your own photo.
       </p>
 
       <div className="grid sm:grid-cols-2 gap-3 mb-3">
@@ -116,7 +110,8 @@ export default function SeeInMyRoomStudio({ product }: { product: Product }) {
 
         <section className="bg-white border border-[#eee] rounded-[12px] overflow-hidden">
           <p className="px-3.5 py-2 text-[12px] font-bold text-[#555] border-b border-[#eee]">
-            Your room
+            Your room{" "}
+            <span className="font-semibold text-[#888]">(optional)</span>
           </p>
           <button
             type="button"
@@ -153,16 +148,28 @@ export default function SeeInMyRoomStudio({ product }: { product: Product }) {
         </section>
       </div>
 
-      <button
-        type="button"
-        onClick={() => void merge()}
-        disabled={loading || !roomUrl}
-        className="w-full sm:w-auto min-w-[240px] h-12 px-5 rounded-full bg-costco-blue text-white text-[15px] font-bold hover:bg-costco-blue-hover disabled:opacity-50"
-      >
-        {loading
-          ? "Grok Imagine is merging…"
-          : `Place ${itemWord} in this room`}
-      </button>
+      <div className="flex flex-wrap items-center gap-2">
+        <button
+          type="button"
+          onClick={() => void merge(false)}
+          disabled={loading !== null}
+          className="w-full sm:w-auto min-w-[200px] h-12 px-5 rounded-full bg-costco-blue text-white text-[15px] font-bold hover:bg-costco-blue-hover disabled:opacity-50"
+        >
+          {loading === "generate" ? "Grok Imagine is placing…" : "Place in room"}
+        </button>
+        {roomUrl ? (
+          <button
+            type="button"
+            onClick={() => void merge(true)}
+            disabled={loading !== null}
+            className="w-full sm:w-auto h-12 px-5 rounded-full border border-costco-blue bg-white text-costco-blue text-[15px] font-bold hover:bg-[#e8f2fa] disabled:opacity-50"
+          >
+            {loading === "upload"
+              ? "Grok Imagine is merging…"
+              : "Place in this photo"}
+          </button>
+        ) : null}
+      </div>
 
       {error && (
         <p className="mt-3 text-[12px] text-costco-red bg-[#fff5f6] border border-[#f3c5cb] px-3 py-2">
@@ -185,14 +192,14 @@ export default function SeeInMyRoomStudio({ product }: { product: Product }) {
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={mergedUrl}
-              alt={`${product.name} placed in your room`}
+              alt={`${product.name} placed in a generated room`}
               className="absolute inset-0 w-full h-full object-contain bg-white"
             />
           ) : (
             <p className="absolute inset-0 flex items-center justify-center text-[13px] text-[#777] px-4 text-center">
               {loading
-                ? `Grok Imagine is placing the ${itemWord} in your photo…`
-                : `Upload a room photo, then place the ${itemWord}.`}
+                ? "Grok Imagine is generating the room and placing the sofa…"
+                : "Tap Place in room — no upload needed."}
             </p>
           )}
         </div>
