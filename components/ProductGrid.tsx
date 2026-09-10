@@ -8,7 +8,6 @@ import type { Product } from "@/lib/data/products";
 import { useCatalogStore } from "@/lib/store/catalog";
 import ProductCard from "@/components/ProductCard";
 import ProductDetailModal from "@/components/ProductDetailModal";
-import FurnitureStagingPdp from "@/components/FurnitureStagingPdp";
 import CategoryScroller from "@/components/CategoryScroller";
 import InstacartMark from "@/components/InstacartMark";
 import { isFurnitureProduct } from "@/lib/placeInRoom";
@@ -75,13 +74,10 @@ export default function ProductGrid() {
   const clearFilters = useCatalogStore((s) => s.clearFilters);
   const [selected, setSelected] = useState<Product | null>(null);
   const [sort, setSort] = useState<"relevance" | "price">("relevance");
-  const openFurniturePdp = usePlaceInRoomStore((s) => s.openPdp);
+  const setLastFurniture = usePlaceInRoomStore((s) => s.setLastProduct);
 
   const openProduct = (product: Product) => {
-    if (isFurnitureProduct(product)) {
-      openFurniturePdp(product.id);
-      return;
-    }
+    if (isFurnitureProduct(product)) setLastFurniture(product.id);
     setSelected(product);
   };
 
@@ -428,7 +424,6 @@ export default function ProductGrid() {
           onClose={() => setSelected(null)}
         />
       )}
-      <FurnitureStagingPdp />
     </div>
   );
 }

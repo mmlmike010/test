@@ -101,7 +101,7 @@ export function wantsPlaceInRoom(text: string): boolean {
   const t = (text || "").toLowerCase();
   if (!t.trim()) return false;
   return (
-    /see (this )?(in )?my room/.test(t) ||
+    /see (this |it )?(in )?my room/.test(t) ||
     /place in (my )?room/.test(t) ||
     /stage (my )?(patio|landscape|room)/.test(t) ||
     /virtual stag/.test(t) ||

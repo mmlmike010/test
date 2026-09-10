@@ -8,6 +8,8 @@ import ProductCard from "@/components/ProductCard";
 import { productSize } from "@/lib/ui/packSize";
 import { aisleLabel } from "@/lib/ui/aisleLabels";
 import { useRef, useState } from "react";
+import SeeInMyRoomCard from "@/components/SeeInMyRoomCard";
+import { isFurnitureProduct } from "@/lib/placeInRoom";
 
 export default function ProductDetailModal({
   product,
@@ -46,7 +48,7 @@ export default function ProductDetailModal({
   };
 
   return (
-    <div className="fixed inset-0 z-[70] flex justify-end">
+    <div className="fixed inset-0 z-[70] flex justify-end lg:right-[380px] xl:right-[420px]">
       <button
         type="button"
         className="absolute inset-0 bg-black/40"
@@ -57,7 +59,7 @@ export default function ProductDetailModal({
         role="dialog"
         aria-modal="true"
         aria-label={`${current.brand} ${current.name}`}
-        className="relative w-full max-w-[480px] h-full bg-white shadow-2xl flex flex-col"
+        className="relative w-full max-w-[400px] h-full bg-white shadow-2xl flex flex-col"
       >
         <div className="sticky top-0 z-10 flex items-center justify-between px-4 py-3 border-b border-costco-border bg-white shrink-0">
           <p className="text-[13px] font-bold text-[#1a1a1a]">Item details</p>
@@ -129,6 +131,7 @@ export default function ProductDetailModal({
                 · {aisleLabel(current.department)}
               </span>
             </p>
+            {isFurnitureProduct(current) && <SeeInMyRoomCard product={current} />}
             <div className="mt-5 pt-4 border-t border-[#eee]">
               <h3 className="text-[15px] font-bold text-[#1a1a1a]">Details</h3>
               <p className="text-[13px] text-[#555] mt-1.5 leading-snug">

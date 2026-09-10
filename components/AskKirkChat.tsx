@@ -13,11 +13,8 @@ import {
 } from "lucide-react";
 import { useCartStore } from "@/lib/store/cart";
 import { products } from "@/lib/data/products";
-import SuggestedActionChip from "@/components/SuggestedActionChip";
 import { usePlaceInRoomStore } from "@/lib/store/placeInRoom";
-import { useCatalogStore } from "@/lib/store/catalog";
 import {
-  FURNITURE_DEPARTMENT,
   pickFurnitureProduct,
   parsePlaceInRoomAsk,
   wantsPlaceInRoom,
@@ -116,8 +113,6 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
   const kirkCartCount = useCartStore((state) => state.getTotalItems());
   const kirkCartSubtotal = useCartStore((state) => state.getSubtotal());
   const lastFurnitureId = usePlaceInRoomStore((s) => s.lastProductId);
-  const openFurniturePdp = usePlaceInRoomStore((s) => s.openPdp);
-  const furnitureDept = useCatalogStore((s) => s.department === FURNITURE_DEPARTMENT);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -253,22 +248,6 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
     setInput("");
     setError(null);
 
-    if (intent.upload) {
-      openFurniturePdp(product.id, { scene: intent.sceneId, upload: true });
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: (Date.now() + 1).toString(),
-          role: "assistant",
-          content:
-            "Upload a room photo on the PDP — I'll have Grok Imagine place this SKU in your space.",
-          timestamp: new Date(),
-        },
-      ]);
-      return;
-    }
-
-    openFurniturePdp(product.id, { scene: intent.sceneId });
     setIsLoading(true);
     setPendingInspire(true);
     try {
@@ -308,7 +287,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
           id: (Date.now() + 1).toString(),
           role: "assistant",
           content:
-            "I couldn't reach Grok Imagine just now. Check that XAI_API_KEY is set and try again — or open See in my room on the furniture PDP.",
+            "I couldn't reach Grok Imagine just now. Check that XAI_API_KEY is set and try again.",
           timestamp: new Date(),
         },
       ]);
@@ -591,7 +570,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
 
   return (
     <>
-    <aside className="fixed inset-y-0 right-0 z-40 w-full max-w-[420px] lg:static lg:z-30 lg:w-[380px] xl:w-[420px] lg:max-w-none shrink-0 bg-white border-l border-[#e5e5e5] h-full flex flex-col">
+    <aside className="fixed inset-y-0 right-0 z-[80] w-full max-w-[420px] lg:static lg:z-[80] lg:w-[380px] xl:w-[420px] lg:max-w-none shrink-0 bg-white border-l border-[#e5e5e5] h-full flex flex-col">
       <div className="relative shrink-0 border-b border-[#e5e5e5] bg-[#f7f1de] overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
@@ -809,42 +788,18 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
       )}
 
       <div className="px-3.5 pt-2.5 pb-3 border-t border-[#e5e5e5] bg-white shrink-0">
-        <div className="flex items-center gap-2 mb-1.5">
-          <p className="text-[11px] font-bold text-[#666]">
-            {furnitureDept ? "Ask Costco" : "Members often ask"}
-          </p>
-          <span className="inline-flex items-center px-2 py-[3px] rounded-full bg-costco-ai-pill text-[10px] font-bold text-costco-blue">
-            ✦ AI
-          </span>
-        </div>
-        <div className="flex flex-col gap-2.5 mb-2.5">
-          <p className="text-[13px] text-[#1a1a1a]">
-            Visualize this before you buy — pick a space:
-          </p>
-          <SuggestedActionChip
-            label="See this in my room"
-            onClick={() => void sendMessage("See this in my room")}
-            disabled={isLoading}
-          />
-          <SuggestedActionChip
-            label="Stage my patio / landscape"
-            tone="red"
-            onClick={() => void sendMessage("Stage my patio / landscape")}
-            disabled={isLoading}
-          />
-          <SuggestedActionChip
-            label="Try living room template"
-            onClick={() => void sendMessage("Try living room template")}
-            disabled={isLoading}
-          />
-          <SuggestedActionChip
-            label="Upload a room photo"
-            onClick={() => void sendMessage("Upload a room photo")}
-            disabled={isLoading}
-          />
-        </div>
-        {!furnitureDept && (
+        <p className="text-[11px] font-bold text-[#666] mb-1.5">
+          Members often ask
+        </p>
         <div className="flex flex-wrap gap-1.5 mb-2.5 content-start">
+          <button
+            type="button"
+            onClick={() => void sendMessage("See it in my room")}
+            disabled={isLoading}
+            className="px-2.5 py-1 bg-[#e8f2fa] hover:bg-[#dceaf6] hover:border-costco-blue text-costco-blue disabled:opacity-50 text-[11px] leading-snug rounded-full transition-colors border border-costco-blue font-bold max-w-full"
+          >
+            See it in my room
+          </button>
           {suggestionChips.map((chip) => (
             <button
               key={chip}
@@ -857,7 +812,6 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             </button>
           ))}
         </div>
-        )}
         <div className="flex gap-1.5 items-stretch">
           <input
             type="text"
