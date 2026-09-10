@@ -1,5 +1,6 @@
 "use client";
 
+import { ChevronRight } from "lucide-react";
 import { departments } from "@/lib/data/products";
 import { useCatalogStore } from "@/lib/store/catalog";
 
@@ -88,14 +89,19 @@ export default function DepartmentsSidebar({
                       setQuery("");
                       void search();
                     }}
-                    className={`w-full text-left block px-2.5 py-[7px] text-[13px] truncate transition-colors border-l-[3px] ${
+                    className={`w-full text-left px-2.5 py-[7px] text-[13px] transition-colors border-l-[3px] flex items-center justify-between gap-1 ${
                       active
                         ? "border-costco-blue bg-[#e8f2fa] text-costco-blue font-bold"
                         : "border-transparent text-[#333] hover:bg-[#f6f6f6] hover:text-costco-blue"
                     }`}
                     title={dept}
                   >
-                    {dept}
+                    <span className="truncate">{dept}</span>
+                    <ChevronRight
+                      className={`w-3.5 h-3.5 shrink-0 ${
+                        active ? "text-costco-blue" : "text-[#b0b0b0]"
+                      }`}
+                    />
                   </button>
                 </li>
               );

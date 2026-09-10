@@ -106,6 +106,7 @@ function ProductCard({
           <span className="text-[20px] font-bold text-[#1a1a1a] tabular-nums leading-none">
             ${product.price.toFixed(2)}
           </span>
+          <span className="text-[13px] text-[#8a8a8a]">each</span>
           <span className="text-[13px] text-[#8a8a8a] line-through tabular-nums">
             ${product.originalPrice.toFixed(2)}
           </span>

@@ -24,7 +24,7 @@ const tiles = {
   15: `${CF}/large_2b963e60-c6a3-4037-8099-6130912fc4c9.jpeg`, // Kirkland bakery croissants 12ct
   16: `${CF}/large_c15562b6-ac05-4b15-8df9-594e7b216767.jpeg`, // Kirkland Alexander Valley Cabernet
   18: `${CF}/large_a4a5dbcb-d19b-42d0-b34e-eccccfedb1cd.jpeg`, // GoPro HERO11 bundle
-  19: `${CF}/large_dfd7fdff-94b2-41fd-a116-155517311bef.jpeg`, // Kirkland Ultra Clean laundry pacs
+  19: `${CF}/large_fc09f4a9-8ad0-4983-9451-bdbe70fcf0d9.jpeg`, // Kirkland Ultra Clean HE liquid detergent
   20: `${CF}/large_029a4c28-4763-49fe-b0ee-0e9d1f402fb1.jpeg`, // Kirkland merino crew socks
   21: `${CF}/large_2bacbaac-2b3d-4412-baad-d7bdb17b6080.jpeg`, // Kirkland Colombian 3 lb
   23: `${CF}/large_f2a0a010-0b6e-4d94-bd34-c39fa04626b2.jpeg`, // Kirkland organic eggs 24ct

@@ -82,6 +82,7 @@ export default function ProductDetailModal({
               <span className="text-[28px] font-bold text-[#1a1a1a] tabular-nums leading-none">
                 ${product.price.toFixed(2)}
               </span>
+              <span className="text-[15px] text-[#8a8a8a]">each</span>
               <span className="text-sm text-[#888] line-through tabular-nums">
                 ${product.originalPrice.toFixed(2)}
               </span>

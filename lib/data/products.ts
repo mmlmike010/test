@@ -634,7 +634,7 @@ export const products: Product[] = [
     price: 17.99,
     originalPrice: 22.99,
     savings: 5.0,
-    image: "/products/19.png",
+    image: "/products/19.png?v=2",
     inStock: true,
     tags: ["cleaning", "kirkland"],
     rating: 3.8,

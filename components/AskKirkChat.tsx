@@ -9,6 +9,7 @@ import {
   ShoppingCart,
   Square,
   Sparkles,
+  ChevronRight,
 } from "lucide-react";
 import { useCartStore } from "@/lib/store/cart";
 import { products } from "@/lib/data/products";
@@ -536,13 +537,19 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
           <button
             type="button"
             onClick={openCart}
-            className="mx-3.5 my-2 w-[calc(100%-1.75rem)] flex items-center justify-between rounded-[3px] bg-[#e8f2fa] border border-[#c5d8ea] px-3 py-1.5 text-left"
+            className="mx-3.5 my-2 w-[calc(100%-1.75rem)] flex items-center justify-between rounded-[3px] bg-[#e8f2fa] border border-[#c5d8ea] px-3 py-2 text-left hover:bg-[#dceaf6]"
           >
-            <span className="text-[12px] font-bold text-costco-blue">
-              View cart · {kirkCartCount} item{kirkCartCount === 1 ? "" : "s"}
+            <span className="flex items-center gap-2 min-w-0">
+              <ShoppingCart className="w-3.5 h-3.5 text-costco-blue shrink-0" />
+              <span className="text-[12px] font-bold text-costco-blue truncate">
+                View cart · {kirkCartCount} item{kirkCartCount === 1 ? "" : "s"}
+              </span>
             </span>
-            <span className="text-[13px] font-bold text-[#1a1a1a] tabular-nums">
-              ${kirkCartSubtotal.toFixed(2)}
+            <span className="flex items-center gap-1 shrink-0">
+              <span className="text-[13px] font-bold text-[#1a1a1a] tabular-nums">
+                ${kirkCartSubtotal.toFixed(2)}
+              </span>
+              <ChevronRight className="w-3.5 h-3.5 text-costco-blue" />
             </span>
           </button>
         )}
@@ -572,7 +579,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                     <p className="text-[13px] font-bold text-[#1a1a1a]">
                       Kirk
                     </p>
-                    <p className="text-[10px] font-bold tracking-[0.14em] text-costco-blue uppercase">
+                    <p className="text-[11px] font-semibold text-costco-blue">
                       Same-Day shopping help
                     </p>
                   </div>
@@ -598,7 +605,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
               className={`max-w-[82%] px-3.5 py-2.5 text-[13px] leading-relaxed rounded-2xl ${
                 message.role === "user"
                   ? "bg-costco-blue text-white rounded-br-md"
-                  : "bg-white text-[#1a1a1a] border border-[#ededed] border-l-[3px] border-l-costco-red rounded-bl-md"
+                  : "bg-white text-[#1a1a1a] border border-[#e8e8e8] rounded-bl-md shadow-[0_1px_2px_rgba(0,0,0,0.04)]"
               }`}
             >
               <p className="whitespace-pre-line">{message.content}</p>
@@ -776,6 +783,10 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             Send
           </button>
         </div>
+        <p className="mt-2 text-[10px] text-[#888] text-center leading-snug">
+          Kirkland Signature shopping help · Membership required · Prices higher
+          than warehouse
+        </p>
       </div>
     </aside>
     {lightboxUrl && (

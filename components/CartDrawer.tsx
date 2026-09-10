@@ -69,7 +69,10 @@ export default function CartDrawer() {
                     {product.name}
                   </p>
                   <p className="text-[15px] font-bold text-[#1a1a1a] mt-1 tabular-nums">
-                    ${product.price.toFixed(2)}
+                    ${product.price.toFixed(2)}{" "}
+                    <span className="text-[12px] font-normal text-[#8a8a8a]">
+                      each
+                    </span>
                   </p>
                   <div className="mt-2 flex items-center justify-between gap-2">
                     <div className="flex items-center border border-[#c8c8c8] rounded-full overflow-hidden h-8">
