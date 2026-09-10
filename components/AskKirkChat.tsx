@@ -3,20 +3,22 @@
 import { useState, useRef, useEffect } from "react";
 import {
   X,
-  RefreshCw,
-  Send,
-  Mic,
+  GripVertical,
+  Maximize2,
+  Minimize2,
+  History,
+  ArrowRight,
   ShoppingCart,
   Square,
   Sparkles,
-  ChevronRight,
 } from "lucide-react";
 import { useCartStore } from "@/lib/store/cart";
 import { products } from "@/lib/data/products";
 import KirkMark from "@/components/KirkMark";
-import CostcoLogo from "@/components/CostcoLogo";
-import GoldStarMark from "@/components/GoldStarMark";
 import GoldStarMembershipCard from "@/components/GoldStarMembershipCard";
+import SuggestedActionChip, {
+  type SuggestedActionChipTone,
+} from "@/components/SuggestedActionChip";
 
 interface Message {
   id: string;
@@ -38,14 +40,24 @@ type KirkAction =
   | { tool: "remove_from_cart"; productIds: string[] }
   | { tool: "clear_cart" };
 
-const suggestionChips = [
-  "What's in my cart?",
-  "Add Kirkland hummus and quinoa to my cart",
-  "Find Kirkland swaps",
-  "Build a party platter",
-  "Recipe inspiration with hummus and tomatoes",
-  "Kids soccer week, no peanuts",
-  "What can I cook for dinner with quinoa?",
+const primarySuggestions: {
+  label: string;
+  tone: SuggestedActionChipTone;
+}[] = [
+  { label: "Buy Again", tone: "blue" },
+  { label: "Instant Savings on everyday items", tone: "red" },
+  { label: "Plan a camping weekend", tone: "blue" },
+  { label: "Quick & easy dinner ideas", tone: "blue" },
+  { label: "This week's recipes (Kirkland basket)", tone: "blue" },
+];
+
+const moreSuggestions: {
+  label: string;
+  tone: SuggestedActionChipTone;
+}[] = [
+  { label: "What's in my cart?", tone: "blue" },
+  { label: "Find Kirkland swaps", tone: "red" },
+  { label: "Kids soccer week, no peanuts", tone: "blue" },
 ];
 
 
@@ -91,7 +103,21 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [pendingInspire, setPendingInspire] = useState(false);
   const [lightboxUrl, setLightboxUrl] = useState<string | null>(null);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [showMoreSuggestions, setShowMoreSuggestions] = useState(false);
+  const [showHome, setShowHome] = useState(true);
+  const [panelPos, setPanelPos] = useState<{ left: number; top: number } | null>(
+    null
+  );
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const dragRef = useRef<{
+    pointerId: number;
+    startX: number;
+    startY: number;
+    origLeft: number;
+    origTop: number;
+  } | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -144,6 +170,64 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
     setLightboxUrl(null);
     setError(null);
     setCartNotice(null);
+    setShowHome(true);
+    setShowMoreSuggestions(false);
+  };
+
+  const clampPanelPos = (left: number, top: number) => {
+    const el = panelRef.current;
+    const width = el?.offsetWidth ?? 360;
+    const height = el?.offsetHeight ?? 200;
+    const maxLeft = Math.max(8, window.innerWidth - width - 8);
+    const maxTop = Math.max(8, window.innerHeight - height - 8);
+    return {
+      left: Math.min(Math.max(8, left), maxLeft),
+      top: Math.min(Math.max(8, top), maxTop),
+    };
+  };
+
+  const onDragPointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
+    const el = panelRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    dragRef.current = {
+      pointerId: e.pointerId,
+      startX: e.clientX,
+      startY: e.clientY,
+      origLeft: rect.left,
+      origTop: rect.top,
+    };
+    e.currentTarget.setPointerCapture(e.pointerId);
+  };
+
+  const onDragPointerMove = (e: React.PointerEvent<HTMLButtonElement>) => {
+    const drag = dragRef.current;
+    if (!drag || drag.pointerId !== e.pointerId) return;
+    setPanelPos(
+      clampPanelPos(
+        drag.origLeft + (e.clientX - drag.startX),
+        drag.origTop + (e.clientY - drag.startY)
+      )
+    );
+  };
+
+  const onDragPointerUp = (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (dragRef.current?.pointerId === e.pointerId) {
+      dragRef.current = null;
+    }
+  };
+
+  const handleHistory = () => {
+    const hasConversation = messages.some((m) => m.role === "user");
+    if (showHome && hasConversation) {
+      setShowHome(false);
+      return;
+    }
+    if (!showHome) {
+      setShowHome(true);
+      return;
+    }
+    handleReset();
   };
 
   const applyActions = (actions: KirkAction[]) => {
@@ -240,6 +324,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
     const nextMessages = [...messages, userMessage];
     setMessages(nextMessages);
     setInput("");
+    setShowHome(false);
     setIsLoading(true);
     setPendingInspire(looksLikeInspireAsk(trimmed));
     setError(null);
@@ -492,329 +577,376 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
 
   if (!isOpen) return null;
 
+  const iconBtn =
+    "inline-flex size-7 items-center justify-center rounded-md text-costco-text-muted transition-colors hover:bg-costco-surface hover:text-costco-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-costco-blue";
+
   return (
     <>
-    <aside className="fixed inset-y-0 right-0 z-40 w-full max-w-[420px] lg:static lg:z-30 lg:w-[380px] xl:w-[420px] lg:max-w-none shrink-0 bg-white border-l border-[#e5e5e5] h-full flex flex-col">
-      <div className="relative shrink-0 border-b border-[#e5e5e5] bg-[#f7f1de] overflow-hidden">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/kirk/card-stock.jpg?v=2"
-          alt=""
-          className="absolute inset-0 h-full w-full object-cover"
-        />
-        <div className="relative h-[6px] bg-costco-red" />
-        <div className="relative h-[3px] bg-gradient-to-r from-[#a3841c] via-[#f3e3a3] to-[#a3841c]" />
-        <div className="relative px-3.5 py-2 flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2.5 min-w-0">
-            <CostcoLogo compact />
-            <span className="w-px h-8 bg-[#d4c194] shrink-0" />
-            <KirkMark size={28} className="shrink-0" />
-            <div className="min-w-0">
-              <h2 className="text-[16px] font-black tracking-tight text-[#1a1a1a] leading-none">
-                Ask Kirk
-              </h2>
-              <p className="mt-1 text-[10px] font-bold tracking-[0.16em] text-costco-blue uppercase">
-                Kirkland Signature
-              </p>
-            </div>
+      <div
+        ref={panelRef}
+        role="dialog"
+        aria-modal="false"
+        aria-labelledby="ask-costco-title"
+        className={`fixed z-[55] flex flex-col overflow-hidden rounded-2xl bg-white shadow-[0px_8px_24px_0px_rgba(0,0,0,0.18)] ${
+          isExpanded ? "h-[min(80vh,720px)] w-[420px]" : "w-[360px]"
+        } ${!showHome && !isExpanded ? "h-[min(70vh,560px)]" : ""}`}
+        style={
+          panelPos
+            ? { left: panelPos.left, top: panelPos.top }
+            : { right: 24, bottom: 24 }
+        }
+      >
+        <div className="flex h-[52px] w-full shrink-0 items-center justify-between py-3.5 pr-3 pl-4">
+          <div className="flex items-center gap-2">
+            <h2
+              id="ask-costco-title"
+              className="text-[18px] leading-normal font-bold text-costco-text"
+            >
+              Ask Costco
+            </h2>
+            <span className="inline-flex items-center gap-1 rounded-full bg-costco-ai-pill px-2 py-[3px] text-costco-blue">
+              <span aria-hidden="true" className="text-[10px] font-bold">
+                ✦
+              </span>
+              <span className="text-[11px] font-semibold">AI</span>
+            </span>
           </div>
-          <div className="flex items-center gap-1 shrink-0">
-            <GoldStarMark size={18} />
-            <p className="hidden xl:block text-[9px] font-semibold tabular-nums tracking-[0.1em] text-[#666] pr-1">
-              111 847 11217
-            </p>
+          <div className="flex items-center gap-2.5">
             <button
               type="button"
-              onClick={handleReset}
-              className="px-2 py-1.5 text-[12px] font-bold text-[#555] hover:bg-[#f3f3f3] rounded-[3px] transition-colors flex items-center gap-1"
-              title="Reset"
+              aria-label="Drag panel"
+              className={`${iconBtn} cursor-grab active:cursor-grabbing`}
+              onPointerDown={onDragPointerDown}
+              onPointerMove={onDragPointerMove}
+              onPointerUp={onDragPointerUp}
+              onPointerCancel={onDragPointerUp}
             >
-              <RefreshCw className="w-3.5 h-3.5" />
-              Reset
+              <GripVertical className="size-3.5" aria-hidden="true" />
             </button>
             <button
               type="button"
-              onClick={onClose}
-              className="p-1.5 text-[#555] hover:bg-[#f3f3f3] rounded-full transition-colors"
-              title="Close"
-              aria-label="Close Ask Kirk"
+              aria-label={isExpanded ? "Collapse panel" : "Expand panel"}
+              aria-pressed={isExpanded}
+              className={iconBtn}
+              onClick={() => setIsExpanded((open) => !open)}
             >
-              <X className="w-4 h-4" />
+              {isExpanded ? (
+                <Minimize2 className="size-3.5" aria-hidden="true" />
+              ) : (
+                <Maximize2 className="size-3.5" aria-hidden="true" />
+              )}
+            </button>
+            <button
+              type="button"
+              aria-label="Conversation history"
+              aria-pressed={!showHome}
+              className={iconBtn}
+              onClick={handleHistory}
+            >
+              <History className="size-3.5" aria-hidden="true" />
+            </button>
+            <button
+              type="button"
+              aria-label="Close Ask Costco"
+              className={iconBtn}
+              onClick={onClose}
+            >
+              <X className="size-3.5" aria-hidden="true" />
             </button>
           </div>
         </div>
-        <div className="relative h-2 bg-costco-blue" />
-        <p className="relative px-3.5 py-1.5 flex items-center gap-1.5 text-[11px] text-[#188038] font-semibold bg-[#f3f3f3] border-b border-[#ececec]">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#0AAD0A]" />
-          Delivery 8:48–9:18pm · 11217 Brooklyn · Membership required
-        </p>
+
+        {cartNotice && (
+          <div className="mx-4 mb-1 flex items-center gap-2 rounded-lg border border-[#b7d7b0] bg-[#eef7ee] px-3 py-2 text-[12px] font-semibold text-[#1e5b24] shrink-0">
+            <ShoppingCart className="h-3.5 w-3.5" />
+            {cartNotice}
+          </div>
+        )}
+
         {kirkCartCount > 0 && (
           <button
             type="button"
             onClick={openCart}
-            className="relative mx-3.5 my-2 w-[calc(100%-1.75rem)] flex items-center justify-between rounded-full bg-[#e8f2fa] border border-[#c5d8ea] px-3.5 py-2 text-left hover:bg-[#dceaf6]"
+            className="mx-4 mb-2 flex items-center justify-between rounded-full border border-[#c5d8ea] bg-[#e8f2fa] px-3.5 py-2 text-left hover:bg-[#dceaf6] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-costco-blue"
           >
             <span className="flex items-center gap-2 min-w-0">
-              <ShoppingCart className="w-3.5 h-3.5 text-costco-blue shrink-0" />
-              <span className="text-[12px] font-bold text-costco-blue truncate">
+              <ShoppingCart className="h-3.5 w-3.5 shrink-0 text-costco-blue" />
+              <span className="truncate text-[12px] font-bold text-costco-blue">
                 View cart · {kirkCartCount} item{kirkCartCount === 1 ? "" : "s"}
               </span>
             </span>
-            <span className="flex items-center gap-1 shrink-0">
-              <span className="text-[13px] font-bold text-[#1a1a1a] tabular-nums">
-                ${kirkCartSubtotal.toFixed(2)}
-              </span>
-              <ChevronRight className="w-3.5 h-3.5 text-costco-blue" />
+            <span className="text-[13px] font-bold tabular-nums text-costco-text">
+              ${kirkCartSubtotal.toFixed(2)}
             </span>
           </button>
         )}
-      </div>
 
-      {cartNotice && (
-        <div className="mx-4 mt-3 flex items-center gap-2 bg-[#eef7ee] border border-[#b7d7b0] text-[#1e5b24] px-3 py-2 text-[12px] font-semibold shrink-0">
-          <ShoppingCart className="w-3.5 h-3.5" />
-          {cartNotice}
-        </div>
-      )}
-
-      <div className="flex-1 overflow-y-auto px-3.5 py-3.5 space-y-3 bg-[#f6f7f8] min-h-0">
-        {messages.map((message) => {
-          const isWelcome = message.id.startsWith("welcome-");
-          if (isWelcome) {
-            return (
-              <div key={message.id} className="space-y-2.5">
-                <GoldStarMembershipCard />
-                <div className="flex gap-2 justify-start">
-                  <KirkMark size={28} className="mt-0.5 shrink-0" />
-                  <div className="max-w-[82%] px-3.5 py-2.5 text-[13px] leading-relaxed rounded-2xl rounded-bl-md bg-white text-[#1a1a1a] border border-[#e8e8e8] shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
-                    <p className="whitespace-pre-line">{message.content}</p>
-                  </div>
-                </div>
-              </div>
-            );
-          }
-          return (
-          <div
-            key={message.id}
-            className={`flex gap-2 ${
-              message.role === "user" ? "justify-end" : "justify-start"
-            }`}
-          >
-            {message.role === "assistant" && (
-              <KirkMark size={28} className="mt-0.5 shrink-0" />
-            )}
-            <div
-              className={`max-w-[82%] px-3.5 py-2.5 text-[13px] leading-relaxed rounded-2xl ${
-                message.role === "user"
-                  ? "bg-costco-blue text-white rounded-br-md"
-                  : "bg-white text-[#1a1a1a] border border-[#e8e8e8] rounded-bl-md shadow-[0_1px_2px_rgba(0,0,0,0.04)]"
-              }`}
-            >
-              <p className="whitespace-pre-line">{message.content}</p>
-              {message.imageUrl && (
-                <div className="mt-2.5 overflow-hidden border border-[#e8e8e8] bg-white">
-                  <button
-                    type="button"
-                    onClick={() => setLightboxUrl(message.imageUrl || null)}
-                    className="block w-full text-left group relative"
-                    title="Click to enlarge"
-                  >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={message.imageUrl}
-                      alt="Recipe inspiration"
-                      className="w-full h-auto max-h-[320px] object-cover group-hover:opacity-95 transition-opacity"
-                    />
-                    <span className="absolute bottom-2 right-2 bg-black/60 text-white text-[10px] font-bold px-2 py-0.5">
-                      Enlarge
-                    </span>
-                  </button>
-                  <p className="text-[10px] text-[#666] px-2.5 py-1.5 bg-[#fafafa] border-t border-[#eee] font-semibold tracking-wide uppercase">
-                    Recipe inspiration · tap to enlarge
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
-          );
-        })}
-        {isLoading && (
-          <div className="flex justify-start gap-2">
-            <KirkMark size={28} className="mt-0.5 shrink-0" />
-            <div className="bg-white border border-[#ededed] rounded-2xl rounded-bl-md px-3.5 py-3 max-w-[82%]">
-              <div className="flex gap-1.5 items-center">
-                <span className="text-[11px] text-[#666] mr-1 font-semibold">Kirk</span>
-                <div className="w-1.5 h-1.5 bg-[#999] rounded-full animate-bounce" />
-                <div
-                  className="w-1.5 h-1.5 bg-[#999] rounded-full animate-bounce"
-                  style={{ animationDelay: "0.12s" }}
+        {showHome ? (
+          <div className="flex w-full flex-col items-start gap-3.5 px-4 pt-1 pb-4">
+            <p className="min-h-10 w-full text-[15px] leading-normal text-costco-text">
+              Hi Marco, what would you like to do today?
+            </p>
+            <div className="flex w-full flex-col items-start gap-2.5">
+              {primarySuggestions.map((chip) => (
+                <SuggestedActionChip
+                  key={chip.label}
+                  label={chip.label}
+                  tone={chip.tone}
+                  disabled={isLoading}
+                  onClick={() => void sendMessage(chip.label)}
                 />
-                <div
-                  className="w-1.5 h-1.5 bg-[#999] rounded-full animate-bounce"
-                  style={{ animationDelay: "0.24s" }}
-                />
-              </div>
-              {pendingInspire && (
-                <div className="mt-2.5 flex items-center gap-2 border border-costco-blue/20 bg-[#eef5fb] px-2.5 py-2">
-                  <div className="relative flex h-7 w-7 items-center justify-center bg-costco-blue/10 overflow-hidden shrink-0">
-                    <Sparkles className="w-3.5 h-3.5 text-costco-blue animate-pulse" />
-                    <span className="pointer-events-none absolute inset-0 -translate-x-full animate-[shimmer_1.6s_infinite] bg-gradient-to-r from-transparent via-white/70 to-transparent" />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-[11px] font-bold text-costco-blue">
-                      Generating image…
-                    </p>
-                    <p className="text-[10px] text-[#666] truncate">
-                      Recipe inspiration
-                    </p>
-                  </div>
-                </div>
-              )}
+              ))}
+              {showMoreSuggestions &&
+                moreSuggestions.map((chip) => (
+                  <SuggestedActionChip
+                    key={chip.label}
+                    label={chip.label}
+                    tone={chip.tone}
+                    disabled={isLoading}
+                    onClick={() => void sendMessage(chip.label)}
+                  />
+                ))}
             </div>
-          </div>
-        )}
-        {error && (
-          <p className="text-[12px] text-costco-red bg-[#fff5f6] border border-[#f3c5cb] px-3 py-2">
-            {error}
-          </p>
-        )}
-        <div ref={messagesEndRef} />
-      </div>
-
-      {(isRecording || isTranscribing || isSpeaking) && (
-        <div className="px-3.5 py-1.5 border-t border-[#eee] bg-[#fff8f8] text-[12px] text-[#333] flex items-center gap-2 shrink-0">
-          {isSpeaking ? (
-            <>
-              <span className="inline-flex items-end gap-[3px] h-3.5 text-costco-red">
-                <span className="kirk-eq-bar" />
-                <span className="kirk-eq-bar" style={{ animationDelay: "0.12s" }} />
-                <span className="kirk-eq-bar" style={{ animationDelay: "0.24s" }} />
-              </span>
-              <span className="font-semibold">Kirk is speaking…</span>
-            </>
-          ) : isTranscribing ? (
-            <span className="font-semibold text-[#555]">Transcribing your request…</span>
-          ) : (
-            <>
-              <span className="w-2 h-2 rounded-full bg-costco-red kirk-listening" />
-              <span className="font-semibold">
-                Listening — pause to send. Kirk will read the reply aloud.
-              </span>
-            </>
-          )}
-        </div>
-      )}
-
-      <div className="px-3.5 pt-2.5 pb-3 border-t border-[#e5e5e5] bg-white shrink-0">
-        <p className="text-[11px] font-bold text-[#666] mb-1.5">
-          Members often ask
-        </p>
-        <div className="flex flex-wrap gap-1.5 mb-2.5 content-start">
-          {suggestionChips.map((chip) => (
             <button
-              key={chip}
               type="button"
-              onClick={() => void sendMessage(chip)}
-              disabled={isLoading}
-              className="px-2.5 py-1 bg-white hover:bg-[#e8f2fa] hover:border-costco-blue hover:text-costco-blue disabled:opacity-50 text-[#333] text-[11px] leading-snug rounded-full transition-colors border border-[#d0d0d0] max-w-full"
-            >
-              {chip}
-            </button>
-          ))}
-        </div>
-        <div className="flex gap-1.5 items-stretch">
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder={
-              isTranscribing
-                ? "Transcribing…"
-                : isRecording
-                  ? "Listening…"
-                  : "Ask Kirk for a cart"
-            }
-            className="flex-1 min-w-0 h-10 px-3.5 bg-[#f6f6f6] border border-[#d8d8d8] rounded-full text-[14px] text-[#1a1a1a] placeholder:text-[#8a8a8a] focus:outline-none focus:bg-white focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15"
-            disabled={isLoading || isRecording || isTranscribing}
-          />
-          <button
-            type="button"
-            onClick={() => {
-              if (isSpeaking) {
-                stopSpeaking();
-                return;
+              aria-label={
+                showMoreSuggestions
+                  ? "Hide more suggestions"
+                  : "Show more suggestions"
               }
-              if (isRecording) stopRecording();
-              else void startRecording();
-            }}
-            disabled={isLoading || isTranscribing}
-            className={`h-10 px-2 border transition-colors text-[10px] font-bold flex flex-col items-center justify-center gap-0.5 min-w-[52px] rounded-full ${
-              isRecording || isSpeaking
-                ? "bg-costco-red text-white border-costco-red kirk-listening"
-                : "border-[#c4c4c4] hover:bg-[#f6f6f6] text-[#333]"
-            }`}
-            title={
-              isSpeaking
-                ? "Stop speaking"
-                : isRecording
-                  ? "Stop"
-                  : "Speak — stops when you pause; I'll read the reply aloud"
-            }
-          >
-            {isRecording || isSpeaking ? (
-              <Square className="w-4 h-4" />
-            ) : (
-              <Mic className="w-4 h-4" />
+              aria-expanded={showMoreSuggestions}
+              onClick={() => setShowMoreSuggestions((open) => !open)}
+              className="inline-flex items-center justify-center rounded-full bg-costco-surface px-2 py-1.5 text-[12px] font-bold leading-none text-costco-text-muted transition-colors hover:bg-[#ececec] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-costco-blue"
+            >
+              <span
+                aria-hidden="true"
+                className={`inline-block ${showMoreSuggestions ? "rotate-180" : ""}`}
+              >
+                ▼
+              </span>
+            </button>
+          </div>
+        ) : (
+          <div className="min-h-0 flex-1 space-y-3 overflow-y-auto bg-white px-3.5 py-3.5">
+            {messages.map((message) => {
+              const isWelcome = message.id.startsWith("welcome-");
+              if (isWelcome) {
+                return (
+                  <div key={message.id} className="space-y-2.5">
+                    <GoldStarMembershipCard />
+                    <div className="flex gap-2 justify-start">
+                      <KirkMark size={28} className="mt-0.5 shrink-0" />
+                      <div className="max-w-[82%] px-3.5 py-2.5 text-[13px] leading-relaxed rounded-2xl rounded-bl-md bg-white text-costco-text border border-[#e8e8e8] shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
+                        <p className="whitespace-pre-line">{message.content}</p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              }
+              return (
+                <div
+                  key={message.id}
+                  className={`flex gap-2 ${
+                    message.role === "user" ? "justify-end" : "justify-start"
+                  }`}
+                >
+                  {message.role === "assistant" && (
+                    <KirkMark size={28} className="mt-0.5 shrink-0" />
+                  )}
+                  <div
+                    className={`max-w-[82%] px-3.5 py-2.5 text-[13px] leading-relaxed rounded-2xl ${
+                      message.role === "user"
+                        ? "bg-costco-blue text-white rounded-br-md"
+                        : "bg-white text-costco-text border border-[#e8e8e8] rounded-bl-md shadow-[0_1px_2px_rgba(0,0,0,0.04)]"
+                    }`}
+                  >
+                    <p className="whitespace-pre-line">{message.content}</p>
+                    {message.imageUrl && (
+                      <div className="mt-2.5 overflow-hidden border border-[#e8e8e8] bg-white">
+                        <button
+                          type="button"
+                          onClick={() => setLightboxUrl(message.imageUrl || null)}
+                          className="block w-full text-left group relative focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-costco-blue"
+                          title="Click to enlarge"
+                        >
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={message.imageUrl}
+                            alt="Recipe inspiration"
+                            className="w-full h-auto max-h-[320px] object-cover group-hover:opacity-95 transition-opacity"
+                          />
+                          <span className="absolute bottom-2 right-2 bg-black/60 text-white text-[10px] font-bold px-2 py-0.5">
+                            Enlarge
+                          </span>
+                        </button>
+                        <p className="text-[10px] text-[#666] px-2.5 py-1.5 bg-[#fafafa] border-t border-[#eee] font-semibold tracking-wide uppercase">
+                          Recipe inspiration · tap to enlarge
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+            {isLoading && (
+              <div className="flex justify-start gap-2">
+                <KirkMark size={28} className="mt-0.5 shrink-0" />
+                <div className="bg-white border border-[#ededed] rounded-2xl rounded-bl-md px-3.5 py-3 max-w-[82%]">
+                  <div className="flex gap-1.5 items-center">
+                    <span className="text-[11px] text-[#666] mr-1 font-semibold">
+                      Kirk
+                    </span>
+                    <div className="w-1.5 h-1.5 bg-[#999] rounded-full animate-bounce" />
+                    <div
+                      className="w-1.5 h-1.5 bg-[#999] rounded-full animate-bounce"
+                      style={{ animationDelay: "0.12s" }}
+                    />
+                    <div
+                      className="w-1.5 h-1.5 bg-[#999] rounded-full animate-bounce"
+                      style={{ animationDelay: "0.24s" }}
+                    />
+                  </div>
+                  {pendingInspire && (
+                    <div className="mt-2.5 flex items-center gap-2 border border-costco-blue/20 bg-[#eef5fb] px-2.5 py-2">
+                      <div className="relative flex h-7 w-7 items-center justify-center bg-costco-blue/10 overflow-hidden shrink-0">
+                        <Sparkles className="w-3.5 h-3.5 text-costco-blue animate-pulse" />
+                        <span className="pointer-events-none absolute inset-0 -translate-x-full animate-[shimmer_1.6s_infinite] bg-gradient-to-r from-transparent via-white/70 to-transparent" />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-[11px] font-bold text-costco-blue">
+                          Generating image…
+                        </p>
+                        <p className="text-[10px] text-[#666] truncate">
+                          Recipe inspiration
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
             )}
-            {isSpeaking
-              ? "Stop"
-              : isRecording
-                ? "Stop"
-                : isTranscribing
-                  ? "…"
-                  : "Speak"}
-          </button>
+            {error && (
+              <p className="text-[12px] text-costco-red bg-[#fff5f6] border border-[#f3c5cb] px-3 py-2">
+                {error}
+              </p>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+        )}
+
+        {(isRecording || isTranscribing || isSpeaking) && (
+          <div className="px-3.5 py-1.5 border-t border-costco-ci-border bg-[#fff8f8] text-[12px] text-[#333] flex items-center gap-2 shrink-0">
+            {isSpeaking ? (
+              <>
+                <span className="inline-flex items-end gap-[3px] h-3.5 text-costco-red">
+                  <span className="kirk-eq-bar" />
+                  <span className="kirk-eq-bar" style={{ animationDelay: "0.12s" }} />
+                  <span className="kirk-eq-bar" style={{ animationDelay: "0.24s" }} />
+                </span>
+                <span className="font-semibold">Kirk is speaking…</span>
+              </>
+            ) : isTranscribing ? (
+              <span className="font-semibold text-[#555]">
+                Transcribing your request…
+              </span>
+            ) : (
+              <>
+                <span className="w-2 h-2 rounded-full bg-costco-red kirk-listening" />
+                <span className="font-semibold">
+                  Listening — pause to send. Kirk will read the reply aloud.
+                </span>
+              </>
+            )}
+          </div>
+        )}
+
+        <div className="w-full shrink-0 bg-white">
+          <div className="h-px w-full bg-costco-ci-border" />
+          <div className="flex h-[52px] items-center justify-between p-3.5">
+            <div className="flex min-w-0 flex-1 items-center gap-2.5">
+              <button
+                type="button"
+                aria-label={
+                  isSpeaking
+                    ? "Stop speaking"
+                    : isRecording
+                      ? "Stop recording"
+                      : isTranscribing
+                        ? "Transcribing"
+                        : "Speak — stops when you pause; reply is read aloud"
+                }
+                onClick={() => {
+                  if (isSpeaking) {
+                    stopSpeaking();
+                    return;
+                  }
+                  if (isRecording) stopRecording();
+                  else void startRecording();
+                }}
+                disabled={isLoading || isTranscribing}
+                className="relative size-[22px] shrink-0 overflow-hidden rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-costco-blue disabled:opacity-50"
+              >
+                <span
+                  aria-hidden="true"
+                  className="block size-[22px] rounded-full bg-costco-red"
+                />
+                {(isRecording || isSpeaking) && (
+                  <Square className="absolute inset-0 m-auto size-2.5 text-white" />
+                )}
+              </button>
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder={
+                  isTranscribing
+                    ? "Transcribing…"
+                    : isRecording
+                      ? "Listening…"
+                      : "Ask me anything"
+                }
+                aria-label="Message"
+                className="min-w-0 flex-1 border-0 bg-transparent text-[14px] leading-normal text-costco-text placeholder:text-costco-text-muted focus:outline-none focus-visible:outline-none"
+                disabled={isLoading || isRecording || isTranscribing}
+              />
+            </div>
+            <button
+              type="button"
+              aria-label="Send message"
+              onClick={() => void sendMessage(input)}
+              disabled={!input.trim() || isLoading}
+              className="shrink-0 text-[16px] font-bold text-costco-blue transition-opacity disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-costco-blue"
+            >
+              <ArrowRight className="size-4" aria-hidden="true" />
+            </button>
+          </div>
+        </div>
+      </div>
+      {lightboxUrl && (
+        <div
+          className="fixed inset-0 z-[80] flex items-center justify-center bg-black/70 p-4"
+          onClick={() => setLightboxUrl(null)}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Enlarged recipe image"
+        >
           <button
             type="button"
-            onClick={() => void sendMessage(input)}
-            disabled={!input.trim() || isLoading}
-            className="h-10 px-3 bg-costco-blue text-white rounded-full font-bold hover:bg-costco-blue-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1 text-[13px] min-w-[68px] justify-center"
+            className="absolute top-4 right-4 bg-white text-costco-text px-3 py-1.5 text-sm font-bold shadow focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-costco-blue"
+            onClick={() => setLightboxUrl(null)}
           >
-            <Send className="w-3.5 h-3.5" />
-            Send
+            Close
           </button>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={lightboxUrl}
+            alt="Recipe inspiration enlarged"
+            className="max-h-[90vh] max-w-[min(920px,96vw)] shadow-2xl object-contain bg-white"
+            onClick={(e) => e.stopPropagation()}
+          />
         </div>
-        <p className="mt-2 text-[10px] text-[#888] text-center leading-snug">
-          Kirkland Signature shopping help · Membership required · Prices higher
-          than warehouse
-        </p>
-      </div>
-    </aside>
-    {lightboxUrl && (
-      <div
-        className="fixed inset-0 z-[80] flex items-center justify-center bg-black/70 p-4"
-        onClick={() => setLightboxUrl(null)}
-        role="dialog"
-        aria-modal="true"
-        aria-label="Enlarged recipe image"
-      >
-        <button
-          type="button"
-          className="absolute top-4 right-4 bg-white text-[#1a1a1a] px-3 py-1.5 text-sm font-bold shadow"
-          onClick={() => setLightboxUrl(null)}
-        >
-          Close
-        </button>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={lightboxUrl}
-          alt="Recipe inspiration enlarged"
-          className="max-h-[90vh] max-w-[min(920px,96vw)] shadow-2xl object-contain bg-white"
-          onClick={(e) => e.stopPropagation()}
-        />
-      </div>
-    )}
+      )}
     </>
   );
 }
