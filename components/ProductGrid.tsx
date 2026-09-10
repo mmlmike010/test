@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { filterProducts } from "@/lib/data/products";
 import type { Product } from "@/lib/data/products";
 import { useCatalogStore } from "@/lib/store/catalog";
 import ProductCard from "@/components/ProductCard";
@@ -54,7 +55,6 @@ function AisleRow({
 }
 
 export default function ProductGrid() {
-  const results = useCatalogStore((s) => s.results);
   const loading = useCatalogStore((s) => s.loading);
   const error = useCatalogStore((s) => s.error);
   const q = useCatalogStore((s) => s.q);
@@ -71,8 +71,12 @@ export default function ProductGrid() {
     void search();
   }, [search]);
 
-  const filtered = results;
   const filteredView = Boolean(department || tag || q.trim());
+  const filtered = filterProducts({
+    q,
+    department: department || undefined,
+    tag: tag || undefined,
+  });
   const titleBits = [
     department,
     tag ? tag.replace(/^\w/, (c) => c.toUpperCase()) : null,
@@ -200,19 +204,15 @@ export default function ProductGrid() {
             </div>
           </section>
 
-          {loading ? (
-            <p className="text-[13px] text-[#666]">Searching…</p>
-          ) : (
-            aisles.map((aisle) => (
-              <AisleRow
-                key={aisle.title}
-                title={aisle.title}
-                items={aisle.items}
-                onShowAll={aisle.onShowAll}
-                onOpen={setSelected}
-              />
-            ))
-          )}
+          {aisles.map((aisle) => (
+            <AisleRow
+              key={aisle.title}
+              title={aisle.title}
+              items={aisle.items}
+              onShowAll={aisle.onShowAll}
+              onOpen={setSelected}
+            />
+          ))}
         </>
       )}
 
@@ -224,9 +224,8 @@ export default function ProductGrid() {
                 {titleBits.join(" · ")}
               </h2>
               <p className="text-[13px] text-[#666] mt-0.5">
-                {loading
-                  ? "Searching…"
-                  : `${filtered.length} item${filtered.length === 1 ? "" : "s"}`}
+                {`${filtered.length} item${filtered.length === 1 ? "" : "s"}`}
+                {loading ? " · Updating…" : ""}
               </p>
             </div>
             <button

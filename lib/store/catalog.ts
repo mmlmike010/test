@@ -1,6 +1,7 @@
 "use client";
 
 import { create } from "zustand";
+import { products as catalog } from "@/lib/data/products";
 import type { Product } from "@/lib/data/products";
 
 type CatalogState = {
@@ -21,7 +22,7 @@ export const useCatalogStore = create<CatalogState>((set, get) => ({
   q: "",
   department: null,
   tag: null,
-  results: [],
+  results: catalog,
   loading: false,
   error: null,
   setQuery: (q) => set({ q }),
