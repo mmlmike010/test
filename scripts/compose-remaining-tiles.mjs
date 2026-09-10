@@ -153,8 +153,8 @@ async function composeJasons() {
   // Never dest-in or blur-recolor a competing brand's RGB.
   const PAPER =
     "https://raw.githubusercontent.com/prabhasp/ali-khasro/master/lokta/paper2.jpg";
-  const seededPack = await download(
-    `${CF}/large_d2b0fee4-2249-4950-9b3a-b167df3fdc0e.jpg`
+  const crumbShot = await download(
+    "https://user-images.githubusercontent.com/15069517/151712105-4d4076e5-3871-4c6b-89a0-40c0bdf22248.jpg"
   );
   const paperBytes = await download(PAPER);
 
@@ -220,8 +220,8 @@ async function composeJasons() {
   const winH = 210;
   const winX = Math.round((pw - winW) / 2);
   const winY = 148;
-  const loaf = await sharp(seededPack)
-    .extract({ left: 230, top: 165, width: 140, height: 120 })
+  const loaf = await sharp(crumbShot)
+    .extract({ left: 1180, top: 420, width: 1880, height: 1320 })
     .resize(winW, winH, { fit: "cover", position: "centre" })
     .png()
     .toBuffer();
@@ -380,7 +380,7 @@ if (only === "all" || only === "jars") {
 
 if (only === "all" || only === "jasons") {
   await composeJasons();
-  console.log("composed 9 from rectangular mauve bakery bag + seeded loaf window");
+  console.log("composed 9 from mauve bakery bag + photographic seeded crumb window");
 }
 
 if (only === "all" || only === "books") {
