@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Check, Minus, Plus } from "lucide-react";
 import type { Product } from "@/lib/data/products";
 import { useCartStore } from "@/lib/store/cart";
+import { productSize } from "@/lib/ui/packSize";
 
 function AddControl({ product }: { product: Product }) {
   const qty = useCartStore(
@@ -125,6 +126,11 @@ export default function ProductCard({
         <h3 className="text-[14px] font-normal text-[#242424] leading-snug mt-1.5 line-clamp-3">
           {product.brand} {product.name}
         </h3>
+        {productSize(product.id) && (
+          <p className="text-[14px] leading-[18px] text-[#72767E] mt-0.5">
+            {productSize(product.id)}
+          </p>
+        )}
         <p className="text-[12px] text-[#188038] mt-0.5">
           {product.inStock ? "Many in stock" : "Out of stock"}
         </p>

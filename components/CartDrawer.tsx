@@ -2,6 +2,7 @@
 
 import { Minus, Plus, Trash2, X } from "lucide-react";
 import { useCartStore } from "@/lib/store/cart";
+import { productSize } from "@/lib/ui/packSize";
 
 export default function CartDrawer() {
   const isOpen = useCartStore((s) => s.isOpen);
@@ -67,6 +68,11 @@ export default function CartDrawer() {
                   <p className="text-[14px] text-[#1a1a1a] leading-snug line-clamp-2">
                     {product.brand} {product.name}
                   </p>
+                  {productSize(product.id) && (
+                    <p className="text-[12px] text-[#6b6b6b] mt-0.5">
+                      {productSize(product.id)}
+                    </p>
+                  )}
                   <p className="text-[15px] font-bold text-[#1a1a1a] mt-1 tabular-nums">
                     ${product.price.toFixed(2)}{" "}
                     <span className="text-[12px] font-normal text-[#8a8a8a]">

@@ -108,7 +108,7 @@ export default function DepartmentsSidebar({
                       setQuery("");
                       void search();
                     }}
-                    className={`w-full text-left px-2 py-[6px] text-[13px] transition-colors border-l-[3px] flex items-center justify-between gap-1.5 ${
+                    className={`w-full text-left px-2 py-2 text-[13px] transition-colors border-l-[3px] flex items-center justify-between gap-1.5 ${
                       active
                         ? "border-costco-blue bg-[#e8f2fa] text-costco-blue font-bold"
                         : "border-transparent text-[#333] hover:bg-[#f6f6f6] hover:text-costco-blue"
@@ -120,7 +120,7 @@ export default function DepartmentsSidebar({
                       <img
                         src={aisleThumbs[dept]}
                         alt=""
-                        className="w-8 h-8 rounded-full object-cover bg-[#f3f3f3] border border-[#ececec] shrink-0"
+                        className="w-10 h-10 rounded-full object-cover bg-[#f3f3f3] border border-[#ececec] shrink-0"
                       />
                       <span className="leading-snug line-clamp-2">{dept}</span>
                     </span>

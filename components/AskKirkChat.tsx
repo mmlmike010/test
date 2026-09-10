@@ -494,7 +494,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
     <>
     <aside className="fixed inset-y-0 right-0 z-40 w-full max-w-[420px] lg:static lg:z-30 lg:w-[380px] xl:w-[420px] lg:max-w-none shrink-0 bg-white border-l border-[#e5e5e5] h-full flex flex-col">
       <div className="shrink-0 border-b border-[#e5e5e5] bg-white">
-        <div className="h-[5px] bg-costco-red" />
+        <div className="h-2 bg-costco-red" />
         <div className="px-3.5 py-2.5 flex items-center justify-between gap-2">
           <div className="flex items-center gap-2.5 min-w-0">
             <KirkMark size={36} className="shrink-0" />
@@ -502,14 +502,11 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
               <h2 className="text-[17px] font-black tracking-tight text-[#1a1a1a] leading-none">
                 Ask Kirk
               </h2>
-              <p className="mt-[5px] leading-none">
-                <span className="block text-[10px] font-extrabold tracking-[0.24em] text-costco-red uppercase">
-                  Kirkland
-                </span>
-                <span className="block w-[72px] h-px bg-costco-blue my-[3px]" />
-                <span className="block text-[9px] font-bold tracking-[0.32em] text-costco-blue uppercase">
-                  Signature
-                </span>
+              <p className="mt-1 text-[10px] font-extrabold tracking-[0.18em] text-costco-red uppercase">
+                Gold Star Membership
+              </p>
+              <p className="mt-[3px] text-[9px] font-bold tracking-[0.22em] text-costco-blue uppercase">
+                Kirkland Signature
               </p>
             </div>
           </div>
@@ -534,7 +531,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             </button>
           </div>
         </div>
-        <div className="h-[5px] bg-costco-blue" />
+        <div className="h-2 bg-costco-blue" />
         <p className="px-3.5 py-1.5 flex items-center gap-1.5 text-[11px] text-[#188038] font-semibold bg-[#f3f3f3] border-b border-[#ececec]">
           <span className="w-1.5 h-1.5 rounded-full bg-[#0AAD0A]" />
           Delivery 8:48–9:18pm · 11217 Brooklyn · Membership required

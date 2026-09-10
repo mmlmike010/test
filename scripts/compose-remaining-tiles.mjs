@@ -160,62 +160,41 @@ ${inner}
 }
 
 async function composeJasons() {
-  // Seeded loaf face only — stay above the Izzio label and below the twist.
+  // Photographic seeded loaf. Cover every competing mark with Jason's print.
   const seededPack = await download(
     `${CF}/large_d2b0fee4-2249-4950-9b3a-b167df3fdc0e.jpg`
   );
 
-  const window = { left: 220, top: 268, width: 360, height: 200 };
   const loaf = await sharp(seededPack)
-    .extract({ left: 225, top: 170, width: 150, height: 88 })
-    .resize(window.width, window.height, { fit: "cover" })
+    .extract({ left: 184, top: 138, width: 232, height: 198 })
+    .resize(420, 380, { fit: "cover" })
     .png()
     .toBuffer();
 
-  const bag = await sharp(
+  const print = await sharp(
     svg(
       800,
       800,
       `
   <defs>
-    <filter id="floor" x="-30%" y="-20%" width="160%" height="160%">
-      <feDropShadow dx="0" dy="20" stdDeviation="16" flood-color="#1a1a1a" flood-opacity="0.18"/>
-    </filter>
-    <filter id="paper">
-      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="11" result="n"/>
-      <feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.07 0" result="grain"/>
-      <feBlend in="SourceGraphic" in2="grain" mode="multiply"/>
-    </filter>
-    <linearGradient id="purpleBag" x1="0.08" y1="0" x2="0.92" y2="1">
+    <linearGradient id="twist" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6a2d86"/>
+      <stop offset="1" stop-color="#3d1758"/>
+    </linearGradient>
+    <linearGradient id="sleeve" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#5a2474"/>
-      <stop offset="0.45" stop-color="#431862"/>
-      <stop offset="1" stop-color="#2c0f44"/>
-    </linearGradient>
-    <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#ffffff" stop-opacity="0"/>
-      <stop offset="0.18" stop-color="#ffffff" stop-opacity="0.12"/>
-      <stop offset="0.34" stop-color="#ffffff" stop-opacity="0"/>
-    </linearGradient>
-    <linearGradient id="fold" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#2a1040"/>
-      <stop offset="1" stop-color="#3a1654"/>
+      <stop offset="0.55" stop-color="#431862"/>
+      <stop offset="1" stop-color="#2f1148"/>
     </linearGradient>
   </defs>
-  <g filter="url(#floor)">
-    <path filter="url(#paper)" fill-rule="evenodd" fill="url(#purpleBag)" d="M168 118 l20-28 h424 l20 28 v508 c0 22-18 36-44 36 H192 c-26 0-44-14-44-36 Z M220 268 h360 v200 H220 Z"/>
-    <path fill-rule="evenodd" fill="url(#sheen)" d="M168 118 l20-28 h424 l20 28 v508 c0 22-18 36-44 36 H192 c-26 0-44-14-44-36 Z M220 268 h360 v200 H220 Z"/>
-    <path d="M188 90 h424 l16 28 H172 Z" fill="url(#fold)"/>
-    <path d="M208 78 h384 l10 12 H198 Z" fill="#241036"/>
-    <path d="M176 150 h448" stroke="#2a1040" stroke-width="2" opacity="0.45"/>
-    <rect x="220" y="268" width="360" height="200" fill="none" stroke="#1b0c28" stroke-width="9"/>
-    <rect x="226" y="274" width="348" height="188" fill="none" stroke="#d8c48a" stroke-width="2" opacity="0.55"/>
-    <text x="400" y="158" text-anchor="middle" fill="#f4e6c0" font-family="Georgia, Times New Roman, serif" font-size="52" font-weight="700">Jason's</text>
-    <text x="400" y="182" text-anchor="middle" fill="#d4c0e4" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="800" letter-spacing="4.6">SOURDOUGH</text>
-    <text x="400" y="234" text-anchor="middle" fill="#e8d5a3" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" letter-spacing="2.2">RECIPE NO 11</text>
-    <text x="400" y="512" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="800" letter-spacing="1.8">GRAINS &amp; SEEDS</text>
-    <text x="400" y="540" text-anchor="middle" fill="#e8d5a3" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700" letter-spacing="2.6">CIABATTIN</text>
-    <text x="400" y="628" text-anchor="middle" fill="#c9b8d8" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700">580g</text>
-  </g>
+  <rect x="190" y="412" width="420" height="168" rx="8" fill="#ffffff" stroke="#d8d8d8" stroke-width="1"/>
+  <rect x="190" y="412" width="420" height="58" rx="8" fill="url(#sleeve)"/>
+  <rect x="190" y="454" width="420" height="16" fill="url(#sleeve)"/>
+  <text x="400" y="462" text-anchor="middle" fill="#f4e6c0" font-family="Georgia, Times New Roman, serif" font-size="28" font-weight="700">Jason's</text>
+  <text x="400" y="480" text-anchor="middle" fill="#d8c4ea" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="800" letter-spacing="2.6">SOURDOUGH</text>
+  <text x="400" y="524" text-anchor="middle" fill="#2f1148" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="800" letter-spacing="1">GRAINS &amp; SEEDS</text>
+  <text x="400" y="548" text-anchor="middle" fill="#5a2474" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" letter-spacing="1.6">RECIPE NO 11 · CIABATTIN</text>
+  <text x="400" y="576" text-anchor="middle" fill="#777777" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700">24 OZ</text>
 `
     )
   )
@@ -231,8 +210,8 @@ async function composeJasons() {
     },
   })
     .composite([
-      { input: loaf, left: window.left, top: window.top },
-      { input: bag, left: 0, top: 0 },
+      { input: loaf, left: 190, top: 170 },
+      { input: print, left: 0, top: 0 },
     ])
     .png({ compressionLevel: 8 })
     .toFile(join(dir, "9.png"));
@@ -289,17 +268,29 @@ async function composeMixedNuts() {
   await toTile(nuts, join(dir, "2.png"));
 }
 
-await composeMixedNuts();
-console.log("composed 2 from Kirkland Heart Healthy Mixed Nuts");
+const only = process.argv[2] || "all";
 
-await composeJars();
-console.log("composed 6 + 7 from Costco Same-Day jar/tub photos");
+if (only === "all" || only === "nuts") {
+  await composeMixedNuts();
+  console.log("composed 2 from Kirkland Heart Healthy Mixed Nuts");
+}
 
-await composeJasons();
-console.log("composed 9 from photographic loaf window");
+if (only === "all" || only === "jars") {
+  await composeJars();
+  console.log("composed 6 + 7 from Costco Same-Day jar/tub photos");
+}
 
-await composeHardcovers();
-console.log("composed 17 from hardcover pack photography");
+if (only === "all" || only === "jasons") {
+  await composeJasons();
+  console.log("composed 9 from photographic seeded loaf");
+}
 
-await composePhotoTiles();
-console.log("composed 13 + 22 from pack photography");
+if (only === "all" || only === "books") {
+  await composeHardcovers();
+  console.log("composed 17 from hardcover pack photography");
+}
+
+if (only === "all" || only === "photos") {
+  await composePhotoTiles();
+  console.log("composed 13 + 22 from pack photography");
+}

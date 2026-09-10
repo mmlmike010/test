@@ -4,6 +4,7 @@ import { X, Check, Plus, Star } from "lucide-react";
 import type { Product } from "@/lib/data/products";
 import { useCartStore } from "@/lib/store/cart";
 import StarRating from "@/components/StarRating";
+import { productSize } from "@/lib/ui/packSize";
 import { useState } from "react";
 
 export default function ProductDetailModal({
@@ -69,6 +70,11 @@ export default function ProductDetailModal({
             <h2 className="text-[22px] font-bold text-[#1a1a1a] leading-snug">
               {product.brand} {product.name}
             </h2>
+            {productSize(product.id) && (
+              <p className="text-[14px] text-[#6b6b6b] mt-1">
+                {productSize(product.id)}
+              </p>
+            )}
             <div className="mt-2">
               <StarRating
                 rating={product.rating}

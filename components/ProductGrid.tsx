@@ -95,6 +95,11 @@ export default function ProductGrid() {
 
   const aisles: Aisle[] = [
     {
+      title: "Buy it again",
+      items: filtered.filter((p) => p.tags?.includes("again")),
+      onShowAll: () => showAisle({ tag: "again" }),
+    },
+    {
       title: "Weekly Savings",
       items: filtered.filter(
         (p) => p.department === "Weekly Savings" || p.tags?.includes("weekly")

@@ -167,7 +167,7 @@ export const products: Product[] = [
     savings: 1.45,
     image: "/products/5.png",
     inStock: true,
-    tags: ["trending", "catering"],
+    tags: ["trending", "catering", "again"],
     rating: 4.3,
     reviewCount: 423,
     reviews: [
@@ -274,7 +274,7 @@ export const products: Product[] = [
     savings: 1.61,
     image: "/products/8.png",
     inStock: true,
-    tags: ["dairy"],
+    tags: ["dairy", "again"],
     rating: 3.9,
     reviewCount: 406,
     reviews: [
@@ -303,7 +303,7 @@ export const products: Product[] = [
     price: 2.71,
     originalPrice: 4.0,
     savings: 1.29,
-    image: "/products/9.png?v=10",
+    image: "/products/9.png?v=11",
     inStock: true,
     tags: ["bakery"],
     rating: 3.9,
@@ -343,7 +343,7 @@ export const products: Product[] = [
     savings: 6.0,
     image: "/products/10.png",
     inStock: true,
-    tags: ["kirkland", "treasure"],
+    tags: ["kirkland", "treasure", "again"],
     rating: 4.9,
     reviewCount: 1842,
     reviews: [
@@ -760,7 +760,7 @@ export const products: Product[] = [
     savings: 2.0,
     image: "/products/23.png",
     inStock: true,
-    tags: ["dairy", "kirkland"],
+    tags: ["dairy", "kirkland", "again"],
     rating: 4.9,
     reviewCount: 35,
     reviews: [
@@ -791,7 +791,7 @@ export const products: Product[] = [
     savings: 2.0,
     image: "/products/24.png",
     inStock: true,
-    tags: ["weekly", "trending", "catering", "recipes"],
+    tags: ["weekly", "trending", "catering", "recipes", "again"],
     rating: 4.9,
     reviewCount: 12847,
     reviews: [
@@ -840,6 +840,12 @@ export const departments = [
 ];
 
 export const categories = [
+  {
+    id: "again",
+    name: "Buy it again",
+    icon: "🛒",
+    image: "/products/cat-again.jpg",
+  },
   {
     id: "treasure",
     name: "Treasure Hunt",
@@ -921,6 +927,7 @@ export function filterProducts(filters: ProductFilters = {}): Product[] {
           tags.includes("catering") ||
           ["dips", "nuts", "snacks", "bakery"].includes(p.category)
         );
+      if (tag === "again") return tags.includes("again");
       return tags.includes(tag) || p.department.toLowerCase().includes(tag);
     }
 
