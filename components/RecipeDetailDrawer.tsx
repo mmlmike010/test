@@ -8,7 +8,7 @@ import { useCartStore } from "@/lib/store/cart";
 import ProductCard from "@/components/ProductCard";
 import ProductDetailModal from "@/components/ProductDetailModal";
 import type { Product } from "@/lib/data/products";
-import { kirkDrawerOffset, useSessionStore } from "@/lib/store/session";
+import { storefrontOverlayClass, useSessionStore } from "@/lib/store/session";
 
 export default function RecipeDetailDrawer({
   recipe,
@@ -35,7 +35,7 @@ export default function RecipeDetailDrawer({
 
   return (
     <div
-      className={`fixed inset-0 z-[70] flex justify-end ${kirkDrawerOffset(kirkOpen)}`}
+      className={`fixed z-[70] flex justify-end ${storefrontOverlayClass(kirkOpen)}`}
     >
       <button
         type="button"

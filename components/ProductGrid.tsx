@@ -157,7 +157,7 @@ export default function ProductGrid() {
     kirkland: "Kirkland Signature",
     new: "What's New",
     again: "Buy it again",
-    recipes: "Recipes",
+    recipes: "Meals",
   };
   const collectionTiles = [
     {
@@ -511,7 +511,7 @@ export default function ProductGrid() {
               document.querySelector("main")?.scrollTo({ top: 0 });
             }}
           >
-            Recipes
+            Meals
           </button>
           <button
             type="button"

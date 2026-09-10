@@ -20,6 +20,7 @@ import GoldStarMembershipCard from "@/components/GoldStarMembershipCard";
 import {
   deliveryWindow,
   formatAddress,
+  storefrontOverlayClass,
   useSessionStore,
 } from "@/lib/store/session";
 
@@ -796,7 +797,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
     </aside>
     {lightboxUrl && (
       <div
-        className="fixed inset-0 z-[80] flex items-center justify-center bg-black/70 p-4"
+        className={`fixed z-[80] flex items-center justify-center bg-black/70 p-4 ${storefrontOverlayClass(isOpen)}`}
         onClick={() => setLightboxUrl(null)}
         role="dialog"
         aria-modal="true"

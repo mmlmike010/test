@@ -87,7 +87,7 @@ export function MobileAisles() {
               : "bg-white border-[#d0d0d0] text-[#333]"
           }`}
         >
-          Recipes
+          Meals
         </button>
         {departments.map((dept) => {
           const active = selected === dept;

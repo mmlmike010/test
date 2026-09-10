@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { X } from "lucide-react";
+import { storefrontOverlayClass, useSessionStore } from "@/lib/store/session";
 
 export default function StoreSheet({
   title,
@@ -14,6 +15,8 @@ export default function StoreSheet({
   children: React.ReactNode;
   wide?: boolean;
 }) {
+  const kirkOpen = useSessionStore((s) => s.kirkOpen);
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -23,7 +26,9 @@ export default function StoreSheet({
   }, [onClose]);
 
   return (
-    <div className="fixed inset-0 z-[90] flex items-end sm:items-center justify-center sm:p-4">
+    <div
+      className={`fixed z-[90] flex items-end sm:items-center justify-center sm:p-4 ${storefrontOverlayClass(kirkOpen)}`}
+    >
       <button
         type="button"
         aria-label="Close"

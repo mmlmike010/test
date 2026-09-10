@@ -135,7 +135,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
                   scrollShop();
                 }}
               >
-                Recipes
+                Meals
               </button>
             </nav>
           </div>

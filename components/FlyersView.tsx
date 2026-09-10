@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ChevronLeft, X } from "lucide-react";
 import { filterProducts, type Product } from "@/lib/data/products";
 import { useCatalogStore } from "@/lib/store/catalog";
+import { storefrontOverlayClass, useSessionStore } from "@/lib/store/session";
 import ProductCard from "@/components/ProductCard";
 import ProductDetailModal from "@/components/ProductDetailModal";
 
@@ -21,6 +22,7 @@ const pages = [
 export default function FlyersView() {
   const clearFilters = useCatalogStore((s) => s.clearFilters);
   const search = useCatalogStore((s) => s.search);
+  const kirkOpen = useSessionStore((s) => s.kirkOpen);
   const [page, setPage] = useState<(typeof pages)[number] | null>(null);
   const [selected, setSelected] = useState<Product | null>(null);
   const deals = filterProducts({ tag: "weekly" });
@@ -95,7 +97,9 @@ export default function FlyersView() {
       </div>
 
       {page && (
-        <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/70 p-4">
+        <div
+          className={`fixed z-[70] flex items-center justify-center bg-black/70 p-4 ${storefrontOverlayClass(kirkOpen)}`}
+        >
           <button
             type="button"
             className="absolute inset-0"

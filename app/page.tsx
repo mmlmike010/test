@@ -23,13 +23,15 @@ export default function Home() {
   return (
     <div className="h-dvh bg-[#f6f7f8] flex flex-col overflow-hidden">
       <Header onAskKirkClick={() => setKirkOpen(true)} />
-      <PromoBanner />
 
       <div className="flex flex-1 min-h-0">
-        <main className="flex-1 min-w-0 overflow-y-auto overflow-x-hidden">
-          <MobileAisles />
-          <ProductGrid />
-        </main>
+        <div className="flex flex-col flex-1 min-w-0">
+          <PromoBanner />
+          <main className="flex-1 min-w-0 overflow-y-auto overflow-x-hidden">
+            <MobileAisles />
+            <ProductGrid />
+          </main>
+        </div>
 
         {isKirkOpen && (
           <>

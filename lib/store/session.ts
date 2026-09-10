@@ -205,7 +205,15 @@ export function formatAddress(address: DeliveryAddress): string {
   return `${address.zip} ${address.city}`;
 }
 
+/** Sit below the Same-Day lockup + search row so titles are not under the sticky header. */
+export const HEADER_LOCKUP_OFFSET = "top-[112px]";
+
 /** Leave the Ask Kirk rail uncovered on desktop. Matches AskKirkChat widths. */
 export function kirkDrawerOffset(open: boolean) {
   return open ? "lg:right-[380px] xl:right-[420px]" : "";
+}
+
+/** Storefront-column overlay: below the header, beside Ask Kirk. */
+export function storefrontOverlayClass(open: boolean) {
+  return `inset-x-0 bottom-0 ${HEADER_LOCKUP_OFFSET} ${kirkDrawerOffset(open)}`;
 }

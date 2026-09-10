@@ -42,7 +42,7 @@ export default function RecipesView() {
 
       <div className="mb-4">
         <h1 className="text-[22px] lg:text-[24px] font-bold text-[#1a1a1a] tracking-tight">
-          Recipes
+          Meals
         </h1>
         <p className="text-[13px] text-[#666] mt-0.5">
           Shop ingredients for member meals · Same-Day · 11217 Brooklyn
