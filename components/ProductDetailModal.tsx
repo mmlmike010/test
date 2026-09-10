@@ -59,12 +59,14 @@ export default function ProductDetailModal({
         aria-label={`${current.brand} ${current.name}`}
         className="relative w-full max-w-[480px] h-full bg-white shadow-2xl flex flex-col"
       >
-        <div className="sticky top-0 z-10 flex items-center justify-between px-4 py-3 border-b border-costco-border bg-white shrink-0">
-          <p className="text-[13px] font-bold text-[#1a1a1a]">Item details</p>
+        <div className="sticky top-0 z-10 flex items-center justify-between px-4 py-3 border-b border-[#ececec] bg-white shrink-0">
+          <p className="text-[13px] font-bold text-[#1a1a1a] truncate pr-3">
+            {current.brand} {current.name}
+          </p>
           <button
             type="button"
             onClick={onClose}
-            className="p-2 rounded-full hover:bg-gray-100"
+            className="p-2 rounded-full hover:bg-[#f6f6f6] shrink-0"
             aria-label="Close"
           >
             <X className="w-5 h-5 text-[#555]" />
@@ -134,6 +136,11 @@ export default function ProductDetailModal({
               <p className="text-[13px] text-[#555] mt-1.5 leading-snug">
                 {aisleLabel(current.department)}
                 {current.category ? ` · ${current.category}` : ""}
+                {productSize(current.id) ? ` · ${productSize(current.id)}` : ""}
+              </p>
+              <p className="text-[12px] text-[#888] mt-1.5">
+                Same-Day price · Membership required · Prices higher than
+                warehouse
               </p>
             </div>
           </div>
@@ -141,7 +148,7 @@ export default function ProductDetailModal({
         {related.length > 0 && (
           <div className="px-5 pb-5">
             <h3 className="text-[15px] font-bold text-[#1a1a1a] mb-2.5">
-              Related items
+              Related products
             </h3>
             <div className="flex gap-2.5 overflow-x-auto scrollbar-hide -mx-1 px-1 pb-1">
               {related.map((item) => (
@@ -167,7 +174,7 @@ export default function ProductDetailModal({
             {current.reviews.map((r, idx) => (
               <li
                 key={`${r.author}-${idx}`}
-                className="border border-[#e8e8e8] bg-[#fafafa] rounded-[12px] px-3.5 py-3"
+                className="border-b border-[#f0f0f0] pb-3"
               >
                 <div className="flex items-center justify-between gap-2 mb-1">
                   <div className="flex items-center gap-0.5">

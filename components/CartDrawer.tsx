@@ -1,6 +1,6 @@
 "use client";
 
-import { Minus, Plus, Trash2, X } from "lucide-react";
+import { Minus, Plus, ShoppingCart, Trash2, X } from "lucide-react";
 import { useCartStore } from "@/lib/store/cart";
 import { productSize } from "@/lib/ui/packSize";
 
@@ -25,101 +25,126 @@ export default function CartDrawer() {
         onClick={closeCart}
       />
       <aside className="relative w-full max-w-[400px] h-full bg-white shadow-2xl flex flex-col">
-        <div className="px-4 py-3 border-b border-[#e5e5e5] flex items-center justify-between shrink-0">
+        <div className="px-4 py-3.5 border-b border-[#ececec] flex items-center justify-between shrink-0">
           <div>
-            <h2 className="font-bold text-[#1a1a1a] text-[17px]">Cart</h2>
-            <p className="text-[12px] text-[#666]">
-              {totalItems} item{totalItems === 1 ? "" : "s"} · Delivery 8:48–9:18pm
+            <h2 className="font-bold text-[#1a1a1a] text-[18px] leading-none">
+              Cart
+            </h2>
+            <p className="text-[12px] text-[#188038] font-semibold mt-1.5">
+              {totalItems} item{totalItems === 1 ? "" : "s"} · Delivery
+              8:48–9:18pm
             </p>
           </div>
           <button
             type="button"
             onClick={closeCart}
-            className="p-2 rounded-full hover:bg-gray-100"
+            className="p-2 rounded-full hover:bg-[#f6f6f6]"
             aria-label="Close cart"
           >
             <X className="w-5 h-5 text-[#555]" />
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-4 py-3 space-y-4 bg-white">
+        <div className="flex-1 overflow-y-auto px-4 py-3 bg-white">
           {items.length === 0 ? (
-            <div className="border border-dashed border-[#ccc] p-8 text-center mt-6">
-              <p className="font-bold text-[#1a1a1a] mb-1">Your cart is empty</p>
-              <p className="text-sm text-[#666]">
-                Ask Kirk to build a cart, or tap + on any product.
+            <div className="flex flex-col items-center text-center pt-16 px-6">
+              <span className="w-16 h-16 rounded-full bg-[#f6f6f6] flex items-center justify-center">
+                <ShoppingCart className="w-7 h-7 text-[#8a8a8a]" />
+              </span>
+              <p className="font-bold text-[#1a1a1a] text-[17px] mt-4">
+                Your cart is empty
+              </p>
+              <p className="text-[13px] text-[#666] mt-1.5 leading-snug">
+                Add items to get started, or ask Kirk to build a cart.
               </p>
             </div>
           ) : (
-            items.map(({ product, quantity }) => (
-              <div
-                key={product.id}
-                className="flex gap-3 pb-4 border-b border-[#eee]"
-              >
-                <div className="relative w-[72px] h-[72px] overflow-hidden bg-[#f7f7f7] border border-[#eee] rounded-[8px] shrink-0">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={product.image}
-                    alt={`${product.brand} ${product.name}`}
-                    className="absolute inset-0 w-full h-full object-contain p-1"
-                  />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-[14px] text-[#1a1a1a] leading-snug line-clamp-2">
-                    {product.brand} {product.name}
-                  </p>
-                  {productSize(product.id) && (
-                    <p className="text-[12px] text-[#6b6b6b] mt-0.5">
-                      {productSize(product.id)}
+            <div className="space-y-0">
+              {items.map(({ product, quantity }) => (
+                <div
+                  key={product.id}
+                  className="flex gap-3 py-3.5 border-b border-[#f0f0f0]"
+                >
+                  <div className="relative w-[72px] h-[72px] overflow-hidden bg-white border border-[#eee] rounded-[12px] shrink-0">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={product.image}
+                      alt={`${product.brand} ${product.name}`}
+                      className="absolute inset-0 w-full h-full object-contain p-1"
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start justify-between gap-2">
+                      <p className="text-[14px] text-[#242424] leading-snug line-clamp-2">
+                        {product.brand} {product.name}
+                      </p>
+                      <p className="text-[15px] font-bold text-[#1a1a1a] tabular-nums shrink-0">
+                        ${(product.price * quantity).toFixed(2)}
+                      </p>
+                    </div>
+                    {productSize(product.id) && (
+                      <p className="text-[13px] text-[#72767E] mt-0.5">
+                        {productSize(product.id)}
+                      </p>
+                    )}
+                    <p className="text-[13px] text-[#8a8a8a] mt-0.5 tabular-nums">
+                      ${product.price.toFixed(2)} each
                     </p>
-                  )}
-                  <p className="text-[15px] font-bold text-[#1a1a1a] mt-1 tabular-nums">
-                    ${product.price.toFixed(2)}{" "}
-                    <span className="text-[12px] font-normal text-[#8a8a8a]">
-                      each
-                    </span>
-                  </p>
-                  <div className="mt-2 flex items-center justify-between gap-2">
-                    <div className="flex items-center rounded-full overflow-hidden h-8 bg-[#0AAD0A] text-white">
+                    <div className="mt-2.5 flex items-center justify-between gap-2">
+                      <div className="flex items-center rounded-full overflow-hidden h-9 bg-[#0AAD0A] text-white">
+                        <button
+                          type="button"
+                          className="w-9 h-9 flex items-center justify-center hover:bg-[#099809]"
+                          onClick={() =>
+                            updateQuantity(product.id, quantity - 1)
+                          }
+                          aria-label="Decrease quantity"
+                        >
+                          <Minus className="w-3.5 h-3.5" />
+                        </button>
+                        <span className="px-1 text-sm font-bold min-w-[1.5rem] text-center tabular-nums">
+                          {quantity}
+                        </span>
+                        <button
+                          type="button"
+                          className="w-9 h-9 flex items-center justify-center hover:bg-[#099809]"
+                          onClick={() =>
+                            updateQuantity(product.id, quantity + 1)
+                          }
+                          aria-label="Increase quantity"
+                        >
+                          <Plus className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
                       <button
                         type="button"
-                        className="w-8 h-8 flex items-center justify-center hover:bg-[#099809]"
-                        onClick={() => updateQuantity(product.id, quantity - 1)}
-                        aria-label="Decrease quantity"
+                        onClick={() => removeItem(product.id)}
+                        className="p-1.5 text-[#777] hover:text-costco-red"
+                        aria-label="Remove item"
                       >
-                        <Minus className="w-3.5 h-3.5" />
-                      </button>
-                      <span className="px-1 text-sm font-bold min-w-[1.5rem] text-center tabular-nums">
-                        {quantity}
-                      </span>
-                      <button
-                        type="button"
-                        className="w-8 h-8 flex items-center justify-center hover:bg-[#099809]"
-                        onClick={() => updateQuantity(product.id, quantity + 1)}
-                        aria-label="Increase quantity"
-                      >
-                        <Plus className="w-3.5 h-3.5" />
+                        <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => removeItem(product.id)}
-                      className="p-1.5 text-[#777] hover:text-costco-red"
-                      aria-label="Remove item"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
                   </div>
                 </div>
-              </div>
-            ))
+              ))}
+              <button
+                type="button"
+                onClick={closeCart}
+                className="mt-3 text-[13px] font-bold text-costco-blue hover:underline"
+              >
+                Add more items
+              </button>
+            </div>
           )}
         </div>
 
-        <div className="border-t border-costco-border p-4 bg-white shrink-0 space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-[#555] text-sm">Subtotal</span>
-            <span className="font-bold text-[#1a1a1a] text-[22px] tabular-nums">
+        <div className="border-t border-[#ececec] p-4 bg-white shrink-0 space-y-3">
+          <div className="flex items-end justify-between">
+            <span className="text-[#555] text-[13px] font-semibold">
+              Estimated total
+            </span>
+            <span className="font-bold text-[#1a1a1a] text-[24px] tabular-nums leading-none">
               ${subtotal.toFixed(2)}
             </span>
           </div>
