@@ -44,11 +44,11 @@ const primarySuggestions: {
   label: string;
   tone: SuggestedActionChipTone;
 }[] = [
-  { label: "Shop my usual items (Buy Again)", tone: "blue" },
-  { label: "Everyday Member Savings", tone: "red" },
+  { label: "Buy Again", tone: "blue" },
+  { label: "Instant Savings on everyday items", tone: "red" },
   { label: "Plan a camping weekend", tone: "blue" },
-  { label: "This week's dinners", tone: "blue" },
-  { label: "Recipe ideas for this week", tone: "blue" },
+  { label: "Quick & easy dinner ideas", tone: "blue" },
+  { label: "This week's recipes (Kirkland basket)", tone: "blue" },
 ];
 
 const moreSuggestions: {
