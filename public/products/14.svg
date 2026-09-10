@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#ffffff"/>
+  <defs>
+    <filter id="pack" x="-25%" y="-15%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="16" stdDeviation="14" flood-color="#1a1a1a" flood-opacity="0.18"/>
+    </filter>
+    <linearGradient id="shine" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+      <stop offset="0.45" stop-color="#fff" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <g filter="url(#pack)"><rect x="122" y="70" width="156" height="250" rx="10" fill="#ffffff" stroke="#b3e5fc" stroke-width="2"/>
+    <rect x="122" y="70" width="156" height="58" fill="#4fc3f7"/>
+    <text x="200" y="106" text-anchor="middle" fill="#01579b" font-family="Arial" font-size="18" font-weight="700">WIPES</text>
+    <rect x="142" y="150" width="116" height="16" fill="#e1f5fe"/>
+    <rect x="142" y="176" width="116" height="16" fill="#e1f5fe"/>
+    <rect x="142" y="202" width="116" height="16" fill="#e1f5fe"/>
+    <text x="200" y="280" text-anchor="middle" fill="#0277bd" font-family="Arial" font-size="14" font-weight="700">12-PACK</text></g>
+</svg>

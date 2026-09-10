@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#ffffff"/>
+  <defs>
+    <filter id="pack" x="-25%" y="-15%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="16" stdDeviation="14" flood-color="#1a1a1a" flood-opacity="0.18"/>
+    </filter>
+    <linearGradient id="shine" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+      <stop offset="0.45" stop-color="#fff" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <g filter="url(#pack)"><rect x="108" y="150" width="184" height="118" rx="18" fill="#e8c57a"/>
+    <ellipse cx="200" cy="198" rx="58" ry="22" fill="#d4a017"/>
+    <rect x="150" y="96" width="100" height="58" rx="6" fill="#005DAA"/>
+    <text x="200" y="122" text-anchor="middle" fill="#fff" font-family="Arial" font-size="16" font-weight="700">SABRA</text>
+    <text x="200" y="140" text-anchor="middle" fill="#c5d8ea" font-family="Arial" font-size="10">HUMMUS CLASSIC</text>
+    <rect x="108" y="256" width="184" height="14" rx="3" fill="#c9a227"/></g>
+</svg>

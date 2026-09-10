@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#E31837"/>
+  <text x="200" y="185" text-anchor="middle" fill="#fff" font-family="Arial" font-size="36" font-weight="700">SAVE</text>
+    <text x="200" y="230" text-anchor="middle" fill="#fff" font-family="Arial" font-size="22">THIS WEEK</text>
+</svg>

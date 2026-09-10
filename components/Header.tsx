@@ -3,7 +3,10 @@
 import { useEffect, useRef } from "react";
 import { useCartStore } from "@/lib/store/cart";
 import { useCatalogStore } from "@/lib/store/catalog";
-import { Search, ShoppingCart, X } from "lucide-react";
+import { ChevronDown, Clock, Search, ShoppingCart, User, X } from "lucide-react";
+import CostcoLogo from "@/components/CostcoLogo";
+import KirkMark from "@/components/KirkMark";
+import InstacartMark from "@/components/InstacartMark";
 
 interface HeaderProps {
   onAskKirkClick: () => void;
@@ -31,115 +34,154 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
   }, [q, department, tag, search]);
 
   return (
-    <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
-      <div className="border-b border-gray-200">
-        <div className="max-w-[1800px] mx-auto px-4 py-2 flex items-center justify-between text-sm">
-          <div className="flex items-center gap-6">
+    <header className="bg-white border-b border-[#e5e5e5] sticky top-0 z-[60] shrink-0">
+      <div className="border-b border-[#ececec]">
+        <div className="max-w-[1800px] mx-auto px-3 sm:px-4 h-[52px] flex items-center justify-between gap-3">
+          <div className="flex items-center gap-4 min-w-0">
             <button
               type="button"
-              className="leading-none text-left"
+              className="flex items-center gap-2.5 leading-none text-left shrink-0"
               onClick={() => {
                 clearFilters();
                 void search();
               }}
               title="Show all products"
             >
-              <span className="text-[26px] font-black tracking-tight text-[#CC0000]">
-                Costco
-              </span>
-              <span className="block text-[10px] font-semibold tracking-[0.2em] text-[#CC0000] -mt-0.5">
-                WHOLESALE
+              <CostcoLogo compact />
+              <span className="hidden sm:flex flex-col pl-2.5 border-l border-[#d8d8d8]">
+                <span className="text-[15px] font-bold text-costco-blue leading-none">
+                  Same-Day
+                </span>
+                <span className="text-[10px] text-[#6b6b6b] mt-0.5 tracking-wide inline-flex items-center gap-1">
+                  <InstacartMark size={14} />
+                  Powered by Instacart
+                </span>
               </span>
             </button>
-            <nav className="flex items-center gap-4 ml-8">
+            <nav className="hidden lg:flex items-center gap-5 text-[14px]">
               <a
                 href="#"
-                className="text-blue-600 font-semibold border-b-2 border-blue-600 pb-1"
+                className="text-costco-blue font-bold border-b-[3px] border-costco-blue py-3"
               >
-                Same-Day
+                Shop
               </a>
-              <a href="#" className="text-gray-700 hover:text-blue-600">
-                Costco Warehouse
+              <a href="#" className="text-[#333] hover:text-costco-blue py-3">
+                Flyers
               </a>
-              <a href="#" className="text-gray-700 hover:text-blue-600">
-                Costco Spirits
-              </a>
-              <a href="#" className="text-gray-700 hover:text-blue-600">
-                More
+              <a href="#" className="text-[#333] hover:text-costco-blue py-3">
+                Lists
               </a>
             </nav>
           </div>
-          <div className="flex items-center gap-4">
-            <span className="text-xs text-gray-600">Powered by Instacart</span>
-            <button className="px-4 py-1.5 bg-blue-600 text-white rounded text-xs font-medium hover:bg-blue-700">
-              Back to Costco.com
-            </button>
-            <button className="px-4 py-1.5 bg-blue-600 text-white rounded text-xs font-medium hover:bg-blue-700">
-              Pricing & Return Policy
-            </button>
-            <button className="text-gray-700 text-xs hover:text-blue-600">
-              Sign In / Register
+          <div className="flex items-center gap-3 shrink-0">
+            <a
+              href="#"
+              className="hidden md:inline text-[13px] text-costco-blue font-semibold hover:underline"
+            >
+              Pricing & fees
+            </a>
+            <a
+              href="#"
+              className="hidden sm:inline text-[13px] text-costco-blue font-semibold hover:underline"
+            >
+              Add Costco
+            </a>
+            <button
+              type="button"
+              className="inline-flex items-center gap-1.5 text-[#333] text-[13px] font-semibold hover:text-costco-blue"
+            >
+              <span className="w-7 h-7 rounded-full border border-[#c8c8c8] bg-white flex items-center justify-center">
+                <User className="w-4 h-4" />
+              </span>
+              <span className="hidden sm:inline">Sign In / Register</span>
             </button>
           </div>
         </div>
       </div>
 
-      <div className="max-w-[1800px] mx-auto px-4 py-3">
-        <div className="flex items-center gap-4">
-          <div className="flex-1 flex items-center gap-3">
-            <form
-              className="relative flex-1 max-w-2xl"
-              onSubmit={(e) => {
-                e.preventDefault();
-                void search();
-              }}
-            >
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <input
-                type="search"
-                value={q}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search Costco..."
-                className="w-full pl-12 pr-10 py-3 border border-gray-300 rounded-full focus:outline-none focus:border-[#0060A9]"
-              />
-              {q && (
-                <button
-                  type="button"
-                  aria-label="Clear search"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-full hover:bg-gray-100"
-                  onClick={() => {
-                    setQuery("");
-                    void search();
-                  }}
-                >
-                  <X className="w-4 h-4 text-gray-500" />
-                </button>
-              )}
-            </form>
-            <button
-              onClick={onAskKirkClick}
-              className="px-5 py-2.5 bg-[#CC0000] text-white rounded-full font-semibold hover:bg-[#b00000] whitespace-nowrap shadow-sm"
-            >
-              Ask Kirk
-            </button>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="text-right">
-              <div className="flex items-center gap-2 text-sm">
-                <span className="text-gray-600">🕐 Delivery</span>
-                <span className="font-semibold">8:48-9:18pm</span>
-              </div>
-              <div className="text-xs text-gray-500">11217 · Brooklyn</div>
-            </div>
-            <button type="button" onClick={openCart} className="relative flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-full hover:bg-gray-50 bg-white">
-              <ShoppingCart className="w-5 h-5 text-gray-700" />
-              <span className="font-medium text-sm">View cart</span>
-              <span className="absolute -top-1.5 -right-1.5 min-w-[22px] h-[22px] px-1 bg-[#0060A9] text-white text-[11px] font-bold rounded-full flex items-center justify-center">
-                {totalItems}
+      <div className="bg-white border-b border-[#ececec]">
+      <div className="max-w-[1800px] mx-auto px-3 sm:px-4 py-2">
+        <div className="flex items-center gap-2.5">
+          <form
+            className="relative flex-1 min-w-0"
+            onSubmit={(e) => {
+              e.preventDefault();
+              void search();
+            }}
+          >
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8a8a8a] w-[18px] h-[18px]" />
+            <input
+              type="search"
+              value={q}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search products"
+              className="w-full h-11 pl-11 pr-10 bg-[#f6f6f6] border border-[#d8d8d8] rounded-full text-[15px] text-[#222] placeholder:text-[#8a8a8a] focus:outline-none focus:bg-white focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15"
+            />
+            {q && (
+              <button
+                type="button"
+                aria-label="Clear search"
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-full hover:bg-gray-100"
+                onClick={() => {
+                  setQuery("");
+                  void search();
+                }}
+              >
+                <X className="w-4 h-4 text-[#666]" />
+              </button>
+            )}
+          </form>
+
+          <button
+            type="button"
+            onClick={onAskKirkClick}
+            className="hidden sm:inline-flex items-center gap-1.5 h-10 px-3 bg-white border-2 border-costco-red text-costco-red rounded-full font-bold hover:bg-[#fff5f6] whitespace-nowrap"
+          >
+            <KirkMark size={22} />
+            <span className="text-[13px]">Ask Kirk</span>
+          </button>
+          <button
+            type="button"
+            onClick={onAskKirkClick}
+            className="sm:hidden h-10 w-10 rounded-full border-2 border-costco-red flex items-center justify-center"
+            aria-label="Ask Kirk"
+          >
+            <KirkMark size={22} />
+          </button>
+
+          <button
+            type="button"
+            className="hidden lg:flex text-left items-center gap-1.5 px-1.5 py-0.5 rounded-md hover:bg-[#f6f6f6]"
+          >
+            <Clock className="w-[18px] h-[18px] text-costco-blue shrink-0" />
+            <span>
+              <span className="block text-[13px] text-[#333] leading-tight">
+                <span className="text-[#666]">Delivery </span>
+                <span className="font-bold">8:48–9:18pm</span>
               </span>
-            </button>
-          </div>
+              <span className="block text-[12px] text-[#666] leading-tight">
+                11217 · Brooklyn
+              </span>
+            </span>
+            <ChevronDown className="w-4 h-4 text-[#666] shrink-0" />
+          </button>
+
+          <button
+            type="button"
+            onClick={openCart}
+            aria-label={`View Cart. Items in cart: ${totalItems}`}
+            className="relative inline-flex items-center gap-1.5 h-10 px-3 border border-[#c4c4c4] rounded-full hover:bg-[#f6f6f6] bg-white"
+          >
+            <ShoppingCart className="w-5 h-5 text-[#333]" />
+            <span className="hidden sm:inline font-bold text-[13px] text-[#333]">
+              Cart
+            </span>
+            <span className="absolute -top-1.5 -right-1 min-w-[20px] h-[20px] px-1 bg-[#0AAD0A] text-white text-[11px] font-bold rounded-full flex items-center justify-center">
+              {totalItems}
+            </span>
+          </button>
         </div>
+      </div>
       </div>
     </header>
   );
