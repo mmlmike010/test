@@ -160,14 +160,14 @@ ${inner}
 }
 
 async function composeJasons() {
-  // Seeded sandwich face only — stay inside the loaf, off the Izzio twist/label.
+  // Seeded loaf face only — stay above the Izzio label and below the twist.
   const seededPack = await download(
     `${CF}/large_d2b0fee4-2249-4950-9b3a-b167df3fdc0e.jpg`
   );
 
-  const window = { left: 208, top: 292, width: 384, height: 208 };
+  const window = { left: 220, top: 268, width: 360, height: 200 };
   const loaf = await sharp(seededPack)
-    .extract({ left: 235, top: 158, width: 120, height: 95 })
+    .extract({ left: 225, top: 170, width: 150, height: 88 })
     .resize(window.width, window.height, { fit: "cover" })
     .png()
     .toBuffer();
@@ -179,31 +179,42 @@ async function composeJasons() {
       `
   <defs>
     <filter id="floor" x="-30%" y="-20%" width="160%" height="160%">
-      <feDropShadow dx="0" dy="18" stdDeviation="14" flood-color="#1a1a1a" flood-opacity="0.16"/>
+      <feDropShadow dx="0" dy="20" stdDeviation="16" flood-color="#1a1a1a" flood-opacity="0.18"/>
     </filter>
-    <linearGradient id="purpleBag" x1="0" y1="0" x2="0.12" y2="1">
-      <stop offset="0" stop-color="#6b2d86"/>
-      <stop offset="0.5" stop-color="#4c1a6c"/>
-      <stop offset="1" stop-color="#311044"/>
+    <filter id="paper">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="11" result="n"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.07 0" result="grain"/>
+      <feBlend in="SourceGraphic" in2="grain" mode="multiply"/>
+    </filter>
+    <linearGradient id="purpleBag" x1="0.08" y1="0" x2="0.92" y2="1">
+      <stop offset="0" stop-color="#5a2474"/>
+      <stop offset="0.45" stop-color="#431862"/>
+      <stop offset="1" stop-color="#2c0f44"/>
     </linearGradient>
     <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#ffffff" stop-opacity="0"/>
-      <stop offset="0.16" stop-color="#ffffff" stop-opacity="0.14"/>
-      <stop offset="0.3" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="0.18" stop-color="#ffffff" stop-opacity="0.12"/>
+      <stop offset="0.34" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="fold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2a1040"/>
+      <stop offset="1" stop-color="#3a1654"/>
     </linearGradient>
   </defs>
   <g filter="url(#floor)">
-    <path fill-rule="evenodd" fill="url(#purpleBag)" d="M176 108 h448 l18 32 v496 c0 20-16 34-40 34 H198 c-24 0-40-14-40-34 V140 Z M208 292 h384 v208 H208 Z"/>
-    <path fill-rule="evenodd" fill="url(#sheen)" d="M176 108 h448 l18 32 v496 c0 20-16 34-40 34 H198 c-24 0-40-14-40-34 V140 Z M208 292 h384 v208 H208 Z"/>
-    <path d="M188 92 h424 l12 16 H176 Z" fill="#3a1654"/>
-    <path d="M210 84 h380 l8 8 H202 Z" fill="#2a1040"/>
-    <rect x="208" y="292" width="384" height="208" fill="none" stroke="#1b0c28" stroke-width="10"/>
-    <text x="400" y="168" text-anchor="middle" fill="#f3e6c4" font-family="Georgia, Times New Roman, serif" font-size="54" font-weight="700">Jason's</text>
-    <text x="400" y="198" text-anchor="middle" fill="#d4c0e4" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="800" letter-spacing="4.2">SOURDOUGH</text>
-    <text x="400" y="248" text-anchor="middle" fill="#e8d5a3" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" letter-spacing="1.8">RECIPE NO 11</text>
-    <text x="400" y="548" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="800" letter-spacing="1.8">GRAINS &amp; SEEDS</text>
-    <text x="400" y="580" text-anchor="middle" fill="#e8d5a3" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" letter-spacing="2.4">CIABATTIN</text>
-    <text x="400" y="646" text-anchor="middle" fill="#c9b8d8" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700">580g</text>
+    <path filter="url(#paper)" fill-rule="evenodd" fill="url(#purpleBag)" d="M168 118 l20-28 h424 l20 28 v508 c0 22-18 36-44 36 H192 c-26 0-44-14-44-36 Z M220 268 h360 v200 H220 Z"/>
+    <path fill-rule="evenodd" fill="url(#sheen)" d="M168 118 l20-28 h424 l20 28 v508 c0 22-18 36-44 36 H192 c-26 0-44-14-44-36 Z M220 268 h360 v200 H220 Z"/>
+    <path d="M188 90 h424 l16 28 H172 Z" fill="url(#fold)"/>
+    <path d="M208 78 h384 l10 12 H198 Z" fill="#241036"/>
+    <path d="M176 150 h448" stroke="#2a1040" stroke-width="2" opacity="0.45"/>
+    <rect x="220" y="268" width="360" height="200" fill="none" stroke="#1b0c28" stroke-width="9"/>
+    <rect x="226" y="274" width="348" height="188" fill="none" stroke="#d8c48a" stroke-width="2" opacity="0.55"/>
+    <text x="400" y="158" text-anchor="middle" fill="#f4e6c0" font-family="Georgia, Times New Roman, serif" font-size="52" font-weight="700">Jason's</text>
+    <text x="400" y="182" text-anchor="middle" fill="#d4c0e4" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="800" letter-spacing="4.6">SOURDOUGH</text>
+    <text x="400" y="234" text-anchor="middle" fill="#e8d5a3" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" letter-spacing="2.2">RECIPE NO 11</text>
+    <text x="400" y="512" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="800" letter-spacing="1.8">GRAINS &amp; SEEDS</text>
+    <text x="400" y="540" text-anchor="middle" fill="#e8d5a3" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700" letter-spacing="2.6">CIABATTIN</text>
+    <text x="400" y="628" text-anchor="middle" fill="#c9b8d8" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700">580g</text>
   </g>
 `
     )
@@ -237,16 +248,16 @@ async function composePhotoTiles() {
 
   const seatPatch = await sharp(
     svg(
-      28,
-      20,
-      `<rect width="28" height="20" rx="2" fill="#E31837"/><text x="14" y="14" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="7" font-weight="800">C</text>`
+      58,
+      18,
+      `<rect width="58" height="18" rx="2" fill="#E31837"/><text x="29" y="13" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="8" font-weight="800" letter-spacing="0.8">COSTCO</text>`
     )
   )
     .png()
     .toBuffer();
 
   const seatTile = await sharp(seat)
-    .composite([{ input: seatPatch, left: 262, top: 188 }])
+    .composite([{ input: seatPatch, left: 248, top: 188 }])
     .jpeg({ quality: 92 })
     .toBuffer();
   await toTile(seatTile, join(dir, "13.png"));
@@ -270,6 +281,16 @@ async function composePhotoTiles() {
     .toBuffer();
   await toTile(sleeveTile, join(dir, "22.png"));
 }
+
+async function composeMixedNuts() {
+  const nuts = await download(
+    `${CF}/large_6f376933-2b60-43ab-92ba-091277d87719.jpeg`
+  );
+  await toTile(nuts, join(dir, "2.png"));
+}
+
+await composeMixedNuts();
+console.log("composed 2 from Kirkland Heart Healthy Mixed Nuts");
 
 await composeJars();
 console.log("composed 6 + 7 from Costco Same-Day jar/tub photos");

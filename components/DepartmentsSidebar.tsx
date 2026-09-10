@@ -120,7 +120,7 @@ export default function DepartmentsSidebar({
                       <img
                         src={aisleThumbs[dept]}
                         alt=""
-                        className="w-7 h-7 rounded-full object-cover bg-[#f3f3f3] border border-[#ececec] shrink-0"
+                        className="w-8 h-8 rounded-full object-cover bg-[#f3f3f3] border border-[#ececec] shrink-0"
                       />
                       <span className="leading-snug line-clamp-2">{dept}</span>
                     </span>

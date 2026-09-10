@@ -14,6 +14,7 @@ import {
 import { useCartStore } from "@/lib/store/cart";
 import { products } from "@/lib/data/products";
 import KirkMark from "@/components/KirkMark";
+import CostcoLogo from "@/components/CostcoLogo";
 
 interface Message {
   id: string;
@@ -574,10 +575,21 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             return (
               <div
                 key={message.id}
-                className="bg-white border border-[#e8e8e8] rounded-[12px] overflow-hidden"
+                className="bg-white border border-[#e8e8e8] rounded-[4px] overflow-hidden shadow-[0_1px_3px_rgba(0,0,0,0.06)]"
               >
-                <div className="h-[4px] bg-costco-red" />
+                <div className="h-[8px] bg-costco-red" />
                 <div className="px-3.5 py-3">
+                <div className="flex items-center justify-between gap-3 mb-3">
+                  <CostcoLogo compact />
+                  <div className="text-right leading-none">
+                    <p className="text-[10px] font-extrabold tracking-[0.22em] text-costco-red uppercase">
+                      Gold Star
+                    </p>
+                    <p className="mt-1 text-[9px] font-bold tracking-[0.18em] text-costco-blue uppercase">
+                      Membership
+                    </p>
+                  </div>
+                </div>
                 <div className="flex items-center gap-2 mb-2">
                   <KirkMark size={28} />
                   <div>
@@ -601,7 +613,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                   </p>
                 </div>
                 </div>
-                <div className="h-[4px] bg-costco-blue" />
+                <div className="h-[8px] bg-costco-blue" />
               </div>
             );
           }

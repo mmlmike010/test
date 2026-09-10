@@ -151,22 +151,22 @@ export default function ProductGrid() {
             {[
               {
                 title: "Weekly Savings",
-                image: "/products/hero-weekly.jpg?v=3",
+                image: "/products/hero-weekly.jpg?v=4",
                 onClick: () => showAisle({ tag: "weekly" }),
               },
               {
                 title: "Kirkland Signature",
-                image: "/products/hero-kirkland.jpg?v=3",
+                image: "/products/hero-kirkland.jpg?v=4",
                 onClick: () => showAisle({ tag: "kirkland" }),
               },
               {
                 title: "What's New",
-                image: "/products/hero-new.jpg?v=3",
+                image: "/products/hero-new.jpg?v=4",
                 onClick: () => showAisle({ tag: "new" }),
               },
               {
                 title: "Treasure Hunt",
-                image: "/products/hero-treasure.jpg?v=3",
+                image: "/products/hero-treasure.jpg?v=4",
                 onClick: () => showAisle({ tag: "treasure" }),
               },
             ].map((tile) => (
@@ -174,7 +174,7 @@ export default function ProductGrid() {
                 key={tile.title}
                 type="button"
                 onClick={tile.onClick}
-                className="relative h-[168px] sm:h-[200px] rounded-[16px] overflow-hidden text-left group bg-white"
+                className="relative h-[196px] sm:h-[236px] rounded-[16px] overflow-hidden text-left group bg-[#f3f3f3]"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
@@ -182,8 +182,8 @@ export default function ProductGrid() {
                   alt=""
                   className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
-                <span className="absolute inset-x-0 bottom-0 h-[38%] bg-gradient-to-t from-black/60 to-transparent" />
-                <span className="absolute bottom-3 left-3 right-3 text-[18px] sm:text-[21px] font-bold text-white leading-tight drop-shadow">
+                <span className="absolute inset-x-0 bottom-0 h-[42%] bg-gradient-to-t from-black/55 via-black/20 to-transparent" />
+                <span className="absolute bottom-3.5 left-3.5 right-3.5 text-[20px] sm:text-[24px] font-bold text-white leading-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.55)]">
                   {tile.title}
                 </span>
               </button>
@@ -257,11 +257,27 @@ export default function ProductGrid() {
         </>
       )}
 
-      <footer className="mt-8 pt-4 border-t border-[#e0e0e0] text-[11px] text-[#777] flex flex-wrap items-center justify-between gap-2">
-        <p>
-          Same-Day Delivery powered by Instacart · Costco membership required
-        </p>
-        <p>Prices, fees, and availability for 11217 Brooklyn</p>
+      <footer className="mt-8 pt-5 border-t border-[#e0e0e0] text-[12px] text-[#666]">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 mb-2">
+          <a href="#" className="text-costco-blue font-semibold hover:underline">
+            Pricing & fees
+          </a>
+          <a href="#" className="text-costco-blue font-semibold hover:underline">
+            Departments
+          </a>
+          <a href="#" className="text-costco-blue font-semibold hover:underline">
+            Flyers
+          </a>
+          <a href="#" className="text-costco-blue font-semibold hover:underline">
+            Lists
+          </a>
+        </div>
+        <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-[#777]">
+          <p>
+            Same-Day Delivery powered by Instacart · Costco membership required
+          </p>
+          <p>Prices, fees, and availability for 11217 Brooklyn</p>
+        </div>
       </footer>
 
       {selected && (

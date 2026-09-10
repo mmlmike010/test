@@ -122,7 +122,7 @@ export default function ProductCard({
             Save ${product.savings.toFixed(2)}
           </p>
         )}
-        <h3 className="text-[14px] font-normal text-[#242424] leading-snug mt-1.5 line-clamp-3 min-h-[3.75rem]">
+        <h3 className="text-[14px] font-normal text-[#242424] leading-snug mt-1.5 line-clamp-3">
           {product.brand} {product.name}
         </h3>
         <p className="text-[12px] text-[#188038] mt-0.5">

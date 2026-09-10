@@ -14,7 +14,7 @@ const CF = "https://d2lnr5mha7bycj.cloudfront.net/product-image/file";
  *  black laptop sleeve) with source-brand marks covered. */
 const tiles = {
   1: `${CF}/large_5bbadc9e-09c1-49aa-86ec-de31a36d08e5.jpeg`, // Kirkland organic granola
-  2: `${CF}/large_79fd814f-55a0-42de-8c5e-aed981e4f67d.jpeg`, // Kirkland snacking nuts
+  2: `${CF}/large_6f376933-2b60-43ab-92ba-091277d87719.jpeg`, // Kirkland Heart Healthy Mixed Nuts 36 oz
   3: `${CF}/large_be581b7c-a021-4dcd-9460-10660cd7b6ec.png`, // Hunt's diced tomatoes
   4: `${CF}/large_d22ae167-8690-49ee-9681-ab73cdf2ded7.png`, // Mutti basil sauce
   5: `${CF}/large_a3b82731-4651-476a-a0c3-01c97a17c2c6.png`, // Sabra Classic Hummus
