@@ -165,22 +165,22 @@ export default function ProductGrid() {
       title: "Member Only Savings",
       subtitle: "8/24/26 – 9/20/26",
       badge: "Sale ends in 10 days",
-      image: "/products/hero-weekly.jpg?v=16",
+      image: "/products/hero-weekly.jpg?v=18",
     },
     {
       tag: "kirkland",
       title: "Kirkland Signature",
-      image: "/products/hero-kirkland.jpg?v=16",
+      image: "/products/hero-kirkland.jpg?v=18",
     },
     {
       tag: "trending",
       title: "This week's featured items",
-      image: "/products/hero-new.jpg?v=16",
+      image: "/products/hero-new.jpg?v=18",
     },
     {
       tag: "treasure",
       title: "Discounts on household favorites",
-      image: "/products/hero-treasure.jpg?v=17",
+      image: "/products/hero-treasure.jpg?v=18",
     },
   ] as const;
   const activeCollection = collectionTiles.find((tile) => tile.tag === tag);
