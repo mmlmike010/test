@@ -148,34 +148,40 @@ ${inner}
 }
 
 async function composeJasons() {
-  // Photographic seeded loaf. Cover every competing mark with Jason's print.
+  // Photographic seeded loaf in a purple windowed bag. Cover every
+  // competing mark; the loaf crop must stay inside the window.
   const seededPack = await download(
     `${CF}/large_d2b0fee4-2249-4950-9b3a-b167df3fdc0e.jpg`
   );
 
   const loaf = await sharp(seededPack)
-    .extract({ left: 188, top: 140, width: 224, height: 176 })
-    .resize(520, 400, { fit: "cover" })
+    .extract({ left: 230, top: 165, width: 140, height: 120 })
+    .resize(400, 380, { fit: "cover", position: "centre" })
     .png()
     .toBuffer();
 
-  const print = await sharp(
+  const bag = await sharp(
     svg(
       800,
       800,
       `
   <defs>
-    <linearGradient id="sleeve" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#5a2474"/>
-      <stop offset="1" stop-color="#2f1148"/>
+    <linearGradient id="film" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5c2a7a"/>
+      <stop offset="0.5" stop-color="#3a1658"/>
+      <stop offset="1" stop-color="#2a0f42"/>
     </linearGradient>
+    <filter id="shadow" x="-15%" y="-8%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#000000" flood-opacity="0.16"/>
+    </filter>
   </defs>
-  <rect x="140" y="318" width="520" height="46" fill="url(#sleeve)"/>
-  <text x="400" y="349" text-anchor="middle" fill="#f4e6c0" font-family="Georgia, Times New Roman, serif" font-size="26" font-weight="700">Jason's</text>
-  <rect x="140" y="364" width="520" height="58" fill="#ffffff"/>
-  <text x="400" y="390" text-anchor="middle" fill="#2f1148" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="800" letter-spacing="1.2">GRAINS &amp; SEEDS</text>
-  <text x="400" y="412" text-anchor="middle" fill="#5a2474" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="700" letter-spacing="1.6">RECIPE NO 11 · 24 OZ</text>
-  <rect x="140" y="500" width="520" height="40" fill="#ffffff"/>
+  <rect x="176" y="48" width="448" height="704" rx="12" fill="url(#film)" filter="url(#shadow)"/>
+  <rect x="200" y="220" width="400" height="380" rx="2" fill="#ffffff"/>
+  <text x="400" y="132" text-anchor="middle" fill="#f4e6c0" font-family="Georgia, Times New Roman, serif" font-size="48" font-weight="700">Jason's</text>
+  <text x="400" y="168" text-anchor="middle" fill="#d4b8e8" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="800" letter-spacing="4.2">SOURDOUGH</text>
+  <text x="400" y="640" text-anchor="middle" fill="#f4e6c0" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="800" letter-spacing="1.5">GRAINS &amp; SEEDS</text>
+  <text x="400" y="668" text-anchor="middle" fill="#d4b8e8" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" letter-spacing="2">RECIPE NO 11 · 24 OZ</text>
+  <text x="400" y="720" text-anchor="middle" fill="#c9a8d8" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="700" letter-spacing="2.4">CIABATTIN</text>
 `
     )
   )
@@ -191,8 +197,8 @@ async function composeJasons() {
     },
   })
     .composite([
-      { input: loaf, left: 140, top: 120 },
-      { input: print, left: 0, top: 0 },
+      { input: bag, left: 0, top: 0 },
+      { input: loaf, left: 200, top: 220 },
     ])
     .png({ compressionLevel: 8 })
     .toFile(join(dir, "9.png"));

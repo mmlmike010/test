@@ -123,14 +123,14 @@ export default function CartDrawer() {
               ${subtotal.toFixed(2)}
             </span>
           </div>
-          <div className="flex gap-2">
+          <div className="flex items-center gap-3">
             {items.length > 0 && (
               <button
                 type="button"
                 onClick={clearCart}
-                className="px-3 py-2.5 text-sm font-bold text-[#333] border border-[#c8c8c8] rounded-[3px] hover:bg-gray-50"
+                className="text-[13px] font-bold text-costco-blue hover:underline shrink-0"
               >
-                Clear
+                Clear cart
               </button>
             )}
             <button

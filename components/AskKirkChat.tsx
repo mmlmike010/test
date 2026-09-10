@@ -16,6 +16,7 @@ import { products } from "@/lib/data/products";
 import KirkMark from "@/components/KirkMark";
 import CostcoLogo from "@/components/CostcoLogo";
 import GoldStarMark from "@/components/GoldStarMark";
+import MembershipBarcode from "@/components/MembershipBarcode";
 
 interface Message {
   id: string;
@@ -509,6 +510,9 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
               <p className="mt-1 text-[9px] font-bold tracking-[0.18em] text-costco-blue uppercase">
                 Membership
               </p>
+              <p className="mt-1 text-[9px] font-semibold tabular-nums tracking-[0.12em] text-[#666]">
+                111 847 11217
+              </p>
             </div>
           </div>
         </div>
@@ -609,24 +613,30 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                 <div className="flex items-center gap-2 mb-2">
                   <KirkMark size={28} />
                   <div>
-                    <p className="text-[13px] font-bold text-[#1a1a1a]">
-                      Kirk
+                    <p className="text-[16px] font-black tracking-tight text-[#1a1a1a] leading-none">
+                      KIRK
                     </p>
-                    <p className="text-[11px] font-semibold text-costco-blue">
-                      Kirkland Signature · Same-Day
+                    <p className="mt-1 text-[10px] font-bold tracking-[0.14em] text-costco-red uppercase">
+                      Gold Star Member
+                    </p>
+                    <p className="mt-0.5 text-[11px] font-semibold text-costco-blue tabular-nums tracking-wide">
+                      111 847 11217
                     </p>
                   </div>
                 </div>
                 <p className="text-[13px] leading-relaxed text-[#333] whitespace-pre-line">
                   {message.content}
                 </p>
-                <div className="mt-2.5 flex items-center justify-between gap-2 border-t border-[#eee] pt-2.5">
-                  <span className="inline-flex h-5 items-center rounded-[2px] bg-costco-red px-1.5 text-[9px] font-black tracking-wide text-white">
-                    MEMBER
-                  </span>
-                  <p className="text-[11px] text-[#555] font-semibold min-w-0 text-right tabular-nums tracking-wide">
-                    GS · 11217 · BROOKLYN
-                  </p>
+                <div className="mt-2.5 border-t border-[#eee] pt-2.5">
+                  <MembershipBarcode className="h-7 w-full text-[#1a1a1a]" />
+                  <div className="mt-2 flex items-center justify-between gap-2">
+                    <span className="inline-flex h-5 items-center rounded-[2px] bg-costco-red px-1.5 text-[9px] font-black tracking-wide text-white">
+                      MEMBER
+                    </span>
+                    <p className="text-[11px] text-[#555] font-semibold min-w-0 text-right tabular-nums tracking-wide">
+                      GS · 11217 · BROOKLYN
+                    </p>
+                  </div>
                 </div>
                 </div>
                 <div className="h-[8px] bg-costco-blue" />
