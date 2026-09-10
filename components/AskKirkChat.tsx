@@ -520,11 +520,11 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             <button
               type="button"
               onClick={onClose}
-              className="px-2 py-1.5 text-[12px] font-bold text-white hover:bg-white/15 rounded-[3px] transition-colors flex items-center gap-1"
+              className="p-1.5 text-white hover:bg-white/15 rounded-full transition-colors"
               title="Close"
+              aria-label="Close Ask Kirk"
             >
-              <X className="w-3.5 h-3.5" />
-              Close
+              <X className="w-4 h-4" />
             </button>
           </div>
         </div>

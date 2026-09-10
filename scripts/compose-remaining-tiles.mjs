@@ -165,7 +165,7 @@ async function composeJasons() {
   );
   const loaf = await sharp(loafPack)
     .extract({ left: 300, top: 90, width: 164, height: 280 })
-    .resize(248, 168, { fit: "cover" })
+    .resize(260, 220, { fit: "cover" })
     .png()
     .toBuffer();
 
@@ -176,22 +176,23 @@ async function composeJasons() {
       `
   <defs>
     <filter id="floor" x="-30%" y="-20%" width="160%" height="160%">
-      <feDropShadow dx="0" dy="22" stdDeviation="18" flood-color="#1a1a1a" flood-opacity="0.16"/>
+      <feDropShadow dx="0" dy="18" stdDeviation="14" flood-color="#1a1a1a" flood-opacity="0.14"/>
     </filter>
-    <linearGradient id="purpleBag" x1="0" y1="0" x2="0.85" y2="1">
-      <stop offset="0" stop-color="#4a1d6a"/>
-      <stop offset="0.45" stop-color="#6b2d86"/>
-      <stop offset="1" stop-color="#3b1658"/>
+    <linearGradient id="purpleBag" x1="0" y1="0" x2="0.2" y2="1">
+      <stop offset="0" stop-color="#5a2480"/>
+      <stop offset="0.55" stop-color="#4a1a6c"/>
+      <stop offset="1" stop-color="#351250"/>
     </linearGradient>
   </defs>
   <g filter="url(#floor)">
-    <path fill-rule="evenodd" fill="url(#purpleBag)" d="M248 150 C248 132 270 120 298 120 L502 120 C530 120 552 132 552 150 L572 560 C572 592 546 616 514 616 L286 616 C254 616 228 592 228 560 Z M276 248 h248 v168 h-248 Z"/>
-    <rect x="276" y="248" width="248" height="168" fill="none" stroke="#2a0f3d" stroke-width="8"/>
-    <text x="400" y="188" text-anchor="middle" fill="#f4e8c8" font-family="Georgia, Times New Roman, serif" font-size="42" font-weight="700">Jason's</text>
-    <text x="400" y="214" text-anchor="middle" fill="#d8c4e8" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" letter-spacing="3">SOURDOUGH</text>
-    <text x="400" y="452" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="800" letter-spacing="2">GRAINS &amp; SEEDS</text>
-    <text x="400" y="484" text-anchor="middle" fill="#e8d5a3" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700">CIABATTIN</text>
-    <text x="400" y="548" text-anchor="middle" fill="#c9b8d8" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700">580g</text>
+    <path fill-rule="evenodd" fill="url(#purpleBag)" d="M268 96 h264 l18 28 v500 c0 22-18 36-40 36 H290 c-22 0-40-14-40-36 V124 Z M270 248 h260 v220 H270 Z"/>
+    <rect x="256" y="84" width="288" height="22" rx="4" fill="#3b1658"/>
+    <rect x="270" y="248" width="260" height="220" fill="none" stroke="#2a0f3d" stroke-width="7"/>
+    <text x="400" y="148" text-anchor="middle" fill="#f4e8c8" font-family="Georgia, Times New Roman, serif" font-size="40" font-weight="700">Jason's</text>
+    <text x="400" y="176" text-anchor="middle" fill="#d8c4e8" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" letter-spacing="3.2">SOURDOUGH</text>
+    <text x="400" y="508" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="800" letter-spacing="1.6">GRAINS &amp; SEEDS</text>
+    <text x="400" y="536" text-anchor="middle" fill="#e8d5a3" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700">CIABATTIN</text>
+    <text x="400" y="612" text-anchor="middle" fill="#c9b8d8" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700">580g</text>
   </g>
 `
     )
@@ -208,7 +209,7 @@ async function composeJasons() {
     },
   })
     .composite([
-      { input: loaf, left: 276, top: 248 },
+      { input: loaf, left: 270, top: 248 },
       { input: bag, left: 0, top: 0 },
     ])
     .png({ compressionLevel: 8 })

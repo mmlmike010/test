@@ -135,7 +135,7 @@ export default function ProductDetailModal({
             {product.reviews.map((r, idx) => (
               <li
                 key={`${r.author}-${idx}`}
-                className="border border-[#e8e8e8] bg-[#fafafa] px-3.5 py-3"
+                className="border border-[#e8e8e8] bg-[#fafafa] rounded-[12px] px-3.5 py-3"
               >
                 <div className="flex items-center justify-between gap-2 mb-1">
                   <div className="flex items-center gap-0.5">

@@ -34,16 +34,6 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
 
   return (
     <header className="bg-white border-b border-[#e5e5e5] sticky top-0 z-50 shrink-0">
-      <div className="bg-[#f3f3f3] border-b border-[#e8e8e8]">
-        <div className="max-w-[1800px] mx-auto px-3 sm:px-4 h-[28px] flex items-center justify-between text-[12px]">
-          <a href="#" className="text-costco-blue font-semibold hover:underline">
-            ← Back to Costco.com
-          </a>
-          <p className="hidden sm:block text-[#666]">
-            Warehouse prices may differ · Membership required
-          </p>
-        </div>
-      </div>
       <div className="border-b border-[#ececec]">
         <div className="max-w-[1800px] mx-auto px-3 sm:px-4 h-[52px] flex items-center justify-between gap-3">
           <div className="flex items-center gap-4 min-w-0">
@@ -123,13 +113,13 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
               value={q}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search products"
-              className="w-full h-10 pl-11 pr-[6.75rem] bg-white border border-[#c4c4c4] rounded-full text-[15px] text-[#222] placeholder:text-[#8a8a8a] focus:outline-none focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15"
+              className="w-full h-11 pl-11 pr-10 bg-[#f6f6f6] border border-[#d8d8d8] rounded-full text-[15px] text-[#222] placeholder:text-[#8a8a8a] focus:outline-none focus:bg-white focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15"
             />
             {q && (
               <button
                 type="button"
                 aria-label="Clear search"
-                className="absolute right-[5.7rem] top-1/2 -translate-y-1/2 p-1 rounded-full hover:bg-gray-100"
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-full hover:bg-gray-100"
                 onClick={() => {
                   setQuery("");
                   void search();
@@ -138,12 +128,6 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
                 <X className="w-4 h-4 text-[#666]" />
               </button>
             )}
-            <button
-              type="submit"
-              className="absolute right-1 top-1/2 -translate-y-1/2 h-8 px-3.5 bg-costco-red text-white text-[13px] font-bold rounded-full hover:bg-costco-red-hover"
-            >
-              Search
-            </button>
           </form>
 
           <button
