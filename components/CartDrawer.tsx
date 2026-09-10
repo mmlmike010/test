@@ -64,9 +64,8 @@ export default function CartDrawer() {
                   />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-[11px] text-[#666]">{product.brand}</p>
                   <p className="text-[14px] text-[#1a1a1a] leading-snug line-clamp-2">
-                    {product.name}
+                    {product.brand} {product.name}
                   </p>
                   <p className="text-[15px] font-bold text-[#1a1a1a] mt-1 tabular-nums">
                     ${product.price.toFixed(2)}{" "}

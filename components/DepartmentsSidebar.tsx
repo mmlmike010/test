@@ -74,7 +74,7 @@ export default function DepartmentsSidebar({
   return (
     <aside
       className={`${
-        compact ? "w-[184px]" : "w-[220px]"
+        compact ? "w-[220px]" : "w-[240px]"
       } hidden md:block shrink-0 bg-white border-r border-[#e5e5e5] h-full overflow-y-auto`}
     >
       <div className="py-3 px-2">
@@ -122,7 +122,7 @@ export default function DepartmentsSidebar({
                         alt=""
                         className="w-7 h-7 rounded-full object-cover bg-[#f3f3f3] border border-[#ececec] shrink-0"
                       />
-                      <span className="truncate">{dept}</span>
+                      <span className="leading-snug line-clamp-2">{dept}</span>
                     </span>
                     <ChevronRight
                       className={`w-3.5 h-3.5 shrink-0 ${

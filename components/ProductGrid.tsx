@@ -151,22 +151,22 @@ export default function ProductGrid() {
             {[
               {
                 title: "Weekly Savings",
-                image: "/products/cat-weekly.jpg",
+                image: "/products/hero-weekly.jpg",
                 onClick: () => showAisle({ tag: "weekly" }),
               },
               {
                 title: "Kirkland Signature",
-                image: "/products/cat-kirkland.jpg",
+                image: "/products/hero-kirkland.jpg",
                 onClick: () => showAisle({ tag: "kirkland" }),
               },
               {
                 title: "What's New",
-                image: "/products/cat-new.jpg",
+                image: "/products/hero-new.jpg",
                 onClick: () => showAisle({ tag: "new" }),
               },
               {
                 title: "Treasure Hunt",
-                image: "/products/cat-treasure.jpg",
+                image: "/products/hero-treasure.jpg",
                 onClick: () => showAisle({ tag: "treasure" }),
               },
             ].map((tile) => (
@@ -174,16 +174,16 @@ export default function ProductGrid() {
                 key={tile.title}
                 type="button"
                 onClick={tile.onClick}
-                className="relative h-[156px] sm:h-[176px] rounded-[16px] overflow-hidden text-left group"
+                className="relative h-[168px] sm:h-[200px] rounded-[16px] overflow-hidden text-left group bg-[#f3f3f3]"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={tile.image}
                   alt=""
-                  className="absolute inset-0 w-full h-full object-cover scale-110 group-hover:scale-[1.15] transition-transform"
+                  className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-300"
                 />
-                <span className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
-                <span className="absolute bottom-3 left-3 right-3 text-[17px] sm:text-[19px] font-bold text-white leading-tight drop-shadow-sm">
+                <span className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent" />
+                <span className="absolute bottom-3 left-3 right-3 text-[18px] sm:text-[21px] font-bold text-white leading-tight drop-shadow">
                   {tile.title}
                 </span>
               </button>

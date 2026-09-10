@@ -37,9 +37,9 @@ export default function ProductDetailModal({
         role="dialog"
         aria-modal="true"
         aria-label={`${product.brand} ${product.name}`}
-        className="relative w-full max-w-[480px] h-full overflow-y-auto bg-white shadow-2xl"
+        className="relative w-full max-w-[480px] h-full bg-white shadow-2xl flex flex-col"
       >
-        <div className="sticky top-0 z-10 flex items-center justify-between px-4 py-3 border-b border-costco-border bg-white">
+        <div className="sticky top-0 z-10 flex items-center justify-between px-4 py-3 border-b border-costco-border bg-white shrink-0">
           <p className="text-[13px] font-bold text-[#1a1a1a]">Item details</p>
           <button
             type="button"
@@ -51,7 +51,7 @@ export default function ProductDetailModal({
           </button>
         </div>
 
-        <div>
+        <div className="flex-1 overflow-y-auto min-h-0">
           <div className="relative aspect-square bg-white border-b border-[#eee]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -66,9 +66,8 @@ export default function ProductDetailModal({
             )}
           </div>
           <div className="p-5 flex flex-col">
-            <p className="text-[13px] text-[#555]">{product.brand}</p>
-            <h2 className="text-[22px] font-bold text-[#1a1a1a] mt-0.5 leading-snug">
-              {product.name}
+            <h2 className="text-[22px] font-bold text-[#1a1a1a] leading-snug">
+              {product.brand} {product.name}
             </h2>
             <div className="mt-2">
               <StarRating
@@ -106,30 +105,7 @@ export default function ProductDetailModal({
                 {product.category ? ` · ${product.category}` : ""}
               </p>
             </div>
-
-            <button
-              type="button"
-              onClick={onAdd}
-              className={`mt-5 w-full py-3 font-bold transition-colors flex items-center justify-center gap-2 rounded-full ${
-                justAdded
-                  ? "bg-green-600 text-white"
-                  : "bg-costco-blue text-white hover:bg-costco-blue-hover"
-              }`}
-            >
-              {justAdded ? (
-                <>
-                  <Check className="w-4 h-4" />
-                  Added{qty > 0 ? ` · ${qty} in cart` : ""}
-                </>
-              ) : (
-                <>
-                  <Plus className="w-4 h-4" />
-                  {qty > 0 ? `Add · ${qty} in cart` : "Add"}
-                </>
-              )}
-            </button>
           </div>
-        </div>
 
         <div className="px-5 pb-6 pt-4 border-t border-[#eee]">
           <h3 className="text-[15px] font-bold text-[#1a1a1a] mb-1">
@@ -167,6 +143,31 @@ export default function ProductDetailModal({
               </li>
             ))}
           </ul>
+        </div>
+        </div>
+
+        <div className="shrink-0 border-t border-[#eee] bg-white px-5 py-3">
+          <button
+            type="button"
+            onClick={onAdd}
+            className={`w-full py-3 font-bold transition-colors flex items-center justify-center gap-2 rounded-full ${
+              justAdded
+                ? "bg-[#099809] text-white"
+                : "bg-[#0AAD0A] text-white hover:bg-[#099809]"
+            }`}
+          >
+            {justAdded ? (
+              <>
+                <Check className="w-4 h-4" />
+                Added{qty > 0 ? ` · ${qty} in cart` : ""}
+              </>
+            ) : (
+              <>
+                <Plus className="w-4 h-4" />
+                {qty > 0 ? `Add · ${qty} in cart` : "Add"}
+              </>
+            )}
+          </button>
         </div>
       </div>
     </div>

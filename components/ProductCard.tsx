@@ -28,8 +28,8 @@ function AddControl({ product }: { product: Product }) {
         aria-label={`Add ${product.name}`}
         className={`absolute bottom-2 right-2 w-8 h-8 rounded-full bg-white border-[1.5px] shadow-[0_1px_4px_rgba(0,0,0,0.12)] flex items-center justify-center ${
           justAdded
-            ? "border-green-600 text-green-600"
-            : "border-costco-blue text-costco-blue hover:bg-[#e8f2fa]"
+            ? "border-[#0AAD0A] text-[#0AAD0A]"
+            : "border-[#0AAD0A] text-[#0AAD0A] hover:bg-[#e8f8e8]"
         }`}
       >
         {justAdded ? <Check className="w-4 h-4" /> : <Plus className="w-5 h-5" />}
@@ -39,12 +39,12 @@ function AddControl({ product }: { product: Product }) {
 
   return (
     <div
-      className="absolute bottom-2 right-2 h-8 flex items-center rounded-full bg-costco-blue text-white shadow-[0_1px_4px_rgba(0,0,0,0.16)] overflow-hidden"
+      className="absolute bottom-2 right-2 h-8 flex items-center rounded-full bg-[#0AAD0A] text-white shadow-[0_1px_4px_rgba(0,0,0,0.16)] overflow-hidden"
       onClick={(e) => e.stopPropagation()}
     >
       <button
         type="button"
-        className="w-8 h-9 flex items-center justify-center hover:bg-costco-blue-hover"
+        className="w-8 h-9 flex items-center justify-center hover:bg-[#099809]"
         onClick={() => updateQuantity(product.id, qty - 1)}
         aria-label="Decrease quantity"
       >
@@ -55,7 +55,7 @@ function AddControl({ product }: { product: Product }) {
       </span>
       <button
         type="button"
-        className="w-8 h-9 flex items-center justify-center hover:bg-costco-blue-hover"
+        className="w-8 h-9 flex items-center justify-center hover:bg-[#099809]"
         onClick={add}
         aria-label="Increase quantity"
       >
@@ -122,11 +122,8 @@ export default function ProductCard({
             Save ${product.savings.toFixed(2)}
           </p>
         )}
-        <p className="text-[13px] text-[#555] mt-1.5 leading-snug">
-          {product.brand}
-        </p>
-        <h3 className="text-[14px] font-normal text-[#242424] leading-snug mt-0.5 line-clamp-2 min-h-[2.5rem]">
-          {product.name}
+        <h3 className="text-[14px] font-normal text-[#242424] leading-snug mt-1.5 line-clamp-3 min-h-[3.75rem]">
+          {product.brand} {product.name}
         </h3>
         <p className="text-[12px] text-[#188038] mt-0.5">
           {product.inStock ? "Many in stock" : "Out of stock"}
