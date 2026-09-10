@@ -20,7 +20,7 @@ const paper = await download(
 
 const texture = await sharp(paper)
   .resize(W, H, { fit: "cover", position: "centre" })
-  .modulate({ brightness: 1.18, saturation: 0.55 })
+  .modulate({ brightness: 1.08, saturation: 0.7 })
   .toBuffer();
 
 const cream = await sharp({
@@ -28,7 +28,7 @@ const cream = await sharp({
     width: W,
     height: H,
     channels: 4,
-    background: { r: 243, g: 234, b: 208, alpha: 0.72 },
+    background: { r: 236, g: 220, b: 176, alpha: 0.62 },
   },
 })
   .png()
@@ -38,9 +38,9 @@ const wash = await sharp(
   Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
   <defs>
     <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#fff6d8" stop-opacity="0.28"/>
-      <stop offset="0.45" stop-color="#f3ead0" stop-opacity="0.08"/>
-      <stop offset="1" stop-color="#c9b27a" stop-opacity="0.22"/>
+      <stop offset="0" stop-color="#fff3c4" stop-opacity="0.34"/>
+      <stop offset="0.42" stop-color="#e8d29a" stop-opacity="0.12"/>
+      <stop offset="1" stop-color="#b8953a" stop-opacity="0.28"/>
     </linearGradient>
   </defs>
   <rect width="${W}" height="${H}" fill="url(#g)"/>

@@ -9,7 +9,7 @@ export default function GoldStarMembershipCard() {
     <div className="relative aspect-[1.586] bg-[#f3ead0] border border-[#c9b27a] rounded-[8px] overflow-hidden shadow-[0_2px_10px_rgba(26,18,8,0.14)] flex flex-col">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="/kirk/card-stock.jpg?v=1"
+        src="/kirk/card-stock.jpg?v=2"
         alt=""
         className="absolute inset-0 h-full w-full object-cover"
       />
