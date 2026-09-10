@@ -11,6 +11,14 @@
   --costco-bg: #f6f7f8;
   --costco-border: #dcdcdc;
   --costco-muted: #5c5c5c;
+  /* Costco CI — Figma chips v2 (node 6-11) */
+  --color-text: #1a1a1a;
+  --color-text-muted: #6b7280;
+  --color-ai-pill: #e8f1fb;
+  --color-chip: #eef4fa;
+  --color-chip-hover: #e4eef8;
+  --color-ci-border: #d1d5db;
+  --color-surface: #f5f5f5;
 }
 
 @theme inline {
@@ -23,6 +31,13 @@
   --color-costco-navy: var(--costco-navy);
   --color-costco-bg: var(--costco-bg);
   --color-costco-border: var(--costco-border);
+  --color-costco-text: var(--color-text);
+  --color-costco-text-muted: var(--color-text-muted);
+  --color-costco-ai-pill: var(--color-ai-pill);
+  --color-costco-chip: var(--color-chip);
+  --color-costco-chip-hover: var(--color-chip-hover);
+  --color-costco-ci-border: var(--color-ci-border);
+  --color-costco-surface: var(--color-surface);
   --font-sans: Arial, Helvetica, sans-serif;
   --font-kirkland: var(--font-kirkland);
 }

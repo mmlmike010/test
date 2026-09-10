@@ -22,21 +22,12 @@ export default function Home() {
           <ProductGrid />
         </main>
 
-        {isKirkOpen && (
-          <>
-            <button
-              type="button"
-              aria-label="Close Ask Kirk"
-              className="lg:hidden fixed inset-0 z-[35] bg-black/40"
-              onClick={() => setIsKirkOpen(false)}
-            />
-            <AskKirkChat
-              isOpen={isKirkOpen}
-              onClose={() => setIsKirkOpen(false)}
-            />
-          </>
-        )}
       </div>
+
+      <AskKirkChat
+        isOpen={isKirkOpen}
+        onClose={() => setIsKirkOpen(false)}
+      />
 
       <CartDrawer />
     </div>
