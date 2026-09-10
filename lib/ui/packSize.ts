@@ -24,6 +24,10 @@ export const PRODUCT_SIZES: Record<string, string> = {
   "22": "14 in",
   "23": "24 ct",
   "24": "1 ct",
+  "25": "1 ct",
+  "26": "1 ct",
+  "27": "1 ct",
+  "28": "4-piece",
 };
 
 export function productSize(id: string): string | undefined {

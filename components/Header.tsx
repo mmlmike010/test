@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { useCartStore } from "@/lib/store/cart";
 import { useCatalogStore } from "@/lib/store/catalog";
 import { ChevronDown, Clock, Search, ShoppingCart, User, X } from "lucide-react";
@@ -22,6 +24,8 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
   const department = useCatalogStore((s) => s.department);
   const tag = useCatalogStore((s) => s.tag);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
     if (timer.current) clearTimeout(timer.current);
@@ -44,6 +48,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
               onClick={() => {
                 clearFilters();
                 void search();
+                if (pathname !== "/") router.push("/");
               }}
               title="Show all products"
             >
@@ -59,12 +64,16 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
               </span>
             </button>
             <nav className="hidden lg:flex items-center gap-5 text-[14px]">
-              <a
-                href="#"
+              <Link
+                href="/"
                 className="text-costco-blue font-bold border-b-[3px] border-costco-blue py-3"
+                onClick={() => {
+                  clearFilters();
+                  void search();
+                }}
               >
                 Shop
-              </a>
+              </Link>
               <a href="#" className="text-[#333] hover:text-costco-blue py-3">
                 Flyers
               </a>

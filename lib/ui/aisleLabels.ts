@@ -4,6 +4,7 @@ const aisleLabels: Record<string, string> = {
   "Weekly Savings": "Member savings",
   Trending: "Featured",
   "Kirkland Signature": "Kirkland Signature",
+  "Furniture & Outdoor": "Furniture & patio",
   "Auto Accessories": "Auto",
   Babies: "Baby",
   "Bakery & Desserts": "Bakery",

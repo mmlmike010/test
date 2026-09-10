@@ -11,6 +11,10 @@
   --costco-bg: #f6f7f8;
   --costco-border: #dcdcdc;
   --costco-muted: #5c5c5c;
+  /* Figma furniture staging — --color/chip, --color/ai-pill, --color/text-muted */
+  --costco-chip: #eef4fa;
+  --costco-ai-pill: #e8f1fb;
+  --costco-text-muted: #6b7280;
 }
 
 @theme inline {
@@ -23,6 +27,9 @@
   --color-costco-navy: var(--costco-navy);
   --color-costco-bg: var(--costco-bg);
   --color-costco-border: var(--costco-border);
+  --color-costco-chip: var(--costco-chip);
+  --color-costco-ai-pill: var(--costco-ai-pill);
+  --color-costco-text-muted: var(--costco-text-muted);
   --font-sans: Arial, Helvetica, sans-serif;
   --font-kirkland: var(--font-kirkland);
 }

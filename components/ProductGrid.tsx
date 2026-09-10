@@ -10,6 +10,8 @@ import ProductCard from "@/components/ProductCard";
 import ProductDetailModal from "@/components/ProductDetailModal";
 import CategoryScroller from "@/components/CategoryScroller";
 import InstacartMark from "@/components/InstacartMark";
+import { isFurnitureProduct } from "@/lib/placeInRoom";
+import { usePlaceInRoomStore } from "@/lib/store/placeInRoom";
 
 type Aisle = {
   title: string;
@@ -72,6 +74,12 @@ export default function ProductGrid() {
   const clearFilters = useCatalogStore((s) => s.clearFilters);
   const [selected, setSelected] = useState<Product | null>(null);
   const [sort, setSort] = useState<"relevance" | "price">("relevance");
+  const setLastFurniture = usePlaceInRoomStore((s) => s.setLastProduct);
+
+  const openProduct = (product: Product) => {
+    if (isFurnitureProduct(product)) setLastFurniture(product.id);
+    setSelected(product);
+  };
 
   useEffect(() => {
     void search();
@@ -188,6 +196,11 @@ export default function ProductGrid() {
       items: filtered.filter((p) => p.department === "Bakery & Desserts"),
       onShowAll: () => showAisle({ department: "Bakery & Desserts" }),
     },
+    {
+      title: "Furniture & Outdoor",
+      items: filtered.filter((p) => isFurnitureProduct(p)),
+      onShowAll: () => showAisle({ department: "Furniture & Outdoor" }),
+    },
   ];
 
   return (
@@ -248,7 +261,7 @@ export default function ProductGrid() {
               title={aisle.title}
               items={aisle.items}
               onShowAll={aisle.onShowAll}
-              onOpen={setSelected}
+              onOpen={openProduct}
             />
           ))}
         </>
@@ -372,7 +385,7 @@ export default function ProductGrid() {
                 <ProductCard
                   key={product.id}
                   product={product}
-                  onOpen={() => setSelected(product)}
+                  onOpen={() => openProduct(product)}
                 />
               ))}
             </div>

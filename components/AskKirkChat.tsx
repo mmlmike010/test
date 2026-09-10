@@ -11,8 +11,11 @@ import {
   Sparkles,
   ChevronRight,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useCartStore } from "@/lib/store/cart";
 import { products } from "@/lib/data/products";
+import { usePlaceInRoomStore } from "@/lib/store/placeInRoom";
+import { seeInMyRoomHref, wantsPlaceInRoom } from "@/lib/placeInRoom";
 import KirkMark from "@/components/KirkMark";
 import CostcoLogo from "@/components/CostcoLogo";
 import GoldStarMark from "@/components/GoldStarMark";
@@ -24,6 +27,7 @@ interface Message {
   content: string;
   timestamp: Date;
   imageUrl?: string | null;
+  imageKind?: "inspire" | "staging";
 }
 
 interface AskKirkChatProps {
@@ -105,6 +109,8 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
   const getSnapshot = useCartStore((state) => state.getSnapshot);
   const kirkCartCount = useCartStore((state) => state.getTotalItems());
   const kirkCartSubtotal = useCartStore((state) => state.getSubtotal());
+  const lastFurnitureId = usePlaceInRoomStore((s) => s.lastProductId);
+  const router = useRouter();
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -226,9 +232,19 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
     }
   };
 
+  const openSeeInMyRoom = () => {
+    router.push(seeInMyRoomHref(lastFurnitureId));
+  };
+
   const sendMessage = async (text: string) => {
     const trimmed = text.trim();
     if (!trimmed || isLoading) return;
+
+    if (wantsPlaceInRoom(trimmed)) {
+      setInput("");
+      openSeeInMyRoom();
+      return;
+    }
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -494,7 +510,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
 
   return (
     <>
-    <aside className="fixed inset-y-0 right-0 z-40 w-full max-w-[420px] lg:static lg:z-30 lg:w-[380px] xl:w-[420px] lg:max-w-none shrink-0 bg-white border-l border-[#e5e5e5] h-full flex flex-col">
+    <aside className="fixed inset-y-0 right-0 z-[80] w-full max-w-[420px] lg:static lg:z-[80] lg:w-[380px] xl:w-[420px] lg:max-w-none shrink-0 bg-white border-l border-[#e5e5e5] h-full flex flex-col">
       <div className="relative shrink-0 border-b border-[#e5e5e5] bg-[#f7f1de] overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
@@ -622,7 +638,11 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={message.imageUrl}
-                      alt="Recipe inspiration"
+                      alt={
+                        message.imageKind === "staging"
+                          ? "Place-in-room staging"
+                          : "Recipe inspiration"
+                      }
                       className="w-full h-auto max-h-[320px] object-cover group-hover:opacity-95 transition-opacity"
                     />
                     <span className="absolute bottom-2 right-2 bg-black/60 text-white text-[10px] font-bold px-2 py-0.5">
@@ -630,7 +650,9 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                     </span>
                   </button>
                   <p className="text-[10px] text-[#666] px-2.5 py-1.5 bg-[#fafafa] border-t border-[#eee] font-semibold tracking-wide uppercase">
-                    Recipe inspiration · tap to enlarge
+                    {message.imageKind === "staging"
+                      ? "Place in room · Grok Imagine · tap to enlarge"
+                      : "Recipe inspiration · tap to enlarge"}
                   </p>
                 </div>
               )}
@@ -665,7 +687,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                       Generating image…
                     </p>
                     <p className="text-[10px] text-[#666] truncate">
-                      Recipe inspiration
+                      Grok Imagine
                     </p>
                   </div>
                 </div>
@@ -710,6 +732,14 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
           Members often ask
         </p>
         <div className="flex flex-wrap gap-1.5 mb-2.5 content-start">
+          <button
+            type="button"
+            onClick={openSeeInMyRoom}
+            disabled={isLoading}
+            className="px-2.5 py-1 bg-[#e8f2fa] hover:bg-[#dceaf6] hover:border-costco-blue text-costco-blue disabled:opacity-50 text-[11px] leading-snug rounded-full transition-colors border border-costco-blue font-bold max-w-full"
+          >
+            See it in my room
+          </button>
           {suggestionChips.map((chip) => (
             <button
               key={chip}
