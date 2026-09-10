@@ -6,6 +6,7 @@ import { productSize } from "@/lib/ui/packSize";
 import {
   deliveryWindow,
   formatAddress,
+  kirkDrawerOffset,
   useSessionStore,
 } from "@/lib/store/session";
 
@@ -19,6 +20,7 @@ export default function CartDrawer() {
   const subtotal = useCartStore((s) => s.getSubtotal());
   const totalItems = useCartStore((s) => s.getTotalItems());
   const setSheet = useSessionStore((s) => s.setSheet);
+  const kirkOpen = useSessionStore((s) => s.kirkOpen);
   const windowId = useSessionStore((s) => s.windowId);
   const address = useSessionStore((s) => s.address);
   const specialRequest = useSessionStore((s) => s.specialRequest);
@@ -27,7 +29,9 @@ export default function CartDrawer() {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[80] flex justify-end">
+    <div
+      className={`fixed inset-0 z-[72] flex justify-end ${kirkDrawerOffset(kirkOpen)}`}
+    >
       <button
         type="button"
         aria-label="Close cart backdrop"
