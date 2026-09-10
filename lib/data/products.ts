@@ -303,7 +303,7 @@ export const products: Product[] = [
     price: 2.71,
     originalPrice: 4.0,
     savings: 1.29,
-    image: "/products/9.png?v=20",
+    image: "/products/9.png?v=21",
     inStock: true,
     tags: ["bakery"],
     rating: 3.9,
@@ -605,7 +605,7 @@ export const products: Product[] = [
     savings: 50.0,
     image: "/products/18.png",
     inStock: true,
-    tags: ["cameras", "treasure"],
+    tags: ["cameras"],
     rating: 4.4,
     reviewCount: 156,
     reviews: [

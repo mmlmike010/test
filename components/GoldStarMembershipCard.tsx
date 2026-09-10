@@ -40,7 +40,7 @@ export default function GoldStarMembershipCard() {
             </p>
           </div>
         </div>
-        <KirkIdPhoto className="w-[22%] max-w-[84px] self-stretch min-h-0 rounded-[2px] border-[3px] border-white shadow-[0_1px_2px_rgba(26,18,8,0.28)] shrink-0" />
+        <KirkIdPhoto className="w-[26%] max-w-[92px] aspect-[3/4] self-start mt-0.5 rounded-[2px] border-[3px] border-white shadow-[0_1px_2px_rgba(26,18,8,0.28)] shrink-0" />
       </div>
       <div className="px-3 pb-1.5 shrink-0">
         <MembershipBarcode className="h-5 w-full text-[#1a1a1a]" />
