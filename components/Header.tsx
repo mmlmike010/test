@@ -60,7 +60,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
   }, [q, department, tag, search]);
 
   return (
-    <header className="bg-white border-b border-[#e5e5e5] sticky top-0 z-[60] shrink-0">
+    <header className="bg-white border-b border-[#e5e5e5] sticky top-0 z-[75] shrink-0">
       <div className="border-b border-[#ececec]">
         <div className="max-w-[1800px] mx-auto px-3 sm:px-4 h-[52px] flex items-center justify-between gap-3">
           <div className="flex items-center gap-4 min-w-0">
