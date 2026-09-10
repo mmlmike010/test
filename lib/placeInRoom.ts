@@ -54,6 +54,11 @@ export const ROOM_SCENES: RoomScene[] = [
 export const DEFAULT_FURNITURE_ID = "25";
 export const PATIO_FURNITURE_ID = "28";
 
+export function seeInMyRoomHref(productId?: string | null): string {
+  const id = productId || DEFAULT_FURNITURE_ID;
+  return `/see-in-my-room?product=${id}`;
+}
+
 export function isFurnitureProduct(product: Product): boolean {
   return (
     product.department === FURNITURE_DEPARTMENT ||

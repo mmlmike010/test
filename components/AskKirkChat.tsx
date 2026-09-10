@@ -11,14 +11,11 @@ import {
   Sparkles,
   ChevronRight,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useCartStore } from "@/lib/store/cart";
 import { products } from "@/lib/data/products";
 import { usePlaceInRoomStore } from "@/lib/store/placeInRoom";
-import {
-  pickFurnitureProduct,
-  parsePlaceInRoomAsk,
-  wantsPlaceInRoom,
-} from "@/lib/placeInRoom";
+import { seeInMyRoomHref, wantsPlaceInRoom } from "@/lib/placeInRoom";
 import KirkMark from "@/components/KirkMark";
 import CostcoLogo from "@/components/CostcoLogo";
 import GoldStarMark from "@/components/GoldStarMark";
@@ -113,6 +110,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
   const kirkCartCount = useCartStore((state) => state.getTotalItems());
   const kirkCartSubtotal = useCartStore((state) => state.getSubtotal());
   const lastFurnitureId = usePlaceInRoomStore((s) => s.lastProductId);
+  const router = useRouter();
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -234,67 +232,8 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
     }
   };
 
-  const sendStagingAsk = async (text: string) => {
-    const intent = parsePlaceInRoomAsk(text, lastFurnitureId);
-    const product = pickFurnitureProduct(intent.sceneId, lastFurnitureId);
-
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      role: "user",
-      content: text,
-      timestamp: new Date(),
-    };
-    setMessages((prev) => [...prev, userMessage]);
-    setInput("");
-    setError(null);
-
-    setIsLoading(true);
-    setPendingInspire(true);
-    try {
-      const res = await fetch("/api/place-in-room", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          productId: product.id,
-          sceneId: intent.sceneId,
-        }),
-      });
-      const data = (await res.json()) as {
-        imageUrl?: string;
-        mode?: string;
-        error?: string;
-      };
-      if (!res.ok || !data.imageUrl) {
-        throw new Error(data.error || "Grok Imagine staging failed");
-      }
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: (Date.now() + 1).toString(),
-          role: "assistant",
-          content: `Here's ${product.brand} ${product.name} staged in the ${intent.sceneId.replace("-", " ")} — Grok Imagine ${data.mode === "edits" ? "composited" : "generated"} this scene.`,
-          timestamp: new Date(),
-          imageUrl: data.imageUrl,
-          imageKind: "staging",
-        },
-      ]);
-    } catch (e) {
-      const msg = e instanceof Error ? e.message : "Grok Imagine staging failed";
-      setError(msg);
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: (Date.now() + 1).toString(),
-          role: "assistant",
-          content:
-            "I couldn't reach Grok Imagine just now. Check that XAI_API_KEY is set and try again.",
-          timestamp: new Date(),
-        },
-      ]);
-    } finally {
-      setIsLoading(false);
-      setPendingInspire(false);
-    }
+  const openSeeInMyRoom = () => {
+    router.push(seeInMyRoomHref(lastFurnitureId));
   };
 
   const sendMessage = async (text: string) => {
@@ -302,7 +241,8 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
     if (!trimmed || isLoading) return;
 
     if (wantsPlaceInRoom(trimmed)) {
-      await sendStagingAsk(trimmed);
+      setInput("");
+      openSeeInMyRoom();
       return;
     }
 
@@ -794,7 +734,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
         <div className="flex flex-wrap gap-1.5 mb-2.5 content-start">
           <button
             type="button"
-            onClick={() => void sendMessage("See it in my room")}
+            onClick={openSeeInMyRoom}
             disabled={isLoading}
             className="px-2.5 py-1 bg-[#e8f2fa] hover:bg-[#dceaf6] hover:border-costco-blue text-costco-blue disabled:opacity-50 text-[11px] leading-snug rounded-full transition-colors border border-costco-blue font-bold max-w-full"
           >

@@ -8,8 +8,9 @@ import ProductCard from "@/components/ProductCard";
 import { productSize } from "@/lib/ui/packSize";
 import { aisleLabel } from "@/lib/ui/aisleLabels";
 import { useRef, useState } from "react";
-import SeeInMyRoomCard from "@/components/SeeInMyRoomCard";
-import { isFurnitureProduct } from "@/lib/placeInRoom";
+import { useRouter } from "next/navigation";
+import { isFurnitureProduct, seeInMyRoomHref } from "@/lib/placeInRoom";
+import { usePlaceInRoomStore } from "@/lib/store/placeInRoom";
 
 export default function ProductDetailModal({
   product,
@@ -25,6 +26,8 @@ export default function ProductDetailModal({
   );
   const [justAdded, setJustAdded] = useState(false);
   const scrollerRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const setLastFurniture = usePlaceInRoomStore((s) => s.setLastProduct);
 
   const related = products
     .filter(
@@ -42,9 +45,16 @@ export default function ProductDetailModal({
   };
 
   const openRelated = (next: Product) => {
+    if (isFurnitureProduct(next)) setLastFurniture(next.id);
     setCurrent(next);
     setJustAdded(false);
     scrollerRef.current?.scrollTo({ top: 0 });
+  };
+
+  const openSeeInMyRoom = () => {
+    setLastFurniture(current.id);
+    router.push(seeInMyRoomHref(current.id));
+    onClose();
   };
 
   return (
@@ -131,7 +141,15 @@ export default function ProductDetailModal({
                 · {aisleLabel(current.department)}
               </span>
             </p>
-            {isFurnitureProduct(current) && <SeeInMyRoomCard product={current} />}
+            {isFurnitureProduct(current) && (
+              <button
+                type="button"
+                onClick={openSeeInMyRoom}
+                className="mt-4 w-full h-11 rounded-full bg-costco-blue text-white text-[14px] font-bold hover:bg-costco-blue-hover"
+              >
+                See it in my room
+              </button>
+            )}
             <div className="mt-5 pt-4 border-t border-[#eee]">
               <h3 className="text-[15px] font-bold text-[#1a1a1a]">Details</h3>
               <p className="text-[13px] text-[#555] mt-1.5 leading-snug">
