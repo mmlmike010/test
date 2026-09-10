@@ -148,9 +148,8 @@ ${inner}
 }
 
 async function composeJasons() {
-  // Official Recipe No 11 is a rectangular paper bakery bag (Tesco pack),
-  // dusty mauve, large loaf window. Colorize photographed paper fiber.
-  // Never dest-in or blur-recolor a competing brand's RGB.
+  // Official Recipe No 11 is a standing mauve paper bakery bag with a
+  // large loaf window. Paper fiber only — never dest-in a competing bag.
   const PAPER =
     "https://raw.githubusercontent.com/prabhasp/ali-khasro/master/lokta/paper2.jpg";
   const crumbShot = await download(
@@ -158,13 +157,26 @@ async function composeJasons() {
   );
   const paperBytes = await download(PAPER);
 
-  const pw = 420;
-  const ph = 560;
+  const pw = 368;
+  const ph = 620;
+  const bagX = 18;
+  const bagY = 22;
+  const bagW = pw - 36;
+  const bagH = ph - 36;
   const bagMask = await sharp(
     svg(
       pw,
       ph,
-      `<rect x="36" y="28" width="348" height="504" rx="18" ry="18" fill="#fff"/>`
+      `<path fill="#fff" d="M${bagX + 10},${bagY}
+        L${bagX + bagW - 10},${bagY}
+        Q${bagX + bagW},${bagY} ${bagX + bagW},${bagY + 10}
+        L${bagX + bagW},${bagY + bagH - 14}
+        Q${bagX + bagW},${bagY + bagH} ${bagX + bagW - 14},${bagY + bagH}
+        L${bagX + 14},${bagY + bagH}
+        Q${bagX},${bagY + bagH} ${bagX},${bagY + bagH - 14}
+        L${bagX},${bagY + 10}
+        Q${bagX},${bagY} ${bagX + 10},${bagY}
+        Z"/>`
     )
   )
     .png()
@@ -173,8 +185,9 @@ async function composeJasons() {
   const paperGrey = await sharp(paperBytes)
     .resize(pw, ph, { fit: "cover", position: "centre" })
     .greyscale()
-    .modulate({ brightness: 1.18, saturation: 0.4 })
-    .sharpen(1.4)
+    .normalize()
+    .modulate({ brightness: 1.22, saturation: 0.3 })
+    .sharpen(1.6)
     .removeAlpha()
     .toBuffer();
   const mauveWash = await sharp({
@@ -182,7 +195,7 @@ async function composeJasons() {
       width: pw,
       height: ph,
       channels: 3,
-      background: { r: 156, g: 92, b: 118 },
+      background: { r: 148, g: 86, b: 108 },
     },
   })
     .jpeg()
@@ -199,13 +212,16 @@ async function composeJasons() {
     `
   <defs>
     <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#ffffff" stop-opacity="0.22"/>
-      <stop offset="0.45" stop-color="#ffffff" stop-opacity="0"/>
-      <stop offset="1" stop-color="#4a2040" stop-opacity="0.12"/>
+      <stop offset="0" stop-color="#2a1020" stop-opacity="0.18"/>
+      <stop offset="0.22" stop-color="#ffffff" stop-opacity="0.16"/>
+      <stop offset="0.55" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="1" stop-color="#2a1020" stop-opacity="0.2"/>
     </linearGradient>
   </defs>
   <rect width="${pw}" height="${ph}" fill="url(#sheen)"/>
-  <rect x="36" y="28" width="348" height="22" fill="#4a2040" fill-opacity="0.12"/>
+  <rect x="${bagX}" y="${bagY}" width="${bagW}" height="36" fill="#3a1830" fill-opacity="0.16"/>
+  <line x1="${bagX + 18}" y1="${bagY + 14}" x2="${bagX + bagW - 18}" y2="${bagY + 14}" stroke="#3a1830" stroke-opacity="0.18" stroke-width="2"/>
+  <line x1="${bagX + 28}" y1="${bagY + 22}" x2="${bagX + bagW - 28}" y2="${bagY + 22}" stroke="#3a1830" stroke-opacity="0.12" stroke-width="2"/>
 `
   );
 
@@ -216,17 +232,17 @@ async function composeJasons() {
   const bagAlpha = await sharp(bagMask).extractChannel("alpha").toBuffer();
   const film = await sharp(body).joinChannel(bagAlpha).png().toBuffer();
 
-  const winW = 248;
-  const winH = 210;
+  const winW = 252;
+  const winH = 268;
   const winX = Math.round((pw - winW) / 2);
-  const winY = 148;
+  const winY = 142;
   const loaf = await sharp(crumbShot)
-    .extract({ left: 1180, top: 420, width: 1880, height: 1320 })
+    .extract({ left: 1420, top: 480, width: 1960, height: 1680 })
     .resize(winW, winH, { fit: "cover", position: "centre" })
     .png()
     .toBuffer();
   const windowMask = await sharp(
-    svg(winW, winH, `<rect width="${winW}" height="${winH}" rx="10" ry="10" fill="#fff"/>`)
+    svg(winW, winH, `<rect width="${winW}" height="${winH}" rx="4" ry="4" fill="#fff"/>`)
   )
     .png()
     .toBuffer();
@@ -241,12 +257,12 @@ async function composeJasons() {
       `
     <defs>
       <linearGradient id="film" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0" stop-color="#ffffff" stop-opacity="0.24"/>
-        <stop offset="0.5" stop-color="#ffffff" stop-opacity="0"/>
-        <stop offset="1" stop-color="#4a2040" stop-opacity="0.08"/>
+        <stop offset="0" stop-color="#ffffff" stop-opacity="0.2"/>
+        <stop offset="0.45" stop-color="#ffffff" stop-opacity="0"/>
+        <stop offset="1" stop-color="#3a1830" stop-opacity="0.1"/>
       </linearGradient>
     </defs>
-    <rect width="${winW}" height="${winH}" rx="10" fill="url(#film)"/>
+    <rect width="${winW}" height="${winH}" rx="4" fill="url(#film)"/>
   `
     )
   )
@@ -258,14 +274,14 @@ async function composeJasons() {
       pw,
       ph,
       `
-  <rect x="${winX - 7}" y="${winY - 7}" width="${winW + 14}" height="${winH + 14}" rx="12" ry="12" fill="#5a2a48"/>
-  <text x="${pw / 2}" y="88" text-anchor="middle" fill="#f7ead2" font-family="Georgia, Times New Roman, serif" font-size="42" font-weight="700">Jason's</text>
-  <text x="${pw / 2}" y="112" text-anchor="middle" fill="#f0d8c8" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="800" letter-spacing="5">SOURDOUGH</text>
-  <text x="${pw / 2}" y="396" text-anchor="middle" fill="#f7ead2" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="800" letter-spacing="1.6">GRAINS &amp; SEEDS</text>
-  <text x="${pw / 2}" y="418" text-anchor="middle" fill="#f0d8c8" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="800" letter-spacing="2.8">TASTE THE MAGIC</text>
-  <rect x="${pw / 2 - 82}" y="430" width="164" height="28" rx="2" fill="#C9A227"/>
-  <text x="${pw / 2}" y="450" text-anchor="middle" fill="#3a1830" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="800" letter-spacing="1.4">RECIPE NO 11</text>
-  <text x="${pw / 2}" y="484" text-anchor="middle" fill="#f0d8c8" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" letter-spacing="1.8">24 OZ</text>
+  <rect x="${winX - 8}" y="${winY - 8}" width="${winW + 16}" height="${winH + 16}" rx="6" fill="#4a2040"/>
+  <text x="${pw / 2}" y="92" text-anchor="middle" fill="#f7ead2" font-family="Georgia, Times New Roman, serif" font-size="40" font-weight="700">Jason's</text>
+  <text x="${pw / 2}" y="118" text-anchor="middle" fill="#f0d8c8" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="800" letter-spacing="5.2">SOURDOUGH</text>
+  <text x="${pw / 2}" y="448" text-anchor="middle" fill="#f7ead2" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="800" letter-spacing="1.8">GRAINS &amp; SEEDS</text>
+  <text x="${pw / 2}" y="470" text-anchor="middle" fill="#f0d8c8" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="800" letter-spacing="2.6">TASTE THE MAGIC</text>
+  <rect x="${pw / 2 - 78}" y="484" width="156" height="26" rx="2" fill="#C9A227"/>
+  <text x="${pw / 2}" y="502" text-anchor="middle" fill="#3a1830" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="800" letter-spacing="1.4">RECIPE NO 11</text>
+  <text x="${pw / 2}" y="538" text-anchor="middle" fill="#f0d8c8" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" letter-spacing="1.8">24 OZ</text>
 `
     )
   )
@@ -282,23 +298,23 @@ async function composeJasons() {
     .toBuffer();
 
   const rotated = await sharp(bag)
-    .rotate(-2, { background: { r: 0, g: 0, b: 0, alpha: 0 } })
+    .rotate(-1.4, { background: { r: 0, g: 0, b: 0, alpha: 0 } })
     .png()
     .toBuffer();
   const rotMeta = await sharp(rotated).metadata();
   const shadow = await sharp(
     svg(
       rotMeta.width,
-      56,
-      `<ellipse cx="${rotMeta.width / 2}" cy="28" rx="${rotMeta.width * 0.32}" ry="11" fill="#000" fill-opacity="0.14"/>`
+      64,
+      `<ellipse cx="${rotMeta.width / 2}" cy="34" rx="${rotMeta.width * 0.28}" ry="10" fill="#000" fill-opacity="0.16"/>`
     )
   )
-    .blur(10)
+    .blur(12)
     .png()
     .toBuffer();
 
   const left = Math.round((800 - rotMeta.width) / 2);
-  const top = Math.round((800 - rotMeta.height) / 2) - 4;
+  const top = Math.round((800 - rotMeta.height) / 2) - 8;
   await sharp({
     create: {
       width: 800,
@@ -308,7 +324,7 @@ async function composeJasons() {
     },
   })
     .composite([
-      { input: shadow, left, top: top + rotMeta.height - 26 },
+      { input: shadow, left, top: top + rotMeta.height - 28 },
       { input: rotated, left, top },
     ])
     .png({ compressionLevel: 8 })
