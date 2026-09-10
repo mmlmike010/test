@@ -11,7 +11,7 @@ export default function CategoryScroller() {
 
   return (
     <div className="bg-white border-b border-[#ececec]">
-      <div className="flex gap-5 overflow-x-auto scrollbar-hide px-4 py-3">
+      <div className="flex gap-5 overflow-x-auto scrollbar-hide px-4 py-3.5">
         {categories.map((category) => {
           const active = tag === category.id;
           return (
@@ -26,7 +26,7 @@ export default function CategoryScroller() {
               className="flex flex-col items-center gap-1.5 min-w-[80px] group"
             >
               <div
-                className={`relative w-[76px] h-[76px] rounded-full overflow-hidden bg-[#f3f3f3] border border-[#e8e8e8] ring-2 ring-offset-2 ${
+                className={`relative w-[80px] h-[80px] rounded-full overflow-hidden bg-[#f3f3f3] border border-[#e8e8e8] ring-2 ring-offset-2 ${
                   active
                     ? "ring-costco-blue"
                     : "ring-transparent group-hover:ring-[#c5d8ea]"

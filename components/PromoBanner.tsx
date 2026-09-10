@@ -9,7 +9,8 @@ export default function PromoBanner() {
           <span className="font-bold">$10 monthly credit</span>
           <span className="text-white/75">
             {" "}
-            · For Executive members ($150 min) · Membership required
+            · For Executive members ($150 min spend) · Same-Day requires a
+            Costco membership
           </span>
         </p>
       </div>

@@ -502,8 +502,8 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
               <h2 className="text-[17px] font-black tracking-tight text-white leading-none">
                 Ask Kirk
               </h2>
-              <p className="text-[11px] font-semibold text-white/90 mt-[4px]">
-                Kirkland Signature · Same-Day
+              <p className="text-[10px] font-extrabold tracking-[0.16em] text-white/90 mt-[5px] uppercase">
+                Kirkland Signature
               </p>
             </div>
           </div>
@@ -531,7 +531,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
         <div className="h-[3px] bg-costco-blue" />
         <p className="px-3.5 py-1.5 flex items-center gap-1.5 text-[11px] text-[#188038] font-semibold bg-[#f3f3f3] border-b border-[#ececec]">
           <span className="w-1.5 h-1.5 rounded-full bg-[#188038]" />
-          In stock · Delivery 8:48–9:18pm · 11217 Brooklyn
+          Delivery 8:48–9:18pm · 11217 Brooklyn · Membership required
         </p>
         {kirkCartCount > 0 && (
           <button
@@ -586,6 +586,9 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                 </div>
                 <p className="text-[13px] leading-relaxed text-[#333] whitespace-pre-line">
                   {message.content}
+                </p>
+                <p className="mt-2.5 text-[11px] text-[#666] font-semibold">
+                  Same-Day requires a Costco membership
                 </p>
                 </div>
               </div>
