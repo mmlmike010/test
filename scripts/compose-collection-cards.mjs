@@ -12,10 +12,10 @@ async function productThumb(id, size) {
 
 async function composeCard(outName, ids) {
   const W = 1200;
-  const H = 560;
-  const size = 340;
-  const y = Math.round((H - size) / 2 - 18);
-  const gap = 28;
+  const H = 520;
+  const size = 400;
+  const y = Math.round((H - size) / 2 - 8);
+  const gap = 12;
   const total = ids.length * size + (ids.length - 1) * gap;
   let x = Math.round((W - total) / 2);
 
@@ -34,7 +34,7 @@ async function composeCard(outName, ids) {
       width: W,
       height: H,
       channels: 3,
-      background: { r: 247, g: 247, b: 247 },
+      background: { r: 244, g: 246, b: 247 },
     },
   })
     .composite(layers)
