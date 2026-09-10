@@ -17,7 +17,6 @@ import KirkMark from "@/components/KirkMark";
 import CostcoLogo from "@/components/CostcoLogo";
 import GoldStarMark from "@/components/GoldStarMark";
 import GoldStarMembershipCard from "@/components/GoldStarMembershipCard";
-import WarehouseScanPass from "@/components/WarehouseScanPass";
 
 interface Message {
   id: string;
@@ -585,7 +584,6 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             return (
               <div key={message.id} className="space-y-2.5">
                 <GoldStarMembershipCard />
-                <WarehouseScanPass />
                 <div className="flex gap-2 justify-start">
                   <KirkMark size={28} className="mt-0.5 shrink-0" />
                   <div className="max-w-[82%] px-3.5 py-2.5 text-[13px] leading-relaxed rounded-2xl rounded-bl-md bg-white text-[#1a1a1a] border border-[#e8e8e8] shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
