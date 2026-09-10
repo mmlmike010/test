@@ -131,7 +131,7 @@ export default function CartDrawer() {
             <button
               type="button"
               onClick={closeCart}
-              className="flex-1 py-3 bg-costco-red text-white rounded-full font-bold hover:bg-costco-red-hover text-[15px]"
+              className="flex-1 py-3 bg-[#0AAD0A] text-white rounded-full font-bold hover:bg-[#099809] text-[15px]"
             >
               {items.length ? "Go to checkout" : "Browse products"}
             </button>

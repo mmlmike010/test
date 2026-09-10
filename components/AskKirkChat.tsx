@@ -502,11 +502,12 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
               <h2 className="text-[17px] font-black tracking-tight text-white leading-none">
                 Ask Kirk
               </h2>
-              <p className="mt-[5px] leading-none">
-                <span className="block text-[10px] font-extrabold tracking-[0.22em] text-white uppercase">
+              <p className="mt-[6px] leading-none">
+                <span className="block text-[10px] font-extrabold tracking-[0.24em] text-white uppercase">
                   Kirkland
                 </span>
-                <span className="block text-[9px] font-bold tracking-[0.28em] text-white/80 uppercase mt-[2px]">
+                <span className="block w-[72px] h-px bg-white/70 my-[3px]" />
+                <span className="block text-[9px] font-bold tracking-[0.32em] text-white/85 uppercase">
                   Signature
                 </span>
               </p>
@@ -535,7 +536,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
         </div>
         <div className="h-[3px] bg-costco-blue" />
         <p className="px-3.5 py-1.5 flex items-center gap-1.5 text-[11px] text-[#188038] font-semibold bg-[#f3f3f3] border-b border-[#ececec]">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#188038]" />
+          <span className="w-1.5 h-1.5 rounded-full bg-[#0AAD0A]" />
           Delivery 8:48–9:18pm · 11217 Brooklyn · Membership required
         </p>
         {kirkCartCount > 0 && (
@@ -592,13 +593,17 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                 <p className="text-[13px] leading-relaxed text-[#333] whitespace-pre-line">
                   {message.content}
                 </p>
-                <div className="mt-2.5 flex items-center gap-2 rounded-[8px] bg-[#f3f3f3] px-2.5 py-1.5">
-                  <span className="inline-flex h-5 items-center rounded-[3px] bg-costco-red px-1.5 text-[9px] font-black tracking-wide text-white">
-                    MEMBER
-                  </span>
-                  <p className="text-[11px] text-[#555] font-semibold">
-                    Same-Day requires a Costco membership
-                  </p>
+                <div className="mt-2.5 overflow-hidden rounded-[8px] border border-[#e5e5e5]">
+                  <div className="h-[3px] bg-costco-red" />
+                  <div className="flex items-center gap-2 bg-[#f7f7f7] px-2.5 py-1.5">
+                    <span className="inline-flex h-5 items-center rounded-[3px] bg-costco-red px-1.5 text-[9px] font-black tracking-wide text-white">
+                      MEMBER
+                    </span>
+                    <p className="text-[11px] text-[#555] font-semibold">
+                      Same-Day requires a Costco membership
+                    </p>
+                  </div>
+                  <div className="h-[3px] bg-costco-blue" />
                 </div>
                 </div>
               </div>

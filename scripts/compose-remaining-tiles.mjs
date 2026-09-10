@@ -193,10 +193,10 @@ async function composeJasons() {
     </linearGradient>
   </defs>
   <g filter="url(#floor)">
-    <path fill-rule="evenodd" fill="url(#purpleBag)" d="M168 96 h464 l22 40 v492 c0 22-18 38-44 38 H190 c-26 0-44-16-44-38 V136 Z M208 292 h384 v208 H208 Z"/>
-    <path fill-rule="evenodd" fill="url(#sheen)" d="M168 96 h464 l22 40 v492 c0 22-18 38-44 38 H190 c-26 0-44-16-44-38 V136 Z M208 292 h384 v208 H208 Z"/>
-    <rect x="176" y="78" width="448" height="22" rx="3" fill="#241036"/>
-    <rect x="164" y="70" width="472" height="12" rx="2" fill="#1b0c28"/>
+    <path fill-rule="evenodd" fill="url(#purpleBag)" d="M176 108 h448 l18 32 v496 c0 20-16 34-40 34 H198 c-24 0-40-14-40-34 V140 Z M208 292 h384 v208 H208 Z"/>
+    <path fill-rule="evenodd" fill="url(#sheen)" d="M176 108 h448 l18 32 v496 c0 20-16 34-40 34 H198 c-24 0-40-14-40-34 V140 Z M208 292 h384 v208 H208 Z"/>
+    <path d="M188 92 h424 l12 16 H176 Z" fill="#3a1654"/>
+    <path d="M210 84 h380 l8 8 H202 Z" fill="#2a1040"/>
     <rect x="208" y="292" width="384" height="208" fill="none" stroke="#1b0c28" stroke-width="10"/>
     <text x="400" y="168" text-anchor="middle" fill="#f3e6c4" font-family="Georgia, Times New Roman, serif" font-size="54" font-weight="700">Jason's</text>
     <text x="400" y="198" text-anchor="middle" fill="#d4c0e4" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="800" letter-spacing="4.2">SOURDOUGH</text>
