@@ -28,9 +28,10 @@ export default function CartDrawer() {
 
   if (!isOpen) return null;
 
+  // 112px = Same-Day header lockup + search row so the cart title is not covered.
   return (
     <div
-      className={`fixed inset-0 z-[72] flex justify-end ${kirkDrawerOffset(kirkOpen)}`}
+      className={`fixed inset-x-0 bottom-0 top-[112px] z-[72] flex justify-end ${kirkDrawerOffset(kirkOpen)}`}
     >
       <button
         type="button"
