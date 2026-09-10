@@ -99,6 +99,13 @@ export default function ProductDetailModal({
                 · {product.department}
               </span>
             </p>
+            <div className="mt-5 pt-4 border-t border-[#eee]">
+              <h3 className="text-[15px] font-bold text-[#1a1a1a]">Details</h3>
+              <p className="text-[13px] text-[#555] mt-1.5 leading-snug">
+                {product.department}
+                {product.category ? ` · ${product.category}` : ""}
+              </p>
+            </div>
 
             <button
               type="button"

@@ -160,12 +160,15 @@ ${inner}
 }
 
 async function composeJasons() {
-  const loafPack = await download(
-    `${CF}/large_c2fd99fb-d74b-471f-8d29-93294dde4ffe.png`
+  // Seeded sandwich face only — stay inside the loaf, off the Izzio twist/label.
+  const seededPack = await download(
+    `${CF}/large_d2b0fee4-2249-4950-9b3a-b167df3fdc0e.jpg`
   );
-  const loaf = await sharp(loafPack)
-    .extract({ left: 300, top: 90, width: 164, height: 280 })
-    .resize(260, 220, { fit: "cover" })
+
+  const window = { left: 208, top: 292, width: 384, height: 208 };
+  const loaf = await sharp(seededPack)
+    .extract({ left: 235, top: 158, width: 120, height: 95 })
+    .resize(window.width, window.height, { fit: "cover" })
     .png()
     .toBuffer();
 
@@ -176,23 +179,31 @@ async function composeJasons() {
       `
   <defs>
     <filter id="floor" x="-30%" y="-20%" width="160%" height="160%">
-      <feDropShadow dx="0" dy="18" stdDeviation="14" flood-color="#1a1a1a" flood-opacity="0.14"/>
+      <feDropShadow dx="0" dy="18" stdDeviation="14" flood-color="#1a1a1a" flood-opacity="0.16"/>
     </filter>
-    <linearGradient id="purpleBag" x1="0" y1="0" x2="0.2" y2="1">
-      <stop offset="0" stop-color="#5a2480"/>
-      <stop offset="0.55" stop-color="#4a1a6c"/>
-      <stop offset="1" stop-color="#351250"/>
+    <linearGradient id="purpleBag" x1="0" y1="0" x2="0.12" y2="1">
+      <stop offset="0" stop-color="#6b2d86"/>
+      <stop offset="0.5" stop-color="#4c1a6c"/>
+      <stop offset="1" stop-color="#311044"/>
+    </linearGradient>
+    <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="0.16" stop-color="#ffffff" stop-opacity="0.14"/>
+      <stop offset="0.3" stop-color="#ffffff" stop-opacity="0"/>
     </linearGradient>
   </defs>
   <g filter="url(#floor)">
-    <path fill-rule="evenodd" fill="url(#purpleBag)" d="M268 96 h264 l18 28 v500 c0 22-18 36-40 36 H290 c-22 0-40-14-40-36 V124 Z M270 248 h260 v220 H270 Z"/>
-    <rect x="256" y="84" width="288" height="22" rx="4" fill="#3b1658"/>
-    <rect x="270" y="248" width="260" height="220" fill="none" stroke="#2a0f3d" stroke-width="7"/>
-    <text x="400" y="148" text-anchor="middle" fill="#f4e8c8" font-family="Georgia, Times New Roman, serif" font-size="40" font-weight="700">Jason's</text>
-    <text x="400" y="176" text-anchor="middle" fill="#d8c4e8" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" letter-spacing="3.2">SOURDOUGH</text>
-    <text x="400" y="508" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="800" letter-spacing="1.6">GRAINS &amp; SEEDS</text>
-    <text x="400" y="536" text-anchor="middle" fill="#e8d5a3" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700">CIABATTIN</text>
-    <text x="400" y="612" text-anchor="middle" fill="#c9b8d8" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700">580g</text>
+    <path fill-rule="evenodd" fill="url(#purpleBag)" d="M168 96 h464 l22 40 v492 c0 22-18 38-44 38 H190 c-26 0-44-16-44-38 V136 Z M208 292 h384 v208 H208 Z"/>
+    <path fill-rule="evenodd" fill="url(#sheen)" d="M168 96 h464 l22 40 v492 c0 22-18 38-44 38 H190 c-26 0-44-16-44-38 V136 Z M208 292 h384 v208 H208 Z"/>
+    <rect x="176" y="78" width="448" height="22" rx="3" fill="#241036"/>
+    <rect x="164" y="70" width="472" height="12" rx="2" fill="#1b0c28"/>
+    <rect x="208" y="292" width="384" height="208" fill="none" stroke="#1b0c28" stroke-width="10"/>
+    <text x="400" y="168" text-anchor="middle" fill="#f3e6c4" font-family="Georgia, Times New Roman, serif" font-size="54" font-weight="700">Jason's</text>
+    <text x="400" y="198" text-anchor="middle" fill="#d4c0e4" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="800" letter-spacing="4.2">SOURDOUGH</text>
+    <text x="400" y="248" text-anchor="middle" fill="#e8d5a3" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" letter-spacing="1.8">RECIPE NO 11</text>
+    <text x="400" y="548" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="800" letter-spacing="1.8">GRAINS &amp; SEEDS</text>
+    <text x="400" y="580" text-anchor="middle" fill="#e8d5a3" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" letter-spacing="2.4">CIABATTIN</text>
+    <text x="400" y="646" text-anchor="middle" fill="#c9b8d8" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700">580g</text>
   </g>
 `
     )
@@ -209,7 +220,7 @@ async function composeJasons() {
     },
   })
     .composite([
-      { input: loaf, left: 270, top: 248 },
+      { input: loaf, left: window.left, top: window.top },
       { input: bag, left: 0, top: 0 },
     ])
     .png({ compressionLevel: 8 })

@@ -502,8 +502,13 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
               <h2 className="text-[17px] font-black tracking-tight text-white leading-none">
                 Ask Kirk
               </h2>
-              <p className="text-[10px] font-extrabold tracking-[0.16em] text-white/90 mt-[5px] uppercase">
-                Kirkland Signature
+              <p className="mt-[5px] leading-none">
+                <span className="block text-[10px] font-extrabold tracking-[0.22em] text-white uppercase">
+                  Kirkland
+                </span>
+                <span className="block text-[9px] font-bold tracking-[0.28em] text-white/80 uppercase mt-[2px]">
+                  Signature
+                </span>
               </p>
             </div>
           </div>
@@ -587,9 +592,14 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                 <p className="text-[13px] leading-relaxed text-[#333] whitespace-pre-line">
                   {message.content}
                 </p>
-                <p className="mt-2.5 text-[11px] text-[#666] font-semibold">
-                  Same-Day requires a Costco membership
-                </p>
+                <div className="mt-2.5 flex items-center gap-2 rounded-[8px] bg-[#f3f3f3] px-2.5 py-1.5">
+                  <span className="inline-flex h-5 items-center rounded-[3px] bg-costco-red px-1.5 text-[9px] font-black tracking-wide text-white">
+                    MEMBER
+                  </span>
+                  <p className="text-[11px] text-[#555] font-semibold">
+                    Same-Day requires a Costco membership
+                  </p>
+                </div>
                 </div>
               </div>
             );
@@ -736,7 +746,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                   ? "Listening…"
                   : "Ask Kirk for a cart"
             }
-            className="flex-1 min-w-0 h-10 px-3.5 border border-[#c4c4c4] rounded-full text-[14px] text-[#1a1a1a] placeholder:text-[#8a8a8a] focus:outline-none focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15"
+            className="flex-1 min-w-0 h-10 px-3.5 bg-[#f6f6f6] border border-[#d8d8d8] rounded-full text-[14px] text-[#1a1a1a] placeholder:text-[#8a8a8a] focus:outline-none focus:bg-white focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15"
             disabled={isLoading || isRecording || isTranscribing}
           />
           <button

@@ -64,10 +64,10 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
                 Shop
               </a>
               <a href="#" className="text-[#333] hover:text-costco-blue py-3">
-                Lists
+                Flyers
               </a>
               <a href="#" className="text-[#333] hover:text-costco-blue py-3">
-                Flyers
+                Lists
               </a>
             </nav>
           </div>

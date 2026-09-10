@@ -147,64 +147,47 @@ export default function ProductGrid() {
 
       {!filteredView && (
         <>
-          <section className="mb-5 rounded-[16px] overflow-hidden bg-white border border-[#e8e8e8]">
-            <div className="bg-costco-blue px-5 py-4 text-white">
-              <h2 className="text-[22px] lg:text-[26px] font-bold tracking-tight leading-tight">
-                Costco favorites delivered in as fast as 1 hour
-              </h2>
-              <p className="text-[13px] text-white/90 mt-1.5">
-                <span className="font-bold">$10 monthly credit</span>
-                <span className="text-white/80">
-                  {" "}
-                  · For Executive members ($150 min spend)
+          <section className="mb-5 grid grid-cols-2 xl:grid-cols-4 gap-3">
+            {[
+              {
+                title: "Weekly Savings",
+                image: "/products/cat-weekly.jpg",
+                onClick: () => showAisle({ tag: "weekly" }),
+              },
+              {
+                title: "Kirkland Signature",
+                image: "/products/cat-kirkland.jpg",
+                onClick: () => showAisle({ tag: "kirkland" }),
+              },
+              {
+                title: "What's New",
+                image: "/products/cat-new.jpg",
+                onClick: () => showAisle({ tag: "new" }),
+              },
+              {
+                title: "Treasure Hunt",
+                image: "/products/cat-treasure.jpg",
+                onClick: () => showAisle({ tag: "treasure" }),
+              },
+            ].map((tile) => (
+              <button
+                key={tile.title}
+                type="button"
+                onClick={tile.onClick}
+                className="relative h-[156px] sm:h-[176px] rounded-[16px] overflow-hidden text-left group"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={tile.image}
+                  alt=""
+                  className="absolute inset-0 w-full h-full object-cover scale-110 group-hover:scale-[1.15] transition-transform"
+                />
+                <span className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
+                <span className="absolute bottom-3 left-3 right-3 text-[17px] sm:text-[19px] font-bold text-white leading-tight drop-shadow-sm">
+                  {tile.title}
                 </span>
-              </p>
-              <p className="text-[12px] text-white/75 mt-1">
-                Same-Day requires a Costco membership
-              </p>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-px bg-[#ececec]">
-              {[
-                {
-                  title: "Weekly Savings",
-                  copy: "Member prices on this week’s warehouse picks",
-                  image: "/products/cat-weekly.jpg",
-                  onClick: () => showAisle({ tag: "weekly" }),
-                },
-                {
-                  title: "Kirkland Signature",
-                  copy: "Our exclusive brand, delivered same day",
-                  image: "/products/cat-kirkland.jpg",
-                  onClick: () => showAisle({ tag: "kirkland" }),
-                },
-                {
-                  title: "Treasure Hunt",
-                  copy: "Limited finds while they last",
-                  image: "/products/cat-treasure.jpg",
-                  onClick: () => showAisle({ tag: "treasure" }),
-                },
-              ].map((tile) => (
-                <button
-                  key={tile.title}
-                  type="button"
-                  onClick={tile.onClick}
-                  className="relative min-h-[96px] bg-white text-left px-4 py-3 hover:bg-[#f6f7f8]"
-                >
-                  <p className="text-[15px] font-bold text-[#1a1a1a]">
-                    {tile.title}
-                  </p>
-                  <p className="text-[12px] text-[#666] mt-0.5 pr-16 leading-snug">
-                    {tile.copy}
-                  </p>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={tile.image}
-                    alt=""
-                    className="absolute right-3 top-1/2 -translate-y-1/2 w-14 h-14 object-cover rounded-full border border-[#ececec]"
-                  />
-                </button>
-              ))}
-            </div>
+              </button>
+            ))}
           </section>
 
           {aisles.map((aisle) => (
