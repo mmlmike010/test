@@ -16,7 +16,7 @@ import { products } from "@/lib/data/products";
 import KirkMark from "@/components/KirkMark";
 import CostcoLogo from "@/components/CostcoLogo";
 import GoldStarMark from "@/components/GoldStarMark";
-import MembershipBarcode from "@/components/MembershipBarcode";
+import GoldStarMembershipCard from "@/components/GoldStarMembershipCard";
 
 interface Message {
   id: string;
@@ -587,62 +587,14 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
           const isWelcome = message.id.startsWith("welcome-");
           if (isWelcome) {
             return (
-              <div
-                key={message.id}
-                className="bg-[#f7f1de] border border-[#d4c194] rounded-[8px] overflow-hidden shadow-[0_2px_8px_rgba(0,0,0,0.08)]"
-              >
-                <div className="h-[6px] bg-costco-red" />
-                <div className="h-[3px] bg-gradient-to-r from-[#a3841c] via-[#f3e3a3] to-[#a3841c]" />
-                <div className="px-3.5 py-3">
-                <div className="flex items-center justify-between gap-3 mb-3">
-                  <CostcoLogo compact />
-                  <div className="flex items-center gap-2">
-                    <GoldStarMark size={22} />
-                    <div className="text-right leading-none">
-                      <p className="text-[10px] font-extrabold tracking-[0.22em] text-costco-red uppercase">
-                        Gold Star
-                      </p>
-                      <p className="mt-1 text-[9px] font-bold tracking-[0.18em] text-costco-blue uppercase">
-                        Membership
-                      </p>
-                    </div>
+              <div key={message.id} className="space-y-2.5">
+                <GoldStarMembershipCard />
+                <div className="flex gap-2 justify-start">
+                  <KirkMark size={28} className="mt-0.5 shrink-0" />
+                  <div className="max-w-[82%] px-3.5 py-2.5 text-[13px] leading-relaxed rounded-2xl rounded-bl-md bg-white text-[#1a1a1a] border border-[#e8e8e8] shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
+                    <p className="whitespace-pre-line">{message.content}</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-[56px] h-[68px] rounded-[3px] border border-[#c9b27a] bg-[#efe6c8] flex items-center justify-center shrink-0">
-                    <KirkMark size={36} />
-                  </div>
-                  <div>
-                    <p className="text-[16px] font-black tracking-tight text-[#1a1a1a] leading-none">
-                      KIRK
-                    </p>
-                    <p className="mt-1 text-[10px] font-bold tracking-[0.14em] text-costco-red uppercase">
-                      Gold Star Member
-                    </p>
-                    <p className="mt-0.5 text-[11px] font-semibold text-costco-blue tabular-nums tracking-wide">
-                      111 847 11217
-                    </p>
-                    <p className="mt-0.5 text-[10px] font-semibold tracking-[0.08em] text-[#777] uppercase">
-                      Member Since 2019
-                    </p>
-                  </div>
-                </div>
-                <p className="text-[13px] leading-relaxed text-[#333] whitespace-pre-line">
-                  {message.content}
-                </p>
-                <div className="mt-2.5 border-t border-[#eee] pt-2.5">
-                  <MembershipBarcode className="h-7 w-full text-[#1a1a1a]" />
-                  <div className="mt-2 flex items-center justify-between gap-2">
-                    <span className="inline-flex h-5 items-center rounded-[2px] bg-costco-red px-1.5 text-[9px] font-black tracking-wide text-white">
-                      MEMBER
-                    </span>
-                    <p className="text-[11px] text-[#555] font-semibold min-w-0 text-right tabular-nums tracking-wide">
-                      GS · 11217 · BROOKLYN
-                    </p>
-                  </div>
-                </div>
-                </div>
-                <div className="h-[6px] bg-costco-blue" />
               </div>
             );
           }

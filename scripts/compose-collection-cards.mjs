@@ -217,9 +217,9 @@ await composeStillLife(
   "hero-weekly.jpg",
   { cabinetBright: 0.7, counterBright: 1.08, counterSat: 0.86 },
   [
-    { id: 4, w: 290, h: 370, x: 478, y: 196 },
-    { id: 3, w: 280, h: 350, x: 598, y: 208 },
-    { id: 5, w: 270, h: 330, x: 748, y: 226 },
+    { id: 4, w: 400, h: 510, x: 392, y: 98 },
+    { id: 3, w: 390, h: 490, x: 538, y: 110 },
+    { id: 5, w: 370, h: 460, x: 718, y: 132 },
   ]
 );
 
@@ -227,9 +227,9 @@ await composeStillLife(
   "hero-kirkland.jpg",
   { cabinetBright: 0.64, counterBright: 1.04, counterSat: 0.78 },
   [
-    { id: 10, w: 200, h: 400, x: 488, y: 168 },
-    { id: 11, w: 320, h: 390, x: 558, y: 178 },
-    { id: 2, w: 280, h: 350, x: 768, y: 214 },
+    { id: 10, w: 260, h: 530, x: 400, y: 62 },
+    { id: 11, w: 430, h: 510, x: 498, y: 78 },
+    { id: 2, w: 370, h: 460, x: 738, y: 124 },
   ]
 );
 
@@ -237,9 +237,9 @@ await composeStillLife(
   "hero-new.jpg",
   { cabinetBright: 0.74, counterBright: 1.12, counterSat: 0.7 },
   [
-    { id: 23, w: 320, h: 340, x: 458, y: 228 },
-    { id: 1, w: 290, h: 380, x: 588, y: 184 },
-    { id: 8, w: 250, h: 320, x: 788, y: 238 },
+    { id: 23, w: 430, h: 450, x: 368, y: 148 },
+    { id: 1, w: 390, h: 520, x: 528, y: 78 },
+    { id: 8, w: 340, h: 430, x: 758, y: 158 },
   ]
 );
 
@@ -247,8 +247,8 @@ await composeStillLife(
   "hero-treasure.jpg",
   { cabinetBright: 0.6, counterBright: 1.02, counterSat: 0.68 },
   [
-    { id: 19, w: 210, h: 380, x: 478, y: 186 },
-    { id: 21, w: 300, h: 370, x: 578, y: 188 },
-    { id: 14, w: 270, h: 300, x: 788, y: 258 },
+    { id: 19, w: 280, h: 520, x: 388, y: 78 },
+    { id: 21, w: 410, h: 500, x: 518, y: 88 },
+    { id: 14, w: 360, h: 400, x: 748, y: 178 },
   ]
 );

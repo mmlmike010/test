@@ -181,22 +181,22 @@ export default function ProductGrid() {
                   title: "Member Only Savings",
                   subtitle: "7/27/26 – 8/23/26",
                   badge: "Sale ends in 14 days",
-                  image: "/products/hero-weekly.jpg?v=12",
+                  image: "/products/hero-weekly.jpg?v=13",
                   onClick: () => showAisle({ tag: "weekly" }),
                 },
                 {
                   title: "Kirkland Signature",
-                  image: "/products/hero-kirkland.jpg?v=12",
+                  image: "/products/hero-kirkland.jpg?v=13",
                   onClick: () => showAisle({ tag: "kirkland" }),
                 },
                 {
                   title: "This week's featured items",
-                  image: "/products/hero-new.jpg?v=12",
+                  image: "/products/hero-new.jpg?v=13",
                   onClick: () => showAisle({ tag: "trending" }),
                 },
                 {
                   title: "Discounts on household favorites",
-                  image: "/products/hero-treasure.jpg?v=12",
+                  image: "/products/hero-treasure.jpg?v=13",
                   onClick: () => showAisle({ tag: "treasure" }),
                 },
               ] as const
