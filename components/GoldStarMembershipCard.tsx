@@ -16,6 +16,10 @@ export default function GoldStarMembershipCard() {
       />
       <div className="relative h-[5px] bg-costco-red shrink-0" />
       <div className="relative h-[2px] bg-gradient-to-r from-[#a3841c] via-[#f3e3a3] to-[#a3841c] shrink-0" />
+      <GoldStarMark
+        size={92}
+        className="pointer-events-none absolute left-[38%] top-[22%] -translate-x-1/2 opacity-[0.16]"
+      />
       <div className="relative flex-1 min-h-0 px-3 pt-2 pb-1 flex gap-3">
         <div className="min-w-0 flex-1 flex flex-col">
           <div className="flex items-start justify-between gap-2">

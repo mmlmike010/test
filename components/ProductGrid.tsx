@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { ChevronLeft, ChevronRight, Search } from "lucide-react";
 import { categories, filterProducts } from "@/lib/data/products";
 import { aisleLabel } from "@/lib/ui/aisleLabels";
 import type { Product } from "@/lib/data/products";
@@ -28,6 +28,39 @@ function AisleRow({
   onShowAll: () => void;
   onOpen: (product: Product) => void;
 }) {
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const [canPrev, setCanPrev] = useState(false);
+  const [canNext, setCanNext] = useState(false);
+
+  const syncArrows = () => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    setCanPrev(el.scrollLeft > 12);
+    setCanNext(el.scrollLeft + el.clientWidth < el.scrollWidth - 12);
+  };
+
+  useEffect(() => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    syncArrows();
+    const ro = new ResizeObserver(syncArrows);
+    ro.observe(el);
+    el.addEventListener("scroll", syncArrows, { passive: true });
+    return () => {
+      ro.disconnect();
+      el.removeEventListener("scroll", syncArrows);
+    };
+  }, [items.length]);
+
+  const nudge = (dir: number) => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    el.scrollBy({
+      left: dir * Math.min(560, el.clientWidth * 0.85),
+      behavior: "smooth",
+    });
+  };
+
   if (items.length < 2) return null;
 
   return (
@@ -45,15 +78,40 @@ function AisleRow({
           <ChevronRight className="w-4 h-4" aria-hidden="true" />
         </button>
       </div>
-      <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-1 -mx-1 px-1">
-        {items.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            compact
-            onOpen={() => onOpen(product)}
-          />
-        ))}
+      <div className="relative">
+        {canPrev && (
+          <button
+            type="button"
+            aria-label={`Scroll ${title} left`}
+            onClick={() => nudge(-1)}
+            className="hidden md:flex absolute left-0 top-[42%] -translate-y-1/2 z-10 w-10 h-10 items-center justify-center rounded-full bg-white border border-[#e8e8e8] shadow-[0_2px_10px_rgba(0,0,0,0.14)] text-[#1a1a1a] hover:bg-[#f6f6f6]"
+          >
+            <ChevronLeft className="w-5 h-5" aria-hidden="true" />
+          </button>
+        )}
+        <div
+          ref={scrollerRef}
+          className="flex gap-3 overflow-x-auto scrollbar-hide pb-1 -mx-1 px-1"
+        >
+          {items.map((product) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+              compact
+              onOpen={() => onOpen(product)}
+            />
+          ))}
+        </div>
+        {canNext && (
+          <button
+            type="button"
+            aria-label={`Scroll ${title} right`}
+            onClick={() => nudge(1)}
+            className="hidden md:flex absolute right-0 top-[42%] -translate-y-1/2 z-10 w-10 h-10 items-center justify-center rounded-full bg-white border border-[#e8e8e8] shadow-[0_2px_10px_rgba(0,0,0,0.14)] text-[#1a1a1a] hover:bg-[#f6f6f6]"
+          >
+            <ChevronRight className="w-5 h-5" aria-hidden="true" />
+          </button>
+        )}
       </div>
     </section>
   );
@@ -268,7 +326,7 @@ export default function ProductGrid() {
             Shop
           </button>
           {activeCollection && (
-            <div className="relative mb-4 h-[132px] sm:h-[156px] rounded-[16px] overflow-hidden bg-[#f3f3f3]">
+            <div className="relative mb-4 h-[168px] sm:h-[200px] lg:h-[220px] rounded-[16px] overflow-hidden bg-[#f3f3f3]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={activeCollection.image}
@@ -299,17 +357,27 @@ export default function ProductGrid() {
           </div>
           <div className="mb-3 flex items-end justify-between gap-3 flex-wrap">
             <div>
-              {!activeCollection && (
+              {q.trim() ? (
+                <h2 className="text-[22px] lg:text-[24px] font-bold text-[#1a1a1a] tracking-tight">
+                  {`${filtered.length} result${filtered.length === 1 ? "" : "s"} for “${q.trim()}”`}
+                </h2>
+              ) : !activeCollection ? (
                 <h2 className="text-[22px] lg:text-[24px] font-bold text-[#1a1a1a] tracking-tight">
                   {titleBits.join(" · ")}
                 </h2>
-              )}
+              ) : null}
               <p className="text-[13px] text-[#666] mt-0.5">
-                {`${filtered.length} item${filtered.length === 1 ? "" : "s"}`}
-                {loading ? " · Updating…" : ""}
+                {q.trim()
+                  ? loading
+                    ? "Updating…"
+                    : "Same-Day · 11217 Brooklyn"
+                  : `${filtered.length} item${filtered.length === 1 ? "" : "s"}${
+                      loading ? " · Updating…" : ""
+                    }`}
               </p>
             </div>
             <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-[12px] font-bold text-[#666]">Sort</span>
               <div
                 className="inline-flex items-center rounded-full border border-[#d8d8d8] bg-white p-0.5"
                 role="group"
@@ -317,7 +385,7 @@ export default function ProductGrid() {
               >
                 {(
                   [
-                    ["relevance", "Relevance"],
+                    ["relevance", "Best match"],
                     ["price", "Price"],
                   ] as const
                 ).map(([value, label]) => (
@@ -344,27 +412,46 @@ export default function ProductGrid() {
                   void search();
                 }}
               >
-                Clear filters
+                Clear all
               </button>
             </div>
           </div>
 
           {!loading && filtered.length === 0 ? (
-            <div className="bg-white border border-dashed border-[#ccc] p-10 text-center">
-              <p className="text-[#1a1a1a] font-bold mb-1">No products found</p>
-              <p className="text-sm text-[#666] mb-4">
-                Try another department or a broader search.
+            <div className="flex flex-col items-center text-center pt-10 pb-12 px-6">
+              <span className="w-16 h-16 rounded-full bg-white border border-[#eee] flex items-center justify-center shadow-[0_1px_4px_rgba(0,0,0,0.06)]">
+                <Search className="w-7 h-7 text-[#8a8a8a]" aria-hidden="true" />
+              </span>
+              <p className="font-bold text-[#1a1a1a] text-[18px] mt-4">
+                {q.trim()
+                  ? `We didn’t find any results for “${q.trim()}”`
+                  : tagLabel
+                    ? `We didn’t find any items in ${tagLabel}`
+                    : department
+                      ? `We didn’t find any items in ${aisleLabel(department)}`
+                      : "We didn’t find any results"}
               </p>
-              <button
-                type="button"
-                className="px-5 py-2 bg-costco-blue text-white text-sm font-bold rounded-[3px]"
-                onClick={() => {
-                  clearFilters();
-                  void search();
-                }}
-              >
-                Show all
-              </button>
+              <p className="text-[13px] text-[#666] mt-1.5 leading-snug max-w-[28rem]">
+                Try checking your spelling or using more general terms.
+              </p>
+              <div className="mt-5 flex flex-col items-center gap-2.5">
+                <button
+                  type="button"
+                  className="px-5 py-2.5 bg-[#0AAD0A] text-white text-[14px] font-bold rounded-full hover:bg-[#099809]"
+                  onClick={() => {
+                    clearFilters();
+                    void search();
+                  }}
+                >
+                  Browse store
+                </button>
+                <a
+                  href="#"
+                  className="text-[13px] text-costco-blue font-bold hover:underline"
+                >
+                  Add a special request
+                </a>
+              </div>
             </div>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3">
