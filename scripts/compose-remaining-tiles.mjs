@@ -148,74 +148,92 @@ ${inner}
 }
 
 async function composeJasons() {
-  // Photographic stand-up pouch: keep the granola bag's silhouette and
-  // lighting, wipe the face so Kirkland / Nature's Path never leak, then
-  // print Jason's Recipe No 11 over a seeded-loaf window.
+  // Official Recipe No 11 is a top-load paper bakery bag, not a plastic
+  // pouch. Colorize a photographed paper fiber and print over a seeded-loaf
+  // window. Never dest-in or blur-recolor a competing brand's RGB.
+  const PAPER =
+    "https://raw.githubusercontent.com/prabhasp/ali-khasro/master/lokta/paper2.jpg";
   const seededPack = await download(
     `${CF}/large_d2b0fee4-2249-4950-9b3a-b167df3fdc0e.jpg`
   );
+  const paperBytes = await download(PAPER);
 
-  const pouch = await sharp(join(dir, "1.png"))
-    .trim({ threshold: 16 })
-    .ensureAlpha()
-    .resize(430, 620, { fit: "inside" })
-    .png()
-    .toBuffer();
-  const { data, info } = await sharp(pouch)
-    .raw()
-    .toBuffer({ resolveWithObject: true });
-  for (let i = 0; i < data.length; i += 4) {
-    if (data[i] > 246 && data[i + 1] > 246 && data[i + 2] > 246) data[i + 3] = 0;
-  }
-  const punched = await sharp(data, { raw: info }).png().toBuffer();
-  const pouchMeta = await sharp(punched).metadata();
-  const pw = pouchMeta.width;
-  const ph = pouchMeta.height;
-  const alpha = await sharp(punched).extractChannel("alpha").toBuffer();
-  const film = await sharp(
+  const pw = 428;
+  const ph = 590;
+  const bagMask = await sharp(
     svg(
       pw,
       ph,
-      `
-  <defs>
-    <linearGradient id="film" x1="0.05" y1="0" x2="0.9" y2="1">
-      <stop offset="0" stop-color="#6a3480"/>
-      <stop offset="0.42" stop-color="#3b1554"/>
-      <stop offset="1" stop-color="#1c0a2c"/>
-    </linearGradient>
-    <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#ffffff" stop-opacity="0.2"/>
-      <stop offset="0.28" stop-color="#ffffff" stop-opacity="0"/>
-      <stop offset="1" stop-color="#000000" stop-opacity="0.1"/>
-    </linearGradient>
-    <linearGradient id="crimp" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#5a2a74"/>
-      <stop offset="1" stop-color="#2d1144"/>
-    </linearGradient>
-  </defs>
-  <rect width="${pw}" height="${ph}" fill="url(#film)"/>
-  <rect width="${pw}" height="${ph}" fill="url(#sheen)"/>
-  <rect width="${pw}" height="${Math.round(ph * 0.09)}" fill="url(#crimp)"/>
-  <path d="M${pw * 0.12} ${ph * 0.055} L${pw * 0.88} ${ph * 0.055}" stroke="#c9a8d8" stroke-opacity="0.35" stroke-width="2"/>
-`
+      `<path d="M36 78 C36 48 58 38 86 38 L342 38 C370 38 392 48 392 78 L406 548 C406 572 386 582 360 582 L68 582 C42 582 22 572 22 548 Z" fill="#fff"/>`
     )
   )
-    .removeAlpha()
-    .joinChannel(alpha)
     .png()
     .toBuffer();
 
-  const winW = 196;
-  const winH = 176;
+  const paperGrey = await sharp(paperBytes)
+    .resize(pw, ph, { fit: "cover", position: "centre" })
+    .greyscale()
+    .modulate({ brightness: 1.15 })
+    .removeAlpha()
+    .toBuffer();
+  const purpleWash = await sharp({
+    create: {
+      width: pw,
+      height: ph,
+      channels: 3,
+      background: { r: 98, g: 42, b: 122 },
+    },
+  })
+    .jpeg()
+    .toBuffer();
+  const paper = await sharp(paperGrey)
+    .composite([{ input: purpleWash, blend: "multiply" }])
+    .removeAlpha()
+    .toBuffer();
+
+  const lighting = svg(
+    pw,
+    ph,
+    `
+  <defs>
+    <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.2"/>
+      <stop offset="0.3" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="1" stop-color="#1a0a24" stop-opacity="0.22"/>
+    </linearGradient>
+    <linearGradient id="fold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2a1438" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#2a1438" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="${pw}" height="${ph}" fill="url(#sheen)"/>
+  <rect x="22" y="38" width="384" height="52" fill="url(#fold)"/>
+  <path d="M86 62 L342 62" stroke="#e8d4f0" stroke-opacity="0.28" stroke-width="2"/>
+`
+  );
+
+  const body = await sharp(paper)
+    .composite([{ input: lighting, blend: "over" }])
+    .removeAlpha()
+    .toBuffer();
+  const bagAlpha = await sharp(bagMask).extractChannel("alpha").toBuffer();
+  const film = await sharp(body).joinChannel(bagAlpha).png().toBuffer();
+
+  const winW = 188;
+  const winH = 168;
   const winX = Math.round((pw - winW) / 2);
-  const winY = Math.round(ph * 0.28);
+  const winY = Math.round(ph * 0.3);
   const loaf = await sharp(seededPack)
     .extract({ left: 230, top: 165, width: 140, height: 120 })
     .resize(winW, winH, { fit: "cover", position: "centre" })
     .png()
     .toBuffer();
   const windowMask = await sharp(
-    svg(winW, winH, `<rect width="${winW}" height="${winH}" rx="14" ry="14" fill="#fff"/>`)
+    svg(
+      winW,
+      winH,
+      `<rect width="${winW}" height="${winH}" rx="12" ry="12" fill="#fff"/>`
+    )
   )
     .png()
     .toBuffer();
@@ -229,14 +247,14 @@ async function composeJasons() {
       pw,
       ph,
       `
-  <rect x="${winX - 4}" y="${winY - 4}" width="${winW + 8}" height="${winH + 8}" rx="16" ry="16" fill="#2a1040"/>
-  <text x="${pw / 2}" y="${Math.round(ph * 0.16)}" text-anchor="middle" fill="#f4e6c0" font-family="Georgia, Times New Roman, serif" font-size="36" font-weight="700">Jason's</text>
-  <text x="${pw / 2}" y="${Math.round(ph * 0.215)}" text-anchor="middle" fill="#d4b8e8" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="800" letter-spacing="4.2">SOURDOUGH</text>
-  <text x="${pw / 2}" y="${Math.round(ph * 0.72)}" text-anchor="middle" fill="#f4e6c0" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="800" letter-spacing="1.4">GRAINS &amp; SEEDS</text>
-  <text x="${pw / 2}" y="${Math.round(ph * 0.76)}" text-anchor="middle" fill="#e8d4f4" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="800" letter-spacing="2.2">CIABATTIN</text>
-  <rect x="${pw / 2 - 78}" y="${Math.round(ph * 0.785)}" width="156" height="26" rx="3" fill="#C9A227"/>
-  <text x="${pw / 2}" y="${Math.round(ph * 0.785) + 18}" text-anchor="middle" fill="#2a1040" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="800" letter-spacing="1.3">RECIPE NO 11</text>
-  <text x="${pw / 2}" y="${Math.round(ph * 0.87)}" text-anchor="middle" fill="#c9a8d8" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="700" letter-spacing="1.6">24 OZ</text>
+  <rect x="${winX - 5}" y="${winY - 5}" width="${winW + 10}" height="${winH + 10}" rx="14" ry="14" fill="#2a1040"/>
+  <text x="${pw / 2}" y="118" text-anchor="middle" fill="#f4e6c0" font-family="Georgia, Times New Roman, serif" font-size="38" font-weight="700">Jason's</text>
+  <text x="${pw / 2}" y="148" text-anchor="middle" fill="#d4b8e8" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="800" letter-spacing="4.4">SOURDOUGH</text>
+  <text x="${pw / 2}" y="438" text-anchor="middle" fill="#f4e6c0" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="800" letter-spacing="1.5">GRAINS &amp; SEEDS</text>
+  <text x="${pw / 2}" y="462" text-anchor="middle" fill="#e8d4f4" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="800" letter-spacing="2.4">CIABATTIN</text>
+  <rect x="${pw / 2 - 80}" y="476" width="160" height="28" rx="3" fill="#C9A227"/>
+  <text x="${pw / 2}" y="495" text-anchor="middle" fill="#2a1040" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="800" letter-spacing="1.3">RECIPE NO 11</text>
+  <text x="${pw / 2}" y="536" text-anchor="middle" fill="#c9a8d8" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" letter-spacing="1.8">24 OZ</text>
 `
     )
   )
@@ -331,7 +349,7 @@ if (only === "all" || only === "jars") {
 
 if (only === "all" || only === "jasons") {
   await composeJasons();
-  console.log("composed 9 from photographic seeded loaf");
+  console.log("composed 9 from paper bakery bag + seeded loaf window");
 }
 
 if (only === "all" || only === "books") {

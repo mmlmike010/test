@@ -497,6 +497,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
     <aside className="fixed inset-y-0 right-0 z-40 w-full max-w-[420px] lg:static lg:z-30 lg:w-[380px] xl:w-[420px] lg:max-w-none shrink-0 bg-white border-l border-[#e5e5e5] h-full flex flex-col">
       <div className="shrink-0 border-b border-[#e5e5e5] bg-[#f7f1de]">
         <div className="h-[6px] bg-costco-red" />
+        <div className="h-[3px] bg-gradient-to-r from-[#a3841c] via-[#f3e3a3] to-[#a3841c]" />
         <div className="px-3.5 pt-2.5 pb-2 flex items-center justify-between gap-2">
           <CostcoLogo compact />
           <div className="flex items-center gap-2 shrink-0">
@@ -591,6 +592,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                 className="bg-[#f7f1de] border border-[#d4c194] rounded-[8px] overflow-hidden shadow-[0_2px_8px_rgba(0,0,0,0.08)]"
               >
                 <div className="h-[6px] bg-costco-red" />
+                <div className="h-[3px] bg-gradient-to-r from-[#a3841c] via-[#f3e3a3] to-[#a3841c]" />
                 <div className="px-3.5 py-3">
                 <div className="flex items-center justify-between gap-3 mb-3">
                   <CostcoLogo compact />
