@@ -55,7 +55,7 @@ export default function CartDrawer() {
                 key={product.id}
                 className="flex gap-3 pb-4 border-b border-[#eee]"
               >
-                <div className="relative w-[72px] h-[72px] overflow-hidden bg-[#f7f7f7] border border-[#eee] shrink-0">
+                <div className="relative w-[72px] h-[72px] overflow-hidden bg-[#f7f7f7] border border-[#eee] rounded-[8px] shrink-0">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={product.image}
@@ -131,7 +131,7 @@ export default function CartDrawer() {
             <button
               type="button"
               onClick={closeCart}
-              className="flex-1 py-3 bg-costco-red text-white rounded-[3px] font-bold hover:bg-costco-red-hover text-[15px]"
+              className="flex-1 py-3 bg-costco-red text-white rounded-full font-bold hover:bg-costco-red-hover text-[15px]"
             >
               {items.length ? "Go to checkout" : "Browse products"}
             </button>

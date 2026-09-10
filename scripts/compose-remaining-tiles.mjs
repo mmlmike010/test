@@ -1,4 +1,4 @@
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync } from "node:fs";
 import { join } from "node:path";
 import sharp from "sharp";
 
@@ -122,24 +122,6 @@ function studio(inner) {
       <stop offset="0.55" stop-color="#c9a066"/>
       <stop offset="1" stop-color="#8d6230"/>
     </linearGradient>
-    <linearGradient id="sleeve" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#3a3a3a"/>
-      <stop offset="0.5" stop-color="#1c1c1c"/>
-      <stop offset="1" stop-color="#111111"/>
-    </linearGradient>
-    <linearGradient id="quilt" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#3d3d3d"/>
-      <stop offset="1" stop-color="#1a1a1a"/>
-    </linearGradient>
-    <pattern id="stitch" width="28" height="28" patternUnits="userSpaceOnUse">
-      <path d="M0 28 L28 0" stroke="#5a5a5a" stroke-width="0.7"/>
-      <path d="M14 28 L28 14" stroke="#4a4a4a" stroke-width="0.5"/>
-    </pattern>
-    <linearGradient id="shine" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#fff" stop-opacity="0"/>
-      <stop offset="0.4" stop-color="#fff" stop-opacity="0.14"/>
-      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
-    </linearGradient>
   </defs>
   <g filter="url(#floor)">${inner}</g>
 </svg>`;
@@ -163,21 +145,6 @@ const studioPacks = {
     <text x="400" y="454" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="800" letter-spacing="3">SOURDOUGH</text>
     <text x="400" y="486" text-anchor="middle" fill="#e8d5a3" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">GRAINS &amp; SEEDS</text>
     <text x="400" y="548" text-anchor="middle" fill="#c9b8d8" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700">CIABATTIN · 580g</text>
-    <rect x="232" y="168" width="36" height="420" fill="url(#shine)"/>
-  `),
-  13: studio(`
-    <rect x="168" y="210" width="464" height="318" rx="18" fill="url(#quilt)"/>
-    <rect x="180" y="222" width="440" height="294" rx="14" fill="#2b2b2b"/>
-    <rect x="180" y="222" width="440" height="294" rx="14" fill="url(#stitch)" opacity=".55"/>
-    <rect x="198" y="248" width="404" height="168" rx="8" fill="#1f1f1f"/>
-    <rect x="198" y="248" width="404" height="168" rx="8" fill="url(#stitch)" opacity=".35"/>
-    <rect x="216" y="430" width="120" height="54" rx="6" fill="#111"/>
-    <rect x="464" y="430" width="120" height="54" rx="6" fill="#111"/>
-    <rect x="300" y="172" width="200" height="46" rx="4" fill="#E31837"/>
-    <text x="400" y="192" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="800" letter-spacing="1.6">COSTCO</text>
-    <text x="400" y="208" text-anchor="middle" fill="#ffd0d6" font-family="Arial, Helvetica, sans-serif" font-size="9" font-weight="700">PLATINUM SERIES</text>
-    <text x="400" y="390" text-anchor="middle" fill="#f2f2f2" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="800">4-IN-1 SEAT PROTECTOR</text>
-    <text x="400" y="416" text-anchor="middle" fill="#bdbdbd" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700">FITS MOST CARS &amp; SUVs</text>
   `),
   17: studio(`
     <rect x="214" y="236" width="168" height="250" rx="3" fill="#153e75" transform="rotate(-8 298 361)"/>
@@ -190,23 +157,66 @@ const studioPacks = {
     <text x="356" y="454" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="800">COSTCO · 3 HARDCOVERS</text>
     <text x="400" y="572" text-anchor="middle" fill="#444444" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700">BESTSELLER MIX</text>
   `),
-  22: studio(`
-    <rect x="168" y="250" width="464" height="300" rx="22" fill="url(#sleeve)"/>
-    <rect x="184" y="266" width="432" height="268" rx="16" fill="#2a2a2a"/>
-    <rect x="208" y="292" width="384" height="196" rx="8" fill="#3d3d3d" opacity=".35"/>
-    <rect x="168" y="250" width="464" height="18" rx="9" fill="#0d0d0d"/>
-    <circle cx="596" cy="259" r="5" fill="#cfcfcf"/>
-    <rect x="188" y="256" width="390" height="6" rx="3" fill="#6f6f6f"/>
-    <text x="400" y="508" text-anchor="middle" fill="#e8e8e8" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="800" letter-spacing="3">incase</text>
-    <text x="400" y="590" text-anchor="middle" fill="#666666" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700">A.R.C. SLEEVE · 14"</text>
-  `),
 };
+
+function svg(w, h, inner) {
+  return Buffer.from(`<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
+${inner}
+</svg>`);
+}
+
+async function composePhotoTiles() {
+  const seat = await download(
+    `${CF}/large_7fa21e55-544f-4f30-b691-385ce5da3e01.jpg`
+  );
+  const sleeve = await download(
+    `${CF}/large_84d967f8-2c2a-4dc0-8a74-72ad7761f5d9.jpeg`
+  );
+
+  const seatPatch = await sharp(
+    svg(
+      28,
+      20,
+      `<rect width="28" height="20" rx="2" fill="#E31837"/><text x="14" y="14" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="7" font-weight="800">C</text>`
+    )
+  )
+    .png()
+    .toBuffer();
+
+  const seatTile = await sharp(seat)
+    .composite([{ input: seatPatch, left: 262, top: 188 }])
+    .jpeg({ quality: 92 })
+    .toBuffer();
+  await toTile(seatTile, join(dir, "13.png"));
+
+  const incaseBadge = await sharp(
+    svg(
+      62,
+      18,
+      `
+  <rect width="62" height="18" rx="2" fill="#f4f4f4"/>
+  <text x="31" y="13" text-anchor="middle" fill="#111111" font-family="Arial, Helvetica, sans-serif" font-size="8" font-weight="800" letter-spacing="1.1">incase</text>
+`
+    )
+  )
+    .png()
+    .toBuffer();
+
+  const sleeveTile = await sharp(sleeve)
+    .composite([{ input: incaseBadge, left: 494, top: 458 }])
+    .jpeg({ quality: 92 })
+    .toBuffer();
+  await toTile(sleeveTile, join(dir, "22.png"));
+}
 
 await composeJars();
 console.log("composed 6 + 7 from Costco Same-Day jar/tub photos");
 
 for (const [id, markup] of Object.entries(studioPacks)) {
-  writeFileSync(join(dir, `${id}.svg`), markup);
   await sharp(Buffer.from(markup)).png({ compressionLevel: 8 }).toFile(join(dir, `${id}.png`));
   console.log("studio", id);
 }
+
+await composePhotoTiles();
+console.log("composed 13 + 22 from pack photography");

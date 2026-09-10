@@ -122,7 +122,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
               type="search"
               value={q}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search Costco..."
+              placeholder="Search products"
               className="w-full h-10 pl-11 pr-[6.75rem] bg-white border border-[#c4c4c4] rounded-full text-[15px] text-[#222] placeholder:text-[#8a8a8a] focus:outline-none focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15"
             />
             {q && (

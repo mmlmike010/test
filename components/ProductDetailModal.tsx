@@ -103,7 +103,7 @@ export default function ProductDetailModal({
             <button
               type="button"
               onClick={onAdd}
-              className={`mt-5 w-full py-3 font-bold transition-colors flex items-center justify-center gap-2 rounded-[3px] ${
+              className={`mt-5 w-full py-3 font-bold transition-colors flex items-center justify-center gap-2 rounded-full ${
                 justAdded
                   ? "bg-green-600 text-white"
                   : "bg-costco-blue text-white hover:bg-costco-blue-hover"
