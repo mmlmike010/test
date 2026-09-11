@@ -31,17 +31,17 @@ function ListThumbStack({ items }: { items: Product[] }) {
       {shown.map((product, index) => (
         <span
           key={product.id}
-          className="relative h-[88px] w-[88px] shrink-0 overflow-hidden rounded-full bg-[#f0f0f0] shadow-[0_1px_4px_rgba(0,0,0,0.16)] ring-2 ring-[#e4e4e4]"
+          className="relative h-[88px] w-[88px] shrink-0 overflow-hidden rounded-full bg-[#e8e8e8] shadow-[0_1px_4px_rgba(0,0,0,0.16)] ring-2 ring-white"
           style={{
             zIndex: shown.length - index,
-            marginLeft: index === 0 ? 0 : -34,
+            marginLeft: index === 0 ? 0 : -38,
           }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={product.image}
             alt=""
-            className="absolute inset-0 h-full w-full object-cover scale-[1.2]"
+            className="absolute inset-0 h-full w-full object-cover scale-[1.55]"
           />
         </span>
       ))}
