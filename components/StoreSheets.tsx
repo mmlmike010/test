@@ -377,6 +377,7 @@ function CheckoutSheet() {
   const clearOrder = useSessionStore((s) => s.clearOrder);
   const items = useCartStore((s) => s.items);
   const subtotal = useCartStore((s) => s.getSubtotal());
+  const totalItems = useCartStore((s) => s.getTotalItems());
   const slot = deliveryWindow(windowId);
   const ready = signedIn && membershipAdded && items.length > 0;
 
@@ -461,7 +462,7 @@ function CheckoutSheet() {
             {items.length > 0 && (
               <div className="overflow-hidden rounded-xl border border-[#e0e0e0] bg-white shadow-sm">
                 <p className="border-b border-[#ececec] bg-[#f6f7f8] px-4 py-2 text-[12px] font-bold text-[#666]">
-                  {items.length} item{items.length === 1 ? "" : "s"}
+                  {totalItems} item{totalItems === 1 ? "" : "s"}
                 </p>
                 {items.map(({ product, quantity }) => (
                   <div
