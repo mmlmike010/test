@@ -22,9 +22,9 @@ import {
 } from "@/lib/store/session";
 
 function PricingSheet() {
-  const setSheet = useSessionStore((s) => s.setSheet);
+  const closeSheet = useSessionStore((s) => s.closeSheet);
   return (
-    <StoreSheet title="Pricing & fees" onClose={() => setSheet(null)} wide>
+    <StoreSheet title="Pricing & fees" onClose={closeSheet} wide>
       <div className="px-4 py-4 text-[13px] text-[#333] leading-relaxed space-y-4">
         <p className="text-[12px] font-bold tracking-[0.08em] uppercase text-costco-blue">
           About our pricing, savings, and returns
@@ -77,7 +77,7 @@ function PricingSheet() {
 }
 
 function MembershipSheet() {
-  const setSheet = useSessionStore((s) => s.setSheet);
+  const closeSheet = useSessionStore((s) => s.closeSheet);
   const addMembership = useSessionStore((s) => s.addMembership);
   const removeMembership = useSessionStore((s) => s.removeMembership);
   const membershipAdded = useSessionStore((s) => s.membershipAdded);
@@ -85,7 +85,7 @@ function MembershipSheet() {
   const [number, setNumber] = useState(membershipNumber || KIRK_MEMBERSHIP);
 
   return (
-    <StoreSheet title="Add membership" onClose={() => setSheet(null)}>
+    <StoreSheet title="Add membership" onClose={closeSheet}>
       <div className="px-4 py-4 space-y-3">
         <GoldStarMembershipCard />
         <p className="text-[13px] text-[#555] leading-snug">
@@ -144,7 +144,7 @@ function MembershipSheet() {
 }
 
 function SignInSheet() {
-  const setSheet = useSessionStore((s) => s.setSheet);
+  const closeSheet = useSessionStore((s) => s.closeSheet);
   const signIn = useSessionStore((s) => s.signIn);
   const signOut = useSessionStore((s) => s.signOut);
   const signedIn = useSessionStore((s) => s.signedIn);
@@ -154,7 +154,7 @@ function SignInSheet() {
   const [mail, setMail] = useState(email || KIRK_EMAIL);
 
   return (
-    <StoreSheet title="Sign in / Register" onClose={() => setSheet(null)}>
+    <StoreSheet title="Sign in / Register" onClose={closeSheet}>
       <div className="px-4 py-4 space-y-3">
         <p className="text-[13px] text-[#555] leading-snug">
           Sign in to save lists, attach a Gold Star, and check out. Demo only —
@@ -217,7 +217,7 @@ function SignInSheet() {
 }
 
 function DeliverySheet() {
-  const setSheet = useSessionStore((s) => s.setSheet);
+  const closeSheet = useSessionStore((s) => s.closeSheet);
   const setDelivery = useSessionStore((s) => s.setDelivery);
   const windowId = useSessionStore((s) => s.windowId);
   const address = useSessionStore((s) => s.address);
@@ -227,7 +227,7 @@ function DeliverySheet() {
   const [zip, setZip] = useState(address.zip);
 
   return (
-    <StoreSheet title="Delivery details" onClose={() => setSheet(null)}>
+    <StoreSheet title="Delivery details" onClose={closeSheet}>
       <div className="px-4 py-4 space-y-4">
         <div>
           <p className="text-[12px] font-bold text-[#555] mb-2">Time window</p>
@@ -297,13 +297,14 @@ function DeliverySheet() {
 
 function DepartmentsSheet() {
   const setSheet = useSessionStore((s) => s.setSheet);
+  const closeSheet = useSessionStore((s) => s.closeSheet);
   const setDepartment = useCatalogStore((s) => s.setDepartment);
   const setQuery = useCatalogStore((s) => s.setQuery);
   const search = useCatalogStore((s) => s.search);
   const selected = useCatalogStore((s) => s.department);
 
   return (
-    <StoreSheet title="Departments" onClose={() => setSheet(null)}>
+    <StoreSheet title="Departments" onClose={closeSheet}>
       <div className="px-2 py-2">
         {departments.map((department) => (
           <button
@@ -331,13 +332,13 @@ function DepartmentsSheet() {
 }
 
 function RequestSheet() {
-  const setSheet = useSessionStore((s) => s.setSheet);
+  const closeSheet = useSessionStore((s) => s.closeSheet);
   const setSpecialRequest = useSessionStore((s) => s.setSpecialRequest);
   const specialRequest = useSessionStore((s) => s.specialRequest);
   const [note, setNote] = useState(specialRequest);
 
   return (
-    <StoreSheet title="Add a special request" onClose={() => setSheet(null)}>
+    <StoreSheet title="Add a special request" onClose={closeSheet}>
       <div className="px-4 py-4 space-y-3">
         <p className="text-[13px] text-[#555] leading-snug">
           Shoppers will try to honor notes like substitutions or leave-at-door
@@ -517,12 +518,18 @@ function CheckoutSheet() {
 
 export default function StoreSheets() {
   const sheet = useSessionStore((s) => s.sheet);
-  if (sheet === "pricing") return <PricingSheet />;
-  if (sheet === "membership") return <MembershipSheet />;
-  if (sheet === "signin") return <SignInSheet />;
-  if (sheet === "delivery") return <DeliverySheet />;
-  if (sheet === "departments") return <DepartmentsSheet />;
-  if (sheet === "request") return <RequestSheet />;
-  if (sheet === "checkout") return <CheckoutSheet />;
-  return null;
+  const priorSheet = useSessionStore((s) => s.priorSheet);
+  const checkoutOpen = sheet === "checkout" || priorSheet === "checkout";
+
+  return (
+    <>
+      {checkoutOpen ? <CheckoutSheet /> : null}
+      {sheet === "pricing" ? <PricingSheet /> : null}
+      {sheet === "membership" ? <MembershipSheet /> : null}
+      {sheet === "signin" ? <SignInSheet /> : null}
+      {sheet === "delivery" ? <DeliverySheet /> : null}
+      {sheet === "departments" ? <DepartmentsSheet /> : null}
+      {sheet === "request" ? <RequestSheet /> : null}
+    </>
+  );
 }

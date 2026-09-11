@@ -92,10 +92,12 @@ function writeSession(state: Persisted) {
 
 type SessionState = Persisted & {
   sheet: StoreSheet;
+  priorSheet: StoreSheet;
   orderPlaced: boolean;
   kirkOpen: boolean;
   setKirkOpen: (open: boolean) => void;
   setSheet: (sheet: StoreSheet) => void;
+  closeSheet: () => void;
   signIn: (displayName: string, email: string) => void;
   signOut: () => void;
   addMembership: (number: string) => void;
@@ -122,17 +124,32 @@ function persistable(state: SessionState): Persisted {
 export const useSessionStore = create<SessionState>((set, get) => ({
   ...fallback,
   sheet: null,
+  priorSheet: null,
   orderPlaced: false,
   kirkOpen: true,
   setKirkOpen: (kirkOpen) => set({ kirkOpen }),
-  setSheet: (sheet) => set({ sheet }),
+  setSheet: (sheet) => {
+    if (sheet === null) {
+      set({ sheet: null, priorSheet: null });
+      return;
+    }
+    const current = get().sheet;
+    set({
+      priorSheet: current === "checkout" ? "checkout" : get().priorSheet,
+      sheet,
+    });
+  },
+  closeSheet: () => {
+    set({ sheet: get().priorSheet, priorSheet: null });
+  },
   signIn: (displayName, email) => {
     const next = {
       ...get(),
       signedIn: true,
       displayName: displayName.trim() || KIRK_NAME,
       email: email.trim() || KIRK_EMAIL,
-      sheet: null as StoreSheet,
+      sheet: get().priorSheet,
+      priorSheet: null as StoreSheet,
     };
     writeSession(persistable(next));
     set(next);
@@ -144,7 +161,8 @@ export const useSessionStore = create<SessionState>((set, get) => ({
       displayName: "",
       email: "",
       orderPlaced: false,
-      sheet: null as StoreSheet,
+      sheet: get().priorSheet,
+      priorSheet: null as StoreSheet,
     };
     writeSession(persistable(next));
     set(next);
@@ -155,7 +173,8 @@ export const useSessionStore = create<SessionState>((set, get) => ({
       ...get(),
       membershipAdded: true,
       membershipNumber: cleaned || KIRK_MEMBERSHIP,
-      sheet: null as StoreSheet,
+      sheet: get().priorSheet,
+      priorSheet: null as StoreSheet,
     };
     writeSession(persistable(next));
     set(next);
@@ -165,7 +184,8 @@ export const useSessionStore = create<SessionState>((set, get) => ({
       ...get(),
       membershipAdded: false,
       membershipNumber: "",
-      sheet: null as StoreSheet,
+      sheet: get().priorSheet,
+      priorSheet: null as StoreSheet,
     };
     writeSession(persistable(next));
     set(next);
@@ -179,13 +199,19 @@ export const useSessionStore = create<SessionState>((set, get) => ({
         city: address.city.trim() || DEFAULT_ADDRESS.city,
         zip: address.zip.trim() || DEFAULT_ADDRESS.zip,
       },
-      sheet: null as StoreSheet,
+      sheet: get().priorSheet,
+      priorSheet: null as StoreSheet,
     };
     writeSession(persistable(next));
     set(next);
   },
   setSpecialRequest: (note) => {
-    const next = { ...get(), specialRequest: note.trim(), sheet: null as StoreSheet };
+    const next = {
+      ...get(),
+      specialRequest: note.trim(),
+      sheet: get().priorSheet,
+      priorSheet: null as StoreSheet,
+    };
     writeSession(persistable(next));
     set(next);
   },
@@ -194,7 +220,12 @@ export const useSessionStore = create<SessionState>((set, get) => ({
 }));
 
 export function hydrateSession() {
-  useSessionStore.setState({ ...readSession(), sheet: null, orderPlaced: false });
+  useSessionStore.setState({
+    ...readSession(),
+    sheet: null,
+    priorSheet: null,
+    orderPlaced: false,
+  });
 }
 
 export function deliveryWindow(windowId: string): DeliveryWindow {
