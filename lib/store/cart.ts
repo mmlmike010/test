@@ -77,7 +77,7 @@ export const useCartStore = create<CartStore>((set, get) => ({
     }),
   clearCart: () => set({ items: [] }),
   openCart: (tone = "sameday") => set({ isOpen: true, cartTone: tone }),
-  closeCart: () => set({ isOpen: false, cartTone: "sameday" }),
+  closeCart: () => set({ isOpen: false }),
   toggleCart: () => set((s) => ({ isOpen: !s.isOpen })),
   getTotalItems: () =>
     get().items.reduce((total, item) => total + item.quantity, 0),

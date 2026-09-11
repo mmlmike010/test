@@ -10,14 +10,17 @@ export default function StoreSheet({
   children,
   wide = false,
   page = false,
+  tone = "sameday",
 }: {
   title: string;
   onClose: () => void;
   children: React.ReactNode;
   wide?: boolean;
   page?: boolean;
+  tone?: "sameday" | "warehouse";
 }) {
   const kirkOpen = useSessionStore((s) => s.kirkOpen);
+  const warehouse = tone === "warehouse";
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -38,19 +41,30 @@ export default function StoreSheet({
           aria-label={title}
           className="flex h-full min-h-0 flex-col"
         >
-          <div className="flex shrink-0 items-center justify-between border-b border-[#ececec] bg-white px-4 py-3.5">
+          <div
+            className={`flex shrink-0 items-center justify-between bg-white px-4 py-3.5 ${
+              warehouse ? "border-b border-[#c4c4c4]" : "border-b border-[#ececec]"
+            }`}
+          >
             <h2 className="pr-3 text-[18px] font-bold leading-none text-[#1a1a1a]">
               {title}
             </h2>
             <button
               type="button"
               onClick={onClose}
-              className="shrink-0 rounded-full p-2 hover:bg-[#f6f6f6]"
+              className={`shrink-0 p-2 ${
+                warehouse
+                  ? "rounded-[3px] hover:bg-[#f7fbfe]"
+                  : "rounded-full hover:bg-[#f6f6f6]"
+              }`}
               aria-label="Close"
             >
               <X className="h-5 w-5 text-[#555]" />
             </button>
           </div>
+          {warehouse ? (
+            <div className="h-[3px] bg-gradient-to-r from-[#a3841c] via-[#f3e3a3] to-[#a3841c]" />
+          ) : null}
           <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4">
             {children}
           </div>

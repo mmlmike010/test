@@ -8,7 +8,7 @@ import GoldStarMembershipCard from "@/components/GoldStarMembershipCard";
 import InstacartMark from "@/components/InstacartMark";
 import { departments } from "@/lib/data/products";
 import { aisleLabel } from "@/lib/ui/aisleLabels";
-import { productSize, unitPriceLabel } from "@/lib/ui/packSize";
+import { productSize, unitPriceLabel, warehouseItemNumber } from "@/lib/ui/packSize";
 import { useCatalogStore } from "@/lib/store/catalog";
 import { useCartStore } from "@/lib/store/cart";
 import {
@@ -378,21 +378,51 @@ function CheckoutSheet() {
   const items = useCartStore((s) => s.items);
   const subtotal = useCartStore((s) => s.getSubtotal());
   const totalItems = useCartStore((s) => s.getTotalItems());
+  const cartTone = useCartStore((s) => s.cartTone);
+  const warehouse = cartTone === "warehouse";
   const slot = deliveryWindow(windowId);
   const ready = signedIn && membershipAdded && items.length > 0;
+  const card = warehouse
+    ? "flex w-full items-center rounded-[3px] border border-[#c4c4c4] bg-white px-4 py-3.5 text-left hover:bg-[#f7fbfe]"
+    : "flex w-full items-center rounded-xl border border-[#e0e0e0] bg-white px-4 py-3.5 text-left shadow-sm hover:bg-[#fafafa]";
 
   return (
-    <StoreSheet title="Checkout" onClose={() => setSheet(null)} page>
+    <StoreSheet
+      title="Checkout"
+      onClose={() => setSheet(null)}
+      page
+      tone={cartTone}
+    >
       <div className="space-y-3">
         {orderPlaced ? (
-          <div className="rounded-xl border border-[#b7d7b0] bg-[#eef7ee] px-5 py-8 text-center">
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-white text-xl text-[#1e5b24]">
+          <div
+            className={
+              warehouse
+                ? "rounded-[3px] border border-[#c4c4c4] bg-white px-5 py-8 text-center"
+                : "rounded-xl border border-[#b7d7b0] bg-[#eef7ee] px-5 py-8 text-center"
+            }
+          >
+            <div
+              className={
+                warehouse
+                  ? "mx-auto flex h-12 w-12 items-center justify-center rounded-[3px] bg-[#f7fbfe] text-xl text-costco-blue"
+                  : "mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-white text-xl text-[#1e5b24]"
+              }
+            >
               ✓
             </div>
-            <p className="mt-3 text-[18px] font-extrabold text-[#1e5b24]">
+            <p
+              className={`mt-3 text-[18px] font-extrabold ${
+                warehouse ? "text-costco-blue" : "text-[#1e5b24]"
+              }`}
+            >
               Order placed
             </p>
-            <p className="mt-1 text-[13px] leading-snug text-[#1e5b24]">
+            <p
+              className={`mt-1 text-[13px] leading-snug ${
+                warehouse ? "text-[#555]" : "text-[#1e5b24]"
+              }`}
+            >
               Delivery {slot.label} · {formatAddress(address)} · Gold Star{" "}
               {membershipNumber}
             </p>
@@ -412,7 +442,7 @@ function CheckoutSheet() {
             <button
               type="button"
               onClick={() => setSheet("delivery")}
-              className="flex w-full items-center rounded-xl border border-[#e0e0e0] bg-white px-4 py-3.5 text-left shadow-sm hover:bg-[#fafafa]"
+              className={card}
             >
               <div className="min-w-0 flex-1">
                 <p className="text-[12px] font-bold text-[#666]">Delivery</p>
@@ -428,7 +458,7 @@ function CheckoutSheet() {
             <button
               type="button"
               onClick={() => setSheet("membership")}
-              className="flex w-full items-center rounded-xl border border-[#e0e0e0] bg-white px-4 py-3.5 text-left shadow-sm hover:bg-[#fafafa]"
+              className={card}
             >
               <div className="min-w-0 flex-1">
                 <p className="text-[12px] font-bold text-[#666]">Membership</p>
@@ -444,7 +474,7 @@ function CheckoutSheet() {
             <button
               type="button"
               onClick={() => setSheet("signin")}
-              className="flex w-full items-center rounded-xl border border-[#e0e0e0] bg-white px-4 py-3.5 text-left shadow-sm hover:bg-[#fafafa]"
+              className={card}
             >
               <div className="min-w-0 flex-1">
                 <p className="text-[12px] font-bold text-[#666]">Account</p>
@@ -459,7 +489,13 @@ function CheckoutSheet() {
                 Special request: {specialRequest}
               </p>
             )}
-            <div className="rounded-xl border border-[#e0e0e0] bg-white px-4 py-3.5 shadow-sm">
+            <div
+              className={
+                warehouse
+                  ? "rounded-[3px] border border-[#c4c4c4] bg-white px-4 py-3.5"
+                  : "rounded-xl border border-[#e0e0e0] bg-white px-4 py-3.5 shadow-sm"
+              }
+            >
               <p className="text-[12px] font-bold text-[#666]">Payment</p>
               <p className="mt-0.5 text-[14px] font-bold text-[#1a1a1a]">
                 Item subtotal only
@@ -469,7 +505,13 @@ function CheckoutSheet() {
               </p>
             </div>
             {items.length > 0 && (
-              <div className="overflow-hidden rounded-xl border border-[#e0e0e0] bg-white shadow-sm">
+              <div
+                className={
+                  warehouse
+                    ? "overflow-hidden rounded-[3px] border border-[#c4c4c4] bg-white"
+                    : "overflow-hidden rounded-xl border border-[#e0e0e0] bg-white shadow-sm"
+                }
+              >
                 <p className="border-b border-[#ececec] bg-[#f6f7f8] px-4 py-2 text-[12px] font-bold text-[#666]">
                   {totalItems} item{totalItems === 1 ? "" : "s"}
                 </p>
@@ -478,7 +520,11 @@ function CheckoutSheet() {
                     key={product.id}
                     className="flex gap-3 border-b border-[#f0f0f0] px-4 py-3 last:border-b-0"
                   >
-                    <div className="relative h-[72px] w-[72px] shrink-0 overflow-hidden rounded-[12px] border border-[#eee] bg-white">
+                    <div
+                      className={`relative h-[72px] w-[72px] shrink-0 overflow-hidden border border-[#eee] bg-white ${
+                        warehouse ? "rounded-[3px]" : "rounded-[12px]"
+                      }`}
+                    >
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={product.image}
@@ -488,16 +534,31 @@ function CheckoutSheet() {
                     </div>
                     <div className="min-w-0 flex-1">
                       <div className="flex items-start justify-between gap-2">
-                        <p className="line-clamp-2 text-[14px] leading-snug text-[#242424]">
+                        <p
+                          className={`line-clamp-2 text-[14px] leading-snug ${
+                            warehouse
+                              ? "font-bold text-costco-blue"
+                              : "text-[#242424]"
+                          }`}
+                        >
                           {product.brand} {product.name}
                         </p>
-                        <p className="shrink-0 text-[15px] font-bold tabular-nums text-[#1a1a1a]">
+                        <p
+                          className={`shrink-0 text-[15px] font-bold tabular-nums ${
+                            warehouse ? "text-costco-red" : "text-[#1a1a1a]"
+                          }`}
+                        >
                           ${(product.price * quantity).toFixed(2)}
                         </p>
                       </div>
                       {productSize(product.id) ? (
                         <p className="mt-0.5 text-[13px] text-[#72767E]">
                           {productSize(product.id)}
+                        </p>
+                      ) : null}
+                      {warehouse ? (
+                        <p className="mt-0.5 text-[12px] text-[#72767E]">
+                          Item {warehouseItemNumber(product.id)}
                         </p>
                       ) : null}
                       {unitPriceLabel(product.id, product.price) ? (
@@ -518,12 +579,22 @@ function CheckoutSheet() {
                 ))}
               </div>
             )}
-            <div className="rounded-xl border border-[#e0e0e0] bg-white px-4 py-4 shadow-sm">
+            <div
+              className={
+                warehouse
+                  ? "rounded-[3px] border border-[#c4c4c4] bg-white px-4 py-4"
+                  : "rounded-xl border border-[#e0e0e0] bg-white px-4 py-4 shadow-sm"
+              }
+            >
               <div className="flex items-end justify-between">
                 <span className="text-[13px] font-semibold text-[#555]">
                   Estimated total
                 </span>
-                <span className="text-[24px] font-bold leading-none tabular-nums text-[#1a1a1a]">
+                <span
+                  className={`text-[24px] font-bold leading-none tabular-nums ${
+                    warehouse ? "text-costco-red" : "text-[#1a1a1a]"
+                  }`}
+                >
                   ${subtotal.toFixed(2)}
                 </span>
               </div>
@@ -531,7 +602,11 @@ function CheckoutSheet() {
                 type="button"
                 disabled={!ready}
                 onClick={placeOrder}
-                className="mt-4 w-full rounded-full bg-[#0AAD0A] py-3 text-[15px] font-bold text-white hover:bg-[#099809] disabled:cursor-not-allowed disabled:opacity-50"
+                className={`mt-4 w-full py-3 text-[15px] font-bold text-white disabled:cursor-not-allowed disabled:opacity-50 ${
+                  warehouse
+                    ? "rounded-[3px] bg-costco-red hover:bg-costco-red-hover"
+                    : "rounded-full bg-[#0AAD0A] hover:bg-[#099809]"
+                }`}
               >
                 {items.length === 0
                   ? "Add items to check out"
@@ -542,8 +617,10 @@ function CheckoutSheet() {
                       : "Place order"}
               </button>
               <p className="mt-3 inline-flex w-full items-center justify-center gap-1.5 text-center text-[11px] leading-snug text-[#888]">
-                <InstacartMark size={12} />
-                Same-Day Delivery powered by Instacart · Membership required
+                {warehouse ? null : <InstacartMark size={12} />}
+                {warehouse
+                  ? "Kirkland Signature shopping help · Membership required · Prices higher than warehouse"
+                  : "Same-Day Delivery powered by Instacart · Membership required"}
               </p>
             </div>
           </>
