@@ -159,6 +159,8 @@ export default function ProductGrid() {
     new: "What's New",
     again: "Buy it again",
     recipes: "Meals",
+    pantry: "Pantry",
+    snacks: "Snacks",
   };
   const collectionTiles = [
     {
@@ -258,6 +260,21 @@ export default function ProductGrid() {
       title: "Discounts on household favorites",
       items: filtered.filter((p) => p.tags?.includes("treasure")),
       onShowAll: () => showAisle({ tag: "treasure" }),
+    },
+    {
+      title: "Dairy & Eggs",
+      items: filtered.filter((p) => p.department === "Dairy & Eggs"),
+      onShowAll: () => showAisle({ department: "Dairy & Eggs" }),
+    },
+    {
+      title: "Pantry",
+      items: filtered.filter((p) => p.tags?.includes("pantry")),
+      onShowAll: () => showAisle({ tag: "pantry" }),
+    },
+    {
+      title: "Snacks",
+      items: filtered.filter((p) => p.tags?.includes("snacks")),
+      onShowAll: () => showAisle({ tag: "snacks" }),
     },
     {
       title: "Bakery",

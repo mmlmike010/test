@@ -74,7 +74,7 @@ export const products: Product[] = [
     savings: 1.33,
     image: "/products/2.png?v=2",
     inStock: true,
-    tags: ["weekly", "treasure"],
+    tags: ["weekly", "treasure", "snacks"],
     rating: 4.9,
     reviewCount: 412,
     reviews: [
@@ -105,7 +105,7 @@ export const products: Product[] = [
     savings: 1.02,
     image: "/products/3.png",
     inStock: true,
-    tags: ["weekly"],
+    tags: ["weekly", "pantry"],
     rating: 4.0,
     reviewCount: 316,
     reviews: [
@@ -136,7 +136,7 @@ export const products: Product[] = [
     savings: 1.75,
     image: "/products/4.png",
     inStock: true,
-    tags: ["trending"],
+    tags: ["trending", "pantry"],
     rating: 4.7,
     reviewCount: 142,
     reviews: [
@@ -167,7 +167,7 @@ export const products: Product[] = [
     savings: 1.45,
     image: "/products/5.png",
     inStock: true,
-    tags: ["trending", "catering", "again"],
+    tags: ["trending", "catering", "again", "snacks"],
     rating: 4.3,
     reviewCount: 423,
     reviews: [
@@ -205,7 +205,7 @@ export const products: Product[] = [
     savings: 1.67,
     image: "/products/6.png?v=5",
     inStock: true,
-    tags: ["new"],
+    tags: ["new", "pantry"],
     rating: 4.9,
     reviewCount: 204,
     reviews: [
@@ -243,7 +243,7 @@ export const products: Product[] = [
     savings: 1.33,
     image: "/products/7.png?v=5",
     inStock: true,
-    tags: ["weekly"],
+    tags: ["weekly", "pantry"],
     rating: 4.7,
     reviewCount: 337,
     reviews: [
@@ -343,7 +343,7 @@ export const products: Product[] = [
     savings: 6.0,
     image: "/products/10.png",
     inStock: true,
-    tags: ["kirkland", "treasure", "again"],
+    tags: ["kirkland", "treasure", "again", "pantry"],
     rating: 4.9,
     reviewCount: 1842,
     reviews: [
@@ -381,7 +381,7 @@ export const products: Product[] = [
     savings: 4.0,
     image: "/products/11.png",
     inStock: true,
-    tags: ["kirkland"],
+    tags: ["kirkland", "pantry"],
     rating: 4.9,
     reviewCount: 102,
     reviews: [
