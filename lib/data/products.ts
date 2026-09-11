@@ -36,7 +36,7 @@ export const products: Product[] = [
     savings: 1.54,
     image: "/products/1.png?v=8",
     inStock: true,
-    tags: ["weekly", "trending"],
+    tags: ["weekly"],
     rating: 4.2,
     reviewCount: 433,
     reviews: [
@@ -74,7 +74,7 @@ export const products: Product[] = [
     savings: 1.33,
     image: "/products/2.png?v=2",
     inStock: true,
-    tags: ["weekly", "treasure", "snacks"],
+    tags: ["weekly", "treasure", "snacks", "trending"],
     rating: 4.9,
     reviewCount: 412,
     reviews: [
@@ -274,7 +274,7 @@ export const products: Product[] = [
     savings: 1.61,
     image: "/products/8.png",
     inStock: true,
-    tags: ["dairy", "again"],
+    tags: ["dairy", "again", "new"],
     rating: 3.9,
     reviewCount: 406,
     reviews: [
@@ -481,7 +481,7 @@ export const products: Product[] = [
     savings: 5.0,
     image: "/products/14.png",
     inStock: true,
-    tags: ["babies", "kirkland", "treasure"],
+    tags: ["babies", "kirkland", "treasure", "new"],
     rating: 4.7,
     reviewCount: 236,
     reviews: [
@@ -512,7 +512,7 @@ export const products: Product[] = [
     savings: 3.0,
     image: "/products/15.png?v=2",
     inStock: true,
-    tags: ["bakery", "kirkland"],
+    tags: ["bakery", "kirkland", "new"],
     rating: 3.9,
     reviewCount: 155,
     reviews: [
@@ -605,7 +605,7 @@ export const products: Product[] = [
     savings: 50.0,
     image: "/products/18.png",
     inStock: true,
-    tags: ["cameras"],
+    tags: ["cameras", "new"],
     rating: 4.4,
     reviewCount: 156,
     reviews: [
@@ -667,7 +667,7 @@ export const products: Product[] = [
     savings: 5.0,
     image: "/products/20.png",
     inStock: true,
-    tags: ["clothing", "kirkland"],
+    tags: ["clothing", "kirkland", "new"],
     rating: 4.7,
     reviewCount: 157,
     reviews: [
@@ -698,7 +698,7 @@ export const products: Product[] = [
     savings: 4.5,
     image: "/products/21.png",
     inStock: true,
-    tags: ["coffee", "kirkland", "treasure"],
+    tags: ["coffee", "kirkland", "treasure", "new"],
     rating: 4.0,
     reviewCount: 365,
     reviews: [

@@ -245,7 +245,11 @@ export default function ProductGrid() {
     {
       title: "What's New",
       items: filtered.filter(
-        (p) => p.department === "What's New" || p.tags?.includes("new")
+        (p) =>
+          // Composed leftover packs stay on the What's New landing, not the homepage rail.
+          p.id !== "1" &&
+          p.id !== "6" &&
+          (p.department === "What's New" || p.tags?.includes("new"))
       ),
       onShowAll: () => showAisle({ tag: "new" }),
     },
