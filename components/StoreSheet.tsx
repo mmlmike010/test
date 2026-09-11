@@ -30,7 +30,7 @@ export default function StoreSheet({
   if (page) {
     return (
       <div
-        className={`fixed z-[90] flex min-h-0 flex-col bg-[#f6f7f8] ${storefrontOverlayClass(kirkOpen)}`}
+        className={`fixed z-[90] flex min-h-0 flex-col bg-[#e8eaed] ${storefrontOverlayClass(kirkOpen)}`}
       >
         <div
           role="dialog"

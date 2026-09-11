@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Check } from "lucide-react";
+import { Check, ChevronRight } from "lucide-react";
 import StoreSheet from "@/components/StoreSheet";
 import GoldStarMark from "@/components/GoldStarMark";
 import GoldStarMembershipCard from "@/components/GoldStarMembershipCard";
@@ -384,17 +384,20 @@ function CheckoutSheet() {
     <StoreSheet title="Checkout" onClose={() => setSheet(null)} page>
       <div className="space-y-3">
         {orderPlaced ? (
-          <div className="rounded-xl bg-[#eef7ee] px-4 py-5">
-            <p className="text-[16px] font-bold text-[#1e5b24]">
+          <div className="rounded-xl border border-[#b7d7b0] bg-[#eef7ee] px-5 py-8 text-center">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-white text-xl text-[#1e5b24]">
+              ✓
+            </div>
+            <p className="mt-3 text-[18px] font-extrabold text-[#1e5b24]">
               Order placed
             </p>
-            <p className="text-[13px] text-[#1e5b24] mt-1 leading-snug">
+            <p className="mt-1 text-[13px] leading-snug text-[#1e5b24]">
               Delivery {slot.label} · {formatAddress(address)} · Gold Star{" "}
               {membershipNumber}
             </p>
             <button
               type="button"
-              className="mt-3 text-[13px] font-bold text-costco-blue hover:underline"
+              className="mt-4 text-[13px] font-bold text-costco-blue hover:underline"
               onClick={() => {
                 clearOrder();
                 setSheet(null);
@@ -408,38 +411,47 @@ function CheckoutSheet() {
             <button
               type="button"
               onClick={() => setSheet("delivery")}
-              className="w-full rounded-xl bg-white px-4 py-3.5 text-left shadow-[0_1px_2px_rgba(0,0,0,0.06)] hover:bg-[#fafafa]"
+              className="flex w-full items-center rounded-xl border border-[#e0e0e0] bg-white px-4 py-3.5 text-left shadow-sm hover:bg-[#fafafa]"
             >
-              <p className="text-[12px] font-bold text-[#666]">Delivery</p>
-              <p className="mt-0.5 text-[14px] font-bold text-[#1a1a1a]">
-                {slot.when} · {slot.label}
-              </p>
-              <p className="text-[13px] text-[#555]">
-                {address.line1}, {formatAddress(address)}
-              </p>
+              <div className="min-w-0 flex-1">
+                <p className="text-[12px] font-bold text-[#666]">Delivery</p>
+                <p className="mt-0.5 text-[14px] font-bold text-[#1a1a1a]">
+                  {slot.when} · {slot.label}
+                </p>
+                <p className="text-[13px] text-[#555]">
+                  {address.line1}, {formatAddress(address)}
+                </p>
+              </div>
+              <ChevronRight className="h-5 w-5 shrink-0 text-[#9aa0a6]" />
             </button>
             <button
               type="button"
               onClick={() => setSheet("membership")}
-              className="w-full rounded-xl bg-white px-4 py-3.5 text-left shadow-[0_1px_2px_rgba(0,0,0,0.06)] hover:bg-[#fafafa]"
+              className="flex w-full items-center rounded-xl border border-[#e0e0e0] bg-white px-4 py-3.5 text-left shadow-sm hover:bg-[#fafafa]"
             >
-              <p className="text-[12px] font-bold text-[#666]">Membership</p>
-              <p className="mt-0.5 inline-flex items-center gap-1.5 text-[14px] font-bold text-[#1a1a1a]">
-                <GoldStarMark size={16} />
-                {membershipAdded
-                  ? `Gold Star · ${membershipNumber}`
-                  : "Add your Costco membership"}
-              </p>
+              <div className="min-w-0 flex-1">
+                <p className="text-[12px] font-bold text-[#666]">Membership</p>
+                <p className="mt-0.5 inline-flex items-center gap-1.5 text-[14px] font-bold text-[#1a1a1a]">
+                  <GoldStarMark size={16} />
+                  {membershipAdded
+                    ? `Gold Star · ${membershipNumber}`
+                    : "Add your Costco membership"}
+                </p>
+              </div>
+              <ChevronRight className="h-5 w-5 shrink-0 text-[#9aa0a6]" />
             </button>
             <button
               type="button"
               onClick={() => setSheet("signin")}
-              className="w-full rounded-xl bg-white px-4 py-3.5 text-left shadow-[0_1px_2px_rgba(0,0,0,0.06)] hover:bg-[#fafafa]"
+              className="flex w-full items-center rounded-xl border border-[#e0e0e0] bg-white px-4 py-3.5 text-left shadow-sm hover:bg-[#fafafa]"
             >
-              <p className="text-[12px] font-bold text-[#666]">Account</p>
-              <p className="mt-0.5 text-[14px] font-bold text-[#1a1a1a]">
-                {signedIn ? `Signed in as ${displayName}` : "Sign in to check out"}
-              </p>
+              <div className="min-w-0 flex-1">
+                <p className="text-[12px] font-bold text-[#666]">Account</p>
+                <p className="mt-0.5 text-[14px] font-bold text-[#1a1a1a]">
+                  {signedIn ? `Signed in as ${displayName}` : "Sign in to check out"}
+                </p>
+              </div>
+              <ChevronRight className="h-5 w-5 shrink-0 text-[#9aa0a6]" />
             </button>
             {specialRequest && (
               <p className="px-1 text-[12px] leading-snug text-[#555]">
@@ -447,7 +459,7 @@ function CheckoutSheet() {
               </p>
             )}
             {items.length > 0 && (
-              <div className="overflow-hidden rounded-xl bg-white shadow-[0_1px_2px_rgba(0,0,0,0.06)]">
+              <div className="overflow-hidden rounded-xl border border-[#e0e0e0] bg-white shadow-sm">
                 <p className="border-b border-[#ececec] bg-[#f6f7f8] px-4 py-2 text-[12px] font-bold text-[#666]">
                   {items.length} item{items.length === 1 ? "" : "s"}
                 </p>
@@ -480,7 +492,7 @@ function CheckoutSheet() {
                 ))}
               </div>
             )}
-            <div className="rounded-xl bg-white px-4 py-4 shadow-[0_1px_2px_rgba(0,0,0,0.06)]">
+            <div className="rounded-xl border border-[#e0e0e0] bg-white px-4 py-4 shadow-sm">
               <div className="flex items-end justify-between">
                 <span className="text-[13px] font-semibold text-[#555]">
                   Estimated total

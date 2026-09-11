@@ -47,54 +47,49 @@ export default function ProductDetailModal({
 
   return (
     <div
-      className={`fixed z-[70] flex justify-end ${storefrontOverlayClass(kirkOpen)}`}
+      className={`fixed z-[70] flex min-h-0 flex-col bg-white ${storefrontOverlayClass(kirkOpen)}`}
     >
-      <button
-        type="button"
-        className="absolute inset-0 bg-black/40"
-        aria-label="Close product"
-        onClick={onClose}
-      />
       <div
         role="dialog"
         aria-modal="true"
         aria-label={`${current.brand} ${current.name}`}
-        className="relative w-full max-w-[480px] h-full bg-white shadow-2xl flex flex-col"
+        className="flex h-full min-h-0 flex-col"
       >
-        <div className="sticky top-0 z-10 flex items-center justify-between px-4 py-3 border-b border-[#ececec] bg-white shrink-0">
-          <p className="text-[13px] font-bold text-[#1a1a1a] truncate pr-3">
+        <div className="flex shrink-0 items-center justify-between border-b border-[#ececec] bg-white px-4 py-3">
+          <p className="truncate pr-3 text-[13px] font-bold text-[#1a1a1a]">
             {current.brand} {current.name}
           </p>
           <button
             type="button"
             onClick={onClose}
-            className="p-2 rounded-full hover:bg-[#f6f6f6] shrink-0"
+            className="shrink-0 rounded-full p-2 hover:bg-[#f6f6f6]"
             aria-label="Close"
           >
-            <X className="w-5 h-5 text-[#555]" />
+            <X className="h-5 w-5 text-[#555]" />
           </button>
         </div>
 
-        <div ref={scrollerRef} className="flex-1 overflow-y-auto min-h-0">
-          <div className="relative aspect-square bg-white border-b border-[#eee]">
+        <div ref={scrollerRef} className="min-h-0 flex-1 overflow-y-auto">
+          <div className="lg:grid lg:grid-cols-2 lg:items-start">
+          <div className="relative aspect-square border-b border-[#eee] bg-white lg:border-b-0 lg:border-r">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={current.image}
               alt={`${current.brand} ${current.name}`}
-              className="absolute inset-0 w-full h-full object-contain p-8"
+              className="absolute inset-0 h-full w-full object-contain p-8"
             />
             {current.savings > 0 && (
-              <div className="absolute top-3 left-3 bg-costco-red text-white px-2 py-1 text-[12px] font-bold rounded-[4px]">
+              <div className="absolute left-3 top-3 rounded-[4px] bg-costco-red px-2 py-1 text-[12px] font-bold text-white">
                 ${current.savings.toFixed(2)} off
               </div>
             )}
             <SaveHeart
               productId={current.id}
               productName={current.name}
-              className="absolute top-3 right-3 w-9 h-9"
+              className="absolute right-3 top-3 h-9 w-9"
             />
           </div>
-          <div className="p-5 flex flex-col">
+          <div className="flex flex-col p-5">
             <h2 className="text-[22px] font-bold text-[#1a1a1a] leading-snug">
               {current.brand} {current.name}
             </h2>
@@ -144,6 +139,7 @@ export default function ProductDetailModal({
                 warehouse
               </p>
             </div>
+          </div>
           </div>
 
         {related.length > 0 && (
