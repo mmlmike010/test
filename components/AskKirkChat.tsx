@@ -778,7 +778,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                   ? "Listening…"
                   : "Ask Kirk for a cart"
             }
-            className="flex-1 min-w-0 h-10 px-3.5 bg-[#f6f6f6] border border-[#d8d8d8] rounded-full text-[14px] text-[#1a1a1a] placeholder:text-[#8a8a8a] focus:outline-none focus:bg-white focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15"
+            className="flex-1 min-w-0 h-11 px-3.5 bg-white border border-[#c4c4c4] rounded-[3px] text-[14px] text-[#1a1a1a] placeholder:text-[#8a8a8a] focus:outline-none focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15"
             disabled={isLoading || isRecording || isTranscribing}
           />
           <button
@@ -792,7 +792,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
               else void startRecording();
             }}
             disabled={isLoading || isTranscribing}
-            className={`h-10 px-2 border transition-colors text-[10px] font-bold flex flex-col items-center justify-center gap-0.5 min-w-[52px] rounded-full ${
+            className={`h-11 px-2 border transition-colors text-[10px] font-bold flex flex-col items-center justify-center gap-0.5 min-w-[52px] rounded-[3px] ${
               isRecording || isSpeaking
                 ? "bg-costco-red text-white border-costco-red kirk-listening"
                 : "border-[#c4c4c4] hover:bg-[#f6f6f6] text-[#333]"
@@ -822,7 +822,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             type="button"
             onClick={() => void sendMessage(input)}
             disabled={!input.trim() || isLoading}
-            className="h-10 px-3 bg-costco-red text-white rounded-full font-bold hover:bg-costco-red-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1 text-[13px] min-w-[68px] justify-center"
+            className="h-11 px-3.5 bg-costco-red text-white rounded-[3px] font-bold hover:bg-costco-red-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1 text-[13px] min-w-[72px] justify-center"
           >
             <Send className="w-3.5 h-3.5" />
             Send
