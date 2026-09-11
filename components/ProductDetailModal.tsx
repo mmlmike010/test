@@ -333,9 +333,11 @@ export default function ProductDetailModal({
               Related products
             </h3>
             {warehouse ? (
-              <div className="grid grid-cols-2 gap-2">
+              <div className="flex flex-wrap gap-2">
                 {related.map((item) => (
-                  <WarehouseResultCard key={item.id} product={item} />
+                  <div key={item.id} className="w-[168px] shrink-0">
+                    <WarehouseResultCard product={item} />
+                  </div>
                 ))}
               </div>
             ) : (
