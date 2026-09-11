@@ -18,7 +18,7 @@ export const recipes: Recipe[] = [
     minutes: 5,
     servings: 2,
     course: "Breakfast",
-    image: "/products/recipe-yogurt.jpg?v=1",
+    image: "/products/recipe-yogurt.jpg?v=2",
     ingredientIds: ["8", "1"],
     steps: [
       "Spoon the Greek yogurt into two bowls.",

@@ -1,17 +1,19 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ChevronLeft, Clock, Search } from "lucide-react";
-import { recipeCourses, recipes, type Recipe, type RecipeCourse } from "@/lib/data/recipes";
+import { ChevronLeft, ChevronRight, Clock, Search, Users } from "lucide-react";
+import { recipeCourses, recipes, type RecipeCourse } from "@/lib/data/recipes";
 import { useCatalogStore } from "@/lib/store/catalog";
 import RecipeDetailDrawer from "@/components/RecipeDetailDrawer";
 
 export default function RecipesView() {
   const clearFilters = useCatalogStore((s) => s.clearFilters);
   const search = useCatalogStore((s) => s.search);
+  const openRecipeId = useCatalogStore((s) => s.openRecipe);
+  const setOpenRecipe = useCatalogStore((s) => s.setOpenRecipe);
   const [q, setQ] = useState("");
   const [course, setCourse] = useState<"All" | RecipeCourse>("All");
-  const [open, setOpen] = useState<Recipe | null>(null);
+  const open = recipes.find((recipe) => recipe.id === openRecipeId) || null;
 
   const shown = useMemo(() => {
     const needle = q.trim().toLowerCase();
@@ -109,30 +111,44 @@ export default function RecipesView() {
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {shown.map((recipe) => (
             <button
               key={recipe.id}
               type="button"
-              onClick={() => setOpen(recipe)}
-              className="text-left group"
+              onClick={() => {
+                setOpenRecipe(recipe.id);
+                document.querySelector("main")?.scrollTo({ top: 0 });
+              }}
+              className="text-left group rounded-[16px] bg-white border border-[#ececec] overflow-hidden hover:shadow-[0_2px_10px_rgba(0,0,0,0.07)]"
             >
-              <span className="relative block aspect-[4/3] rounded-[16px] overflow-hidden bg-[#f3f3f3]">
+              <span className="relative block aspect-[4/3] bg-[#f3f3f3]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={recipe.image}
                   alt=""
-                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-300"
                 />
               </span>
-              <span className="block mt-2 text-[15px] sm:text-[16px] font-bold text-[#1a1a1a] leading-snug">
-                {recipe.title}
-              </span>
-              <span className="mt-0.5 flex items-center gap-1.5 text-[12px] text-[#666]">
-                <Clock className="w-3.5 h-3.5" aria-hidden="true" />
-                {recipe.minutes} min
-                <span aria-hidden="true">·</span>
-                {recipe.course}
+              <span className="block px-3.5 pt-3 pb-3.5">
+                <span className="block text-[16px] font-bold text-[#1a1a1a] leading-snug">
+                  {recipe.title}
+                </span>
+                <span className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[12px] text-[#666]">
+                  <span className="inline-flex items-center gap-1">
+                    <Clock className="w-3.5 h-3.5" aria-hidden="true" />
+                    {recipe.minutes} min
+                  </span>
+                  <span className="inline-flex items-center gap-1">
+                    <Users className="w-3.5 h-3.5" aria-hidden="true" />
+                    {recipe.servings} servings
+                  </span>
+                  <span>{recipe.course}</span>
+                </span>
+                <span className="mt-2.5 inline-flex items-center gap-0.5 text-[13px] font-bold text-[#0AAD0A]">
+                  Shop ingredients
+                  <ChevronRight className="w-4 h-4" aria-hidden="true" />
+                </span>
               </span>
             </button>
           ))}
@@ -140,7 +156,10 @@ export default function RecipesView() {
       )}
 
       {open && (
-        <RecipeDetailDrawer recipe={open} onClose={() => setOpen(null)} />
+        <RecipeDetailDrawer
+          recipe={open}
+          onClose={() => setOpenRecipe(null)}
+        />
       )}
     </div>
   );

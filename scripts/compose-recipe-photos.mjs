@@ -25,7 +25,10 @@ async function plated(url, outName, position = "centre") {
   process.stdout.write(`wrote ${outName}\n`);
 }
 
-await plated(`${GH}/smoothie-bowl/smoothie-bowl-aerial.jpg`, "recipe-yogurt.jpg");
+await plated(
+  "https://raw.githubusercontent.com/jhaydter/recipes/main/docs/assets/images/double-berry-overnight-oats.jpg",
+  "recipe-yogurt.jpg"
+);
 await plated(`${GH}/tomato_fritatta_aerial.jpg`, "recipe-eggs.jpg", "south");
 await plated(`${GH}/fried_rice.jpeg`, "recipe-quinoa.jpg");
 await plated(`${GH}/tomato-pasta/tomato-penne-plated.jpeg`, "recipe-pasta.jpg");
