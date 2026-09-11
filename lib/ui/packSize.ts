@@ -30,6 +30,10 @@ export function productSize(id: string): string | undefined {
   return PRODUCT_SIZES[id];
 }
 
+function money(price: number, qty: number): string {
+  return `$${(price / qty).toFixed(2)}`;
+}
+
 /** Same-Day item-page unit price. UI only — never sent to Kirk. */
 export function unitPriceLabel(
   id: string,
@@ -41,7 +45,7 @@ export function unitPriceLabel(
   const multi = size.match(/^(\d+)\s*x\s*(\d+(?:\.\d+)?)\s*(oz|lb)$/i);
   if (multi) {
     const qty = Number(multi[1]) * Number(multi[2]);
-    return `$${(price / qty).toFixed(2)}/${multi[3].toLowerCase()}`;
+    return `${money(price, qty)} / ${multi[3].toLowerCase()}`;
   }
 
   const simple = size.match(/^(\d+(?:\.\d+)?)\s*(oz|lb|L|ct)$/i);
@@ -50,14 +54,15 @@ export function unitPriceLabel(
     const raw = simple[2];
     const unit = raw.toLowerCase() === "l" ? "L" : raw.toLowerCase();
     if (unit === "ct" && qty <= 1) return undefined;
-    return `$${(price / qty).toFixed(2)}/${unit}`;
+    if (unit === "ct") return `${money(price, qty)} each`;
+    return `${money(price, qty)} / ${unit}`;
   }
 
   const loads = size.match(/^(\d+)\s*loads$/i);
-  if (loads) return `$${(price / Number(loads[1])).toFixed(2)}/load`;
+  if (loads) return `${money(price, Number(loads[1]))} / load`;
 
   const pairs = size.match(/^(\d+)\s*pairs$/i);
-  if (pairs) return `$${(price / Number(pairs[1])).toFixed(2)}/pair`;
+  if (pairs) return `${money(price, Number(pairs[1]))} / pair`;
 
   return undefined;
 }

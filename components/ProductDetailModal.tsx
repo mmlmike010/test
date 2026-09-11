@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown, X, Minus, Plus, Star } from "lucide-react";
+import { ChevronDown, X, Minus, Plus, Star, ZoomIn } from "lucide-react";
 import SaveHeart from "@/components/SaveHeart";
 import { products, type Product } from "@/lib/data/products";
 import { useCartStore } from "@/lib/store/cart";
@@ -55,6 +55,7 @@ export default function ProductDetailModal({
   onClose: () => void;
 }) {
   const [current, setCurrent] = useState(product);
+  const [zoomed, setZoomed] = useState(false);
   const addItem = useCartStore((s) => s.addItem);
   const updateQuantity = useCartStore((s) => s.updateQuantity);
   const qty = useCartStore(
@@ -94,11 +95,13 @@ export default function ProductDetailModal({
   };
 
   const openRelated = (next: Product) => {
+    setZoomed(false);
     setCurrent(next);
     scrollerRef.current?.scrollTo({ top: 0 });
   };
 
   return (
+    <>
     <div
       className={`fixed z-[70] flex min-h-0 flex-col bg-white ${storefrontOverlayClass(kirkOpen)}`}
     >
@@ -124,23 +127,56 @@ export default function ProductDetailModal({
 
         <div ref={scrollerRef} className="min-h-0 flex-1 overflow-y-auto">
           <div className="lg:grid lg:grid-cols-2 lg:items-start">
-          <div className="relative aspect-square border-b border-[#eee] bg-white lg:border-b-0 lg:border-r">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={current.image}
-              alt={`${current.brand} ${current.name}`}
-              className="absolute inset-0 h-full w-full object-contain p-8"
-            />
-            {current.savings > 0 && (
-              <div className="absolute left-3 top-3 rounded-[4px] bg-costco-red px-2 py-1 text-[12px] font-bold text-white">
-                ${current.savings.toFixed(2)} off
-              </div>
-            )}
-            <SaveHeart
-              productId={current.id}
-              productName={current.name}
-              className="absolute right-3 top-3 h-9 w-9"
-            />
+          <div className="lg:border-r lg:border-[#eee]">
+            <div className="relative aspect-square bg-[#f6f7f8]">
+              <button
+                type="button"
+                onClick={() => setZoomed(true)}
+                className="absolute inset-0"
+                aria-label="Enlarge product image"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={current.image}
+                  alt={`${current.brand} ${current.name}`}
+                  className="absolute inset-0 h-full w-full object-contain p-8"
+                />
+              </button>
+              {current.savings > 0 && (
+                <div className="absolute left-3 top-3 rounded-[4px] bg-costco-red px-2 py-1 text-[12px] font-bold text-white">
+                  ${current.savings.toFixed(2)} off
+                </div>
+              )}
+              <SaveHeart
+                productId={current.id}
+                productName={current.name}
+                className="absolute right-3 top-3 h-9 w-9"
+              />
+              <button
+                type="button"
+                onClick={() => setZoomed(true)}
+                className="absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-full bg-white shadow-[0_1px_4px_rgba(0,0,0,0.16)] hover:bg-[#f6f6f6]"
+                aria-label="Zoom product image"
+              >
+                <ZoomIn className="h-4 w-4 text-[#333]" />
+              </button>
+            </div>
+            <div className="flex justify-center border-b border-[#eee] bg-white py-3 lg:border-b-0">
+              <button
+                type="button"
+                onClick={() => setZoomed(true)}
+                className="relative h-14 w-14 overflow-hidden rounded-[8px] border-2 border-[#1a1a1a] bg-white"
+                aria-label="Selected product photo"
+                aria-current="true"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={current.image}
+                  alt=""
+                  className="absolute inset-0 h-full w-full object-contain p-1"
+                />
+              </button>
+            </div>
           </div>
           <div className="flex flex-col p-5">
             <h2 className="text-[22px] font-bold text-[#1a1a1a] leading-snug">
@@ -150,7 +186,7 @@ export default function ProductDetailModal({
               <p className="mt-1 text-[14px] text-[#242424]">• {size}</p>
             ) : null}
             {perUnit ? (
-              <p className="mt-0.5 text-[14px] text-[#242424]">•{perUnit}</p>
+              <p className="mt-0.5 text-[14px] text-[#242424]">• {perUnit}</p>
             ) : null}
             <button
               type="button"
@@ -309,5 +345,30 @@ export default function ProductDetailModal({
         </div>
       </div>
     </div>
+    {zoomed ? (
+      <div
+        className={`fixed z-[80] flex items-center justify-center bg-black/70 p-4 ${storefrontOverlayClass(kirkOpen)}`}
+        onClick={() => setZoomed(false)}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Enlarged product image"
+      >
+        <button
+          type="button"
+          className="absolute top-4 right-4 bg-white text-[#1a1a1a] px-3 py-1.5 text-sm font-bold shadow"
+          onClick={() => setZoomed(false)}
+        >
+          Close
+        </button>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={current.image}
+          alt={`${current.brand} ${current.name} enlarged`}
+          className="max-h-[90vh] max-w-[min(920px,96vw)] shadow-2xl object-contain bg-white"
+          onClick={(e) => e.stopPropagation()}
+        />
+      </div>
+    ) : null}
+    </>
   );
 }
