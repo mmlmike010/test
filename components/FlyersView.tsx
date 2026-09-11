@@ -97,7 +97,7 @@ export default function FlyersView() {
 
       {page && (
         <div
-          className={`fixed z-[70] flex items-center justify-center bg-black/70 p-4 ${storefrontOverlayClass(kirkOpen)}`}
+          className={`fixed z-[74] flex items-center justify-center bg-black/70 p-4 ${storefrontOverlayClass(kirkOpen)}`}
         >
           <button
             type="button"

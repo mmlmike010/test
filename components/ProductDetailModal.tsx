@@ -10,6 +10,7 @@ import ProductCard from "@/components/ProductCard";
 import { productSize, unitPriceLabel } from "@/lib/ui/packSize";
 import { aisleLabel } from "@/lib/ui/aisleLabels";
 import { storefrontOverlayClass, useSessionStore } from "@/lib/store/session";
+import { useListStore } from "@/lib/store/lists";
 import { useRef, useState, type ReactNode } from "react";
 
 function ItemAccordion({
@@ -66,6 +67,14 @@ export default function ProductDetailModal({
   const setQuery = useCatalogStore((s) => s.setQuery);
   const setTag = useCatalogStore((s) => s.setTag);
   const setDepartment = useCatalogStore((s) => s.setDepartment);
+  const saved = useListStore((s) =>
+    Boolean(
+      s.lists
+        .find((list) => list.id === "shopping")
+        ?.productIds.includes(current.id)
+    )
+  );
+  const toggleList = useListStore((s) => s.toggle);
   const size = productSize(current.id);
   const perUnit = unitPriceLabel(current.id, current.price);
 
@@ -103,7 +112,7 @@ export default function ProductDetailModal({
   return (
     <>
     <div
-      className={`fixed z-[70] flex min-h-0 flex-col bg-white ${storefrontOverlayClass(kirkOpen)}`}
+      className={`fixed z-[74] flex min-h-0 flex-col bg-white ${storefrontOverlayClass(kirkOpen)}`}
     >
       <div
         role="dialog"
@@ -188,13 +197,23 @@ export default function ProductDetailModal({
             {perUnit ? (
               <p className="mt-0.5 text-[14px] text-[#242424]">• {perUnit}</p>
             ) : null}
-            <button
-              type="button"
-              onClick={shopAllBrand}
-              className="mt-2 w-fit text-[14px] font-bold text-costco-blue hover:underline"
-            >
-              Shop all {current.brand}
-            </button>
+            <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1">
+              <button
+                type="button"
+                onClick={shopAllBrand}
+                className="w-fit text-[14px] font-bold text-costco-blue hover:underline"
+              >
+                Shop all {current.brand}
+              </button>
+              <button
+                type="button"
+                onClick={() => toggleList(current.id)}
+                aria-pressed={saved}
+                className="w-fit text-[14px] font-bold text-costco-blue hover:underline"
+              >
+                {saved ? "Saved to list" : "Add to list"}
+              </button>
+            </div>
             <div className="mt-2">
               <StarRating
                 rating={current.rating}

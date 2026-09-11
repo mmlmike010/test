@@ -2,6 +2,7 @@
 
 import { Minus, Plus, ShoppingCart, Trash2, X } from "lucide-react";
 import { useCartStore } from "@/lib/store/cart";
+import { useCatalogStore } from "@/lib/store/catalog";
 import { productSize } from "@/lib/ui/packSize";
 import {
   deliveryWindow,
@@ -20,6 +21,7 @@ export default function CartDrawer() {
   const subtotal = useCartStore((s) => s.getSubtotal());
   const totalItems = useCartStore((s) => s.getTotalItems());
   const setSheet = useSessionStore((s) => s.setSheet);
+  const inspect = useCatalogStore((s) => s.inspect);
   const kirkOpen = useSessionStore((s) => s.kirkOpen);
   const windowId = useSessionStore((s) => s.windowId);
   const address = useSessionStore((s) => s.address);
@@ -79,19 +81,28 @@ export default function CartDrawer() {
                   key={product.id}
                   className="flex gap-3 py-3.5 border-b border-[#f0f0f0]"
                 >
-                  <div className="relative w-[72px] h-[72px] overflow-hidden bg-white border border-[#eee] rounded-[12px] shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => inspect(product)}
+                    className="relative w-[72px] h-[72px] overflow-hidden bg-white border border-[#eee] rounded-[12px] shrink-0"
+                    aria-label={`View ${product.brand} ${product.name}`}
+                  >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={product.image}
-                      alt={`${product.brand} ${product.name}`}
+                      alt=""
                       className="absolute inset-0 w-full h-full object-contain p-1"
                     />
-                  </div>
+                  </button>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2">
-                      <p className="text-[14px] text-[#242424] leading-snug line-clamp-2">
+                      <button
+                        type="button"
+                        onClick={() => inspect(product)}
+                        className="text-left text-[14px] text-[#242424] leading-snug line-clamp-2 hover:underline"
+                      >
                         {product.brand} {product.name}
-                      </p>
+                      </button>
                       <p className="text-[15px] font-bold text-[#1a1a1a] tabular-nums shrink-0">
                         ${(product.price * quantity).toFixed(2)}
                       </p>

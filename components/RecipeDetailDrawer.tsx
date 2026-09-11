@@ -35,7 +35,7 @@ export default function RecipeDetailDrawer({
 
   return (
     <div
-      className={`fixed z-[70] flex min-h-0 flex-col bg-white ${storefrontOverlayClass(kirkOpen)}`}
+      className={`fixed z-[74] flex min-h-0 flex-col bg-white ${storefrontOverlayClass(kirkOpen)}`}
     >
       <div
         role="dialog"
