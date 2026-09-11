@@ -7,6 +7,7 @@ import { useCartStore } from "@/lib/store/cart";
 import { useCatalogStore } from "@/lib/store/catalog";
 import StarRating from "@/components/StarRating";
 import ProductCard from "@/components/ProductCard";
+import { officialPacksFirst } from "@/lib/ui/merchOrder";
 import { productSize, unitPriceLabel } from "@/lib/ui/packSize";
 import { aisleLabel } from "@/lib/ui/aisleLabels";
 import { storefrontOverlayClass, useSessionStore } from "@/lib/store/session";
@@ -90,14 +91,14 @@ export default function ProductDetailModal({
     onClose();
   };
 
-  const related = products
-    .filter(
+  const related = officialPacksFirst(
+    products.filter(
       (p) =>
         p.id !== current.id &&
         (p.department === current.department ||
           p.category === current.category)
     )
-    .slice(0, 4);
+  ).slice(0, 4);
 
   const onAdd = () => {
     addItem(current);

@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Search } from "lucide-react";
 import { categories, filterProducts } from "@/lib/data/products";
 import { aisleLabel } from "@/lib/ui/aisleLabels";
+import { officialPacksFirst } from "@/lib/ui/merchOrder";
 import type { Product } from "@/lib/data/products";
 import { useCatalogStore } from "@/lib/store/catalog";
 import ProductCard from "@/components/ProductCard";
@@ -206,7 +207,7 @@ export default function ProductGrid() {
     if (sort === "price") {
       return [...filtered].sort((a, b) => a.price - b.price);
     }
-    return filtered;
+    return officialPacksFirst(filtered);
   }, [filtered, sort]);
 
   const showAisle = (next: { department?: string; tag?: string }) => {
@@ -219,70 +220,90 @@ export default function ProductGrid() {
   const aisles: Aisle[] = [
     {
       title: "Buy it again",
-      items: filtered.filter((p) => p.tags?.includes("again")),
+      items: officialPacksFirst(
+        filtered.filter((p) => p.tags?.includes("again"))
+      ),
       onShowAll: () => showAisle({ tag: "again" }),
     },
     {
       title: "Member Only Savings",
-      items: filtered.filter(
-        (p) =>
-          // Same exclusion as filterProducts({ tag: "weekly" }) — flyer pages stay four deals.
-          p.id !== "1" &&
-          (p.department === "Weekly Savings" || p.tags?.includes("weekly"))
+      items: officialPacksFirst(
+        filtered.filter(
+          (p) =>
+            // Same exclusion as filterProducts({ tag: "weekly" }) — flyer pages stay four deals.
+            p.id !== "1" &&
+            (p.department === "Weekly Savings" || p.tags?.includes("weekly"))
+        )
       ),
       onShowAll: () => showAisle({ tag: "weekly" }),
     },
     {
       title: "Kirkland Signature",
-      items: filtered.filter(
-        (p) =>
-          p.brand === "Kirkland Signature" ||
-          p.department === "Kirkland Signature" ||
-          p.tags?.includes("kirkland")
+      items: officialPacksFirst(
+        filtered.filter(
+          (p) =>
+            p.brand === "Kirkland Signature" ||
+            p.department === "Kirkland Signature" ||
+            p.tags?.includes("kirkland")
+        )
       ),
       onShowAll: () => showAisle({ tag: "kirkland" }),
     },
     {
       title: "What's New",
-      items: filtered.filter(
-        (p) =>
-          // Composed leftover packs stay on the What's New landing, not the homepage rail.
-          p.id !== "1" &&
-          p.id !== "6" &&
-          (p.department === "What's New" || p.tags?.includes("new"))
+      items: officialPacksFirst(
+        filtered.filter(
+          (p) =>
+            // Composed leftover packs stay on the What's New landing, not the homepage rail.
+            p.id !== "1" &&
+            p.id !== "6" &&
+            (p.department === "What's New" || p.tags?.includes("new"))
+        )
       ),
       onShowAll: () => showAisle({ tag: "new" }),
     },
     {
       title: "This week's featured items",
-      items: filtered.filter(
-        (p) => p.department === "Trending" || p.tags?.includes("trending")
+      items: officialPacksFirst(
+        filtered.filter(
+          (p) => p.department === "Trending" || p.tags?.includes("trending")
+        )
       ),
       onShowAll: () => showAisle({ tag: "trending" }),
     },
     {
       title: "Discounts on household favorites",
-      items: filtered.filter((p) => p.tags?.includes("treasure")),
+      items: officialPacksFirst(
+        filtered.filter((p) => p.tags?.includes("treasure"))
+      ),
       onShowAll: () => showAisle({ tag: "treasure" }),
     },
     {
       title: "Dairy & Eggs",
-      items: filtered.filter((p) => p.department === "Dairy & Eggs"),
+      items: officialPacksFirst(
+        filtered.filter((p) => p.department === "Dairy & Eggs")
+      ),
       onShowAll: () => showAisle({ department: "Dairy & Eggs" }),
     },
     {
       title: "Pantry",
-      items: filtered.filter((p) => p.tags?.includes("pantry")),
+      items: officialPacksFirst(
+        filtered.filter((p) => p.tags?.includes("pantry"))
+      ),
       onShowAll: () => showAisle({ tag: "pantry" }),
     },
     {
       title: "Snacks",
-      items: filtered.filter((p) => p.tags?.includes("snacks")),
+      items: officialPacksFirst(
+        filtered.filter((p) => p.tags?.includes("snacks"))
+      ),
       onShowAll: () => showAisle({ tag: "snacks" }),
     },
     {
       title: "Bakery",
-      items: filtered.filter((p) => p.department === "Bakery & Desserts"),
+      items: officialPacksFirst(
+        filtered.filter((p) => p.department === "Bakery & Desserts")
+      ),
       onShowAll: () => showAisle({ department: "Bakery & Desserts" }),
     },
   ];

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ChevronLeft, X } from "lucide-react";
 import { filterProducts } from "@/lib/data/products";
+import { officialPacksFirst } from "@/lib/ui/merchOrder";
 import { useCatalogStore } from "@/lib/store/catalog";
 import { storefrontOverlayClass, useSessionStore } from "@/lib/store/session";
 import ProductCard from "@/components/ProductCard";
@@ -24,7 +25,7 @@ export default function FlyersView() {
   const kirkOpen = useSessionStore((s) => s.kirkOpen);
   const inspect = useCatalogStore((s) => s.inspect);
   const [page, setPage] = useState<(typeof pages)[number] | null>(null);
-  const deals = filterProducts({ tag: "weekly" });
+  const deals = officialPacksFirst(filterProducts({ tag: "weekly" }));
 
   return (
     <div>
