@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { ChevronLeft, X } from "lucide-react";
 import { filterProducts } from "@/lib/data/products";
-import { officialPacksFirst } from "@/lib/ui/merchOrder";
+import { hideComposedLeftovers, officialPacksFirst } from "@/lib/ui/merchOrder";
 import { useCatalogStore } from "@/lib/store/catalog";
 import { storefrontOverlayClass, useSessionStore } from "@/lib/store/session";
 import ProductCard from "@/components/ProductCard";
@@ -25,7 +25,9 @@ export default function FlyersView() {
   const kirkOpen = useSessionStore((s) => s.kirkOpen);
   const inspect = useCatalogStore((s) => s.inspect);
   const [page, setPage] = useState<(typeof pages)[number] | null>(null);
-  const deals = officialPacksFirst(filterProducts({ tag: "weekly" }));
+  const deals = hideComposedLeftovers(
+    officialPacksFirst(filterProducts({ tag: "weekly" }))
+  );
 
   return (
     <div>
@@ -51,13 +53,17 @@ export default function FlyersView() {
         </p>
       </div>
 
-      <div className="flex gap-4 overflow-x-auto scrollbar-hide mb-6">
+      <div
+        className={`mb-6 grid gap-3 ${
+          kirkOpen ? "grid-cols-2" : "grid-cols-2 sm:grid-cols-3"
+        }`}
+      >
         {pages.map((item) => (
           <button
             key={item.src}
             type="button"
             onClick={() => setPage(item)}
-            className="shrink-0 w-[240px] sm:w-[280px] lg:w-[300px] text-left group"
+            className="min-w-0 text-left group"
           >
             <span className="relative block aspect-[850/1100] rounded-[8px] overflow-hidden bg-white border border-[#e0e0e0] shadow-[0_1px_4px_rgba(0,0,0,0.08)]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -86,7 +92,13 @@ export default function FlyersView() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3">
+      <div
+        className={
+          kirkOpen
+            ? "grid grid-cols-2 xl:grid-cols-3 gap-3"
+            : "grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3"
+        }
+      >
         {deals.map((product) => (
           <ProductCard
             key={product.id}

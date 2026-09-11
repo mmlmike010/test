@@ -120,6 +120,7 @@ export default function CartDrawer() {
                     <p className="text-[13px] text-[#8a8a8a] mt-0.5 tabular-nums">
                       ${product.price.toFixed(2)} each
                     </p>
+                    <p className="text-[12px] text-[#666] mt-0.5">Sold by Costco</p>
                     <div className="mt-2.5 flex items-center justify-between gap-2">
                       <div className="flex items-center rounded-full overflow-hidden h-9 bg-[#0AAD0A] text-white">
                         <button
