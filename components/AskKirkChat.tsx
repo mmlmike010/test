@@ -31,7 +31,10 @@ import {
   kirkQueryPreview,
   storefrontQueryForKirk,
 } from "@/lib/ui/merchOrder";
-import { EMPTY_WAREHOUSE_FACETS } from "@/lib/ui/warehouseSearch";
+import {
+  applyWarehouseFacets,
+  EMPTY_WAREHOUSE_FACETS,
+} from "@/lib/ui/warehouseSearch";
 
 interface Message {
   id: string;
@@ -126,6 +129,8 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
   const kirkWindow = deliveryWindow(useSessionStore((s) => s.windowId));
   const kirkAddress = useSessionStore((s) => s.address);
   const kirkMember = useSessionStore((s) => s.membershipAdded);
+  const warehouseFacets = useCatalogStore((s) => s.warehouseFacets);
+  const setWarehouseFacets = useCatalogStore((s) => s.setWarehouseFacets);
 
   useEffect(() => {
     const onlyWelcome =
@@ -693,11 +698,13 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
           const added = (message.productIds || [])
             .map((id) => products.find((p) => p.id === id))
             .filter((p): p is (typeof products)[number] => Boolean(p));
-          const hits =
+          const unfilteredHits =
             message.role === "user"
               ? kirkQueryPreview(products, message.content)
               : [];
+          const hits = applyWarehouseFacets(unfilteredHits, warehouseFacets);
           const preview = hits.slice(0, 4);
+          const facetEmpty = unfilteredHits.length > 0 && hits.length === 0;
           return (
           <div key={message.id} className="space-y-2">
           {message.role === "user" ? (
@@ -754,6 +761,17 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                     />
                   ))}
                 </div>
+              ) : facetEmpty ? (
+                <p className="m-2 rounded-[3px] border border-[#c4c4c4] bg-[#fafafa] px-3 py-6 text-center text-[13px] text-[#555]">
+                  No items match these filters.{" "}
+                  <button
+                    type="button"
+                    className="font-bold text-costco-blue hover:underline"
+                    onClick={() => setWarehouseFacets(EMPTY_WAREHOUSE_FACETS)}
+                  >
+                    See all results
+                  </button>
+                </p>
               ) : null}
             </div>
           ) : (
