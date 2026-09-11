@@ -377,80 +377,84 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
 
       <div className="bg-white border-b border-[#ececec]">
         {warehouseSearch ? (
-          <nav
-            className="max-w-[1800px] mx-auto px-3 sm:px-4 h-[40px] flex items-center gap-5 overflow-x-auto scrollbar-hide text-[14px]"
-            aria-label="Departments"
-          >
-            <div ref={shopRef} className="relative h-full shrink-0">
-              <button
-                type="button"
-                aria-expanded={shopOpen}
-                aria-current={warehouseDepts.length === 0 ? "page" : undefined}
-                className={`${tabClass(warehouseDepts.length === 0)} inline-flex items-center gap-0.5`}
-                onClick={() => setShopOpen((open) => !open)}
-              >
-                Shop
-                <ChevronDown
-                  className={`h-3.5 w-3.5 ${shopOpen ? "rotate-180" : ""}`}
-                  aria-hidden="true"
-                />
-              </button>
-              {shopOpen ? (
-                <div className="absolute left-0 top-full z-[80] w-[min(520px,92vw)] border border-[#c4c4c4] bg-white shadow-[0_8px_24px_rgba(0,0,0,0.12)]">
-                  <p className="border-b border-[#ececec] px-3 py-2 text-[11px] font-bold uppercase tracking-[0.12em] text-[#666]">
-                    Shop
-                  </p>
-                  <div className="grid grid-cols-2 gap-x-2 p-2">
-                    <button
-                      type="button"
-                      className="px-2 py-1.5 text-left text-[13px] font-bold text-costco-blue hover:bg-[#f7fbfe] hover:underline"
-                      onClick={() => {
-                        setWarehouseFacets(EMPTY_WAREHOUSE_FACETS);
-                        setShopOpen(false);
-                      }}
-                    >
-                      Shop All
-                    </button>
-                    {WAREHOUSE_NAV.map((label) => (
+          <div className="relative max-w-[1800px] mx-auto px-3 sm:px-4">
+            <div className="flex h-[40px] items-center gap-5 text-[14px]">
+              <div ref={shopRef} className="relative h-full shrink-0">
+                <button
+                  type="button"
+                  aria-expanded={shopOpen}
+                  aria-current={warehouseDepts.length === 0 ? "page" : undefined}
+                  className={`${tabClass(warehouseDepts.length === 0)} inline-flex items-center gap-0.5`}
+                  onClick={() => setShopOpen((open) => !open)}
+                >
+                  Shop
+                  <ChevronDown
+                    className={`h-3.5 w-3.5 ${shopOpen ? "rotate-180" : ""}`}
+                    aria-hidden="true"
+                  />
+                </button>
+                {shopOpen ? (
+                  <div className="absolute left-0 top-full z-[80] w-[min(520px,92vw)] border border-[#c4c4c4] bg-white shadow-[0_8px_24px_rgba(0,0,0,0.12)]">
+                    <p className="border-b border-[#ececec] px-3 py-2 text-[11px] font-bold uppercase tracking-[0.12em] text-[#666]">
+                      Shop
+                    </p>
+                    <div className="grid grid-cols-2 gap-x-2 p-2">
                       <button
-                        key={`shop-${label}`}
                         type="button"
-                        className="px-2 py-1.5 text-left text-[13px] font-semibold text-costco-blue hover:bg-[#f7fbfe] hover:underline"
+                        className="px-2 py-1.5 text-left text-[13px] font-bold text-costco-blue hover:bg-[#f7fbfe] hover:underline"
                         onClick={() => {
-                          setWarehouseFacets({
-                            ...EMPTY_WAREHOUSE_FACETS,
-                            departments: [label],
-                          });
+                          setWarehouseFacets(EMPTY_WAREHOUSE_FACETS);
                           setShopOpen(false);
                         }}
                       >
-                        {label}
+                        Shop All
                       </button>
-                    ))}
+                      {WAREHOUSE_NAV.map((label) => (
+                        <button
+                          key={`shop-${label}`}
+                          type="button"
+                          className="px-2 py-1.5 text-left text-[13px] font-semibold text-costco-blue hover:bg-[#f7fbfe] hover:underline"
+                          onClick={() => {
+                            setWarehouseFacets({
+                              ...EMPTY_WAREHOUSE_FACETS,
+                              departments: [label],
+                            });
+                            setShopOpen(false);
+                          }}
+                        >
+                          {label}
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ) : null}
+                ) : null}
+              </div>
+              <nav
+                className="flex h-full min-w-0 flex-1 items-center gap-5 overflow-x-auto scrollbar-hide"
+                aria-label="Departments"
+              >
+                {WAREHOUSE_NAV.map((label) => {
+                  const active = warehouseDepts.includes(label);
+                  return (
+                    <button
+                      key={label}
+                      type="button"
+                      aria-current={active ? "page" : undefined}
+                      className={tabClass(active)}
+                      onClick={() =>
+                        setWarehouseFacets({
+                          ...EMPTY_WAREHOUSE_FACETS,
+                          departments: active ? [] : [label],
+                        })
+                      }
+                    >
+                      {label}
+                    </button>
+                  );
+                })}
+              </nav>
             </div>
-            {WAREHOUSE_NAV.map((label) => {
-              const active = warehouseDepts.includes(label);
-              return (
-                <button
-                  key={label}
-                  type="button"
-                  aria-current={active ? "page" : undefined}
-                  className={tabClass(active)}
-                  onClick={() =>
-                    setWarehouseFacets({
-                      ...EMPTY_WAREHOUSE_FACETS,
-                      departments: active ? [] : [label],
-                    })
-                  }
-                >
-                  {label}
-                </button>
-              );
-            })}
-          </nav>
+          </div>
         ) : (
           <nav
             className="max-w-[1800px] mx-auto px-3 sm:px-4 h-[40px] flex items-center gap-5 overflow-x-auto scrollbar-hide text-[14px]"
