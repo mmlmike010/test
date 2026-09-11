@@ -12,8 +12,10 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { useCartStore } from "@/lib/store/cart";
+import { useCatalogStore } from "@/lib/store/catalog";
 import { products } from "@/lib/data/products";
 import KirkMark from "@/components/KirkMark";
+import ProductCard from "@/components/ProductCard";
 import CostcoLogo from "@/components/CostcoLogo";
 import GoldStarMark from "@/components/GoldStarMark";
 import GoldStarMembershipCard from "@/components/GoldStarMembershipCard";
@@ -30,6 +32,7 @@ interface Message {
   content: string;
   timestamp: Date;
   imageUrl?: string | null;
+  productIds?: string[];
 }
 
 interface AskKirkChatProps {
@@ -114,6 +117,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
   const kirkWindow = deliveryWindow(useSessionStore((s) => s.windowId));
   const kirkAddress = useSessionStore((s) => s.address);
   const kirkMember = useSessionStore((s) => s.membershipAdded);
+  const inspect = useCatalogStore((s) => s.inspect);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -156,7 +160,8 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
   };
 
   const applyActions = (actions: KirkAction[]) => {
-    if (!actions?.length) return;
+    const addedIds: string[] = [];
+    if (!actions?.length) return addedIds;
     const notices: string[] = [];
     let shouldOpen = false;
 
@@ -180,6 +185,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
           if (product) {
             addItem(product, qty);
             added += 1;
+            addedIds.push(id);
           }
         }
         if (added) {
@@ -200,6 +206,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
       setCartNotice(notices[0]);
       window.setTimeout(() => setCartNotice(null), 3500);
     }
+    return addedIds;
   };
 
   const speakText = async (text: string) => {
@@ -299,17 +306,17 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
       const actions = Array.isArray(data.actions)
         ? (data.actions as KirkAction[])
         : [];
-      if (actions.length) {
-        applyActions(actions);
-      } else if (Array.isArray(data.productIds) && data.productIds.length) {
-        applyActions([
-          {
-            tool: "add_to_cart",
-            productIds: data.productIds as string[],
-            quantity: 1,
-          },
-        ]);
-      }
+      const addedIds = actions.length
+        ? applyActions(actions)
+        : Array.isArray(data.productIds) && data.productIds.length
+          ? applyActions([
+              {
+                tool: "add_to_cart",
+                productIds: data.productIds as string[],
+                quantity: 1,
+              },
+            ])
+          : [];
 
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
@@ -318,6 +325,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
         timestamp: new Date(),
         imageUrl:
           typeof data.imageUrl === "string" ? data.imageUrl : null,
+        productIds: addedIds,
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
@@ -597,9 +605,12 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
               </div>
             );
           }
+          const added = (message.productIds || [])
+            .map((id) => products.find((p) => p.id === id))
+            .filter((p): p is (typeof products)[number] => Boolean(p));
           return (
+          <div key={message.id} className="space-y-2">
           <div
-            key={message.id}
             className={`flex gap-2 ${
               message.role === "user" ? "justify-end" : "justify-start"
             }`}
@@ -639,6 +650,24 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                 </div>
               )}
             </div>
+          </div>
+          {added.length > 0 ? (
+            <div className="ml-9">
+              <p className="mb-1.5 text-[10px] font-bold uppercase tracking-[0.08em] text-[#666]">
+                Added to cart
+              </p>
+              <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+                {added.map((product) => (
+                  <ProductCard
+                    key={`${message.id}-${product.id}`}
+                    product={product}
+                    compact
+                    onOpen={() => inspect(product)}
+                  />
+                ))}
+              </div>
+            </div>
+          ) : null}
           </div>
           );
         })}

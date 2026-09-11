@@ -7,7 +7,6 @@ import { useCatalogStore } from "@/lib/store/catalog";
 import { useCartStore } from "@/lib/store/cart";
 import { hydrateLists, useListStore } from "@/lib/store/lists";
 import ProductCard from "@/components/ProductCard";
-import ProductDetailModal from "@/components/ProductDetailModal";
 
 export default function ListsView() {
   const clearFilters = useCatalogStore((s) => s.clearFilters);
@@ -15,7 +14,7 @@ export default function ListsView() {
   const lists = useListStore((s) => s.lists);
   const createList = useListStore((s) => s.createList);
   const addItem = useCartStore((s) => s.addItem);
-  const [selected, setSelected] = useState<Product | null>(null);
+  const inspect = useCatalogStore((s) => s.inspect);
   const [newName, setNewName] = useState("");
   const [creating, setCreating] = useState(false);
   const again = filterProducts({ tag: "again" });
@@ -151,7 +150,7 @@ export default function ListsView() {
             <ProductCard
               key={product.id}
               product={product}
-              onOpen={() => setSelected(product)}
+              onOpen={() => inspect(product)}
             />
           ))}
         </div>
@@ -196,7 +195,7 @@ export default function ListsView() {
                   <ProductCard
                     key={product.id}
                     product={product}
-                    onOpen={() => setSelected(product)}
+                    onOpen={() => inspect(product)}
                   />
                 ))}
               </div>
@@ -205,13 +204,6 @@ export default function ListsView() {
         );
       })}
 
-      {selected && (
-        <ProductDetailModal
-          key={selected.id}
-          product={selected}
-          onClose={() => setSelected(null)}
-        />
-      )}
     </div>
   );
 }

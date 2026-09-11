@@ -132,7 +132,8 @@ export default function ProductGrid() {
   const setTag = useCatalogStore((s) => s.setTag);
   const setQuery = useCatalogStore((s) => s.setQuery);
   const clearFilters = useCatalogStore((s) => s.clearFilters);
-  const [selected, setSelected] = useState<Product | null>(null);
+  const inspecting = useCatalogStore((s) => s.inspecting);
+  const inspect = useCatalogStore((s) => s.inspect);
   const [sort, setSort] = useState<"relevance" | "price">("relevance");
   const setSheet = useSessionStore((s) => s.setSheet);
   const address = useSessionStore((s) => s.address);
@@ -323,7 +324,7 @@ export default function ProductGrid() {
               title={aisle.title}
               items={aisle.items}
               onShowAll={aisle.onShowAll}
-              onOpen={setSelected}
+              onOpen={inspect}
             />
           ))}
         </>
@@ -484,7 +485,7 @@ export default function ProductGrid() {
                 <ProductCard
                   key={product.id}
                   product={product}
-                  onOpen={() => setSelected(product)}
+                  onOpen={() => inspect(product)}
                 />
               ))}
             </div>
@@ -554,11 +555,11 @@ export default function ProductGrid() {
         </div>
       </footer>
 
-      {selected && (
+      {inspecting && (
         <ProductDetailModal
-          key={selected.id}
-          product={selected}
-          onClose={() => setSelected(null)}
+          key={inspecting.id}
+          product={inspecting}
+          onClose={() => inspect(null)}
         />
       )}
     </div>

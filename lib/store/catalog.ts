@@ -11,9 +11,11 @@ type CatalogState = {
   results: Product[];
   loading: boolean;
   error: string | null;
+  inspecting: Product | null;
   setQuery: (q: string) => void;
   setDepartment: (department: string | null) => void;
   setTag: (tag: string | null) => void;
+  inspect: (product: Product | null) => void;
   clearFilters: () => void;
   search: () => Promise<void>;
 };
@@ -25,9 +27,11 @@ export const useCatalogStore = create<CatalogState>((set, get) => ({
   results: catalog,
   loading: false,
   error: null,
+  inspecting: null,
   setQuery: (q) => set({ q }),
   setDepartment: (department) => set({ department, tag: null }),
   setTag: (tag) => set({ tag, department: null }),
+  inspect: (inspecting) => set({ inspecting }),
   clearFilters: () => set({ q: "", department: null, tag: null }),
   search: async () => {
     const { q, department, tag } = get();

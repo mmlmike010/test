@@ -6,8 +6,8 @@ import { products } from "@/lib/data/products";
 import type { Recipe } from "@/lib/data/recipes";
 import { useCartStore } from "@/lib/store/cart";
 import ProductCard from "@/components/ProductCard";
-import ProductDetailModal from "@/components/ProductDetailModal";
 import type { Product } from "@/lib/data/products";
+import { useCatalogStore } from "@/lib/store/catalog";
 import { storefrontOverlayClass, useSessionStore } from "@/lib/store/session";
 
 export default function RecipeDetailDrawer({
@@ -18,8 +18,8 @@ export default function RecipeDetailDrawer({
   onClose: () => void;
 }) {
   const addItem = useCartStore((s) => s.addItem);
+  const inspect = useCatalogStore((s) => s.inspect);
   const [justAdded, setJustAdded] = useState(false);
-  const [selected, setSelected] = useState<Product | null>(null);
   const kirkOpen = useSessionStore((s) => s.kirkOpen);
 
   const ingredients = recipe.ingredientIds
@@ -101,7 +101,7 @@ export default function RecipeDetailDrawer({
                 <ProductCard
                   key={product.id}
                   product={product}
-                  onOpen={() => setSelected(product)}
+                  onOpen={() => inspect(product)}
                 />
               ))}
             </div>
@@ -143,13 +143,6 @@ export default function RecipeDetailDrawer({
         </div>
       </div>
 
-      {selected && (
-        <ProductDetailModal
-          key={selected.id}
-          product={selected}
-          onClose={() => setSelected(null)}
-        />
-      )}
     </div>
   );
 }

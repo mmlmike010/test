@@ -65,20 +65,26 @@ const pouchMask = await sharp(maskRgba, {
   .png()
   .toBuffer();
 
-// Tight bowl only — raspberries in granola.
+// Tight bowl only — raspberries in granola. Never keep Ancient Grains type.
+const winW = 268;
+const winH = 236;
 const bowl = await sharp(src)
   .extract({ left: 170, top: 104, width: 160, height: 104 })
-  .resize(196, 196, { fit: "cover", position: "centre" })
+  .resize(winW, winH, { fit: "cover", position: "centre" })
   .modulate({ brightness: 1.03, saturation: 1.12 })
   .png()
   .toBuffer();
-const circleMask = await sharp(
-  svg(196, 196, `<circle cx="98" cy="98" r="98" fill="#fff"/>`)
+const windowMask = await sharp(
+  svg(
+    winW,
+    winH,
+    `<rect x="0" y="0" width="${winW}" height="${winH}" rx="18" fill="#fff"/>`
+  )
 )
   .png()
   .toBuffer();
-const bowlRound = await sharp(bowl)
-  .composite([{ input: circleMask, blend: "dest-in" }])
+const bowlWindow = await sharp(bowl)
+  .composite([{ input: windowMask, blend: "dest-in" }])
   .png()
   .toBuffer();
 
@@ -87,19 +93,24 @@ const face = await sharp(
     W,
     H,
     `
-  <rect x="113" y="39" width="381" height="248" fill="#CFA05A"/>
-  <rect x="113" y="287" width="381" height="287" fill="#F6F1E6"/>
   <defs>
+    <linearGradient id="kraft" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#C9A66B"/>
+      <stop offset="0.45" stop-color="#E8D3A4"/>
+      <stop offset="1" stop-color="#C4A062"/>
+    </linearGradient>
     <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#3a2410" stop-opacity="0.14"/>
-      <stop offset="0.22" stop-color="#fff8ee" stop-opacity="0.2"/>
+      <stop offset="0" stop-color="#3a2410" stop-opacity="0.12"/>
+      <stop offset="0.22" stop-color="#fff8ee" stop-opacity="0.18"/>
       <stop offset="0.55" stop-color="#fff8ee" stop-opacity="0"/>
-      <stop offset="1" stop-color="#3a2410" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#3a2410" stop-opacity="0.14"/>
     </linearGradient>
   </defs>
+  <rect x="113" y="39" width="381" height="535" fill="url(#kraft)"/>
   <rect x="113" y="39" width="381" height="535" fill="url(#sheen)"/>
   <rect x="150" y="48" width="308" height="16" rx="3" fill="#b89a68"/>
   <rect x="162" y="52" width="284" height="7" rx="2" fill="#8e7a52"/>
+  <rect x="162" y="74" width="276" height="244" rx="20" fill="#5a3d1c"/>
 `
   )
 )
@@ -111,22 +122,16 @@ const print = await sharp(
     W,
     H,
     `
-  <rect x="168" y="308" width="264" height="48" rx="3" fill="#1a1a1a"/>
-  <text x="300" y="341" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="800" letter-spacing="1.6">KIRKLAND</text>
-  <text x="300" y="380" text-anchor="middle" fill="#3d3226" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="800" letter-spacing="3.2">SIGNATURE</text>
-  <text x="300" y="424" text-anchor="middle" fill="#7A1F3D" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="800">MIXED BERRY</text>
-  <text x="300" y="456" text-anchor="middle" fill="#1a1a1a" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="800" letter-spacing="1.4">ORGANIC GRANOLA</text>
-  <text x="300" y="486" text-anchor="middle" fill="#555555" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="700">RASPBERRY · BLUEBERRY · STRAWBERRY</text>
-  <text x="300" y="530" text-anchor="middle" fill="#1a1a1a" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="800">3.5 LB</text>
-  <text x="300" y="552" text-anchor="middle" fill="#666666" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="700">NET WT 56 OZ (1.59 kg)</text>
+  <rect x="168" y="336" width="264" height="48" rx="3" fill="#1a1a1a"/>
+  <text x="300" y="369" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="800" letter-spacing="1.6">KIRKLAND</text>
+  <text x="300" y="404" text-anchor="middle" fill="#3d3226" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="800" letter-spacing="3.2">SIGNATURE</text>
+  <text x="300" y="442" text-anchor="middle" fill="#7A1F3D" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="800">MIXED BERRY</text>
+  <text x="300" y="472" text-anchor="middle" fill="#1a1a1a" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="800" letter-spacing="1.4">ORGANIC GRANOLA</text>
+  <text x="300" y="498" text-anchor="middle" fill="#555555" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="700">RASPBERRY · BLUEBERRY · STRAWBERRY</text>
+  <text x="300" y="536" text-anchor="middle" fill="#1a1a1a" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="800">3.5 LB</text>
+  <text x="300" y="556" text-anchor="middle" fill="#666666" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="700">NET WT 56 OZ (1.59 kg)</text>
 `
   )
-)
-  .png()
-  .toBuffer();
-
-const ring = await sharp(
-  svg(208, 208, `<circle cx="104" cy="104" r="102" fill="none" stroke="#6a4a28" stroke-width="5"/>`)
 )
   .png()
   .toBuffer();
@@ -134,8 +139,7 @@ const ring = await sharp(
 const labeled = await sharp(face)
   .composite([
     { input: print, left: 0, top: 0 },
-    { input: ring, left: 196, top: 72 },
-    { input: bowlRound, left: 202, top: 78 },
+    { input: bowlWindow, left: 166, top: 78 },
   ])
   .png()
   .toBuffer();
