@@ -202,35 +202,35 @@ ${inner}
 }
 
 async function composeJasons() {
-  // Recipe No 11: printed plastic ciabattin bag, not a kraft sack.
+  // Recipe No 11: flat printed plastic ciabattin sleeve, not a standing pouch.
   // Crumb window is seeded sourdough only — never dest-in a competing bag.
   const crumbShot = await download(
     "https://user-images.githubusercontent.com/15069517/151712105-4d4076e5-3871-4c6b-89a0-40c0bdf22248.jpg"
   );
 
-  const pw = 392;
-  const ph = 560;
+  const pw = 680;
+  const ph = 392;
   const plastic = await sharp({
     create: {
       width: pw,
       height: ph,
       channels: 3,
-      background: { r: 132, g: 72, b: 88 },
+      background: { r: 118, g: 58, b: 74 },
     },
   })
     .jpeg()
     .toBuffer();
 
-  const bagD = `M48,36
-    C44,28 52,18 72,16
-    L320,16
-    C340,18 348,28 344,36
-    L348,72
-    C356,150 358,300 350,470
-    C348,516 336,536 300,544
-    L92,544
-    C56,536 44,516 42,470
-    C34,300 36,150 44,72
+  const bagD = `M28,36
+    C24,22 38,12 58,12
+    L622,12
+    C642,12 656,22 652,36
+    L668,88
+    C676,150 676,250 668,312
+    C664,348 648,376 608,380
+    L72,380
+    C32,376 16,348 12,312
+    C4,250 4,150 12,88
     Z`;
 
   const bagMask = await sharp(svg(pw, ph, `<path fill="#fff" d="${bagD}"/>`))
@@ -243,19 +243,19 @@ async function composeJasons() {
     `
   <defs>
     <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#2a1020" stop-opacity="0.28"/>
-      <stop offset="0.22" stop-color="#fff6ea" stop-opacity="0.22"/>
-      <stop offset="0.55" stop-color="#fff6ea" stop-opacity="0"/>
-      <stop offset="1" stop-color="#2a1020" stop-opacity="0.26"/>
+      <stop offset="0" stop-color="#2a1020" stop-opacity="0.3"/>
+      <stop offset="0.18" stop-color="#fff6ea" stop-opacity="0.2"/>
+      <stop offset="0.48" stop-color="#fff6ea" stop-opacity="0"/>
+      <stop offset="1" stop-color="#2a1020" stop-opacity="0.28"/>
     </linearGradient>
     <linearGradient id="vert" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#fff6ea" stop-opacity="0.08"/>
-      <stop offset="1" stop-color="#2a1020" stop-opacity="0.16"/>
+      <stop offset="0" stop-color="#fff6ea" stop-opacity="0.1"/>
+      <stop offset="1" stop-color="#2a1020" stop-opacity="0.18"/>
     </linearGradient>
   </defs>
   <rect width="${pw}" height="${ph}" fill="url(#sheen)"/>
   <rect width="${pw}" height="${ph}" fill="url(#vert)"/>
-  <rect x="64" y="16" width="264" height="22" fill="#C9A227"/>
+  <rect x="48" y="12" width="584" height="20" fill="#C9A227"/>
 `
   );
 
@@ -266,17 +266,17 @@ async function composeJasons() {
   const bagAlpha = await sharp(bagMask).extractChannel("alpha").toBuffer();
   const film = await sharp(body).joinChannel(bagAlpha).png().toBuffer();
 
-  const winW = 272;
-  const winH = 268;
-  const winX = Math.round((pw - winW) / 2);
-  const winY = 124;
+  const winW = 368;
+  const winH = 248;
+  const winX = 268;
+  const winY = 78;
   const loaf = await sharp(crumbShot)
     .extract({ left: 1120, top: 480, width: 2240, height: 1500 })
     .resize(winW, winH, { fit: "cover", position: "centre" })
     .png()
     .toBuffer();
   const windowMask = await sharp(
-    svg(winW, winH, `<rect width="${winW}" height="${winH}" rx="6" ry="6" fill="#fff"/>`)
+    svg(winW, winH, `<rect width="${winW}" height="${winH}" rx="8" ry="8" fill="#fff"/>`)
   )
     .png()
     .toBuffer();
@@ -291,12 +291,12 @@ async function composeJasons() {
       `
     <defs>
       <linearGradient id="film" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0" stop-color="#ffffff" stop-opacity="0.24"/>
+        <stop offset="0" stop-color="#ffffff" stop-opacity="0.22"/>
         <stop offset="0.45" stop-color="#ffffff" stop-opacity="0"/>
         <stop offset="1" stop-color="#3a1830" stop-opacity="0.12"/>
       </linearGradient>
     </defs>
-    <rect width="${winW}" height="${winH}" rx="6" fill="url(#film)"/>
+    <rect width="${winW}" height="${winH}" rx="8" fill="url(#film)"/>
   `
     )
   )
@@ -308,15 +308,15 @@ async function composeJasons() {
       pw,
       ph,
       `
-  <text x="${pw / 2}" y="32" text-anchor="middle" fill="#3a1830" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="800" letter-spacing="1.8">RESEAL TO KEEP FRESH</text>
-  <rect x="${winX - 5}" y="${winY - 5}" width="${winW + 10}" height="${winH + 10}" rx="7" fill="#4a2434"/>
-  <text x="${pw / 2}" y="82" text-anchor="middle" fill="#f7ead2" font-family="Georgia, Times New Roman, serif" font-size="40" font-style="italic" font-weight="700">Jason's</text>
-  <text x="${pw / 2}" y="106" text-anchor="middle" fill="#f0d8c8" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="800" letter-spacing="5.4">SOURDOUGH</text>
-  <text x="${pw / 2}" y="418" text-anchor="middle" fill="#f7ead2" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="800" letter-spacing="2">GRAINS &amp; SEEDS</text>
-  <text x="${pw / 2}" y="440" text-anchor="middle" fill="#f0d8c8" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="800" letter-spacing="2.4">TASTE THE MAGIC</text>
-  <rect x="${pw / 2 - 82}" y="452" width="164" height="26" rx="2" fill="#C9A227"/>
-  <text x="${pw / 2}" y="470" text-anchor="middle" fill="#3a1830" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="800" letter-spacing="1.4">RECIPE NO 11</text>
-  <text x="${pw / 2}" y="510" text-anchor="middle" fill="#f0d8c8" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" letter-spacing="2">24 OZ</text>
+  <text x="148" y="28" text-anchor="middle" fill="#3a1830" font-family="Arial, Helvetica, sans-serif" font-size="9" font-weight="800" letter-spacing="1.6">RESEAL TO KEEP FRESH</text>
+  <rect x="${winX - 6}" y="${winY - 6}" width="${winW + 12}" height="${winH + 12}" rx="10" fill="#4a2434"/>
+  <text x="148" y="118" text-anchor="middle" fill="#f7ead2" font-family="Georgia, Times New Roman, serif" font-size="44" font-style="italic" font-weight="700">Jason's</text>
+  <text x="148" y="146" text-anchor="middle" fill="#f0d8c8" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="800" letter-spacing="4.8">SOURDOUGH</text>
+  <text x="148" y="196" text-anchor="middle" fill="#f7ead2" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="800" letter-spacing="1.4">GRAINS &amp; SEEDS</text>
+  <text x="148" y="220" text-anchor="middle" fill="#f0d8c8" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="800" letter-spacing="2">CIABATTIN</text>
+  <rect x="66" y="240" width="164" height="28" rx="2" fill="#C9A227"/>
+  <text x="148" y="259" text-anchor="middle" fill="#3a1830" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="800" letter-spacing="1.2">RECIPE NO 11</text>
+  <text x="148" y="304" text-anchor="middle" fill="#f0d8c8" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" letter-spacing="2">24 OZ</text>
 `
     )
   )
@@ -333,23 +333,23 @@ async function composeJasons() {
     .toBuffer();
 
   const rotated = await sharp(bag)
-    .rotate(-1.2, { background: { r: 0, g: 0, b: 0, alpha: 0 } })
+    .rotate(-2.2, { background: { r: 0, g: 0, b: 0, alpha: 0 } })
     .png()
     .toBuffer();
   const rotMeta = await sharp(rotated).metadata();
   const shadow = await sharp(
     svg(
       rotMeta.width,
-      64,
-      `<ellipse cx="${rotMeta.width / 2}" cy="34" rx="${rotMeta.width * 0.28}" ry="10" fill="#000" fill-opacity="0.16"/>`
+      72,
+      `<ellipse cx="${rotMeta.width / 2}" cy="38" rx="${rotMeta.width * 0.34}" ry="11" fill="#000" fill-opacity="0.16"/>`
     )
   )
-    .blur(12)
+    .blur(14)
     .png()
     .toBuffer();
 
   const left = Math.round((800 - rotMeta.width) / 2);
-  const top = Math.round((800 - rotMeta.height) / 2) - 6;
+  const top = Math.round((800 - rotMeta.height) / 2) - 8;
   await sharp({
     create: {
       width: 800,
@@ -359,7 +359,7 @@ async function composeJasons() {
     },
   })
     .composite([
-      { input: shadow, left, top: top + rotMeta.height - 28 },
+      { input: shadow, left, top: top + rotMeta.height - 36 },
       { input: rotated, left, top },
     ])
     .png({ compressionLevel: 8 })
