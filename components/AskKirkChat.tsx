@@ -611,9 +611,8 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
           const isWelcome = message.id.startsWith("welcome-");
           if (isWelcome) {
             const asked = messages.some((m) => m.role === "user");
-            const preview = asked
-              ? []
-              : kirklandWarehousePreview(products);
+            if (asked) return null;
+            const preview = kirklandWarehousePreview(products);
             return (
               <div key={message.id} className="space-y-2.5">
                 <GoldStarMembershipCard />
@@ -681,14 +680,11 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             ) : null}
             </div>
           ) : (
-            <div className="bg-white border border-[#e8e8e8] rounded-[3px] overflow-hidden">
-              <div className="bg-costco-red px-3.5 py-1.5">
-                <p className="text-[10px] font-bold tracking-[0.16em] text-white uppercase">
-                  Kirkland Signature
-                </p>
-              </div>
-              <div className="px-3.5 py-2.5 text-[13px] leading-relaxed text-[#1a1a1a]">
-              <p className="whitespace-pre-line">{message.content}</p>
+            <div className="bg-white border border-[#e8e8e8] rounded-[3px] px-3.5 py-2.5 text-[13px] leading-relaxed text-[#1a1a1a]">
+              <p className="text-[10px] font-bold tracking-[0.12em] text-costco-blue uppercase">
+                Kirkland Signature
+              </p>
+              <p className="mt-1 whitespace-pre-line">{message.content}</p>
               {message.imageUrl && (
                 <div className="mt-2.5 overflow-hidden border border-[#e8e8e8] bg-white">
                   <button
@@ -712,7 +708,6 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                   </p>
                 </div>
               )}
-              </div>
             </div>
           )}
           {added.length > 0 ? (
@@ -735,13 +730,10 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
           );
         })}
         {isLoading && (
-          <div className="bg-white border border-[#e8e8e8] rounded-[3px] overflow-hidden">
-            <div className="bg-costco-red px-3.5 py-1.5">
-              <p className="text-[10px] font-bold tracking-[0.16em] text-white uppercase">
-                Kirkland Signature
-              </p>
-            </div>
-            <div className="px-3.5 py-3">
+          <div className="bg-white border border-[#e8e8e8] rounded-[3px] px-3.5 py-3">
+            <p className="text-[10px] font-bold tracking-[0.12em] text-costco-blue uppercase mb-2">
+              Kirkland Signature
+            </p>
               <div className="flex gap-1.5 items-center">
                 <div className="w-1.5 h-1.5 bg-[#999] rounded-full animate-bounce" />
                 <div
@@ -769,7 +761,6 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                   </div>
                 </div>
               )}
-            </div>
           </div>
         )}
         {error && (
