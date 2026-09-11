@@ -6,6 +6,8 @@ const dir = join(process.cwd(), "public", "products");
 mkdirSync(dir, { recursive: true });
 
 const CF = "https://d2lnr5mha7bycj.cloudfront.net/product-image/file";
+const PAPER =
+  "https://raw.githubusercontent.com/prabhasp/ali-khasro/master/lokta/paper2.jpg";
 
 async function download(url) {
   const res = await fetch(url);
@@ -36,6 +38,18 @@ function xml(text) {
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;");
+}
+
+async function paperize(base, w, h, blend = "multiply") {
+  const paper = await download(PAPER);
+  const grain = await sharp(paper)
+    .resize(w, h, { fit: "cover", position: "centre" })
+    .modulate({ brightness: 1.42, saturation: 0.18 })
+    .toBuffer();
+  return sharp(base)
+    .composite([{ input: grain, blend }])
+    .png()
+    .toBuffer();
 }
 
 function kirkLabel({ w, h, title, line2 = "", size = "", layout = "jar" }) {
@@ -90,17 +104,21 @@ async function composeJars() {
     108,
     5
   );
-  const beanFace = await sharp(
-    kirkLabel({
-      w: 236,
-      h: 268,
-      title: "FIVE BEAN",
-      line2: "SALAD",
-      size: "15 OZ",
-    })
-  )
-    .png()
-    .toBuffer();
+  const beanFace = await paperize(
+    await sharp(
+      kirkLabel({
+        w: 236,
+        h: 268,
+        title: "FIVE BEAN",
+        line2: "SALAD",
+        size: "15 OZ",
+      })
+    )
+      .png()
+      .toBuffer(),
+    236,
+    268
+  );
   const beanLabel = await sharp(beanFace)
     .composite([{ input: beanFood, left: 20, top: 62 }])
     .png()
@@ -134,18 +152,22 @@ async function composeJars() {
     88,
     6
   );
-  const lentilFace = await sharp(
-    kirkLabel({
-      w: 476,
-      h: 198,
-      title: "COOKED LENTILS",
-      line2: "& CHICKPEAS",
-      size: "17 OZ · READY TO EAT",
-      layout: "tub",
-    })
-  )
-    .png()
-    .toBuffer();
+  const lentilFace = await paperize(
+    await sharp(
+      kirkLabel({
+        w: 476,
+        h: 198,
+        title: "COOKED LENTILS",
+        line2: "& CHICKPEAS",
+        size: "17 OZ · READY TO EAT",
+        layout: "tub",
+      })
+    )
+      .png()
+      .toBuffer(),
+    476,
+    198
+  );
   const lentilLabel = await sharp(lentilFace)
     .composite([{ input: lentilFood, left: 14, top: 18 }])
     .png()

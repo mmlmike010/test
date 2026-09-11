@@ -7,6 +7,8 @@ mkdirSync(dir, { recursive: true });
 
 const CF =
   "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_5bbadc9e-09c1-49aa-86ec-de31a36d08e5.jpeg";
+const PAPER =
+  "https://raw.githubusercontent.com/prabhasp/ali-khasro/master/lokta/paper2.jpg";
 
 async function download(url) {
   const res = await fetch(url);
@@ -117,6 +119,16 @@ const face = await sharp(
   .png()
   .toBuffer();
 
+const paper = await download(PAPER);
+const grain = await sharp(paper)
+  .resize(W, H, { fit: "cover", position: "centre" })
+  .modulate({ brightness: 1.28, saturation: 0.35 })
+  .toBuffer();
+const faced = await sharp(face)
+  .composite([{ input: grain, blend: "multiply" }])
+  .png()
+  .toBuffer();
+
 const print = await sharp(
   svg(
     W,
@@ -142,7 +154,7 @@ const print = await sharp(
   .png()
   .toBuffer();
 
-const labeled = await sharp(face)
+const labeled = await sharp(faced)
   .composite([
     { input: print, left: 0, top: 0 },
     { input: bowlWindow, left: 166, top: 78 },
