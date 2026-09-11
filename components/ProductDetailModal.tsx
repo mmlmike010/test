@@ -199,7 +199,9 @@ export default function ProductDetailModal({
               <button
                 type="button"
                 onClick={() => setZoomed(true)}
-                className="absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-full bg-white shadow-[0_1px_4px_rgba(0,0,0,0.16)] hover:bg-[#f6f6f6]"
+                className={`absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center bg-white shadow-[0_1px_4px_rgba(0,0,0,0.16)] hover:bg-[#f6f6f6] ${
+                  warehouse ? "rounded-[3px]" : "rounded-full"
+                }`}
                 aria-label="Zoom product image"
               >
                 <ZoomIn className="h-4 w-4 text-[#333]" />
@@ -233,24 +235,28 @@ export default function ProductDetailModal({
               {current.brand} {current.name}
             </h2>
             {size ? (
-              <p className="mt-1 text-[14px] text-[#242424]">• {size}</p>
+              <p className="mt-1 text-[14px] text-[#242424]">
+                {warehouse ? size : `• ${size}`}
+              </p>
             ) : null}
             {warehouse ? (
               <p className="mt-0.5 text-[13px] text-[#72767E]">
                 Item {warehouseItemNumber(current.id)}
               </p>
             ) : null}
-            {perUnit ? (
+            {perUnit && !warehouse ? (
               <p className="mt-0.5 text-[14px] text-[#242424]">• {perUnit}</p>
             ) : null}
             <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1">
-              <button
-                type="button"
-                onClick={shopAllBrand}
-                className="w-fit text-[14px] font-bold text-costco-blue hover:underline"
-              >
-                Shop all {current.brand}
-              </button>
+              {warehouse ? null : (
+                <button
+                  type="button"
+                  onClick={shopAllBrand}
+                  className="w-fit text-[14px] font-bold text-costco-blue hover:underline"
+                >
+                  Shop all {current.brand}
+                </button>
+              )}
               <button
                 type="button"
                 onClick={() => toggleList(current.id)}
@@ -303,26 +309,51 @@ export default function ProductDetailModal({
                 </span>
               )}
             </p>
-            <p className="mt-0.5 text-[12px] text-[#666]">Sold by Costco</p>
+            {warehouse ? null : (
+              <p className="mt-0.5 text-[12px] text-[#666]">Sold by Costco</p>
+            )}
             <div className="mt-5" key={current.id}>
-              <ItemAccordion title="Details" defaultOpen>
-                <p>
-                  {aisleLabel(current.department)}
-                  {current.category ? ` · ${current.category}` : ""}
-                  {size ? ` · ${size}` : ""}
-                </p>
-                <p className="mt-1.5 text-[12px] text-[#888]">
-                  {warehouse
-                    ? "Kirkland Signature shopping help · Membership required · Prices higher than warehouse"
-                    : "Same-Day price · Membership required · Prices higher than warehouse"}
-                </p>
-              </ItemAccordion>
-              <ItemAccordion title="Ingredients">
-                <p>See the warehouse package for the full ingredient list.</p>
-              </ItemAccordion>
-              <ItemAccordion title="Directions">
-                <p>See the warehouse package for preparation and storage.</p>
-              </ItemAccordion>
+              {warehouse ? (
+                <>
+                  <ItemAccordion title="Features" defaultOpen>
+                    <p>
+                      {aisleLabel(current.department)}
+                      {current.category ? ` · ${current.category}` : ""}
+                    </p>
+                    <p className="mt-1.5 text-[12px] text-[#888]">
+                      Kirkland Signature shopping help · Membership required ·
+                      Prices higher than warehouse
+                    </p>
+                  </ItemAccordion>
+                  <ItemAccordion title="Specifications">
+                    <ul className="space-y-1">
+                      <li>Item {warehouseItemNumber(current.id)}</li>
+                      {size ? <li>{size}</li> : null}
+                      {perUnit ? <li>{perUnit}</li> : null}
+                    </ul>
+                  </ItemAccordion>
+                </>
+              ) : (
+                <>
+                  <ItemAccordion title="Details" defaultOpen>
+                    <p>
+                      {aisleLabel(current.department)}
+                      {current.category ? ` · ${current.category}` : ""}
+                      {size ? ` · ${size}` : ""}
+                    </p>
+                    <p className="mt-1.5 text-[12px] text-[#888]">
+                      Same-Day price · Membership required · Prices higher than
+                      warehouse
+                    </p>
+                  </ItemAccordion>
+                  <ItemAccordion title="Ingredients">
+                    <p>See the warehouse package for the full ingredient list.</p>
+                  </ItemAccordion>
+                  <ItemAccordion title="Directions">
+                    <p>See the warehouse package for preparation and storage.</p>
+                  </ItemAccordion>
+                </>
+              )}
             </div>
           </div>
           </div>
@@ -357,7 +388,7 @@ export default function ProductDetailModal({
 
         <div className="px-5 pb-6 pt-4 border-t border-[#eee]">
           <h3 className="text-[15px] font-bold text-[#1a1a1a] mb-1">
-            Member reviews
+            {warehouse ? "Reviews" : "Member reviews"}
           </h3>
           <p className="text-[12px] text-[#666] mb-4">
             Based on {current.reviewCount.toLocaleString()} ratings

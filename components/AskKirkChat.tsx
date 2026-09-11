@@ -623,7 +623,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
       </div>
 
       {cartNotice && (
-        <div className="mx-4 mt-3 flex items-center gap-2 bg-[#eef7ee] border border-[#b7d7b0] text-[#1e5b24] px-3 py-2 text-[12px] font-semibold shrink-0">
+        <div className="mx-4 mt-3 flex items-center gap-2 border border-[#c4c4c4] bg-[#f7fbfe] px-3 py-2 text-[12px] font-semibold text-costco-blue shrink-0">
           <ShoppingCart className="w-3.5 h-3.5" />
           {cartNotice}
         </div>
