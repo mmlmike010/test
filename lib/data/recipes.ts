@@ -18,7 +18,7 @@ export const recipes: Recipe[] = [
     minutes: 5,
     servings: 2,
     course: "Breakfast",
-    image: "/products/recipe-yogurt.jpg?v=2",
+    image: "/products/recipe-yogurt.jpg?v=3",
     ingredientIds: ["8", "1"],
     steps: [
       "Spoon the Greek yogurt into two bowls.",
@@ -32,7 +32,7 @@ export const recipes: Recipe[] = [
     minutes: 30,
     servings: 6,
     course: "Breakfast",
-    image: "/products/recipe-eggs.jpg?v=2",
+    image: "/products/recipe-eggs.jpg?v=3",
     ingredientIds: ["23", "3", "10"],
     steps: [
       "Heat the oven to 375°F. Whisk the eggs with salt and a splash of water.",
@@ -88,7 +88,7 @@ export const recipes: Recipe[] = [
     minutes: 15,
     servings: 6,
     course: "Snacks",
-    image: "/products/recipe-bruschetta.jpg?v=1",
+    image: "/products/recipe-bruschetta.jpg?v=2",
     ingredientIds: ["3", "9", "10"],
     steps: [
       "Toast Jason’s sourdough and brush with Kirkland olive oil.",
@@ -102,7 +102,7 @@ export const recipes: Recipe[] = [
     minutes: 10,
     servings: 8,
     course: "Snacks",
-    image: "/products/recipe-board.jpg?v=2",
+    image: "/products/recipe-board.jpg?v=3",
     ingredientIds: ["5", "2", "12", "9"],
     steps: [
       "Spoon hummus into a shallow bowl and swirl the top.",
