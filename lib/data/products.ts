@@ -303,7 +303,7 @@ export const products: Product[] = [
     price: 2.71,
     originalPrice: 4.0,
     savings: 1.29,
-    image: "/products/9.png?v=30",
+    image: "/products/9.png?v=31",
     inStock: true,
     tags: ["bakery"],
     rating: 3.9,

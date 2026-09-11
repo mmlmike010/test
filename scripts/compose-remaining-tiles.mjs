@@ -334,6 +334,7 @@ async function composeJasons() {
 
   const rotated = await sharp(bag)
     .rotate(-2.2, { background: { r: 0, g: 0, b: 0, alpha: 0 } })
+    .resize({ width: 780 })
     .png()
     .toBuffer();
   const rotMeta = await sharp(rotated).metadata();
@@ -349,7 +350,7 @@ async function composeJasons() {
     .toBuffer();
 
   const left = Math.round((800 - rotMeta.width) / 2);
-  const top = Math.round((800 - rotMeta.height) / 2) - 8;
+  const top = Math.round((800 - rotMeta.height) / 2) - 4;
   await sharp({
     create: {
       width: 800,
