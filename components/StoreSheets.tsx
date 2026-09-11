@@ -489,21 +489,17 @@ function CheckoutSheet() {
                 Special request: {specialRequest}
               </p>
             )}
-            <div
-              className={
-                warehouse
-                  ? "rounded-[3px] border border-[#c4c4c4] bg-white px-4 py-3.5"
-                  : "rounded-xl border border-[#e0e0e0] bg-white px-4 py-3.5 shadow-sm"
-              }
-            >
-              <p className="text-[12px] font-bold text-[#666]">Payment</p>
-              <p className="mt-0.5 text-[14px] font-bold text-[#1a1a1a]">
-                Item subtotal only
-              </p>
-              <p className="mt-0.5 text-[13px] text-[#555]">
-                Service, delivery, and tax are not estimated in this demo
-              </p>
-            </div>
+            {warehouse ? null : (
+              <div className="rounded-xl border border-[#e0e0e0] bg-white px-4 py-3.5 shadow-sm">
+                <p className="text-[12px] font-bold text-[#666]">Payment</p>
+                <p className="mt-0.5 text-[14px] font-bold text-[#1a1a1a]">
+                  Item subtotal only
+                </p>
+                <p className="mt-0.5 text-[13px] text-[#555]">
+                  Service, delivery, and tax are not estimated in this demo
+                </p>
+              </div>
+            )}
             {items.length > 0 && (
               <div
                 className={
@@ -561,7 +557,7 @@ function CheckoutSheet() {
                           Item {warehouseItemNumber(product.id)}
                         </p>
                       ) : null}
-                      {unitPriceLabel(product.id, product.price) ? (
+                      {!warehouse && unitPriceLabel(product.id, product.price) ? (
                         <p className="mt-0.5 text-[13px] text-[#72767E]">
                           {unitPriceLabel(product.id, product.price)}
                         </p>
@@ -586,9 +582,22 @@ function CheckoutSheet() {
                   : "rounded-xl border border-[#e0e0e0] bg-white px-4 py-4 shadow-sm"
               }
             >
+              {warehouse ? (
+                <p className="mb-3 text-[15px] font-bold text-[#1a1a1a]">
+                  Order Summary
+                </p>
+              ) : null}
+              {warehouse ? (
+                <div className="mb-3 flex items-center justify-between text-[13px] text-[#555]">
+                  <span>
+                    Subtotal ({totalItems} item{totalItems === 1 ? "" : "s"})
+                  </span>
+                  <span className="tabular-nums">${subtotal.toFixed(2)}</span>
+                </div>
+              ) : null}
               <div className="flex items-end justify-between">
                 <span className="text-[13px] font-semibold text-[#555]">
-                  Estimated total
+                  {warehouse ? "Estimated Total" : "Estimated total"}
                 </span>
                 <span
                   className={`text-[24px] font-bold leading-none tabular-nums ${
@@ -598,6 +607,12 @@ function CheckoutSheet() {
                   ${subtotal.toFixed(2)}
                 </span>
               </div>
+              {warehouse ? (
+                <p className="mt-2 text-[12px] leading-snug text-[#555]">
+                  Item subtotal only. Service, delivery, and tax are not
+                  estimated in this demo.
+                </p>
+              ) : null}
               <button
                 type="button"
                 disabled={!ready}

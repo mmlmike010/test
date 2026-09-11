@@ -274,7 +274,16 @@ export default function ProductDetailModal({
               />
             </div>
 
-            <div className="mt-4 flex items-baseline gap-2 flex-wrap">
+            {warehouse ? (
+              <p className="mt-4 text-[12px] font-bold uppercase tracking-[0.06em] text-[#555]">
+                Your Price
+              </p>
+            ) : null}
+            <div
+              className={`flex items-baseline gap-2 flex-wrap ${
+                warehouse ? "mt-1" : "mt-4"
+              }`}
+            >
               <span
                 className={`text-[28px] font-bold tabular-nums leading-none ${
                   warehouse ? "text-costco-red" : "text-[#1a1a1a]"
