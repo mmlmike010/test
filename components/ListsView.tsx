@@ -18,8 +18,8 @@ function ListThumbStack({ items }: { items: Product[] }) {
   const shown = items.slice(0, 4);
   if (shown.length === 0) {
     return (
-      <div className="flex h-[84px] items-center">
-        <span className="flex h-[72px] w-[72px] items-center justify-center rounded-[16px] border border-dashed border-[#d8d8d8] bg-[#fafafa]">
+      <div className="flex h-[88px] items-center">
+        <span className="flex h-[76px] w-[76px] items-center justify-center rounded-full border border-dashed border-[#d8d8d8] bg-[#fafafa]">
           <Heart className="h-6 w-6 text-[#c4c4c4]" />
         </span>
       </div>
@@ -27,18 +27,18 @@ function ListThumbStack({ items }: { items: Product[] }) {
   }
 
   return (
-    <div className="flex h-[84px] items-center pl-1">
+    <div className="flex h-[88px] items-center pl-2">
       {shown.map((product, index) => (
         <span
           key={product.id}
-          className="relative -ml-4 first:ml-0 h-[72px] w-[72px] overflow-hidden rounded-[16px] border-[3px] border-white bg-[#fafafa] shadow-[0_1px_4px_rgba(0,0,0,0.14)]"
+          className="relative -ml-5 first:ml-0 h-[76px] w-[76px] overflow-hidden rounded-full border-[3px] border-white bg-[#f3f3f3] shadow-[0_1px_6px_rgba(0,0,0,0.18)]"
           style={{ zIndex: shown.length - index }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={product.image}
             alt=""
-            className="absolute inset-0 h-full w-full object-contain p-1.5"
+            className="absolute inset-0 h-full w-full object-contain p-1"
           />
         </span>
       ))}
