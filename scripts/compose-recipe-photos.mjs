@@ -4,8 +4,8 @@ import sharp from "sharp";
 const dir = join(process.cwd(), "public", "products");
 const W = 1200;
 const H = 900;
-const GH =
-  "https://raw.githubusercontent.com/kchenturtles/PassionfruitKitchen/main/public";
+const JH =
+  "https://raw.githubusercontent.com/jhaydter/recipes/main/docs/assets/images";
 
 async function download(url) {
   const res = await fetch(url);
@@ -25,14 +25,29 @@ async function plated(url, outName, position = "centre") {
   process.stdout.write(`wrote ${outName}\n`);
 }
 
-await plated(
-  "https://raw.githubusercontent.com/jhaydter/recipes/main/docs/assets/images/double-berry-overnight-oats.jpg",
-  "recipe-yogurt.jpg"
-);
-await plated(`${GH}/tomato_fritatta_aerial.jpg`, "recipe-eggs.jpg", "south");
-await plated(
-  "https://raw.githubusercontent.com/jhaydter/recipes/main/docs/assets/images/cowboy-quinoa-bake.png",
-  "recipe-quinoa.jpg"
-);
-await plated(`${GH}/tomato-pasta/tomato-penne-plated.jpeg`, "recipe-pasta.jpg");
-await plated(`${GH}/cheeseboard/cheeseboard.jpeg`, "recipe-board.jpg");
+await plated(`${JH}/pasta-pomodoro.jpg`, "recipe-pasta.jpg");
+await plated(`${JH}/hummus.jpg`, "recipe-board.jpg");
+await plated(`${JH}/tomato-bruschetta.jpg`, "recipe-bruschetta.jpg", "south");
+await plated(`${JH}/deviled-eggs.jpg`, "recipe-deviled.jpg");
+await plated(`${JH}/dried-fruit-and-nut-mix.png`, "recipe-trail.jpg");
+
+{
+  const bytes = await download(`${JH}/roasted-tomato-soup.png`);
+  const meta = await sharp(bytes).metadata();
+  const width = meta.width || 850;
+  const height = meta.height || 500;
+  const left = Math.round(width * 0.52);
+  await sharp(bytes)
+    .extract({
+      left,
+      top: 0,
+      width: width - left,
+      height,
+    })
+    .resize(W, H, { fit: "cover", position: "east" })
+    .sharpen({ sigma: 0.55 })
+    .modulate({ brightness: 1.02, saturation: 1.03 })
+    .jpeg({ quality: 90 })
+    .toFile(join(dir, "recipe-soup.jpg"));
+  process.stdout.write("wrote recipe-soup.jpg\n");
+}
