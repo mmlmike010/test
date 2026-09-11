@@ -705,7 +705,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
               ref={latestResultsRef}
               className="rounded-[3px] border border-[#c4c4c4] bg-white"
             >
-              <div className="sticky top-0 z-10 border-b border-[#ececec] bg-white px-3.5 py-2">
+              <div className="sticky top-0 z-10 border-b border-[#ececec] bg-white px-3.5 py-1.5">
                 <nav
                   aria-label="Breadcrumb"
                   className="flex flex-wrap items-center gap-x-1.5 text-[11px] text-[#555]"
@@ -714,14 +714,11 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                   <span aria-hidden="true">›</span>
                   <span className="text-[#1a1a1a]">Search Results</span>
                 </nav>
-                <p className="mt-1 text-[13px] font-bold text-[#1a1a1a]">
-                  Search Results
-                </p>
-                <p className="mt-0.5 text-[12px] text-[#555] whitespace-pre-line">
+                <p className="mt-0.5 text-[13px] font-bold text-[#1a1a1a] whitespace-pre-line">
                   {message.content}
                 </p>
                 {hits.length > 0 ? (
-                  <div className="mt-1.5 flex items-end justify-between gap-2">
+                  <div className="mt-1 flex items-end justify-between gap-2">
                     <p className="text-[12px] font-bold text-[#1a1a1a]">
                       Showing 1 – {preview.length} of {hits.length}
                     </p>
