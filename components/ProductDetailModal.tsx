@@ -135,8 +135,18 @@ export default function ProductDetailModal({
         </div>
 
         <div ref={scrollerRef} className="min-h-0 flex-1 overflow-y-auto">
-          <div className="lg:grid lg:grid-cols-2 lg:items-start">
-          <div className="lg:border-r lg:border-[#eee]">
+          <div
+            className={
+              kirkOpen
+                ? "xl:grid xl:grid-cols-2 xl:items-start"
+                : "lg:grid lg:grid-cols-2 lg:items-start"
+            }
+          >
+          <div
+            className={
+              kirkOpen ? "xl:border-r xl:border-[#eee]" : "lg:border-r lg:border-[#eee]"
+            }
+          >
             <div className="relative aspect-square bg-[#f3f4f5]">
               <button
                 type="button"
@@ -170,7 +180,11 @@ export default function ProductDetailModal({
                 <ZoomIn className="h-4 w-4 text-[#333]" />
               </button>
             </div>
-            <div className="flex justify-start gap-2 border-b border-[#eee] bg-white px-4 py-3 lg:border-b-0">
+            <div
+              className={`flex justify-start gap-2 border-b border-[#eee] bg-white px-4 py-3 ${
+                kirkOpen ? "xl:border-b-0" : "lg:border-b-0"
+              }`}
+            >
               <button
                 type="button"
                 onClick={() => setZoomed(true)}

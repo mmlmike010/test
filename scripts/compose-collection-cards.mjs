@@ -56,7 +56,14 @@ async function knockoutWhite(buf, cutoff = 242) {
 }
 
 /** Costco.com-style collection banner: studio sweep + one exact pack. */
-async function merchHero({ file, wash, outName, scale = 0.92, nudgeX = 80 }) {
+async function merchHero({
+  file,
+  wash,
+  outName,
+  scale = 0.92,
+  nudgeX = 80,
+  nudgeY = 0,
+}) {
   const src = await download(`${CF}/${file}`);
   const sweepSrc = await download(
     "https://raw.githubusercontent.com/bx5974/bullet3/master/data/kitchens/fatihrmutfak/Concrete.jpg"
@@ -85,8 +92,14 @@ async function merchHero({ file, wash, outName, scale = 0.92, nudgeX = 80 }) {
     .png()
     .toBuffer();
   const meta = await sharp(pack).metadata();
-  const left = Math.round((W - meta.width) / 2) + Math.round(nudgeX * 0.35);
-  const top = Math.round((H - meta.height) / 2);
+  const left = Math.min(
+    W - (meta.width || 0) - 48,
+    Math.round((W - meta.width) / 2) + nudgeX
+  );
+  const top = Math.max(
+    12,
+    Math.round((H - meta.height) / 2) + Math.round(nudgeY)
+  );
   const shadow = await sharp(
     Buffer.from(
       `<svg xmlns="http://www.w3.org/2000/svg" width="${meta.width}" height="110"><ellipse cx="${meta.width / 2}" cy="58" rx="${meta.width * 0.34}" ry="16" fill="black" fill-opacity="0.32"/></svg>`
@@ -115,8 +128,9 @@ if (only === "all" || only === "weekly") {
     file: "large_e5d1efe6-fead-4b09-a7ca-7c7e0b11ea6f.jpg",
     wash: { r: 180, g: 42, b: 48, alpha: 0.38 },
     outName: "hero-weekly.jpg",
-    scale: 0.88,
-    nudgeX: 110,
+    scale: 0.84,
+    nudgeX: 300,
+    nudgeY: -28,
   });
 }
 
@@ -125,8 +139,9 @@ if (only === "all" || only === "kirkland") {
     file: "large_83cdd023-627e-4ee5-8d7e-6d23e8a79fba.jpeg",
     wash: { r: 0, g: 70, b: 140, alpha: 0.36 },
     outName: "hero-kirkland.jpg",
-    scale: 0.8,
-    nudgeX: 90,
+    scale: 0.72,
+    nudgeX: 320,
+    nudgeY: -18,
   });
 }
 
@@ -135,8 +150,9 @@ if (only === "all" || only === "featured") {
     file: "large_a3b82731-4651-476a-a0c3-01c97a17c2c6.png",
     wash: { r: 210, g: 150, b: 40, alpha: 0.28 },
     outName: "hero-new.jpg",
-    scale: 0.9,
-    nudgeX: 100,
+    scale: 0.86,
+    nudgeX: 300,
+    nudgeY: -24,
   });
 }
 
@@ -145,7 +161,8 @@ if (only === "all" || only === "household") {
     file: "large_2bacbaac-2b3d-4412-baad-d7bdb17b6080.jpeg",
     wash: { r: 90, g: 42, b: 28, alpha: 0.4 },
     outName: "hero-treasure.jpg",
-    scale: 0.92,
-    nudgeX: 80,
+    scale: 0.88,
+    nudgeX: 290,
+    nudgeY: -24,
   });
 }

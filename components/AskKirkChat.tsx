@@ -554,9 +554,8 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             </button>
           </div>
         </div>
-        <div className="h-2 bg-costco-blue" />
-        <p className="px-3.5 py-1.5 flex items-center gap-1.5 text-[11px] text-[#188038] font-semibold bg-[#f3f3f3] border-b border-[#ececec]">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#0AAD0A]" />
+        <p className="px-3.5 py-1.5 flex items-center gap-1.5 text-[11px] text-white font-semibold bg-costco-blue">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#f3e3a3]" />
           Delivery {kirkWindow.label} · {formatAddress(kirkAddress)} ·{" "}
           {kirkMember ? "Gold Star" : "Membership required"}
         </p>

@@ -168,25 +168,25 @@ export default function ProductGrid() {
       title: "Member Only Savings",
       subtitle: "8/24/26 – 9/21/26",
       badge: "Sale ends in 10 days",
-      image: "/products/hero-weekly.jpg?v=19",
+      image: "/products/hero-weekly.jpg?v=21",
       wash: "#7a3a3c",
     },
     {
       tag: "kirkland",
       title: "Kirkland Signature",
-      image: "/products/hero-kirkland.jpg?v=20",
+      image: "/products/hero-kirkland.jpg?v=21",
       wash: "#3d5470",
     },
     {
       tag: "trending",
       title: "This week's featured items",
-      image: "/products/hero-new.jpg?v=19",
+      image: "/products/hero-new.jpg?v=21",
       wash: "#7a6d52",
     },
     {
       tag: "treasure",
       title: "Discounts on household favorites",
-      image: "/products/hero-treasure.jpg?v=19",
+      image: "/products/hero-treasure.jpg?v=21",
       wash: "#5a443c",
     },
   ] as const;
@@ -311,13 +311,13 @@ export default function ProductGrid() {
                   alt=""
                   className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
-                <span className="absolute inset-x-0 bottom-0 h-[46%] bg-gradient-to-t from-black/62 via-black/20 to-transparent" />
+                <span className="absolute inset-y-0 left-0 w-[62%] bg-gradient-to-r from-black/58 via-black/22 to-transparent" />
                 {"badge" in tile && tile.badge && (
                   <span className="absolute top-3 left-3 inline-flex items-center rounded-full bg-white px-2 py-1 text-[11px] font-bold text-costco-red shadow-[0_1px_3px_rgba(0,0,0,0.12)]">
                     {tile.badge}
                   </span>
                 )}
-                <span className="absolute bottom-3.5 left-3.5 right-3.5">
+                <span className="absolute inset-y-0 left-3.5 right-[38%] flex flex-col justify-end pb-3.5">
                   <span className="block text-[20px] sm:text-[24px] font-bold text-white leading-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.55)]">
                     {tile.title}
                   </span>
@@ -373,25 +373,13 @@ export default function ProductGrid() {
               <img
                 src={activeCollection.image}
                 alt=""
-                className="absolute inset-0 w-full h-full object-cover"
+                className="absolute inset-0 w-full h-full object-cover object-center"
               />
-              <span className="absolute inset-0 bg-gradient-to-t from-black/58 via-black/15 to-black/10" />
               {"badge" in activeCollection && activeCollection.badge && (
                 <span className="absolute top-3 left-3 inline-flex items-center rounded-full bg-white px-2 py-1 text-[11px] font-bold text-costco-red shadow-[0_1px_3px_rgba(0,0,0,0.12)]">
                   {activeCollection.badge}
                 </span>
               )}
-              <span className="absolute bottom-3 left-3.5 right-3.5">
-                <span className="block text-[22px] sm:text-[26px] font-bold text-white leading-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.55)]">
-                  {activeCollection.title}
-                </span>
-                {"subtitle" in activeCollection &&
-                  activeCollection.subtitle && (
-                    <span className="mt-0.5 block text-[12px] font-semibold text-white/90">
-                      {activeCollection.subtitle}
-                    </span>
-                  )}
-              </span>
             </div>
           )}
           <div className="-mx-4 lg:-mx-5 mb-4">
@@ -403,10 +391,19 @@ export default function ProductGrid() {
                 <h2 className="text-[22px] lg:text-[24px] font-bold text-[#1a1a1a] tracking-tight">
                   {`${filtered.length} result${filtered.length === 1 ? "" : "s"} for “${q.trim()}”`}
                 </h2>
-              ) : !activeCollection ? (
+              ) : (
                 <h2 className="text-[22px] lg:text-[24px] font-bold text-[#1a1a1a] tracking-tight">
-                  {titleBits.join(" · ")}
+                  {activeCollection
+                    ? activeCollection.title
+                    : titleBits.join(" · ")}
                 </h2>
+              )}
+              {activeCollection &&
+              "subtitle" in activeCollection &&
+              activeCollection.subtitle ? (
+                <p className="text-[13px] font-semibold text-[#666] mt-0.5">
+                  {activeCollection.subtitle}
+                </p>
               ) : null}
               <p className="text-[13px] text-[#666] mt-0.5">
                 {q.trim()
