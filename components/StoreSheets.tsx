@@ -702,10 +702,10 @@ function CheckoutSheet() {
                 type="button"
                 disabled={!ready}
                 onClick={placeOrder}
-                className={`mt-4 w-full py-3 text-[15px] font-bold text-white disabled:cursor-not-allowed disabled:opacity-50 ${
+                className={`mt-4 w-full py-3 text-[15px] font-bold text-white disabled:cursor-not-allowed ${
                   warehouse
-                    ? "rounded-[3px] bg-costco-red hover:bg-costco-red-hover"
-                    : "rounded-full bg-[#0AAD0A] hover:bg-[#099809]"
+                    ? "rounded-[3px] bg-costco-red hover:bg-costco-red-hover disabled:bg-[#c4c4c4] disabled:text-[#666] disabled:hover:bg-[#c4c4c4]"
+                    : "rounded-full bg-[#0AAD0A] hover:bg-[#099809] disabled:opacity-50"
                 }`}
               >
                 {items.length === 0

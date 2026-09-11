@@ -56,8 +56,7 @@ export default function ShopProductRow({
             <span className="mt-0.5 block tabular-nums">
               <span className="text-[16px] font-bold text-costco-red">
                 ${product.price.toFixed(2)}
-              </span>{" "}
-              <span className="font-normal text-[#8a8a8a] text-[11px]">each</span>
+              </span>
               {product.originalPrice > product.price ? (
                 <span className="ml-1 text-[12px] text-[#888] line-through">
                   ${product.originalPrice.toFixed(2)}

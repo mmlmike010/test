@@ -3,6 +3,7 @@
 import { Minus, Plus, ShoppingCart, Trash2, X } from "lucide-react";
 import { useCartStore } from "@/lib/store/cart";
 import { useCatalogStore } from "@/lib/store/catalog";
+import WarehouseQtySelect from "@/components/WarehouseQtySelect";
 import { productSize, unitPriceLabel, warehouseItemNumber } from "@/lib/ui/packSize";
 import {
   deliveryWindow,
@@ -156,30 +157,14 @@ export default function CartDrawer() {
                           ${product.price.toFixed(2)}
                         </p>
                       </div>
-                      <div className="flex items-center overflow-hidden rounded-[3px] border border-[#c4c4c4] bg-white sm:justify-self-center">
-                        <button
-                          type="button"
-                          className="flex h-9 w-9 items-center justify-center text-costco-blue hover:bg-[#f7fbfe]"
-                          onClick={() =>
-                            updateQuantity(product.id, quantity - 1)
-                          }
-                          aria-label="Decrease quantity"
-                        >
-                          <Minus className="h-3.5 w-3.5" />
-                        </button>
-                        <span className="min-w-[1.5rem] px-1 text-center text-sm font-bold tabular-nums text-[#1a1a1a]">
-                          {quantity}
-                        </span>
-                        <button
-                          type="button"
-                          className="flex h-9 w-9 items-center justify-center text-costco-blue hover:bg-[#f7fbfe]"
-                          onClick={() =>
-                            updateQuantity(product.id, quantity + 1)
-                          }
-                          aria-label="Increase quantity"
-                        >
-                          <Plus className="h-3.5 w-3.5" />
-                        </button>
+                      <div className="sm:justify-self-center">
+                        <WarehouseQtySelect
+                          value={quantity}
+                          onChange={(n) => updateQuantity(product.id, n)}
+                          max={20}
+                          labelled={false}
+                          compact
+                        />
                       </div>
                       <div className="text-right">
                         <p className="text-[11px] font-bold uppercase tracking-[0.06em] text-[#666] sm:hidden">

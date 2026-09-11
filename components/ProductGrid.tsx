@@ -483,19 +483,32 @@ export default function ProductGrid() {
               </p>
             </div>
             <div className="flex items-center gap-2 flex-wrap">
+              {warehouseList ? (
+                <label className="inline-flex items-center gap-2 text-[13px] text-[#555]">
+                  <span className="font-bold">Sort By</span>
+                  <select
+                    aria-label="Sort items"
+                    value={sort}
+                    onChange={(e) =>
+                      setSort(e.target.value as "relevance" | "price")
+                    }
+                    className="h-9 rounded-[3px] border border-[#c4c4c4] bg-white px-2 text-[13px] font-bold text-[#1a1a1a] focus:border-costco-blue focus:outline-none focus:ring-2 focus:ring-costco-blue/15"
+                  >
+                    <option value="relevance">Best Match</option>
+                    <option value="price">Price</option>
+                  </select>
+                </label>
+              ) : (
+                <>
               <span className="text-[12px] font-bold text-[#666]">Sort</span>
               <div
-                className={`inline-flex items-center border bg-white p-0.5 ${
-                  warehouseList
-                    ? "rounded-[3px] border-[#c4c4c4]"
-                    : "rounded-full border-[#d8d8d8]"
-                }`}
+                className="inline-flex items-center border bg-white p-0.5 rounded-full border-[#d8d8d8]"
                 role="group"
                 aria-label="Sort items"
               >
                 {(
                   [
-                    ["relevance", warehouseList ? "Best Match" : "Best match"],
+                    ["relevance", "Best match"],
                     ["price", "Price"],
                   ] as const
                 ).map(([value, label]) => (
@@ -504,22 +517,18 @@ export default function ProductGrid() {
                     type="button"
                     aria-pressed={sort === value}
                     onClick={() => setSort(value)}
-                    className={`px-3 py-1.5 text-[12px] font-bold ${
-                      warehouseList ? "rounded-[3px]" : "rounded-full"
-                    } ${
+                    className={`px-3 py-1.5 text-[12px] font-bold rounded-full ${
                       sort === value
-                        ? warehouseList
-                          ? "bg-[#f7fbfe] text-costco-blue"
-                          : "bg-[#e8f2fa] text-costco-blue"
-                        : warehouseList
-                          ? "text-[#555] hover:bg-[#f7fbfe]"
-                          : "text-[#555] hover:bg-[#f6f6f6]"
+                        ? "bg-[#e8f2fa] text-costco-blue"
+                        : "text-[#555] hover:bg-[#f6f6f6]"
                     }`}
                   >
                     {label}
                   </button>
                 ))}
               </div>
+                </>
+              )}
               <button
                 type="button"
                 className="text-sm text-costco-blue font-bold hover:underline"
@@ -544,14 +553,23 @@ export default function ProductGrid() {
                 <Search className="w-7 h-7 text-[#8a8a8a]" aria-hidden="true" />
               </span>
               <p className="font-bold text-[#1a1a1a] text-[18px] mt-4">
-                {q.trim()
-                  ? `We didn’t find any results for “${q.trim()}”`
-                  : tagLabel
-                    ? `We didn’t find any items in ${tagLabel}`
-                    : department
-                      ? `We didn’t find any items in ${aisleLabel(department)}`
-                      : "We didn’t find any results"}
+                {warehouseList
+                  ? "We’re sorry"
+                  : q.trim()
+                    ? `We didn’t find any results for “${q.trim()}”`
+                    : tagLabel
+                      ? `We didn’t find any items in ${tagLabel}`
+                      : department
+                        ? `We didn’t find any items in ${aisleLabel(department)}`
+                        : "We didn’t find any results"}
               </p>
+              {warehouseList ? (
+                <p className="text-[15px] font-semibold text-[#1a1a1a] mt-2">
+                  {q.trim()
+                    ? `We did not find any results for “${q.trim()}”`
+                    : "We did not find any results"}
+                </p>
+              ) : null}
               <p className="text-[13px] text-[#666] mt-1.5 leading-snug max-w-[28rem]">
                 Try checking your spelling or using more general terms.
               </p>

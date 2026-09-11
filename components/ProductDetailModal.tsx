@@ -8,6 +8,7 @@ import { useCatalogStore } from "@/lib/store/catalog";
 import StarRating from "@/components/StarRating";
 import ProductCard from "@/components/ProductCard";
 import WarehouseResultCard from "@/components/WarehouseResultCard";
+import WarehouseQtySelect from "@/components/WarehouseQtySelect";
 import { hideComposedLeftovers, officialPacksFirst } from "@/lib/ui/merchOrder";
 import { productSize, unitPriceLabel, warehouseItemNumber } from "@/lib/ui/packSize";
 import { aisleLabel } from "@/lib/ui/aisleLabels";
@@ -59,8 +60,11 @@ export default function ProductDetailModal({
 }) {
   const [current, setCurrent] = useState(product);
   const [zoomed, setZoomed] = useState(false);
+  const [buyQty, setBuyQty] = useState(1);
+  const [justAdded, setJustAdded] = useState(false);
   const addItem = useCartStore((s) => s.addItem);
   const updateQuantity = useCartStore((s) => s.updateQuantity);
+  const openCart = useCartStore((s) => s.openCart);
   const qty = useCartStore(
     (s) => s.items.find((i) => i.product.id === current.id)?.quantity || 0
   );
@@ -106,7 +110,11 @@ export default function ProductDetailModal({
   ).slice(0, 4);
 
   const onAdd = () => {
-    addItem(current);
+    addItem(current, warehouse ? buyQty : 1);
+    if (warehouse) {
+      setJustAdded(true);
+      window.setTimeout(() => setJustAdded(false), 900);
+    }
   };
 
   const openRelated = (next: Product) => {
@@ -118,7 +126,9 @@ export default function ProductDetailModal({
   return (
     <>
     <div
-      className={`fixed z-[74] flex min-h-0 flex-col bg-white ${storefrontOverlayClass(kirkOpen)}`}
+      className={`fixed z-[74] flex min-h-0 flex-col ${
+        warehouse ? "bg-[#e8eaed]" : "bg-white"
+      } ${storefrontOverlayClass(kirkOpen)}`}
     >
       <div
         role="dialog"
@@ -230,8 +240,12 @@ export default function ProductDetailModal({
               </button>
             </div>
           </div>
-          <div className="flex flex-col p-5">
-            <h2 className="text-[22px] font-bold text-[#1a1a1a] leading-snug">
+          <div className={`flex flex-col p-5 ${warehouse ? "bg-white" : ""}`}>
+            <h2
+              className={`text-[22px] font-bold leading-snug ${
+                warehouse ? "text-costco-blue" : "text-[#1a1a1a]"
+              }`}
+            >
               {current.brand} {current.name}
             </h2>
             {size ? (
@@ -328,8 +342,14 @@ export default function ProductDetailModal({
               <p className="mt-0.5 text-[12px] text-[#666]">Sold by Costco</p>
             )}
             {warehouse ? (
-              <div className="mt-4 rounded-[3px] border border-[#c4c4c4] bg-[#f7fbfe] px-3.5 py-3">
-                <p className="text-[12px] font-bold uppercase tracking-[0.06em] text-[#555]">
+              <div className="mt-4 rounded-[3px] border-2 border-costco-blue bg-[#f7fbfe] px-3.5 py-3">
+                <p className="flex items-center gap-2 text-[13px] font-bold text-[#1a1a1a]">
+                  <span
+                    className="inline-flex h-3.5 w-3.5 items-center justify-center rounded-full border-2 border-costco-blue"
+                    aria-hidden="true"
+                  >
+                    <span className="h-1.5 w-1.5 rounded-full bg-costco-blue" />
+                  </span>
                   Delivery
                 </p>
                 <p className="mt-1 text-[13px] font-semibold text-[#188038]">
@@ -342,38 +362,28 @@ export default function ProductDetailModal({
             ) : null}
             {warehouse ? (
               <div className="mt-4">
-                {qty === 0 ? (
+                <div className="flex items-end gap-2">
+                  <WarehouseQtySelect value={buyQty} onChange={setBuyQty} />
                   <button
                     type="button"
                     onClick={onAdd}
-                    className="flex h-12 w-full items-center justify-center gap-2 rounded-[3px] bg-costco-red text-[15px] font-bold text-white hover:bg-costco-red-hover"
+                    className="flex h-12 flex-1 items-center justify-center gap-2 rounded-[3px] bg-costco-red text-[15px] font-bold text-white hover:bg-costco-red-hover"
                   >
-                    <Plus className="h-4 w-4" />
-                    Add to Cart
+                    {justAdded ? "Added" : "Add to Cart"}
                   </button>
-                ) : (
-                  <div className="flex h-12 items-center justify-between overflow-hidden rounded-[3px] border border-[#c4c4c4] bg-white">
-                    <button
-                      type="button"
-                      className="flex h-12 w-14 items-center justify-center text-costco-blue hover:bg-[#f7fbfe]"
-                      onClick={() => updateQuantity(current.id, qty - 1)}
-                      aria-label="Decrease quantity"
-                    >
-                      <Minus className="h-4 w-4" />
-                    </button>
-                    <span className="min-w-[1.5rem] text-center text-[16px] font-bold tabular-nums text-[#1a1a1a]">
-                      {qty}
-                    </span>
-                    <button
-                      type="button"
-                      className="flex h-12 w-14 items-center justify-center text-costco-blue hover:bg-[#f7fbfe]"
-                      onClick={onAdd}
-                      aria-label="Increase quantity"
-                    >
-                      <Plus className="h-4 w-4" />
-                    </button>
-                  </div>
-                )}
+                </div>
+                {qty > 0 ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onClose();
+                      openCart("warehouse");
+                    }}
+                    className="mt-2 text-[13px] font-bold text-costco-blue hover:underline"
+                  >
+                    {qty} in cart · View Cart
+                  </button>
+                ) : null}
               </div>
             ) : null}
             <div className="mt-5" key={current.id}>
@@ -423,7 +433,13 @@ export default function ProductDetailModal({
           </div>
 
         {related.length > 0 && (
-          <div className="px-5 pb-5">
+          <div
+            className={`px-5 pb-5 ${
+              warehouse
+                ? "mx-4 mb-3 rounded-[3px] border border-[#c4c4c4] bg-white pt-4"
+                : ""
+            }`}
+          >
             <h3 className="text-[15px] font-bold text-[#1a1a1a] mb-2.5">
               {warehouse ? "Related Products" : "Related products"}
             </h3>
@@ -450,7 +466,13 @@ export default function ProductDetailModal({
           </div>
         )}
 
-        <div className="px-5 pb-6 pt-4 border-t border-[#eee]">
+        <div
+          className={`px-5 pb-6 pt-4 ${
+            warehouse
+              ? "mx-4 mb-4 rounded-[3px] border border-[#c4c4c4] bg-white"
+              : "border-t border-[#eee]"
+          }`}
+        >
           <h3 className="text-[15px] font-bold text-[#1a1a1a] mb-1">
             {warehouse ? "Reviews" : "Member reviews"}
           </h3>
@@ -507,38 +529,20 @@ export default function ProductDetailModal({
             </p>
           </div>
           {warehouse ? (
-            qty === 0 ? (
+            <div className="flex flex-1 items-center gap-2">
+              <WarehouseQtySelect
+                value={buyQty}
+                onChange={setBuyQty}
+                labelled={false}
+              />
               <button
                 type="button"
                 onClick={onAdd}
-                className="flex-1 h-12 font-bold transition-colors flex items-center justify-center gap-2 rounded-[3px] bg-costco-red text-white hover:bg-costco-red-hover"
+                className="flex h-12 flex-1 items-center justify-center rounded-[3px] bg-costco-red text-[15px] font-bold text-white hover:bg-costco-red-hover"
               >
-                <Plus className="w-4 h-4" />
-                Add to Cart
+                {justAdded ? "Added" : "Add to Cart"}
               </button>
-            ) : (
-              <div className="flex-1 h-12 flex items-center justify-between rounded-[3px] border border-[#c4c4c4] bg-white overflow-hidden">
-                <button
-                  type="button"
-                  className="w-14 h-12 flex items-center justify-center text-costco-blue hover:bg-[#f7fbfe]"
-                  onClick={() => updateQuantity(current.id, qty - 1)}
-                  aria-label="Decrease quantity"
-                >
-                  <Minus className="w-4 h-4" />
-                </button>
-                <span className="text-[16px] font-bold tabular-nums min-w-[1.5rem] text-center text-[#1a1a1a]">
-                  {qty}
-                </span>
-                <button
-                  type="button"
-                  className="w-14 h-12 flex items-center justify-center text-costco-blue hover:bg-[#f7fbfe]"
-                  onClick={onAdd}
-                  aria-label="Increase quantity"
-                >
-                  <Plus className="w-4 h-4" />
-                </button>
-              </div>
-            )
+            </div>
           ) : qty === 0 ? (
             <button
               type="button"
