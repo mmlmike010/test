@@ -694,7 +694,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
           <div key={message.id} className="space-y-2">
           {message.role === "user" ? (
             <div className="overflow-hidden rounded-[3px] border border-[#c4c4c4] bg-white">
-              <div className="border-b border-[#ececec] px-3.5 py-2">
+              <div className="sticky top-0 z-10 border-b border-[#ececec] bg-white px-3.5 py-2">
                 <nav
                   aria-label="Breadcrumb"
                   className="flex flex-wrap items-center gap-x-1.5 text-[11px] text-[#555]"
