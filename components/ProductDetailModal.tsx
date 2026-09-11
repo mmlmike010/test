@@ -7,7 +7,7 @@ import { useCartStore } from "@/lib/store/cart";
 import { useCatalogStore } from "@/lib/store/catalog";
 import StarRating from "@/components/StarRating";
 import ProductCard from "@/components/ProductCard";
-import { productSize } from "@/lib/ui/packSize";
+import { productSize, unitPriceLabel } from "@/lib/ui/packSize";
 import { aisleLabel } from "@/lib/ui/aisleLabels";
 import { storefrontOverlayClass, useSessionStore } from "@/lib/store/session";
 import { useRef, useState, type ReactNode } from "react";
@@ -66,6 +66,7 @@ export default function ProductDetailModal({
   const setTag = useCatalogStore((s) => s.setTag);
   const setDepartment = useCatalogStore((s) => s.setDepartment);
   const size = productSize(current.id);
+  const perUnit = unitPriceLabel(current.id, current.price);
 
   const shopAllBrand = () => {
     if (current.brand === "Kirkland Signature") {
@@ -147,6 +148,9 @@ export default function ProductDetailModal({
             </h2>
             {size ? (
               <p className="mt-1 text-[14px] text-[#242424]">• {size}</p>
+            ) : null}
+            {perUnit ? (
+              <p className="mt-0.5 text-[14px] text-[#242424]">•{perUnit}</p>
             ) : null}
             <button
               type="button"
