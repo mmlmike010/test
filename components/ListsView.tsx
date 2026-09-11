@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { ChevronLeft, Heart, ListPlus, ShoppingCart } from "lucide-react";
 import { filterProducts, products, type Product } from "@/lib/data/products";
 import { useCatalogStore } from "@/lib/store/catalog";
+import { useSessionStore } from "@/lib/store/session";
 import { useCartStore } from "@/lib/store/cart";
 import { hydrateLists, useListStore } from "@/lib/store/lists";
 import ProductCard from "@/components/ProductCard";
@@ -117,6 +118,7 @@ export default function ListsView() {
   const setOpenList = useCatalogStore((s) => s.setOpenList);
   const [newName, setNewName] = useState("");
   const [creating, setCreating] = useState(false);
+  const kirkOpen = useSessionStore((s) => s.kirkOpen);
   const again = filterProducts({ tag: "again" });
 
   useEffect(() => {
@@ -222,7 +224,13 @@ export default function ListsView() {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3">
+          <div
+            className={
+              kirkOpen
+                ? "grid grid-cols-2 xl:grid-cols-3 gap-3"
+                : "grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3"
+            }
+          >
             {opened.items.map((product) => (
               <ProductCard
                 key={product.id}
