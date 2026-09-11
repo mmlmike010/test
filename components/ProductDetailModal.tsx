@@ -137,7 +137,7 @@ export default function ProductDetailModal({
         <div ref={scrollerRef} className="min-h-0 flex-1 overflow-y-auto">
           <div className="lg:grid lg:grid-cols-2 lg:items-start">
           <div className="lg:border-r lg:border-[#eee]">
-            <div className="relative aspect-square bg-[#f6f7f8]">
+            <div className="relative aspect-square bg-[#f3f4f5]">
               <button
                 type="button"
                 onClick={() => setZoomed(true)}

@@ -366,7 +366,7 @@ export default function ProductGrid() {
           </button>
           {activeCollection && (
             <div
-              className="relative mb-4 h-[168px] sm:h-[200px] lg:h-[220px] rounded-[16px] overflow-hidden"
+              className="relative mb-4 h-[220px] sm:h-[280px] lg:h-[320px] rounded-[16px] overflow-hidden"
               style={{ background: activeCollection.wash }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
