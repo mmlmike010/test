@@ -18,27 +18,27 @@ function ListThumbStack({ items }: { items: Product[] }) {
   const shown = items.slice(0, 4);
   if (shown.length === 0) {
     return (
-      <div className="flex h-[72px] items-center">
-        <span className="flex h-14 w-14 items-center justify-center rounded-[12px] border border-dashed border-[#d8d8d8] bg-[#fafafa]">
-          <Heart className="h-5 w-5 text-[#c4c4c4]" />
+      <div className="flex h-[84px] items-center">
+        <span className="flex h-[72px] w-[72px] items-center justify-center rounded-[16px] border border-dashed border-[#d8d8d8] bg-[#fafafa]">
+          <Heart className="h-6 w-6 text-[#c4c4c4]" />
         </span>
       </div>
     );
   }
 
   return (
-    <div className="flex h-[72px] items-center pl-1">
+    <div className="flex h-[84px] items-center pl-1">
       {shown.map((product, index) => (
         <span
           key={product.id}
-          className="relative -ml-3 first:ml-0 h-14 w-14 overflow-hidden rounded-[12px] border-2 border-white bg-white shadow-[0_1px_3px_rgba(0,0,0,0.12)]"
+          className="relative -ml-4 first:ml-0 h-[72px] w-[72px] overflow-hidden rounded-[16px] border-[3px] border-white bg-[#fafafa] shadow-[0_1px_4px_rgba(0,0,0,0.14)]"
           style={{ zIndex: shown.length - index }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={product.image}
             alt=""
-            className="absolute inset-0 h-full w-full object-contain p-1"
+            className="absolute inset-0 h-full w-full object-contain p-1.5"
           />
         </span>
       ))}
@@ -192,7 +192,7 @@ export default function ListsView() {
         </form>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
         <ListPreviewCard
           href="#buy-it-again"
           title="Buy it again"
