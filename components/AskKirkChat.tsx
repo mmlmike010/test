@@ -511,8 +511,8 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
   return (
     <>
     <aside className="fixed inset-y-0 right-0 z-40 w-full max-w-[420px] lg:static lg:z-30 lg:w-[380px] xl:w-[420px] lg:max-w-none shrink-0 bg-white border-l border-[#e5e5e5] h-full flex flex-col">
-      <div className="relative shrink-0 bg-costco-red">
-        <div className="px-3.5 py-2 flex items-center justify-between gap-2">
+      <div className="relative shrink-0 bg-white">
+        <div className="bg-costco-red px-3.5 py-2 flex items-center justify-between gap-2">
           <div className="flex items-center gap-2.5 min-w-0">
             <CostcoLogo compact tone="onRed" />
             <span className="w-px h-8 bg-white/35 shrink-0" />
