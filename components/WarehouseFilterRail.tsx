@@ -81,7 +81,10 @@ export default function WarehouseFilterRail({
     .filter((row) => row.count > 0);
 
   return (
-    <aside className="mb-4 rounded-[3px] border border-[#c4c4c4] bg-white px-3 py-3 lg:mb-0 lg:sticky lg:top-0">
+    <aside
+      id="warehouse-filter-results"
+      className="mb-4 rounded-[3px] border border-[#c4c4c4] bg-white px-3 py-3 lg:mb-0 lg:sticky lg:top-0"
+    >
       <div className="flex items-center justify-between gap-2">
         <p className="text-[14px] font-bold text-[#1a1a1a]">Filter Results</p>
         {facets.departments.length ||

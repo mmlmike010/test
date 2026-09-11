@@ -19,6 +19,7 @@ import WarehouseResultCard from "@/components/WarehouseResultCard";
 import CostcoLogo from "@/components/CostcoLogo";
 import GoldStarMark from "@/components/GoldStarMark";
 import GoldStarMembershipCard from "@/components/GoldStarMembershipCard";
+import WarehouseShopDepartments from "@/components/WarehouseShopDepartments";
 import {
   deliveryWindow,
   formatAddress,
@@ -562,6 +563,35 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
   if (!isOpen) return null;
 
   const hasUserAsk = messages.some((m) => m.role === "user");
+  const lastUserId = [...messages]
+    .reverse()
+    .find((message) => message.role === "user")?.id;
+  const browseWarehouseDepartment = (label: string | null) => {
+    if (!label) {
+      setWarehouseFacets(EMPTY_WAREHOUSE_FACETS);
+      return;
+    }
+    const catalog = useCatalogStore.getState();
+    catalog.inspect(null);
+    useCatalogStore.setState({
+      q:
+        catalog.listTone === "warehouse" && catalog.q.trim()
+          ? catalog.q
+          : "kirkland",
+      department: null,
+      tag: null,
+      openList: null,
+      openRecipe: null,
+      listTone: "warehouse",
+      warehouseFacets: {
+        ...EMPTY_WAREHOUSE_FACETS,
+        departments: [label],
+      },
+      warehouseSort: "relevance",
+    });
+    void catalog.search();
+    document.querySelector("main")?.scrollTo({ top: 0 });
+  };
 
   return (
     <>
@@ -668,7 +698,10 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
           if (isWelcome) {
             const asked = messages.some((m) => m.role === "user");
             if (asked) return null;
-            const preview = kirklandWarehousePreview(products);
+            const preview = applyWarehouseFacets(
+              kirklandWarehousePreview(products, 24),
+              warehouseFacets
+            ).slice(0, 4);
             return (
               <div key={message.id} className="space-y-2.5">
                 <GoldStarMembershipCard />
@@ -677,11 +710,17 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                     {message.content}
                   </p>
                 </div>
+                <WarehouseShopDepartments
+                  selected={warehouseFacets.departments}
+                  onPick={browseWarehouseDepartment}
+                />
                 {preview.length > 0 ? (
                   <div className="overflow-hidden rounded-[3px] border border-[#c4c4c4] bg-white">
                     <div className="flex items-end justify-between gap-2 border-b border-[#ececec] px-3 py-2">
                       <p className="text-[13px] font-bold text-[#1a1a1a]">
-                        Kirkland Signature
+                        {warehouseFacets.departments.length === 1
+                          ? warehouseFacets.departments[0]
+                          : "Kirkland Signature"}
                       </p>
                       <p className="text-[11px] font-semibold text-[#666] tabular-nums">
                         {preview.length} items
@@ -697,7 +736,20 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                       ))}
                     </div>
                   </div>
-                ) : null}
+                ) : (
+                  <p className="rounded-[3px] border border-[#c4c4c4] bg-white px-3 py-5 text-center text-[13px] text-[#555]">
+                    No items match these filters.{" "}
+                    <button
+                      type="button"
+                      className="font-bold text-costco-blue hover:underline"
+                      onClick={() =>
+                        setWarehouseFacets(EMPTY_WAREHOUSE_FACETS)
+                      }
+                    >
+                      Shop All
+                    </button>
+                  </p>
+                )}
               </div>
             );
           }
@@ -740,6 +792,20 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                       Showing 1 – {preview.length} of {hits.length}
                     </p>
                     <div className="flex flex-wrap items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          document
+                            .getElementById("warehouse-filter-results")
+                            ?.scrollIntoView({
+                              behavior: "smooth",
+                              block: "start",
+                            });
+                        }}
+                        className="text-[12px] font-bold text-costco-blue hover:underline"
+                      >
+                        Filter Results
+                      </button>
                       <button
                         type="button"
                         onClick={() => {
@@ -824,6 +890,32 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                     See all results
                   </button>
                 </p>
+              ) : null}
+              {message.id === lastUserId ? (
+                <div className="border-t border-[#ececec] px-3 py-2">
+                  <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#666]">
+                    Related Searches
+                  </p>
+                  <div className="mt-1.5 grid grid-cols-2 gap-x-2.5 gap-y-1">
+                    {suggestionChips
+                      .filter((chip) => chip !== message.content)
+                      .map((chip) => (
+                        <button
+                          key={`${message.id}-${chip}`}
+                          type="button"
+                          onClick={() => void sendMessage(chip)}
+                          disabled={isLoading}
+                          className="flex items-start gap-1 text-left text-[11px] font-semibold leading-tight text-costco-blue hover:underline disabled:opacity-50"
+                        >
+                          <Search
+                            className="mt-0.5 h-3 w-3 shrink-0 text-[#8a8a8a]"
+                            aria-hidden="true"
+                          />
+                          <span className="line-clamp-2">{chip}</span>
+                        </button>
+                      ))}
+                  </div>
+                </div>
               ) : null}
             </div>
           ) : (
@@ -1010,34 +1102,30 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             Search
           </button>
         </div>
-        <p className="mt-2 text-[10px] font-bold tracking-[0.12em] text-[#666] uppercase">
-          {hasUserAsk ? "Related Searches" : "Popular Searches"}
-        </p>
-        <div className="mt-1 grid grid-cols-2 gap-x-2.5 gap-y-1">
-          {suggestionChips
-            .filter((chip) => {
-              if (!hasUserAsk) return true;
-              const lastAsk = [...messages]
-                .reverse()
-                .find((message) => message.role === "user")?.content;
-              return chip !== lastAsk;
-            })
-            .map((chip) => (
-              <button
-                key={chip}
-                type="button"
-                onClick={() => void sendMessage(chip)}
-                disabled={isLoading}
-                className="flex items-start gap-1 text-[11px] leading-tight text-costco-blue font-semibold hover:underline disabled:opacity-50 text-left"
-              >
-                <Search
-                  className="mt-0.5 h-3 w-3 shrink-0 text-[#8a8a8a]"
-                  aria-hidden="true"
-                />
-                <span className="line-clamp-2">{chip}</span>
-              </button>
-            ))}
-        </div>
+        {!hasUserAsk ? (
+          <>
+            <p className="mt-2 text-[10px] font-bold tracking-[0.12em] text-[#666] uppercase">
+              Popular Searches
+            </p>
+            <div className="mt-1 grid grid-cols-2 gap-x-2.5 gap-y-1">
+              {suggestionChips.map((chip) => (
+                <button
+                  key={chip}
+                  type="button"
+                  onClick={() => void sendMessage(chip)}
+                  disabled={isLoading}
+                  className="flex items-start gap-1 text-left text-[11px] font-semibold leading-tight text-costco-blue hover:underline disabled:opacity-50"
+                >
+                  <Search
+                    className="mt-0.5 h-3 w-3 shrink-0 text-[#8a8a8a]"
+                    aria-hidden="true"
+                  />
+                  <span className="line-clamp-2">{chip}</span>
+                </button>
+              ))}
+            </div>
+          </>
+        ) : null}
         <p className="mt-2 text-[10px] text-[#888] text-center leading-snug">
           Kirkland Signature shopping help · Membership required · Prices higher
           than warehouse
