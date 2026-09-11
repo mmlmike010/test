@@ -31,3 +31,68 @@ export function kirklandWarehousePreview(
     )
   ).slice(0, n);
 }
+
+const QUERY_STOP = new Set([
+  "what",
+  "whats",
+  "the",
+  "and",
+  "for",
+  "with",
+  "can",
+  "you",
+  "my",
+  "cart",
+  "find",
+  "add",
+  "ask",
+  "kirk",
+  "to",
+  "of",
+  "in",
+  "on",
+  "it",
+  "is",
+  "or",
+  "no",
+  "week",
+  "kids",
+  "dinner",
+  "cook",
+  "build",
+  "party",
+  "recipe",
+  "inspiration",
+  "swaps",
+]);
+
+/** Client-side warehouse hits for a Kirk query. UI only — never sent to Kirk. */
+export function kirkQueryPreview(
+  items: Product[],
+  query: string,
+  n = 4
+): Product[] {
+  const tokens = query
+    .toLowerCase()
+    .split(/[^a-z0-9]+/)
+    .filter((token) => token.length > 2 && !QUERY_STOP.has(token));
+  if (!tokens.length) return [];
+
+  const scored = items
+    .map((p) => {
+      const hay = [p.brand, p.name, p.category, p.department, ...(p.tags || [])]
+        .join(" ")
+        .toLowerCase();
+      const score = tokens.filter((token) => hay.includes(token)).length;
+      return { p, score };
+    })
+    .filter((row) => row.score > 0)
+    .sort((a, b) => {
+      if (b.score !== a.score) return b.score - a.score;
+      const left = COMPOSED_IDS.has(a.p.id) ? 1 : 0;
+      const right = COMPOSED_IDS.has(b.p.id) ? 1 : 0;
+      return left - right;
+    });
+
+  return hideComposedLeftovers(scored.map((row) => row.p)).slice(0, n);
+}

@@ -25,7 +25,7 @@ import {
   storefrontOverlayClass,
   useSessionStore,
 } from "@/lib/store/session";
-import { kirklandWarehousePreview } from "@/lib/ui/merchOrder";
+import { kirklandWarehousePreview, kirkQueryPreview } from "@/lib/ui/merchOrder";
 
 interface Message {
   id: string;
@@ -648,9 +648,14 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
           const added = (message.productIds || [])
             .map((id) => products.find((p) => p.id === id))
             .filter((p): p is (typeof products)[number] => Boolean(p));
+          const hits =
+            message.role === "user"
+              ? kirkQueryPreview(products, message.content)
+              : [];
           return (
           <div key={message.id} className="space-y-2">
           {message.role === "user" ? (
+            <div className="space-y-2">
             <div className="bg-white border border-[#e8e8e8] border-l-[3px] border-l-costco-blue rounded-[3px] px-3.5 py-2">
               <p className="text-[10px] font-bold tracking-[0.12em] text-costco-blue uppercase">
                 You asked
@@ -658,6 +663,22 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
               <p className="mt-1 text-[13px] font-semibold text-[#1a1a1a] whitespace-pre-line">
                 {message.content}
               </p>
+            </div>
+            {hits.length > 0 ? (
+                <div>
+                  <p className="mb-1.5 text-[13px] font-bold text-[#1a1a1a]">
+                    {hits.length} result{hits.length === 1 ? "" : "s"}
+                  </p>
+                  <div className="grid grid-cols-2 gap-2">
+                    {hits.map((product) => (
+                      <WarehouseResultCard
+                        key={`${message.id}-${product.id}`}
+                        product={product}
+                      />
+                    ))}
+                  </div>
+                </div>
+            ) : null}
             </div>
           ) : (
             <div className="bg-white border border-[#e8e8e8] rounded-[3px] overflow-hidden">
