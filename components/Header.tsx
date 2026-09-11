@@ -23,6 +23,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
   const openCart = useCartStore((state) => state.openCart);
   const q = useCatalogStore((s) => s.q);
   const setQuery = useCatalogStore((s) => s.setQuery);
+  const setListTone = useCatalogStore((s) => s.setListTone);
   const search = useCatalogStore((s) => s.search);
   const setTag = useCatalogStore((s) => s.setTag);
   const setDepartment = useCatalogStore((s) => s.setDepartment);
@@ -157,6 +158,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
                   setDepartment(null);
                 }
                 setQuery(next);
+                setListTone("sameday");
               }}
               placeholder="Search products"
               className="w-full h-11 pl-11 pr-10 bg-[#f6f6f6] border border-[#d8d8d8] rounded-full text-[15px] text-[#222] placeholder:text-[#8a8a8a] focus:outline-none focus:bg-white focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15"
@@ -168,6 +170,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
                 className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-full hover:bg-gray-100"
                 onClick={() => {
                   setQuery("");
+                  setListTone("sameday");
                   void search();
                 }}
               >

@@ -13,11 +13,13 @@ type CatalogState = {
   error: string | null;
   inspecting: Product | null;
   inspectTone: "sameday" | "warehouse";
+  listTone: "sameday" | "warehouse";
   openList: string | null;
   openRecipe: string | null;
   setQuery: (q: string) => void;
   setDepartment: (department: string | null) => void;
   setTag: (tag: string | null) => void;
+  setListTone: (tone: "sameday" | "warehouse") => void;
   setOpenList: (openList: string | null) => void;
   setOpenRecipe: (openRecipe: string | null) => void;
   inspect: (product: Product | null, tone?: "sameday" | "warehouse") => void;
@@ -34,18 +36,40 @@ export const useCatalogStore = create<CatalogState>((set, get) => ({
   error: null,
   inspecting: null,
   inspectTone: "sameday",
+  listTone: "sameday",
   openList: null,
   openRecipe: null,
   setQuery: (q) => set({ q }),
   setDepartment: (department) =>
-    set({ department, tag: null, openList: null, openRecipe: null }),
-  setTag: (tag) => set({ tag, department: null, openList: null, openRecipe: null }),
+    set({
+      department,
+      tag: null,
+      openList: null,
+      openRecipe: null,
+      listTone: "sameday",
+    }),
+  setTag: (tag) =>
+    set({
+      tag,
+      department: null,
+      openList: null,
+      openRecipe: null,
+      listTone: "sameday",
+    }),
+  setListTone: (listTone) => set({ listTone }),
   setOpenList: (openList) => set({ openList }),
   setOpenRecipe: (openRecipe) => set({ openRecipe }),
   inspect: (inspecting, tone = "sameday") =>
     set({ inspecting, inspectTone: inspecting ? tone : "sameday" }),
   clearFilters: () =>
-    set({ q: "", department: null, tag: null, openList: null, openRecipe: null }),
+    set({
+      q: "",
+      department: null,
+      tag: null,
+      openList: null,
+      openRecipe: null,
+      listTone: "sameday",
+    }),
   search: async () => {
     const { q, department, tag } = get();
     set({ loading: true, error: null });

@@ -280,6 +280,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
       const catalog = useCatalogStore.getState();
       catalog.clearFilters();
       catalog.setQuery(storefrontQ);
+      catalog.setListTone("warehouse");
       catalog.inspect(null);
       void catalog.search();
       document.querySelector("main")?.scrollTo({ top: 0 });

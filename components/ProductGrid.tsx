@@ -12,6 +12,7 @@ import {
 import type { Product } from "@/lib/data/products";
 import { useCatalogStore } from "@/lib/store/catalog";
 import ProductCard from "@/components/ProductCard";
+import WarehouseResultCard from "@/components/WarehouseResultCard";
 import ProductDetailModal from "@/components/ProductDetailModal";
 import CategoryScroller from "@/components/CategoryScroller";
 import InstacartMark from "@/components/InstacartMark";
@@ -140,6 +141,8 @@ export default function ProductGrid() {
   const clearFilters = useCatalogStore((s) => s.clearFilters);
   const inspecting = useCatalogStore((s) => s.inspecting);
   const inspect = useCatalogStore((s) => s.inspect);
+  const listTone = useCatalogStore((s) => s.listTone);
+  const warehouseList = listTone === "warehouse" && Boolean(q.trim());
   const [sort, setSort] = useState<"relevance" | "price">("relevance");
   const setSheet = useSessionStore((s) => s.setSheet);
   const address = useSessionStore((s) => s.address);
@@ -445,7 +448,9 @@ export default function ProductGrid() {
             <div>
               {q.trim() ? (
                 <h2 className="text-[22px] lg:text-[24px] font-bold text-[#1a1a1a] tracking-tight">
-                  {`${shown.length} result${shown.length === 1 ? "" : "s"} for “${q.trim()}”`}
+                  {warehouseList
+                    ? `${shown.length} Result${shown.length === 1 ? "" : "s"}`
+                    : `${shown.length} result${shown.length === 1 ? "" : "s"} for “${q.trim()}”`}
                 </h2>
               ) : (
                 <h2 className="text-[22px] lg:text-[24px] font-bold text-[#1a1a1a] tracking-tight">
@@ -465,7 +470,9 @@ export default function ProductGrid() {
                 {q.trim()
                   ? loading
                     ? "Updating…"
-                    : "Same-Day · 11217 Brooklyn"
+                    : warehouseList
+                      ? "Kirkland Signature shopping help · 11217 Brooklyn"
+                      : "Same-Day · 11217 Brooklyn"
                   : `${shown.length} item${shown.length === 1 ? "" : "s"}${
                       loading ? " · Updating…" : ""
                     }`}
@@ -474,13 +481,17 @@ export default function ProductGrid() {
             <div className="flex items-center gap-2 flex-wrap">
               <span className="text-[12px] font-bold text-[#666]">Sort</span>
               <div
-                className="inline-flex items-center rounded-full border border-[#d8d8d8] bg-white p-0.5"
+                className={`inline-flex items-center border bg-white p-0.5 ${
+                  warehouseList
+                    ? "rounded-[3px] border-[#c4c4c4]"
+                    : "rounded-full border-[#d8d8d8]"
+                }`}
                 role="group"
                 aria-label="Sort items"
               >
                 {(
                   [
-                    ["relevance", "Best match"],
+                    ["relevance", warehouseList ? "Best Match" : "Best match"],
                     ["price", "Price"],
                   ] as const
                 ).map(([value, label]) => (
@@ -489,10 +500,16 @@ export default function ProductGrid() {
                     type="button"
                     aria-pressed={sort === value}
                     onClick={() => setSort(value)}
-                    className={`px-3 py-1.5 text-[12px] font-bold rounded-full ${
+                    className={`px-3 py-1.5 text-[12px] font-bold ${
+                      warehouseList ? "rounded-[3px]" : "rounded-full"
+                    } ${
                       sort === value
-                        ? "bg-[#e8f2fa] text-costco-blue"
-                        : "text-[#555] hover:bg-[#f6f6f6]"
+                        ? warehouseList
+                          ? "bg-[#f7fbfe] text-costco-blue"
+                          : "bg-[#e8f2fa] text-costco-blue"
+                        : warehouseList
+                          ? "text-[#555] hover:bg-[#f7fbfe]"
+                          : "text-[#555] hover:bg-[#f6f6f6]"
                     }`}
                   >
                     {label}
@@ -537,7 +554,11 @@ export default function ProductGrid() {
               <div className="mt-5 flex flex-col items-center gap-2.5">
                 <button
                   type="button"
-                  className="px-5 py-2.5 bg-[#0AAD0A] text-white text-[14px] font-bold rounded-full hover:bg-[#099809]"
+                  className={`px-5 py-2.5 text-[14px] font-bold text-white ${
+                    warehouseList
+                      ? "rounded-[3px] bg-costco-red hover:bg-costco-red-hover"
+                      : "rounded-full bg-[#0AAD0A] hover:bg-[#099809]"
+                  }`}
                   onClick={() => {
                     clearFilters();
                     void search();
@@ -557,27 +578,38 @@ export default function ProductGrid() {
           ) : (
             <>
             <div className={searchGridClass}>
-              {shown.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  onOpen={() => inspect(product)}
-                />
-              ))}
+              {shown.map((product) =>
+                warehouseList ? (
+                  <WarehouseResultCard key={product.id} product={product} />
+                ) : (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    onOpen={() => inspect(product)}
+                  />
+                )
+              )}
             </div>
             {related.length > 0 ? (
               <section className="mt-8">
                 <h3 className="mb-3 text-[20px] lg:text-[22px] font-bold text-[#1a1a1a] tracking-tight">
-                  Related products
+                  {warehouseList ? "Related Products" : "Related products"}
                 </h3>
                 <div className={searchGridClass}>
-                  {related.map((product) => (
-                    <ProductCard
-                      key={`related-${product.id}`}
-                      product={product}
-                      onOpen={() => inspect(product)}
-                    />
-                  ))}
+                  {related.map((product) =>
+                    warehouseList ? (
+                      <WarehouseResultCard
+                        key={`related-${product.id}`}
+                        product={product}
+                      />
+                    ) : (
+                      <ProductCard
+                        key={`related-${product.id}`}
+                        product={product}
+                        onOpen={() => inspect(product)}
+                      />
+                    )
+                  )}
                 </div>
               </section>
             ) : null}
