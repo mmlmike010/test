@@ -113,9 +113,10 @@ export default function ListsView() {
   const createList = useListStore((s) => s.createList);
   const addItem = useCartStore((s) => s.addItem);
   const inspect = useCatalogStore((s) => s.inspect);
+  const openList = useCatalogStore((s) => s.openList);
+  const setOpenList = useCatalogStore((s) => s.setOpenList);
   const [newName, setNewName] = useState("");
   const [creating, setCreating] = useState(false);
-  const [openList, setOpenList] = useState<string | null>(null);
   const again = filterProducts({ tag: "again" });
 
   useEffect(() => {
