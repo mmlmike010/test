@@ -33,7 +33,7 @@ export default function WarehouseResultCard({
       >
         <span
           className={`relative bg-white ${
-            featured ? "h-[88px]" : catalog ? "h-[156px]" : "aspect-square"
+            featured ? "h-[88px]" : catalog ? "h-[180px]" : "aspect-square"
           }`}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}

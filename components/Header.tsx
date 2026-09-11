@@ -13,6 +13,10 @@ import {
   formatAddress,
   useSessionStore,
 } from "@/lib/store/session";
+import {
+  EMPTY_WAREHOUSE_FACETS,
+  WAREHOUSE_NAV,
+} from "@/lib/ui/warehouseSearch";
 
 interface HeaderProps {
   onAskKirkClick: () => void;
@@ -31,6 +35,8 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
   const department = useCatalogStore((s) => s.department);
   const tag = useCatalogStore((s) => s.tag);
   const listTone = useCatalogStore((s) => s.listTone);
+  const warehouseFacets = useCatalogStore((s) => s.warehouseFacets);
+  const setWarehouseFacets = useCatalogStore((s) => s.setWarehouseFacets);
   const warehouseSearch = listTone === "warehouse" && Boolean(q.trim());
   const onRecipes = tag === "recipes";
   const onFlyers = tag === "flyers";
@@ -241,43 +247,80 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
       </div>
 
       <div className="bg-white border-b border-[#ececec]">
-        <nav
-          className="max-w-[1800px] mx-auto px-3 sm:px-4 h-[40px] flex items-center gap-5 overflow-x-auto scrollbar-hide text-[14px]"
-          aria-label="Same-Day sections"
-        >
-          <button
-            type="button"
-            aria-current={onShop ? "page" : undefined}
-            className={tabClass(onShop)}
-            onClick={goShop}
+        {warehouseSearch ? (
+          <nav
+            className="max-w-[1800px] mx-auto px-3 sm:px-4 h-[40px] flex items-center gap-5 overflow-x-auto scrollbar-hide text-[14px]"
+            aria-label="Departments"
           >
-            Shop
-          </button>
-          <button
-            type="button"
-            aria-current={onFlyers ? "page" : undefined}
-            className={tabClass(onFlyers)}
-            onClick={() => goTab("flyers")}
+            <button
+              type="button"
+              aria-current={
+                warehouseFacets.departments.length === 0 ? "page" : undefined
+              }
+              className={tabClass(warehouseFacets.departments.length === 0)}
+              onClick={() => setWarehouseFacets(EMPTY_WAREHOUSE_FACETS)}
+            >
+              Shop
+            </button>
+            {WAREHOUSE_NAV.map((label) => {
+              const active = warehouseFacets.departments.includes(label);
+              return (
+                <button
+                  key={label}
+                  type="button"
+                  aria-current={active ? "page" : undefined}
+                  className={tabClass(active)}
+                  onClick={() =>
+                    setWarehouseFacets({
+                      ...EMPTY_WAREHOUSE_FACETS,
+                      departments: active ? [] : [label],
+                    })
+                  }
+                >
+                  {label}
+                </button>
+              );
+            })}
+          </nav>
+        ) : (
+          <nav
+            className="max-w-[1800px] mx-auto px-3 sm:px-4 h-[40px] flex items-center gap-5 overflow-x-auto scrollbar-hide text-[14px]"
+            aria-label="Same-Day sections"
           >
-            Flyers
-          </button>
-          <button
-            type="button"
-            aria-current={onLists ? "page" : undefined}
-            className={tabClass(onLists)}
-            onClick={() => goTab("lists")}
-          >
-            Lists
-          </button>
-          <button
-            type="button"
-            aria-current={onRecipes ? "page" : undefined}
-            className={tabClass(onRecipes)}
-            onClick={() => goTab("recipes")}
-          >
-            Meals
-          </button>
-        </nav>
+            <button
+              type="button"
+              aria-current={onShop ? "page" : undefined}
+              className={tabClass(onShop)}
+              onClick={goShop}
+            >
+              Shop
+            </button>
+            <button
+              type="button"
+              aria-current={onFlyers ? "page" : undefined}
+              className={tabClass(onFlyers)}
+              onClick={() => goTab("flyers")}
+            >
+              Flyers
+            </button>
+            <button
+              type="button"
+              aria-current={onLists ? "page" : undefined}
+              className={tabClass(onLists)}
+              onClick={() => goTab("lists")}
+            >
+              Lists
+            </button>
+            <button
+              type="button"
+              aria-current={onRecipes ? "page" : undefined}
+              className={tabClass(onRecipes)}
+              onClick={() => goTab("recipes")}
+            >
+              Meals
+            </button>
+          </nav>
+        )}
       </div>
     </header>
   );

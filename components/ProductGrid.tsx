@@ -25,17 +25,11 @@ import ListsView from "@/components/ListsView";
 import { formatAddress, useSessionStore } from "@/lib/store/session";
 import {
   applyWarehouseFacets,
+  EMPTY_WAREHOUSE_FACETS,
   sortWarehouseItems,
-  type WarehouseFacets,
+  warehouseSelectionChips,
   type WarehouseSort,
 } from "@/lib/ui/warehouseSearch";
-
-const EMPTY_WAREHOUSE_FACETS: WarehouseFacets = {
-  departments: [],
-  brands: [],
-  priceId: null,
-  minRating: 0,
-};
 
 type Aisle = {
   title: string;
@@ -157,11 +151,10 @@ export default function ProductGrid() {
   const inspecting = useCatalogStore((s) => s.inspecting);
   const inspect = useCatalogStore((s) => s.inspect);
   const listTone = useCatalogStore((s) => s.listTone);
+  const warehouseFacets = useCatalogStore((s) => s.warehouseFacets);
+  const setWarehouseFacets = useCatalogStore((s) => s.setWarehouseFacets);
   const warehouseList = listTone === "warehouse" && Boolean(q.trim());
   const [sort, setSort] = useState<WarehouseSort>("relevance");
-  const [warehouseFacets, setWarehouseFacets] = useState<WarehouseFacets>(
-    EMPTY_WAREHOUSE_FACETS
-  );
   const [hideFilters, setHideFilters] = useState(false);
   const [compareIds, setCompareIds] = useState<string[]>([]);
   const [compareOpen, setCompareOpen] = useState(false);
@@ -270,6 +263,9 @@ export default function ProductGrid() {
     ? applyWarehouseFacets(shown, warehouseFacets)
     : shown;
   const gridItems = warehouseList ? visible : shown;
+  const selectionChips = warehouseList
+    ? warehouseSelectionChips(warehouseFacets)
+    : [];
   const compareItems = compareIds
     .map((id) => products.find((product) => product.id === id))
     .filter((product): product is Product => Boolean(product));
@@ -684,6 +680,7 @@ export default function ProductGrid() {
               </div>
             </div>
           ) : (
+            <>
             <div
               className={
                 warehouseList && !hideFilters
@@ -699,6 +696,33 @@ export default function ProductGrid() {
               />
             ) : null}
             <div>
+            {selectionChips.length > 0 ? (
+              <div className="mb-3 rounded-[3px] border border-[#c4c4c4] bg-white px-3 py-2">
+                <p className="text-[13px] font-bold text-[#1a1a1a]">
+                  Your Selections
+                </p>
+                <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+                  {selectionChips.map((chip) => (
+                    <button
+                      key={chip.key}
+                      type="button"
+                      onClick={() => setWarehouseFacets(chip.clear)}
+                      className="inline-flex items-center gap-1 rounded-[3px] border border-[#c4c4c4] bg-[#f7fbfe] px-2 py-0.5 text-[12px] font-semibold text-costco-blue hover:border-costco-blue"
+                    >
+                      {chip.label}
+                      <span aria-hidden="true">×</span>
+                    </button>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={() => setWarehouseFacets(EMPTY_WAREHOUSE_FACETS)}
+                    className="text-[12px] font-bold text-costco-blue hover:underline"
+                  >
+                    Clear All
+                  </button>
+                </div>
+              </div>
+            ) : null}
             {warehouseList && compareItems.length > 0 ? (
               <div className="mb-3 flex flex-wrap items-center gap-2 rounded-[3px] border border-[#c4c4c4] bg-white px-3 py-2">
                 <span className="text-[13px] font-bold text-[#1a1a1a]">
@@ -811,6 +835,78 @@ export default function ProductGrid() {
             ) : null}
             </div>
             </div>
+            {warehouseList ? (
+              <footer className="mt-8 -mx-4 overflow-hidden bg-[#333] text-white lg:-mx-5">
+                <div className="grid gap-6 px-4 py-5 sm:grid-cols-3 lg:px-5">
+                  <div>
+                    <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#f3e3a3]">
+                      Customer Service
+                    </p>
+                    <div className="mt-2 flex flex-col items-start gap-1.5">
+                      <button
+                        type="button"
+                        className="text-[13px] text-white hover:underline"
+                        onClick={() => setSheet("membership", "sameday")}
+                      >
+                        Membership
+                      </button>
+                      <button
+                        type="button"
+                        className="text-[13px] text-white hover:underline"
+                        onClick={() => setSheet("pricing", "sameday")}
+                      >
+                        Pricing & fees
+                      </button>
+                      <button
+                        type="button"
+                        className="text-[13px] text-white hover:underline"
+                        onClick={() => setSheet("delivery", "sameday")}
+                      >
+                        Delivery windows
+                      </button>
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#f3e3a3]">
+                      Get to Know Costco
+                    </p>
+                    <div className="mt-2 flex flex-col items-start gap-1.5">
+                      <button
+                        type="button"
+                        className="text-[13px] text-white hover:underline"
+                        onClick={() => setSheet("departments", "sameday")}
+                      >
+                        Departments
+                      </button>
+                      <button
+                        type="button"
+                        className="text-[13px] text-white hover:underline"
+                        onClick={() => {
+                          clearFilters();
+                          void search();
+                          document.querySelector("main")?.scrollTo({ top: 0 });
+                        }}
+                      >
+                        Same-Day Shop
+                      </button>
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#f3e3a3]">
+                      Locations & Delivery
+                    </p>
+                    <p className="mt-2 text-[12px] leading-relaxed text-white/80">
+                      Delivery to {formatAddress(address)}. Membership required.
+                      Prices higher than warehouse.
+                    </p>
+                  </div>
+                </div>
+                <div className="border-t border-white/15 px-4 py-2.5 text-[11px] text-white/65 lg:px-5">
+                  © 2026 Costco Wholesale Corporation
+                </div>
+              </footer>
+            ) : null}
+            </>
           )}
         </>
       )}

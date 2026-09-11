@@ -28,6 +28,72 @@ export type WarehouseFacets = {
   minRating: number;
 };
 
+export const EMPTY_WAREHOUSE_FACETS: WarehouseFacets = {
+  departments: [],
+  brands: [],
+  priceId: null,
+  minRating: 0,
+};
+
+/** costco.com-style department row. Labels match aisleLabel() — local UI only. */
+export const WAREHOUSE_NAV = [
+  "Kirkland Signature",
+  "Dairy & Eggs",
+  "Bakery",
+  "Coffee",
+  "Household",
+  "Baby",
+  "Clothing",
+  "Wine & spirits",
+  "Member savings",
+] as const;
+
+export function warehouseSelectionChips(facets: WarehouseFacets): {
+  key: string;
+  label: string;
+  clear: WarehouseFacets;
+}[] {
+  const chips: { key: string; label: string; clear: WarehouseFacets }[] = [];
+  for (const department of facets.departments) {
+    chips.push({
+      key: `dept:${department}`,
+      label: department,
+      clear: {
+        ...facets,
+        departments: facets.departments.filter((item) => item !== department),
+      },
+    });
+  }
+  for (const brand of facets.brands) {
+    chips.push({
+      key: `brand:${brand}`,
+      label: brand,
+      clear: {
+        ...facets,
+        brands: facets.brands.filter((item) => item !== brand),
+      },
+    });
+  }
+  if (facets.priceId) {
+    const bucket = WAREHOUSE_PRICE_BUCKETS.find(
+      (item) => item.id === facets.priceId
+    );
+    chips.push({
+      key: `price:${facets.priceId}`,
+      label: bucket?.label || facets.priceId,
+      clear: { ...facets, priceId: null },
+    });
+  }
+  if (facets.minRating > 0) {
+    chips.push({
+      key: `rating:${facets.minRating}`,
+      label: `${facets.minRating} Stars & Up`,
+      clear: { ...facets, minRating: 0 },
+    });
+  }
+  return chips;
+}
+
 export function applyWarehouseFacets(
   items: Product[],
   facets: WarehouseFacets

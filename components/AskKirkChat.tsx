@@ -633,7 +633,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
       <div
         className={`flex-1 overflow-y-auto px-3.5 min-h-0 ${
           hasUserAsk
-            ? "bg-white py-3.5 space-y-3"
+            ? "bg-[#e8eaed] py-3.5 space-y-3"
             : "bg-[#f6f7f8] py-2.5 space-y-2"
         }`}
       >
@@ -686,11 +686,11 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
           <div key={message.id} className="space-y-2">
           {message.role === "user" ? (
             <div className="space-y-2">
-            <div className="bg-white border border-[#e8e8e8] border-l-[3px] border-l-costco-blue rounded-[3px] px-3.5 py-2">
-              <p className="text-[10px] font-bold tracking-[0.12em] text-costco-blue uppercase">
-                You asked
+            <div className="bg-white border border-[#c4c4c4] rounded-[3px] px-3.5 py-2">
+              <p className="text-[13px] font-bold text-[#1a1a1a]">
+                Search Results
               </p>
-              <p className="mt-1 text-[13px] font-semibold text-[#1a1a1a] whitespace-pre-line">
+              <p className="mt-0.5 text-[12px] text-[#555] whitespace-pre-line">
                 {message.content}
               </p>
             </div>
@@ -698,10 +698,11 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                 <div>
                   <div className="mb-1.5 flex items-end justify-between gap-2">
                     <p className="text-[13px] font-bold text-[#1a1a1a]">
-                      {hits.length} Result{hits.length === 1 ? "" : "s"}
+                      Showing {hits.length ? `1 – ${hits.length}` : "0"} of{" "}
+                      {hits.length}
                     </p>
-                    <p className="text-[11px] font-semibold text-[#666]">
-                      Sort: Best Match
+                    <p className="text-[11px] font-semibold text-[#555]">
+                      Sort By Best Match
                     </p>
                   </div>
                   <div className="grid grid-cols-2 gap-2">

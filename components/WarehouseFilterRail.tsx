@@ -105,7 +105,8 @@ export default function WarehouseFilterRail({
         ) : null}
       </div>
 
-      <p className="mt-3 text-[13px] font-bold text-[#1a1a1a]">Delivery</p>
+      <div className="mt-3 border-t border-[#e0e0e0] pt-3">
+      <p className="text-[13px] font-bold text-[#1a1a1a]">Delivery</p>
       <label className="mt-1 flex items-center gap-2 text-[12px] text-[#1a1a1a]">
         <input
           type="checkbox"
@@ -116,9 +117,10 @@ export default function WarehouseFilterRail({
         Same-Day Delivery
         <span className="ml-auto text-[#72767E]">{items.length}</span>
       </label>
+      </div>
 
       {departments.length > 0 ? (
-        <div className="mt-4">
+        <div className="mt-3 border-t border-[#e0e0e0] pt-3">
           <p className="text-[13px] font-bold text-[#1a1a1a]">Department</p>
           <div className="mt-1 space-y-0.5">
             {departments.map(([label, count]) => (
@@ -140,7 +142,7 @@ export default function WarehouseFilterRail({
       ) : null}
 
       {brands.length > 0 ? (
-        <div className="mt-4">
+        <div className="mt-3 border-t border-[#e0e0e0] pt-3">
           <p className="text-[13px] font-bold text-[#1a1a1a]">Brand</p>
           <div className="mt-1 space-y-0.5">
             {brands.map(([label, count]) => (
@@ -162,7 +164,7 @@ export default function WarehouseFilterRail({
       ) : null}
 
       {prices.length > 0 ? (
-        <div className="mt-4">
+        <div className="mt-3 border-t border-[#e0e0e0] pt-3">
           <p className="text-[13px] font-bold text-[#1a1a1a]">Price</p>
           <div className="mt-1 space-y-0.5">
             {prices.map((bucket) => (
@@ -184,7 +186,7 @@ export default function WarehouseFilterRail({
       ) : null}
 
       {ratings.length > 0 ? (
-        <div className="mt-4">
+        <div className="mt-3 border-t border-[#e0e0e0] pt-3">
           <p className="text-[13px] font-bold text-[#1a1a1a]">
             Customer Ratings
           </p>
