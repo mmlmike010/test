@@ -176,28 +176,28 @@ export default function ProductGrid() {
       subtitle: "8/24/26 – 9/21/26",
       badge: "Sale ends in 10 days",
       image: "/products/hero-weekly.jpg?v=22",
-      tile: "/products/hero-weekly-tile.jpg?v=1",
+      tile: "/products/hero-weekly-tile.jpg?v=2",
       wash: "#7a3a3c",
     },
     {
       tag: "kirkland",
       title: "Kirkland Signature",
       image: "/products/hero-kirkland.jpg?v=22",
-      tile: "/products/hero-kirkland-tile.jpg?v=1",
+      tile: "/products/hero-kirkland-tile.jpg?v=2",
       wash: "#3d5470",
     },
     {
       tag: "trending",
       title: "This week's featured items",
       image: "/products/hero-new.jpg?v=22",
-      tile: "/products/hero-new-tile.jpg?v=1",
+      tile: "/products/hero-new-tile.jpg?v=2",
       wash: "#7a6d52",
     },
     {
       tag: "treasure",
       title: "Discounts on household favorites",
       image: "/products/hero-treasure.jpg?v=22",
-      tile: "/products/hero-treasure-tile.jpg?v=1",
+      tile: "/products/hero-treasure-tile.jpg?v=2",
       wash: "#5a443c",
     },
   ] as const;
@@ -369,9 +369,9 @@ export default function ProductGrid() {
                 <img
                   src={tile.tile}
                   alt=""
-                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  className="absolute inset-0 w-full h-full object-cover object-[center_30%] group-hover:scale-105 transition-transform duration-300"
                 />
-                <span className="absolute inset-x-0 bottom-0 h-[46%] bg-gradient-to-t from-black/70 via-black/25 to-transparent" />
+                <span className="absolute inset-x-0 bottom-0 h-[36%] bg-gradient-to-t from-black/70 via-black/28 to-transparent" />
                 {"badge" in tile && tile.badge && (
                   <span className="absolute top-3 left-3 inline-flex items-center rounded-full bg-white px-2 py-1 text-[11px] font-bold text-costco-red shadow-[0_1px_3px_rgba(0,0,0,0.12)]">
                     {tile.badge}
