@@ -12,10 +12,9 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { useCartStore } from "@/lib/store/cart";
-import { useCatalogStore } from "@/lib/store/catalog";
 import { products } from "@/lib/data/products";
-import { productSize, unitPriceLabel } from "@/lib/ui/packSize";
 import KirkMark from "@/components/KirkMark";
+import ShopProductRow from "@/components/ShopProductRow";
 import CostcoLogo from "@/components/CostcoLogo";
 import GoldStarMark from "@/components/GoldStarMark";
 import GoldStarMembershipCard from "@/components/GoldStarMembershipCard";
@@ -114,10 +113,10 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
   const getSnapshot = useCartStore((state) => state.getSnapshot);
   const kirkCartCount = useCartStore((state) => state.getTotalItems());
   const kirkCartSubtotal = useCartStore((state) => state.getSubtotal());
+  const kirkItems = useCartStore((state) => state.items);
   const kirkWindow = deliveryWindow(useSessionStore((s) => s.windowId));
   const kirkAddress = useSessionStore((s) => s.address);
   const kirkMember = useSessionStore((s) => s.membershipAdded);
-  const inspect = useCatalogStore((s) => s.inspect);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -566,7 +565,22 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             className="mx-3.5 my-2 w-[calc(100%-1.75rem)] flex items-center justify-between rounded-full bg-[#e8f2fa] border border-[#c5d8ea] px-3.5 py-2 text-left hover:bg-[#dceaf6]"
           >
             <span className="flex items-center gap-2 min-w-0">
-              <ShoppingCart className="w-3.5 h-3.5 text-costco-blue shrink-0" />
+              <span className="flex items-center pl-0.5">
+                {kirkItems.slice(0, 3).map(({ product }, index) => (
+                  <span
+                    key={product.id}
+                    className="relative h-8 w-8 overflow-hidden rounded-full border border-white bg-white shadow-[0_0_0_1px_#c5d8ea]"
+                    style={{ marginLeft: index === 0 ? 0 : -8, zIndex: 3 - index }}
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={product.image}
+                      alt=""
+                      className="absolute inset-0 h-full w-full object-contain p-0.5"
+                    />
+                  </span>
+                ))}
+              </span>
               <span className="text-[12px] font-bold text-costco-blue truncate">
                 View cart · {kirkCartCount} item{kirkCartCount === 1 ? "" : "s"}
               </span>
@@ -657,46 +671,10 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
               </p>
               <div className="space-y-1.5">
                 {added.map((product) => (
-                  <button
+                  <ShopProductRow
                     key={`${message.id}-${product.id}`}
-                    type="button"
-                    onClick={() => inspect(product)}
-                    className="flex w-full items-center gap-2.5 rounded-[12px] border border-[#e8e8e8] bg-white px-2 py-2 text-left hover:bg-[#fafafa]"
-                  >
-                    <span className="relative h-[72px] w-[72px] shrink-0 overflow-hidden rounded-[12px] border border-[#eee] bg-white">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={product.image}
-                        alt=""
-                        className="absolute inset-0 h-full w-full object-contain p-1"
-                      />
-                    </span>
-                    <span className="min-w-0 flex-1">
-                      <span className="block text-[13px] leading-snug text-[#242424] line-clamp-2">
-                        {product.brand} {product.name}
-                      </span>
-                      {productSize(product.id) ? (
-                        <span className="mt-0.5 block text-[12px] text-[#72767E]">
-                          {productSize(product.id)}
-                        </span>
-                      ) : null}
-                      {unitPriceLabel(product.id, product.price) ? (
-                        <span className="mt-0.5 block text-[12px] text-[#72767E]">
-                          {unitPriceLabel(product.id, product.price)}
-                        </span>
-                      ) : null}
-                      <span className="mt-0.5 block text-[14px] font-bold tabular-nums text-[#1a1a1a]">
-                        ${product.price.toFixed(2)}{" "}
-                        <span className="font-normal text-[#8a8a8a]">each</span>
-                      </span>
-                      {product.savings > 0 ? (
-                        <span className="mt-0.5 block text-[12px] font-semibold text-[#188038]">
-                          Save ${product.savings.toFixed(2)}
-                        </span>
-                      ) : null}
-                    </span>
-                    <ChevronRight className="h-4 w-4 shrink-0 text-costco-blue" />
-                  </button>
+                    product={product}
+                  />
                 ))}
               </div>
             </div>

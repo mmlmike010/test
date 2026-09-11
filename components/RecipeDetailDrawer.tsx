@@ -6,10 +6,8 @@ import { products } from "@/lib/data/products";
 import type { Recipe } from "@/lib/data/recipes";
 import { useCartStore } from "@/lib/store/cart";
 import type { Product } from "@/lib/data/products";
-import { useCatalogStore } from "@/lib/store/catalog";
-import { productSize, unitPriceLabel } from "@/lib/ui/packSize";
 import { storefrontOverlayClass, useSessionStore } from "@/lib/store/session";
-import AddControl from "@/components/AddControl";
+import ShopProductRow from "@/components/ShopProductRow";
 
 export default function RecipeDetailDrawer({
   recipe,
@@ -19,7 +17,6 @@ export default function RecipeDetailDrawer({
   onClose: () => void;
 }) {
   const addItem = useCartStore((s) => s.addItem);
-  const inspect = useCatalogStore((s) => s.inspect);
   const [justAdded, setJustAdded] = useState(false);
   const kirkOpen = useSessionStore((s) => s.kirkOpen);
 
@@ -111,52 +108,7 @@ export default function RecipeDetailDrawer({
                 </p>
                 <div className="mt-2.5 space-y-1.5">
                   {ingredients.map((product) => (
-                    <div
-                      key={product.id}
-                      className="flex w-full items-center gap-2.5 rounded-[12px] border border-[#e8e8e8] bg-white px-2 py-2"
-                    >
-                      <button
-                        type="button"
-                        onClick={() => inspect(product)}
-                        className="flex min-w-0 flex-1 items-center gap-2.5 text-left hover:bg-[#fafafa] rounded-[10px]"
-                      >
-                        <span className="relative h-[72px] w-[72px] shrink-0 overflow-hidden rounded-[12px] border border-[#eee] bg-white">
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img
-                            src={product.image}
-                            alt=""
-                            className="absolute inset-0 h-full w-full object-contain p-1"
-                          />
-                        </span>
-                        <span className="min-w-0 flex-1">
-                          <span className="block text-[13px] leading-snug text-[#242424] line-clamp-2">
-                            {product.brand} {product.name}
-                          </span>
-                          {productSize(product.id) ? (
-                            <span className="mt-0.5 block text-[12px] text-[#72767E]">
-                              {productSize(product.id)}
-                            </span>
-                          ) : null}
-                          {unitPriceLabel(product.id, product.price) ? (
-                            <span className="mt-0.5 block text-[12px] text-[#72767E]">
-                              {unitPriceLabel(product.id, product.price)}
-                            </span>
-                          ) : null}
-                          <span className="mt-0.5 block text-[14px] font-bold tabular-nums text-[#1a1a1a]">
-                            ${product.price.toFixed(2)}{" "}
-                            <span className="font-normal text-[#8a8a8a]">
-                              each
-                            </span>
-                          </span>
-                          {product.savings > 0 ? (
-                            <span className="mt-0.5 block text-[12px] font-semibold text-[#188038]">
-                              Save ${product.savings.toFixed(2)}
-                            </span>
-                          ) : null}
-                        </span>
-                      </button>
-                      <AddControl product={product} variant="inline" />
-                    </div>
+                    <ShopProductRow key={product.id} product={product} />
                   ))}
                 </div>
               </div>
