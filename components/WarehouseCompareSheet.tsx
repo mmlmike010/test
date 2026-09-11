@@ -193,7 +193,7 @@ export default function WarehouseCompareSheet({
                 </th>
                 {items.map((product) => (
                   <td key={product.id} className="border border-[#c4c4c4] px-3 py-2">
-                    <p className="text-[18px] font-bold tabular-nums text-costco-red">
+                    <p className="text-[18px] font-bold tabular-nums text-[#1a1a1a]">
                       ${product.price.toFixed(2)}
                     </p>
                     {product.originalPrice > product.price ? (

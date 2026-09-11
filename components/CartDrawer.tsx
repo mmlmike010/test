@@ -153,7 +153,7 @@ export default function CartDrawer() {
                         <p className="text-[11px] font-bold uppercase tracking-[0.06em] text-[#666] sm:hidden">
                           Item Price
                         </p>
-                        <p className="mt-0.5 text-[15px] font-bold tabular-nums text-costco-red sm:mt-0 sm:text-right">
+                        <p className="mt-0.5 text-[15px] font-bold tabular-nums text-[#1a1a1a] sm:mt-0 sm:text-right">
                           ${product.price.toFixed(2)}
                         </p>
                       </div>
@@ -170,7 +170,7 @@ export default function CartDrawer() {
                         <p className="text-[11px] font-bold uppercase tracking-[0.06em] text-[#666] sm:hidden">
                           Total
                         </p>
-                        <p className="mt-0.5 text-[15px] font-bold tabular-nums text-costco-red sm:mt-0">
+                        <p className="mt-0.5 text-[15px] font-bold tabular-nums text-[#1a1a1a] sm:mt-0">
                           ${(product.price * quantity).toFixed(2)}
                         </p>
                       </div>
@@ -205,7 +205,7 @@ export default function CartDrawer() {
                   <span className="text-[13px] font-semibold text-[#555]">
                     Estimated Total
                   </span>
-                  <span className="text-[24px] font-bold leading-none tabular-nums text-costco-red">
+                  <span className="text-[24px] font-bold leading-none tabular-nums text-[#1a1a1a]">
                     ${subtotal.toFixed(2)}
                   </span>
                 </div>

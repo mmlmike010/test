@@ -5,6 +5,7 @@ import { useCatalogStore } from "@/lib/store/catalog";
 import { productSize, warehouseItemNumber } from "@/lib/ui/packSize";
 import { isLimitedOffer } from "@/lib/ui/warehouseSearch";
 import AddControl from "@/components/AddControl";
+import LimitedTimeOfferBadge from "@/components/LimitedTimeOfferBadge";
 import StarRating from "@/components/StarRating";
 
 /** costco.com search-grid tile. UI only — never sent to Kirk. */
@@ -53,9 +54,7 @@ export default function WarehouseResultCard({
             }`}
           />
           {chrome && isLimitedOffer(product) ? (
-            <span className="absolute left-0 top-0 bg-costco-red px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
-              Limited Offer
-            </span>
+            <LimitedTimeOfferBadge compact={featured || preview} />
           ) : null}
         </span>
         <span className={`min-w-0 px-2 ${featured ? "pb-1 pt-0.5" : "pb-2 pt-1"}`}>
@@ -90,7 +89,7 @@ export default function WarehouseResultCard({
           ) : null}
           <span className="mt-1 flex flex-wrap items-baseline gap-x-1 tabular-nums">
             <span
-              className={`font-bold text-costco-red ${
+              className={`font-bold text-[#1a1a1a] ${
                 featured || preview ? "text-[16px]" : "text-[18px]"
               }`}
             >
@@ -105,6 +104,11 @@ export default function WarehouseResultCard({
           {product.savings > 0 ? (
             <span className="mt-0.5 block text-[11px] font-semibold text-[#188038]">
               Save ${product.savings.toFixed(2)}
+            </span>
+          ) : null}
+          {chrome && !preview ? (
+            <span className="mt-0.5 block text-[11px] font-semibold text-[#188038]">
+              Delivery
             </span>
           ) : null}
         </span>

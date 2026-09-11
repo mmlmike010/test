@@ -14,6 +14,7 @@ import { hideComposedLeftovers, officialPacksFirst } from "@/lib/ui/merchOrder";
 import { useWarehouseChrome } from "@/lib/store/warehouseChrome";
 import { productSize, unitPriceLabel, warehouseItemNumber } from "@/lib/ui/packSize";
 import { isLimitedOffer } from "@/lib/ui/warehouseSearch";
+import LimitedTimeOfferBadge from "@/components/LimitedTimeOfferBadge";
 import { aisleLabel } from "@/lib/ui/aisleLabels";
 import { storefrontOverlayClass, useSessionStore } from "@/lib/store/session";
 import { useListStore } from "@/lib/store/lists";
@@ -203,9 +204,7 @@ export default function ProductDetailModal({
                 />
               </button>
               {warehouse && isLimitedOffer(current) ? (
-                <div className="absolute left-3 top-3 bg-costco-red px-2 py-1 text-[12px] font-bold uppercase tracking-wide text-white">
-                  Limited Offer
-                </div>
+                <LimitedTimeOfferBadge />
               ) : !warehouse && current.savings > 0 ? (
                 <div className="absolute left-3 top-3 rounded-[4px] bg-costco-red px-2 py-1 text-[12px] font-bold text-white">
                   ${current.savings.toFixed(2)} off
@@ -337,9 +336,7 @@ export default function ProductDetailModal({
               }`}
             >
               <span
-                className={`text-[28px] font-bold tabular-nums leading-none ${
-                  warehouse ? "text-costco-red" : "text-[#1a1a1a]"
-                }`}
+                className="text-[28px] font-bold tabular-nums leading-none text-[#1a1a1a]"
               >
                 ${current.price.toFixed(2)}
               </span>
@@ -558,9 +555,7 @@ export default function ProductDetailModal({
         >
           <div className="min-w-0">
             <p
-              className={`text-[20px] font-bold tabular-nums leading-none ${
-                warehouse ? "text-costco-red" : "text-[#1a1a1a]"
-              }`}
+              className="text-[20px] font-bold tabular-nums leading-none text-[#1a1a1a]"
             >
               ${current.price.toFixed(2)}
             </p>

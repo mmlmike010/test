@@ -659,8 +659,8 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                   </p>
                 </div>
                 {preview.length > 0 ? (
-                  <div>
-                    <div className="mb-1.5 flex items-end justify-between gap-2">
+                  <div className="overflow-hidden rounded-[3px] border border-[#c4c4c4] bg-white">
+                    <div className="flex items-end justify-between gap-2 border-b border-[#ececec] px-3 py-2">
                       <p className="text-[13px] font-bold text-[#1a1a1a]">
                         Kirkland Signature
                       </p>
@@ -668,7 +668,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                         {preview.length} items
                       </p>
                     </div>
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-2 gap-2 p-2">
                       {preview.map((product) => (
                         <WarehouseResultCard
                           key={`preview-${product.id}`}
@@ -693,26 +693,36 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
           return (
           <div key={message.id} className="space-y-2">
           {message.role === "user" ? (
-            <div className="space-y-2">
-            <div className="bg-white border border-[#c4c4c4] rounded-[3px] px-3.5 py-2">
-              <p className="text-[13px] font-bold text-[#1a1a1a]">
-                Search Results
-              </p>
-              <p className="mt-0.5 text-[12px] text-[#555] whitespace-pre-line">
-                {message.content}
-              </p>
-            </div>
-            {hits.length > 0 ? (
-                <div>
-                  <div className="mb-1.5 flex items-end justify-between gap-2">
-                    <p className="text-[13px] font-bold text-[#1a1a1a]">
+            <div className="overflow-hidden rounded-[3px] border border-[#c4c4c4] bg-white">
+              <div className="border-b border-[#ececec] px-3.5 py-2">
+                <nav
+                  aria-label="Breadcrumb"
+                  className="flex flex-wrap items-center gap-x-1.5 text-[11px] text-[#555]"
+                >
+                  <span className="font-bold text-costco-blue">Home</span>
+                  <span aria-hidden="true">›</span>
+                  <span className="text-[#1a1a1a]">Search Results</span>
+                </nav>
+                <p className="mt-1 text-[13px] font-bold text-[#1a1a1a]">
+                  Search Results
+                </p>
+                <p className="mt-0.5 text-[12px] text-[#555] whitespace-pre-line">
+                  {message.content}
+                </p>
+                {hits.length > 0 ? (
+                  <div className="mt-1.5 flex items-end justify-between gap-2">
+                    <p className="text-[12px] font-bold text-[#1a1a1a]">
                       Showing 1 – {preview.length} of {hits.length}
                     </p>
                     <p className="text-[11px] font-semibold text-[#555]">
                       Sort By Best Match
                     </p>
                   </div>
-                  <div className="grid grid-cols-2 gap-2">
+                ) : null}
+              </div>
+              {hits.length > 0 ? (
+                <>
+                  <div className="grid grid-cols-2 gap-2 p-2">
                     {preview.map((product) => (
                       <WarehouseResultCard
                         key={`${message.id}-${product.id}`}
@@ -721,8 +731,19 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                       />
                     ))}
                   </div>
-                </div>
-            ) : null}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      document
+                        .querySelector("main")
+                        ?.scrollTo({ top: 0, behavior: "smooth" });
+                    }}
+                    className="block w-full border-t border-[#ececec] px-3.5 py-2 text-left text-[13px] font-bold text-costco-blue hover:bg-[#f7fbfe]"
+                  >
+                    View all {hits.length} results
+                  </button>
+                </>
+              ) : null}
             </div>
           ) : (
             <div className="bg-white border border-[#e8e8e8] rounded-[3px] px-3.5 py-2.5 text-[13px] leading-relaxed text-[#1a1a1a]">
@@ -917,16 +938,20 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             <p className="mt-2 text-[10px] font-bold tracking-[0.12em] text-[#666] uppercase">
               Popular Searches
             </p>
-            <div className="mt-1 grid grid-cols-2 gap-x-2.5 gap-y-0.5">
+            <div className="mt-1 grid grid-cols-2 gap-x-2.5 gap-y-1">
               {suggestionChips.map((chip) => (
                 <button
                   key={chip}
                   type="button"
                   onClick={() => void sendMessage(chip)}
                   disabled={isLoading}
-                  className="text-[11px] leading-tight text-costco-blue font-semibold hover:underline disabled:opacity-50 text-left line-clamp-2"
+                  className="flex items-start gap-1 text-[11px] leading-tight text-costco-blue font-semibold hover:underline disabled:opacity-50 text-left"
                 >
-                  {chip}
+                  <Search
+                    className="mt-0.5 h-3 w-3 shrink-0 text-[#8a8a8a]"
+                    aria-hidden="true"
+                  />
+                  <span className="line-clamp-2">{chip}</span>
                 </button>
               ))}
             </div>

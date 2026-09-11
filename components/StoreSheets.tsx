@@ -623,11 +623,7 @@ function CheckoutSheet() {
                         >
                           {product.brand} {product.name}
                         </p>
-                        <p
-                          className={`shrink-0 text-[15px] font-bold tabular-nums ${
-                            warehouse ? "text-costco-red" : "text-[#1a1a1a]"
-                          }`}
-                        >
+                        <p className="shrink-0 text-[15px] font-bold tabular-nums text-[#1a1a1a]">
                           ${(product.price * quantity).toFixed(2)}
                         </p>
                       </div>
@@ -684,11 +680,7 @@ function CheckoutSheet() {
                 <span className="text-[13px] font-semibold text-[#555]">
                   {warehouse ? "Estimated Total" : "Estimated total"}
                 </span>
-                <span
-                  className={`text-[24px] font-bold leading-none tabular-nums ${
-                    warehouse ? "text-costco-red" : "text-[#1a1a1a]"
-                  }`}
-                >
+                <span className="text-[24px] font-bold leading-none tabular-nums text-[#1a1a1a]">
                   ${subtotal.toFixed(2)}
                 </span>
               </div>

@@ -90,7 +90,7 @@ export default function WarehouseAddedModal() {
             </p>
             <p className="mt-1 text-[13px] text-[#555]">
               Qty {quantity} ·{" "}
-              <span className="font-bold tabular-nums text-costco-red">
+              <span className="font-bold tabular-nums text-[#1a1a1a]">
                 ${line.toFixed(2)}
               </span>
             </p>
