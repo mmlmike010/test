@@ -30,6 +30,8 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
   const clearFilters = useCatalogStore((s) => s.clearFilters);
   const department = useCatalogStore((s) => s.department);
   const tag = useCatalogStore((s) => s.tag);
+  const listTone = useCatalogStore((s) => s.listTone);
+  const warehouseSearch = listTone === "warehouse" && Boolean(q.trim());
   const onRecipes = tag === "recipes";
   const onFlyers = tag === "flyers";
   const onLists = tag === "lists";
@@ -161,13 +163,19 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
                 setListTone("sameday");
               }}
               placeholder="Search products"
-              className="w-full h-11 pl-11 pr-10 bg-[#f6f6f6] border border-[#d8d8d8] rounded-full text-[15px] text-[#222] placeholder:text-[#8a8a8a] focus:outline-none focus:bg-white focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15"
+              className={`w-full h-11 pl-11 pr-10 bg-[#f6f6f6] border text-[15px] text-[#222] placeholder:text-[#8a8a8a] focus:outline-none focus:bg-white focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15 ${
+                warehouseSearch
+                  ? "rounded-[3px] border-[#c4c4c4]"
+                  : "rounded-full border-[#d8d8d8]"
+              }`}
             />
             {q && (
               <button
                 type="button"
                 aria-label="Clear search"
-                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-full hover:bg-gray-100"
+                className={`absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-100 ${
+                  warehouseSearch ? "rounded-[3px]" : "rounded-full"
+                }`}
                 onClick={() => {
                   setQuery("");
                   setListTone("sameday");

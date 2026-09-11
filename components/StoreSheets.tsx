@@ -21,6 +21,12 @@ import {
   useSessionStore,
 } from "@/lib/store/session";
 
+function useWarehouseCheckoutSheet() {
+  const cartTone = useCartStore((s) => s.cartTone);
+  const priorSheet = useSessionStore((s) => s.priorSheet);
+  return cartTone === "warehouse" && priorSheet === "checkout";
+}
+
 function PricingSheet() {
   const closeSheet = useSessionStore((s) => s.closeSheet);
   return (
@@ -82,10 +88,15 @@ function MembershipSheet() {
   const removeMembership = useSessionStore((s) => s.removeMembership);
   const membershipAdded = useSessionStore((s) => s.membershipAdded);
   const membershipNumber = useSessionStore((s) => s.membershipNumber);
+  const warehouse = useWarehouseCheckoutSheet();
   const [number, setNumber] = useState(membershipNumber || KIRK_MEMBERSHIP);
 
   return (
-    <StoreSheet title="Add membership" onClose={closeSheet}>
+    <StoreSheet
+      title="Add membership"
+      onClose={closeSheet}
+      tone={warehouse ? "warehouse" : "sameday"}
+    >
       <div className="px-4 py-4 space-y-3">
         <GoldStarMembershipCard />
         <p className="text-[13px] text-[#555] leading-snug">
@@ -93,8 +104,18 @@ function MembershipSheet() {
           Kirk&apos;s Gold Star is ready for this demo.
         </p>
         {membershipAdded ? (
-          <div className="rounded-[12px] border border-[#b7d7b0] bg-[#eef7ee] px-3.5 py-3">
-            <p className="text-[13px] font-bold text-[#1e5b24] inline-flex items-center gap-1.5">
+          <div
+            className={
+              warehouse
+                ? "rounded-[3px] border border-[#c4c4c4] bg-[#f7fbfe] px-3.5 py-3"
+                : "rounded-[12px] border border-[#b7d7b0] bg-[#eef7ee] px-3.5 py-3"
+            }
+          >
+            <p
+              className={`inline-flex items-center gap-1.5 text-[13px] font-bold ${
+                warehouse ? "text-costco-blue" : "text-[#1e5b24]"
+              }`}
+            >
               <GoldStarMark size={16} />
               Gold Star added · {membershipNumber}
             </p>
@@ -116,12 +137,20 @@ function MembershipSheet() {
                 value={number}
                 onChange={(e) => setNumber(e.target.value)}
                 inputMode="numeric"
-                className="w-full h-11 px-3.5 bg-[#f6f6f6] border border-[#d8d8d8] rounded-[8px] text-[15px] text-[#222] focus:outline-none focus:bg-white focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15"
+                className={`w-full h-11 px-3.5 bg-[#f6f6f6] border text-[15px] text-[#222] focus:outline-none focus:bg-white focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15 ${
+                  warehouse
+                    ? "rounded-[3px] border-[#c4c4c4]"
+                    : "rounded-[8px] border-[#d8d8d8]"
+                }`}
               />
             </label>
             <button
               type="button"
-              className="w-full py-3 bg-[#0AAD0A] text-white rounded-full font-bold hover:bg-[#099809] text-[15px]"
+              className={`w-full py-3 text-[15px] font-bold text-white ${
+                warehouse
+                  ? "rounded-[3px] bg-costco-red hover:bg-costco-red-hover"
+                  : "rounded-full bg-[#0AAD0A] hover:bg-[#099809]"
+              }`}
               onClick={() => addMembership(number)}
             >
               Add membership
@@ -150,18 +179,29 @@ function SignInSheet() {
   const signedIn = useSessionStore((s) => s.signedIn);
   const displayName = useSessionStore((s) => s.displayName);
   const email = useSessionStore((s) => s.email);
+  const warehouse = useWarehouseCheckoutSheet();
   const [name, setName] = useState(displayName || KIRK_NAME);
   const [mail, setMail] = useState(email || KIRK_EMAIL);
 
   return (
-    <StoreSheet title="Sign in / Register" onClose={closeSheet}>
+    <StoreSheet
+      title="Sign in / Register"
+      onClose={closeSheet}
+      tone={warehouse ? "warehouse" : "sameday"}
+    >
       <div className="px-4 py-4 space-y-3">
         <p className="text-[13px] text-[#555] leading-snug">
           Sign in to save lists, attach a Gold Star, and check out. Demo only —
           nothing leaves this browser.
         </p>
         {signedIn ? (
-          <div className="rounded-[12px] border border-[#c5d8ea] bg-[#e8f2fa] px-3.5 py-3">
+          <div
+            className={
+              warehouse
+                ? "rounded-[3px] border border-[#c4c4c4] bg-[#f7fbfe] px-3.5 py-3"
+                : "rounded-[12px] border border-[#c5d8ea] bg-[#e8f2fa] px-3.5 py-3"
+            }
+          >
             <p className="text-[15px] font-bold text-[#1a1a1a]">{displayName}</p>
             <p className="text-[13px] text-[#555]">{email}</p>
             <button
@@ -181,7 +221,11 @@ function SignInSheet() {
               <input
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full h-11 px-3.5 bg-[#f6f6f6] border border-[#d8d8d8] rounded-[8px] text-[15px] text-[#222] focus:outline-none focus:bg-white focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15"
+                className={`w-full h-11 px-3.5 bg-[#f6f6f6] border text-[15px] text-[#222] focus:outline-none focus:bg-white focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15 ${
+                  warehouse
+                    ? "rounded-[3px] border-[#c4c4c4]"
+                    : "rounded-[8px] border-[#d8d8d8]"
+                }`}
               />
             </label>
             <label className="block">
@@ -192,12 +236,20 @@ function SignInSheet() {
                 type="email"
                 value={mail}
                 onChange={(e) => setMail(e.target.value)}
-                className="w-full h-11 px-3.5 bg-[#f6f6f6] border border-[#d8d8d8] rounded-[8px] text-[15px] text-[#222] focus:outline-none focus:bg-white focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15"
+                className={`w-full h-11 px-3.5 bg-[#f6f6f6] border text-[15px] text-[#222] focus:outline-none focus:bg-white focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15 ${
+                  warehouse
+                    ? "rounded-[3px] border-[#c4c4c4]"
+                    : "rounded-[8px] border-[#d8d8d8]"
+                }`}
               />
             </label>
             <button
               type="button"
-              className="w-full py-3 bg-[#0AAD0A] text-white rounded-full font-bold hover:bg-[#099809] text-[15px]"
+              className={`w-full py-3 text-[15px] font-bold text-white ${
+                warehouse
+                  ? "rounded-[3px] bg-costco-red hover:bg-costco-red-hover"
+                  : "rounded-full bg-[#0AAD0A] hover:bg-[#099809]"
+              }`}
               onClick={() => signIn(name, mail)}
             >
               Continue
@@ -221,13 +273,18 @@ function DeliverySheet() {
   const setDelivery = useSessionStore((s) => s.setDelivery);
   const windowId = useSessionStore((s) => s.windowId);
   const address = useSessionStore((s) => s.address);
+  const warehouse = useWarehouseCheckoutSheet();
   const [picked, setPicked] = useState(windowId);
   const [line1, setLine1] = useState(address.line1);
   const [city, setCity] = useState(address.city);
   const [zip, setZip] = useState(address.zip);
 
   return (
-    <StoreSheet title="Delivery details" onClose={closeSheet}>
+    <StoreSheet
+      title="Delivery details"
+      onClose={closeSheet}
+      tone={warehouse ? "warehouse" : "sameday"}
+    >
       <div className="px-4 py-4 space-y-4">
         <div>
           <p className="text-[12px] font-bold text-[#555] mb-2">Time window</p>
@@ -239,10 +296,16 @@ function DeliverySheet() {
                   key={window.id}
                   type="button"
                   onClick={() => setPicked(window.id)}
-                  className={`w-full flex items-center justify-between rounded-[12px] border px-3.5 py-3 text-left ${
+                  className={`w-full flex items-center justify-between border px-3.5 py-3 text-left ${
+                    warehouse ? "rounded-[3px]" : "rounded-[12px]"
+                  } ${
                     on
-                      ? "border-costco-blue bg-[#e8f2fa]"
-                      : "border-[#e0e0e0] bg-white hover:bg-[#f6f6f6]"
+                      ? warehouse
+                        ? "border-costco-blue bg-[#f7fbfe]"
+                        : "border-costco-blue bg-[#e8f2fa]"
+                      : warehouse
+                        ? "border-[#c4c4c4] bg-white hover:bg-[#f7fbfe]"
+                        : "border-[#e0e0e0] bg-white hover:bg-[#f6f6f6]"
                   }`}
                 >
                   <span>
@@ -265,27 +328,43 @@ function DeliverySheet() {
             value={line1}
             onChange={(e) => setLine1(e.target.value)}
             placeholder="Street address"
-            className="w-full h-11 px-3.5 bg-[#f6f6f6] border border-[#d8d8d8] rounded-[8px] text-[15px] text-[#222] focus:outline-none focus:bg-white focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15"
+            className={`w-full h-11 px-3.5 bg-[#f6f6f6] border text-[15px] text-[#222] focus:outline-none focus:bg-white focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15 ${
+              warehouse
+                ? "rounded-[3px] border-[#c4c4c4]"
+                : "rounded-[8px] border-[#d8d8d8]"
+            }`}
           />
           <div className="grid grid-cols-2 gap-2">
             <input
               value={city}
               onChange={(e) => setCity(e.target.value)}
               placeholder="City"
-              className="h-11 px-3.5 bg-[#f6f6f6] border border-[#d8d8d8] rounded-[8px] text-[15px] text-[#222] focus:outline-none focus:bg-white focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15"
+              className={`h-11 px-3.5 bg-[#f6f6f6] border text-[15px] text-[#222] focus:outline-none focus:bg-white focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15 ${
+                warehouse
+                  ? "rounded-[3px] border-[#c4c4c4]"
+                  : "rounded-[8px] border-[#d8d8d8]"
+              }`}
             />
             <input
               value={zip}
               onChange={(e) => setZip(e.target.value)}
               placeholder="ZIP"
               inputMode="numeric"
-              className="h-11 px-3.5 bg-[#f6f6f6] border border-[#d8d8d8] rounded-[8px] text-[15px] text-[#222] focus:outline-none focus:bg-white focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15"
+              className={`h-11 px-3.5 bg-[#f6f6f6] border text-[15px] text-[#222] focus:outline-none focus:bg-white focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15 ${
+                warehouse
+                  ? "rounded-[3px] border-[#c4c4c4]"
+                  : "rounded-[8px] border-[#d8d8d8]"
+              }`}
             />
           </div>
         </div>
         <button
           type="button"
-          className="w-full py-3 bg-[#0AAD0A] text-white rounded-full font-bold hover:bg-[#099809] text-[15px]"
+          className={`w-full py-3 text-[15px] font-bold text-white ${
+            warehouse
+              ? "rounded-[3px] bg-costco-red hover:bg-costco-red-hover"
+              : "rounded-full bg-[#0AAD0A] hover:bg-[#099809]"
+          }`}
           onClick={() => setDelivery(picked, { line1, city, zip })}
         >
           Save delivery details
