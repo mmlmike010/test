@@ -2,13 +2,18 @@
 export default function KirkMark({
   size = 40,
   className = "",
+  tone = "default",
 }: {
   size?: number;
   className?: string;
+  tone?: "default" | "onRed";
 }) {
+  const onRed = tone === "onRed";
   return (
     <span
-      className={`relative inline-flex items-center justify-center rounded-full bg-[#E31837] text-white shadow-sm ${className}`}
+      className={`relative inline-flex items-center justify-center rounded-full shadow-sm ${
+        onRed ? "bg-white text-[#E31837]" : "bg-[#E31837] text-white"
+      } ${className}`}
       style={{ width: size, height: size }}
       aria-hidden
     >

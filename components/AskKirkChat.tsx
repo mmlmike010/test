@@ -511,32 +511,30 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
   return (
     <>
     <aside className="fixed inset-y-0 right-0 z-40 w-full max-w-[420px] lg:static lg:z-30 lg:w-[380px] xl:w-[420px] lg:max-w-none shrink-0 bg-white border-l border-[#e5e5e5] h-full flex flex-col">
-      <div className="relative shrink-0 border-b border-[#e5e5e5] bg-white">
-        <div className="h-[6px] bg-costco-red" />
-        <div className="h-[3px] bg-gradient-to-r from-[#a3841c] via-[#f3e3a3] to-[#a3841c]" />
+      <div className="relative shrink-0 bg-costco-red">
         <div className="px-3.5 py-2 flex items-center justify-between gap-2">
           <div className="flex items-center gap-2.5 min-w-0">
-            <CostcoLogo compact />
-            <span className="w-px h-8 bg-[#d8d8d8] shrink-0" />
-            <KirkMark size={28} className="shrink-0" />
+            <CostcoLogo compact tone="onRed" />
+            <span className="w-px h-8 bg-white/35 shrink-0" />
+            <KirkMark size={28} tone="onRed" className="shrink-0" />
             <div className="min-w-0">
-              <h2 className="text-[16px] font-black tracking-tight text-[#1a1a1a] leading-none">
+              <h2 className="text-[16px] font-black tracking-tight text-white leading-none">
                 Ask Kirk
               </h2>
-              <p className="mt-1 text-[10px] font-bold tracking-[0.16em] text-costco-blue uppercase">
+              <p className="mt-1 text-[10px] font-bold tracking-[0.16em] text-white/85 uppercase">
                 Kirkland Signature
               </p>
             </div>
           </div>
           <div className="flex items-center gap-1 shrink-0">
             <GoldStarMark size={18} />
-            <p className="hidden xl:block text-[9px] font-semibold tabular-nums tracking-[0.1em] text-[#666] pr-1">
+            <p className="hidden xl:block text-[9px] font-semibold tabular-nums tracking-[0.1em] text-white/90 pr-1">
               111 847 11217
             </p>
             <button
               type="button"
               onClick={handleReset}
-              className="px-2 py-1.5 text-[12px] font-bold text-[#555] hover:bg-[#f3f3f3] rounded-[3px] transition-colors flex items-center gap-1"
+              className="px-2 py-1.5 text-[12px] font-bold text-white hover:bg-white/15 rounded-[3px] transition-colors flex items-center gap-1"
               title="Reset"
             >
               <RefreshCw className="w-3.5 h-3.5" />
@@ -545,7 +543,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             <button
               type="button"
               onClick={onClose}
-              className="p-1.5 text-[#555] hover:bg-[#f3f3f3] rounded-full transition-colors"
+              className="p-1.5 text-white hover:bg-white/15 rounded-full transition-colors"
               title="Close"
               aria-label="Close Ask Kirk"
             >
@@ -553,6 +551,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             </button>
           </div>
         </div>
+        <div className="h-[3px] bg-gradient-to-r from-[#a3841c] via-[#f3e3a3] to-[#a3841c]" />
         <p className="px-3.5 py-1.5 flex items-center gap-1.5 text-[11px] text-white font-semibold bg-costco-blue">
           <span className="w-1.5 h-1.5 rounded-full bg-[#f3e3a3]" />
           Delivery {kirkWindow.label} · {formatAddress(kirkAddress)} ·{" "}
@@ -569,8 +568,8 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                 {kirkItems.slice(0, 3).map(({ product }, index) => (
                   <span
                     key={product.id}
-                    className="relative h-8 w-8 overflow-hidden rounded-full border border-white bg-white shadow-[0_0_0_1px_#c5d8ea]"
-                    style={{ marginLeft: index === 0 ? 0 : -8, zIndex: 3 - index }}
+                    className="relative h-9 w-9 overflow-hidden rounded-full border border-white bg-white shadow-[0_0_0_1px_#c5d8ea]"
+                    style={{ marginLeft: index === 0 ? 0 : -10, zIndex: 3 - index }}
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
