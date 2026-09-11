@@ -168,25 +168,25 @@ export default function ProductGrid() {
       title: "Member Only Savings",
       subtitle: "8/24/26 – 9/21/26",
       badge: "Sale ends in 10 days",
-      image: "/products/hero-weekly.jpg?v=21",
+      image: "/products/hero-weekly.jpg?v=22",
       wash: "#7a3a3c",
     },
     {
       tag: "kirkland",
       title: "Kirkland Signature",
-      image: "/products/hero-kirkland.jpg?v=21",
+      image: "/products/hero-kirkland.jpg?v=22",
       wash: "#3d5470",
     },
     {
       tag: "trending",
       title: "This week's featured items",
-      image: "/products/hero-new.jpg?v=21",
+      image: "/products/hero-new.jpg?v=22",
       wash: "#7a6d52",
     },
     {
       tag: "treasure",
       title: "Discounts on household favorites",
-      image: "/products/hero-treasure.jpg?v=21",
+      image: "/products/hero-treasure.jpg?v=22",
       wash: "#5a443c",
     },
   ] as const;
@@ -382,9 +382,6 @@ export default function ProductGrid() {
               )}
             </div>
           )}
-          <div className="-mx-4 lg:-mx-5 mb-4">
-            <CategoryScroller />
-          </div>
           <div className="mb-3 flex items-end justify-between gap-3 flex-wrap">
             <div>
               {q.trim() ? (
@@ -454,6 +451,9 @@ export default function ProductGrid() {
                 Clear all
               </button>
             </div>
+          </div>
+          <div className="-mx-4 lg:-mx-5 mb-4">
+            <CategoryScroller />
           </div>
 
           {!loading && filtered.length === 0 ? (

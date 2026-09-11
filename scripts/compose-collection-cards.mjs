@@ -128,9 +128,9 @@ if (only === "all" || only === "weekly") {
     file: "large_e5d1efe6-fead-4b09-a7ca-7c7e0b11ea6f.jpg",
     wash: { r: 180, g: 42, b: 48, alpha: 0.38 },
     outName: "hero-weekly.jpg",
-    scale: 0.84,
-    nudgeX: 300,
-    nudgeY: -28,
+    scale: 0.56,
+    nudgeX: 380,
+    nudgeY: -12,
   });
 }
 
@@ -150,9 +150,9 @@ if (only === "all" || only === "featured") {
     file: "large_a3b82731-4651-476a-a0c3-01c97a17c2c6.png",
     wash: { r: 210, g: 150, b: 40, alpha: 0.28 },
     outName: "hero-new.jpg",
-    scale: 0.86,
-    nudgeX: 300,
-    nudgeY: -24,
+    scale: 0.58,
+    nudgeX: 370,
+    nudgeY: -10,
   });
 }
 
