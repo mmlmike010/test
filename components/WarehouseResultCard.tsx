@@ -68,74 +68,83 @@ export default function WarehouseResultCard({
 
   if (list) {
     return (
-      <div className="flex gap-2 border border-[#c4c4c4] bg-white rounded-[3px] px-2 py-1.5">
-        <button
-          type="button"
-          onClick={() => inspect(product, "warehouse")}
-          className="relative h-[72px] w-[72px] shrink-0 overflow-hidden border border-[#eee] bg-white rounded-[3px] hover:bg-[#f7fbfe]"
-          aria-label={`View ${product.brand} ${product.name}`}
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={product.image}
-            alt=""
-            className="absolute inset-0 h-full w-full object-contain p-1 pt-4"
-          />
-          {isLimitedOffer(product) ? (
-            <LimitedTimeOfferBadge compact />
-          ) : null}
-        </button>
-        <div className="min-w-0 flex-1">
+      <div className="overflow-hidden rounded-[3px] border border-[#c4c4c4] bg-white">
+        {isLimitedOffer(product) ? (
+          <span className="block bg-costco-red py-0.5 text-center text-[9px] font-bold uppercase tracking-wide text-white">
+            Limited-Time Offers
+          </span>
+        ) : null}
+        <div className="flex gap-2.5 px-2 py-2">
           <button
             type="button"
             onClick={() => inspect(product, "warehouse")}
-            className="block w-full text-left"
+            className="relative h-24 w-24 shrink-0 overflow-hidden rounded-[3px] border border-[#eee] bg-[#f6f6f6] hover:bg-[#f7fbfe]"
+            aria-label={`View ${product.brand} ${product.name}`}
           >
-            <span className="block text-[13px] font-bold leading-snug text-costco-blue line-clamp-2 hover:underline">
-              {product.brand} {product.name}
-            </span>
-            <span className="mt-0.5 block text-[11px] text-[#72767E]">
-              {size ? `${size} · ` : ""}Item {warehouseItemNumber(product.id)}
-            </span>
-            <span className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5">
-              <StarRating
-                rating={product.rating}
-                reviewCount={product.reviewCount}
-                size="sm"
-                showCount={false}
-              />
-              <span className="text-[15px] font-bold tabular-nums text-[#1a1a1a]">
-                ${product.price.toFixed(2)}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={product.image}
+              alt=""
+              className="absolute inset-0 h-full w-full object-contain p-1.5"
+            />
+          </button>
+          <div className="min-w-0 flex-1">
+            <button
+              type="button"
+              onClick={() => inspect(product, "warehouse")}
+              className="block w-full text-left"
+            >
+              <span className="block text-[13px] font-bold leading-snug text-costco-blue line-clamp-2 hover:underline">
+                {product.brand} {product.name}
               </span>
-              {product.originalPrice > product.price ? (
-                <span className="text-[12px] text-[#888] line-through tabular-nums">
-                  ${product.originalPrice.toFixed(2)}
+              <span className="mt-0.5 block text-[11px] text-[#72767E]">
+                {size ? `${size} · ` : ""}Item {warehouseItemNumber(product.id)}
+              </span>
+              <span className="mt-0.5 block">
+                <StarRating
+                  rating={product.rating}
+                  reviewCount={product.reviewCount}
+                  size="sm"
+                  showCount={false}
+                />
+              </span>
+              <span className="mt-1 flex flex-wrap items-baseline gap-x-1.5 tabular-nums">
+                <span className="text-[18px] font-bold text-[#1a1a1a]">
+                  ${product.price.toFixed(2)}
                 </span>
-              ) : null}
+                {product.originalPrice > product.price ? (
+                  <span className="text-[12px] text-[#888] line-through">
+                    ${product.originalPrice.toFixed(2)}
+                  </span>
+                ) : null}
+              </span>
               {product.savings > 0 ? (
-                <span className="text-[11px] font-semibold text-[#188038]">
+                <span className="mt-0.5 block text-[11px] font-semibold text-[#188038]">
                   Save ${product.savings.toFixed(2)}
                 </span>
               ) : null}
-            </span>
-          </button>
-          <div className="mt-1 flex flex-wrap items-center gap-x-2.5 gap-y-1">
-            <AddControl product={product} variant="inline" tone="warehouse" />
-            {onCompare ? (
-              <label
-                className="flex items-center gap-1.5 text-[11px] text-[#555]"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <input
-                  type="checkbox"
-                  checked={compareChecked}
-                  onChange={(e) => onCompare(e.target.checked)}
-                  className="accent-costco-blue"
-                />
-                Compare Product
-              </label>
-            ) : null}
-            <AddToListLink productId={product.id} productName={product.name} />
+              <span className="mt-0.5 block text-[11px] font-semibold text-[#188038]">
+                Delivery
+              </span>
+            </button>
+            <div className="mt-1.5 flex flex-wrap items-center gap-x-2.5 gap-y-1">
+              <AddControl product={product} variant="inline" tone="warehouse" />
+              {onCompare ? (
+                <label
+                  className="flex items-center gap-1.5 text-[11px] text-[#555]"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <input
+                    type="checkbox"
+                    checked={compareChecked}
+                    onChange={(e) => onCompare(e.target.checked)}
+                    className="accent-costco-blue"
+                  />
+                  Compare Product
+                </label>
+              ) : null}
+              <AddToListLink productId={product.id} productName={product.name} />
+            </div>
           </div>
         </div>
       </div>

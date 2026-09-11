@@ -153,8 +153,11 @@ export default function ProductGrid() {
   const listTone = useCatalogStore((s) => s.listTone);
   const warehouseFacets = useCatalogStore((s) => s.warehouseFacets);
   const setWarehouseFacets = useCatalogStore((s) => s.setWarehouseFacets);
+  const warehouseSort = useCatalogStore((s) => s.warehouseSort);
+  const setWarehouseSort = useCatalogStore((s) => s.setWarehouseSort);
   const warehouseList = listTone === "warehouse" && Boolean(q.trim());
   const [sort, setSort] = useState<WarehouseSort>("relevance");
+  const activeSort = warehouseList ? warehouseSort : sort;
   const [hideFilters, setHideFilters] = useState(false);
   const [compareIds, setCompareIds] = useState<string[]>([]);
   const [compareOpen, setCompareOpen] = useState(false);
@@ -239,15 +242,15 @@ export default function ProductGrid() {
     const merch = hideComposedLeftovers(filtered, allow);
     if (warehouseList) {
       return sortWarehouseItems(
-        sort === "relevance" ? officialPacksFirst(merch) : merch,
-        sort
+        activeSort === "relevance" ? officialPacksFirst(merch) : merch,
+        activeSort
       );
     }
     if (sort === "price") {
       return [...merch].sort((a, b) => a.price - b.price);
     }
     return officialPacksFirst(merch);
-  }, [filtered, sort, q, department, warehouseList]);
+  }, [filtered, sort, activeSort, q, department, warehouseList]);
   const related = q.trim() && shown.length > 0 && shown.length < 6
     ? relatedSearchItems(shown, products)
     : [];
@@ -256,6 +259,7 @@ export default function ProductGrid() {
   if (prevFilterKey !== filterKey) {
     setPrevFilterKey(filterKey);
     setWarehouseFacets(EMPTY_WAREHOUSE_FACETS);
+    setWarehouseSort("relevance");
     setSort("relevance");
     setCompareIds([]);
     setCompareOpen(false);
@@ -569,9 +573,9 @@ export default function ProductGrid() {
                   <span className="font-bold">Sort By</span>
                   <select
                     aria-label="Sort items"
-                    value={sort}
+                    value={warehouseSort}
                     onChange={(e) =>
-                      setSort(e.target.value as WarehouseSort)
+                      setWarehouseSort(e.target.value as WarehouseSort)
                     }
                     className="h-9 rounded-[3px] border border-[#c4c4c4] bg-white px-2 text-[13px] font-bold text-[#1a1a1a] focus:border-costco-blue focus:outline-none focus:ring-2 focus:ring-costco-blue/15"
                   >

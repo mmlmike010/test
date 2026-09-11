@@ -6,6 +6,7 @@ import type { Product } from "@/lib/data/products";
 import {
   EMPTY_WAREHOUSE_FACETS,
   type WarehouseFacets,
+  type WarehouseSort,
 } from "@/lib/ui/warehouseSearch";
 
 type CatalogState = {
@@ -19,6 +20,7 @@ type CatalogState = {
   inspectTone: "sameday" | "warehouse";
   listTone: "sameday" | "warehouse";
   warehouseFacets: WarehouseFacets;
+  warehouseSort: WarehouseSort;
   openList: string | null;
   openRecipe: string | null;
   setQuery: (q: string) => void;
@@ -26,6 +28,7 @@ type CatalogState = {
   setTag: (tag: string | null) => void;
   setListTone: (tone: "sameday" | "warehouse") => void;
   setWarehouseFacets: (warehouseFacets: WarehouseFacets) => void;
+  setWarehouseSort: (warehouseSort: WarehouseSort) => void;
   setOpenList: (openList: string | null) => void;
   setOpenRecipe: (openRecipe: string | null) => void;
   inspect: (product: Product | null, tone?: "sameday" | "warehouse") => void;
@@ -44,6 +47,7 @@ export const useCatalogStore = create<CatalogState>((set, get) => ({
   inspectTone: "sameday",
   listTone: "sameday",
   warehouseFacets: EMPTY_WAREHOUSE_FACETS,
+  warehouseSort: "relevance",
   openList: null,
   openRecipe: null,
   setQuery: (q) => set({ q }),
@@ -55,6 +59,7 @@ export const useCatalogStore = create<CatalogState>((set, get) => ({
       openRecipe: null,
       listTone: "sameday",
       warehouseFacets: EMPTY_WAREHOUSE_FACETS,
+      warehouseSort: "relevance",
     }),
   setTag: (tag) =>
     set({
@@ -64,9 +69,11 @@ export const useCatalogStore = create<CatalogState>((set, get) => ({
       openRecipe: null,
       listTone: "sameday",
       warehouseFacets: EMPTY_WAREHOUSE_FACETS,
+      warehouseSort: "relevance",
     }),
   setListTone: (listTone) => set({ listTone }),
   setWarehouseFacets: (warehouseFacets) => set({ warehouseFacets }),
+  setWarehouseSort: (warehouseSort) => set({ warehouseSort }),
   setOpenList: (openList) => set({ openList }),
   setOpenRecipe: (openRecipe) => set({ openRecipe }),
   inspect: (inspecting, tone = "sameday") =>
@@ -80,6 +87,7 @@ export const useCatalogStore = create<CatalogState>((set, get) => ({
       openRecipe: null,
       listTone: "sameday",
       warehouseFacets: EMPTY_WAREHOUSE_FACETS,
+      warehouseSort: "relevance",
     }),
   search: async () => {
     const { q, department, tag } = get();

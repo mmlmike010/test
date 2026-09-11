@@ -34,6 +34,9 @@ import {
 import {
   applyWarehouseFacets,
   EMPTY_WAREHOUSE_FACETS,
+  sortWarehouseItems,
+  warehouseSelectionChips,
+  type WarehouseSort,
 } from "@/lib/ui/warehouseSearch";
 
 interface Message {
@@ -131,6 +134,8 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
   const kirkMember = useSessionStore((s) => s.membershipAdded);
   const warehouseFacets = useCatalogStore((s) => s.warehouseFacets);
   const setWarehouseFacets = useCatalogStore((s) => s.setWarehouseFacets);
+  const warehouseSort = useCatalogStore((s) => s.warehouseSort);
+  const setWarehouseSort = useCatalogStore((s) => s.setWarehouseSort);
 
   useEffect(() => {
     const onlyWelcome =
@@ -301,6 +306,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
         openRecipe: null,
         listTone: "warehouse",
         warehouseFacets: EMPTY_WAREHOUSE_FACETS,
+        warehouseSort: "relevance",
       });
       void catalog.search();
       document.querySelector("main")?.scrollTo({ top: 0 });
@@ -702,9 +708,13 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             message.role === "user"
               ? kirkQueryPreview(products, message.content)
               : [];
-          const hits = applyWarehouseFacets(unfilteredHits, warehouseFacets);
+          const hits = sortWarehouseItems(
+            applyWarehouseFacets(unfilteredHits, warehouseFacets),
+            warehouseSort
+          );
           const preview = hits.slice(0, 4);
           const facetEmpty = unfilteredHits.length > 0 && hits.length === 0;
+          const selectionChips = warehouseSelectionChips(warehouseFacets);
           return (
           <div key={message.id} className="space-y-2">
           {message.role === "user" ? (
@@ -729,7 +739,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                     <p className="text-[12px] font-bold text-[#1a1a1a]">
                       Showing 1 – {preview.length} of {hits.length}
                     </p>
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
                       <button
                         type="button"
                         onClick={() => {
@@ -744,9 +754,51 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                       <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-[3px] border border-costco-blue bg-[#f7fbfe] px-1 text-[11px] font-bold text-costco-blue">
                         1
                       </span>
-                      <p className="text-[11px] font-semibold text-[#555]">
-                        Sort By Best Match
-                      </p>
+                      <label className="inline-flex items-center gap-1 text-[11px] text-[#555]">
+                        <span className="font-semibold">Sort By</span>
+                        <select
+                          aria-label="Sort items"
+                          value={warehouseSort}
+                          onChange={(e) =>
+                            setWarehouseSort(e.target.value as WarehouseSort)
+                          }
+                          className="h-6 rounded-[3px] border border-[#c4c4c4] bg-white px-1 text-[11px] font-bold text-[#1a1a1a] focus:border-costco-blue focus:outline-none"
+                        >
+                          <option value="relevance">Best Match</option>
+                          <option value="price">Price (Low to High)</option>
+                          <option value="priceDesc">Price (High to Low)</option>
+                          <option value="rating">Ratings (High to Low)</option>
+                        </select>
+                      </label>
+                    </div>
+                  </div>
+                ) : null}
+                {selectionChips.length > 0 ? (
+                  <div className="mt-1.5 border-t border-[#ececec] pt-1.5">
+                    <p className="text-[11px] font-bold text-[#1a1a1a]">
+                      Your Selections
+                    </p>
+                    <div className="mt-1 flex flex-wrap items-center gap-1">
+                      {selectionChips.map((chip) => (
+                        <button
+                          key={chip.key}
+                          type="button"
+                          onClick={() => setWarehouseFacets(chip.clear)}
+                          className="inline-flex items-center gap-1 rounded-[3px] border border-[#c4c4c4] bg-[#f7fbfe] px-1.5 py-0.5 text-[11px] font-semibold text-costco-blue hover:border-costco-blue"
+                        >
+                          {chip.label}
+                          <span aria-hidden="true">×</span>
+                        </button>
+                      ))}
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setWarehouseFacets(EMPTY_WAREHOUSE_FACETS)
+                        }
+                        className="text-[11px] font-bold text-costco-blue hover:underline"
+                      >
+                        Clear All
+                      </button>
                     </div>
                   </div>
                 ) : null}
