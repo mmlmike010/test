@@ -27,18 +27,21 @@ function ListThumbStack({ items }: { items: Product[] }) {
   }
 
   return (
-    <div className="flex h-[88px] items-center pl-2">
+    <div className="flex h-[96px] items-center">
       {shown.map((product, index) => (
         <span
           key={product.id}
-          className="relative -ml-5 first:ml-0 h-[76px] w-[76px] overflow-hidden rounded-full border-[3px] border-white bg-[#f3f3f3] shadow-[0_1px_6px_rgba(0,0,0,0.18)]"
-          style={{ zIndex: shown.length - index }}
+          className="relative h-[88px] w-[88px] shrink-0 overflow-hidden rounded-full bg-[#f0f0f0] shadow-[0_1px_4px_rgba(0,0,0,0.16)] ring-2 ring-[#e4e4e4]"
+          style={{
+            zIndex: shown.length - index,
+            marginLeft: index === 0 ? 0 : -34,
+          }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={product.image}
             alt=""
-            className="absolute inset-0 h-full w-full object-contain p-1"
+            className="absolute inset-0 h-full w-full object-cover scale-[1.2]"
           />
         </span>
       ))}
