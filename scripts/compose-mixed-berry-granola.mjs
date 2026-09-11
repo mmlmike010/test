@@ -122,9 +122,10 @@ const print = await sharp(
     W,
     H,
     `
-  <rect x="168" y="336" width="264" height="48" rx="3" fill="#1a1a1a"/>
-  <text x="300" y="369" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="800" letter-spacing="1.6">KIRKLAND</text>
-  <text x="300" y="404" text-anchor="middle" fill="#3d3226" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="800" letter-spacing="3.2">SIGNATURE</text>
+  <text x="300" y="360" text-anchor="middle" fill="#1a1a1a" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="800" letter-spacing="0.6">KIRKLAND</text>
+  <line x1="214" y1="374" x2="258" y2="374" stroke="#C9A227" stroke-width="1.5"/>
+  <text x="300" y="380" text-anchor="middle" fill="#C9A227" font-family="Georgia, Times New Roman, serif" font-size="13" font-style="italic" font-weight="700">Signature</text>
+  <line x1="342" y1="374" x2="386" y2="374" stroke="#C9A227" stroke-width="1.5"/>
   <text x="300" y="442" text-anchor="middle" fill="#7A1F3D" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="800">MIXED BERRY</text>
   <text x="300" y="472" text-anchor="middle" fill="#1a1a1a" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="800" letter-spacing="1.4">ORGANIC GRANOLA</text>
   <text x="300" y="498" text-anchor="middle" fill="#555555" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="700">RASPBERRY · BLUEBERRY · STRAWBERRY</text>

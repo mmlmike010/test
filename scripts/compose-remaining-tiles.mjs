@@ -38,21 +38,21 @@ function xml(text) {
     .replaceAll(">", "&gt;");
 }
 
-function kirkLabel({ w, h, title, line2 = "", size = "", fill = "#005DAA" }) {
-  const titleSize = title.length > 12 ? Math.round(w * 0.11) : Math.round(w * 0.13);
-  const line2Size = Math.round(w * 0.1);
-  const band = Math.round(h * 0.3);
+function kirkLabel({ w, h, title, line2 = "", size = "" }) {
+  const titleSize = title.length > 12 ? Math.round(w * 0.1) : Math.round(w * 0.12);
+  const line2Size = Math.round(w * 0.092);
+  const mark = Math.round(h * 0.22);
   return Buffer.from(`<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
-  <rect width="${w}" height="${h}" fill="#F6F3EA"/>
+  <rect width="${w}" height="${h}" fill="#F7F4EC"/>
   <rect x="1" y="1" width="${w - 2}" height="${h - 2}" fill="none" stroke="#C9C2B0" stroke-width="1.25"/>
-  <rect width="${w}" height="${band}" fill="${fill}"/>
-  <text x="${w / 2}" y="${band * 0.48}" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="${Math.round(w * 0.105)}" font-weight="800">KIRKLAND</text>
-  <text x="${w / 2}" y="${band * 0.78}" text-anchor="middle" fill="#F3E3A3" font-family="Arial, Helvetica, sans-serif" font-size="${Math.round(w * 0.048)}" letter-spacing="2.2" font-weight="700">SIGNATURE</text>
-  <line x1="14" y1="${band + 8}" x2="${w - 14}" y2="${band + 8}" stroke="#C9A227" stroke-width="1.5"/>
-  <text x="${w / 2}" y="${h * 0.52}" text-anchor="middle" fill="#1a1a1a" font-family="Arial, Helvetica, sans-serif" font-size="${titleSize}" font-weight="800">${xml(title)}</text>
-  ${line2 ? `<text x="${w / 2}" y="${h * 0.68}" text-anchor="middle" fill="#1a1a1a" font-family="Arial, Helvetica, sans-serif" font-size="${line2Size}" font-weight="800">${xml(line2)}</text>` : ""}
-  ${size ? `<text x="${w / 2}" y="${h * 0.88}" text-anchor="middle" fill="#5a564c" font-family="Arial, Helvetica, sans-serif" font-size="${Math.round(w * 0.055)}" font-weight="700">${xml(size)}</text>` : ""}
+  <text x="${w / 2}" y="${mark * 0.62}" text-anchor="middle" fill="#1a1a1a" font-family="Arial, Helvetica, sans-serif" font-size="${Math.round(w * 0.072)}" font-weight="800" letter-spacing="0.4">KIRKLAND</text>
+  <line x1="${w * 0.18}" y1="${mark * 0.86}" x2="${w * 0.34}" y2="${mark * 0.86}" stroke="#C9A227" stroke-width="1.4"/>
+  <text x="${w / 2}" y="${mark * 0.96}" text-anchor="middle" fill="#C9A227" font-family="Georgia, Times New Roman, serif" font-size="${Math.round(w * 0.042)}" font-style="italic" font-weight="700">Signature</text>
+  <line x1="${w * 0.66}" y1="${mark * 0.86}" x2="${w * 0.82}" y2="${mark * 0.86}" stroke="#C9A227" stroke-width="1.4"/>
+  <text x="${w / 2}" y="${h * 0.5}" text-anchor="middle" fill="#1a1a1a" font-family="Arial, Helvetica, sans-serif" font-size="${titleSize}" font-weight="800">${xml(title)}</text>
+  ${line2 ? `<text x="${w / 2}" y="${h * 0.66}" text-anchor="middle" fill="#1a1a1a" font-family="Arial, Helvetica, sans-serif" font-size="${line2Size}" font-weight="800">${xml(line2)}</text>` : ""}
+  ${size ? `<text x="${w / 2}" y="${h * 0.88}" text-anchor="middle" fill="#5a564c" font-family="Arial, Helvetica, sans-serif" font-size="${Math.round(w * 0.05)}" font-weight="700">${xml(size)}</text>` : ""}
 </svg>`);
 }
 
@@ -71,7 +71,6 @@ async function composeJars() {
       title: "FIVE BEAN",
       line2: "SALAD",
       size: "15 OZ",
-      fill: "#1B5E20",
     })
   )
     .png()
@@ -105,7 +104,6 @@ async function composeJars() {
       title: "COOKED LENTILS",
       line2: "& CHICKPEAS",
       size: "17 OZ · READY TO EAT",
-      fill: "#5D4037",
     })
   )
     .png()
