@@ -609,12 +609,13 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
               <div key={message.id} className="space-y-2.5">
                 <GoldStarMembershipCard />
                 <div className="bg-white border border-[#e8e8e8] rounded-[3px] overflow-hidden">
-                  <div className="h-[3px] bg-costco-red" />
-                  <div className="px-3.5 py-2.5">
-                    <p className="text-[10px] font-bold tracking-[0.14em] text-costco-red uppercase">
+                  <div className="bg-costco-red px-3.5 py-1.5">
+                    <p className="text-[10px] font-bold tracking-[0.16em] text-white uppercase">
                       Kirkland Signature
                     </p>
-                    <p className="mt-1.5 text-[13px] leading-relaxed text-[#1a1a1a] whitespace-pre-line">
+                  </div>
+                  <div className="px-3.5 py-2.5">
+                    <p className="text-[13px] leading-relaxed text-[#1a1a1a] whitespace-pre-line">
                       {message.content}
                     </p>
                   </div>
@@ -638,7 +639,11 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             </div>
           ) : (
             <div className="bg-white border border-[#e8e8e8] rounded-[3px] overflow-hidden">
-              <div className="h-[3px] bg-costco-red" />
+              <div className="bg-costco-red px-3.5 py-1.5">
+                <p className="text-[10px] font-bold tracking-[0.16em] text-white uppercase">
+                  Kirkland Signature
+                </p>
+              </div>
               <div className="px-3.5 py-2.5 text-[13px] leading-relaxed text-[#1a1a1a]">
               <p className="whitespace-pre-line">{message.content}</p>
               {message.imageUrl && (
@@ -688,12 +693,13 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
         })}
         {isLoading && (
           <div className="bg-white border border-[#e8e8e8] rounded-[3px] overflow-hidden">
-            <div className="h-[3px] bg-costco-red" />
+            <div className="bg-costco-red px-3.5 py-1.5">
+              <p className="text-[10px] font-bold tracking-[0.16em] text-white uppercase">
+                Kirkland Signature
+              </p>
+            </div>
             <div className="px-3.5 py-3">
               <div className="flex gap-1.5 items-center">
-                <span className="text-[10px] font-bold tracking-[0.14em] text-costco-red uppercase mr-1">
-                  Kirkland Signature
-                </span>
                 <div className="w-1.5 h-1.5 bg-[#999] rounded-full animate-bounce" />
                 <div
                   className="w-1.5 h-1.5 bg-[#999] rounded-full animate-bounce"
