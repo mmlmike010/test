@@ -20,30 +20,30 @@ function ListThumbStack({ items }: { items: Product[] }) {
   const shown = items.slice(0, 4);
   if (shown.length === 0) {
     return (
-      <div className="flex h-[104px] items-center rounded-[12px] bg-[#f3f3f3] px-3">
-        <span className="flex h-[76px] w-[76px] items-center justify-center rounded-full border border-dashed border-[#d0d0d0] bg-white">
-          <Heart className="h-6 w-6 text-[#c4c4c4]" />
+      <div className="flex h-[112px] items-center">
+        <span className="flex h-[96px] w-[96px] items-center justify-center rounded-full bg-[#f3f3f3] ring-[3px] ring-white shadow-[0_1px_4px_rgba(0,0,0,0.08)]">
+          <Heart className="h-7 w-7 text-[#c4c4c4]" />
         </span>
       </div>
     );
   }
 
   return (
-    <div className="flex h-[104px] items-center rounded-[12px] bg-[#f3f3f3] px-3">
+    <div className="flex h-[112px] items-center">
       {shown.map((product, index) => (
         <span
           key={product.id}
-          className="relative h-[80px] w-[80px] shrink-0 overflow-hidden rounded-full bg-white shadow-[0_1px_4px_rgba(0,0,0,0.12)] ring-2 ring-white"
+          className="relative h-[96px] w-[96px] shrink-0 overflow-hidden rounded-full bg-[#f3f3f3] shadow-[0_1px_4px_rgba(0,0,0,0.14)] ring-[3px] ring-white"
           style={{
             zIndex: shown.length - index,
-            marginLeft: index === 0 ? 0 : -28,
+            marginLeft: index === 0 ? 0 : -40,
           }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={product.image}
             alt=""
-            className="absolute inset-0 h-full w-full object-contain p-1.5"
+            className="absolute inset-0 h-full w-full object-contain p-1"
           />
         </span>
       ))}
