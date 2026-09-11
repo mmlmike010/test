@@ -58,8 +58,20 @@ export default function RecipeDetailDrawer({
         </div>
 
         <div className="min-h-0 flex-1 overflow-y-auto">
-          <div className="lg:grid lg:grid-cols-2 lg:items-start">
-            <div className="relative aspect-[4/3] bg-[#f3f3f3] lg:aspect-square lg:border-r lg:border-[#eee]">
+          <div
+            className={
+              kirkOpen
+                ? "xl:grid xl:grid-cols-2 xl:items-start"
+                : "lg:grid lg:grid-cols-2 lg:items-start"
+            }
+          >
+            <div
+              className={`relative aspect-[4/3] bg-[#f3f3f3] ${
+                kirkOpen
+                  ? "xl:aspect-square xl:border-r xl:border-[#eee]"
+                  : "lg:aspect-square lg:border-r lg:border-[#eee]"
+              }`}
+            >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={recipe.image}

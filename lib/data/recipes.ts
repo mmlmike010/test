@@ -14,7 +14,7 @@ export type Recipe = {
 export const recipes: Recipe[] = [
   {
     id: "berry-yogurt-bowl",
-    title: "Yogurt granola breakfast bowl",
+    title: "Berry yogurt parfait",
     minutes: 5,
     servings: 2,
     course: "Breakfast",
@@ -98,7 +98,7 @@ export const recipes: Recipe[] = [
   },
   {
     id: "hummus-board",
-    title: "Member snack board",
+    title: "Classic hummus bowl",
     minutes: 10,
     servings: 8,
     course: "Snacks",

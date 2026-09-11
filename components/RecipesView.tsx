@@ -129,6 +129,13 @@ export default function RecipesView() {
                   alt=""
                   className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-300"
                 />
+                <span className="absolute left-2.5 top-2.5 rounded-full bg-white px-2 py-1 text-[11px] font-bold text-[#1a1a1a] shadow-[0_1px_3px_rgba(0,0,0,0.12)]">
+                  {recipe.course}
+                </span>
+                <span className="absolute bottom-2.5 left-2.5 inline-flex items-center gap-1 rounded-full bg-black/65 px-2 py-1 text-[11px] font-bold text-white">
+                  <Clock className="w-3 h-3" aria-hidden="true" />
+                  {recipe.minutes} min
+                </span>
               </span>
               <span className="block px-3.5 pt-3 pb-3.5">
                 <span className="block text-[16px] font-bold text-[#1a1a1a] leading-snug">
