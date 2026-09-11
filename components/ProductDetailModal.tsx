@@ -325,6 +325,55 @@ export default function ProductDetailModal({
             {warehouse ? null : (
               <p className="mt-0.5 text-[12px] text-[#666]">Sold by Costco</p>
             )}
+            {warehouse ? (
+              <div className="mt-4 rounded-[3px] border border-[#c4c4c4] bg-[#f7fbfe] px-3.5 py-3">
+                <p className="text-[12px] font-bold uppercase tracking-[0.06em] text-[#555]">
+                  Delivery
+                </p>
+                <p className="mt-1 text-[13px] font-semibold text-[#188038]">
+                  Same-Day Delivery · In Stock
+                </p>
+                <p className="mt-0.5 text-[12px] leading-snug text-[#666]">
+                  Membership required · Prices higher than warehouse
+                </p>
+              </div>
+            ) : null}
+            {warehouse ? (
+              <div className="mt-4">
+                {qty === 0 ? (
+                  <button
+                    type="button"
+                    onClick={onAdd}
+                    className="flex h-12 w-full items-center justify-center gap-2 rounded-[3px] bg-costco-red text-[15px] font-bold text-white hover:bg-costco-red-hover"
+                  >
+                    <Plus className="h-4 w-4" />
+                    Add to Cart
+                  </button>
+                ) : (
+                  <div className="flex h-12 items-center justify-between overflow-hidden rounded-[3px] border border-[#c4c4c4] bg-white">
+                    <button
+                      type="button"
+                      className="flex h-12 w-14 items-center justify-center text-costco-blue hover:bg-[#f7fbfe]"
+                      onClick={() => updateQuantity(current.id, qty - 1)}
+                      aria-label="Decrease quantity"
+                    >
+                      <Minus className="h-4 w-4" />
+                    </button>
+                    <span className="min-w-[1.5rem] text-center text-[16px] font-bold tabular-nums text-[#1a1a1a]">
+                      {qty}
+                    </span>
+                    <button
+                      type="button"
+                      className="flex h-12 w-14 items-center justify-center text-costco-blue hover:bg-[#f7fbfe]"
+                      onClick={onAdd}
+                      aria-label="Increase quantity"
+                    >
+                      <Plus className="h-4 w-4" />
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : null}
             <div className="mt-5" key={current.id}>
               {warehouse ? (
                 <>
@@ -374,7 +423,7 @@ export default function ProductDetailModal({
         {related.length > 0 && (
           <div className="px-5 pb-5">
             <h3 className="text-[15px] font-bold text-[#1a1a1a] mb-2.5">
-              Related products
+              {warehouse ? "Related Products" : "Related products"}
             </h3>
             {warehouse ? (
               <div className="flex flex-wrap gap-2">

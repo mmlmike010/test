@@ -695,9 +695,14 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             </div>
             {hits.length > 0 ? (
                 <div>
-                  <p className="mb-1.5 text-[13px] font-bold text-[#1a1a1a]">
-                    {hits.length} result{hits.length === 1 ? "" : "s"}
-                  </p>
+                  <div className="mb-1.5 flex items-end justify-between gap-2">
+                    <p className="text-[13px] font-bold text-[#1a1a1a]">
+                      {hits.length} Result{hits.length === 1 ? "" : "s"}
+                    </p>
+                    <p className="text-[11px] font-semibold text-[#666]">
+                      Sort: Best Match
+                    </p>
+                  </div>
                   <div className="grid grid-cols-2 gap-2">
                     {hits.map((product) => (
                       <WarehouseResultCard
