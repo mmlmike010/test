@@ -11,6 +11,7 @@ import ProductCard from "@/components/ProductCard";
 import ProductDetailModal from "@/components/ProductDetailModal";
 import CategoryScroller from "@/components/CategoryScroller";
 import InstacartMark from "@/components/InstacartMark";
+import CostcoLogo from "@/components/CostcoLogo";
 import RecipesView from "@/components/RecipesView";
 import FlyersView from "@/components/FlyersView";
 import ListsView from "@/components/ListsView";
@@ -532,64 +533,118 @@ export default function ProductGrid() {
         </>
       )}
 
-      <footer className="mt-8 pt-5 border-t border-[#e0e0e0] text-[12px] text-[#666]">
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 mb-2">
-          <button
-            type="button"
-            className="text-costco-blue font-semibold hover:underline"
-            onClick={() => setSheet("pricing")}
-          >
-            Pricing & fees
-          </button>
-          <button
-            type="button"
-            className="text-costco-blue font-semibold hover:underline"
-            onClick={() => {
-              setQuery("");
-              setTag("recipes");
-              void search();
-              document.querySelector("main")?.scrollTo({ top: 0 });
-            }}
-          >
-            Meals
-          </button>
-          <button
-            type="button"
-            className="text-costco-blue font-semibold hover:underline"
-            onClick={() => setSheet("departments")}
-          >
-            Departments
-          </button>
-          <button
-            type="button"
-            className="text-costco-blue font-semibold hover:underline"
-            onClick={() => {
-              setQuery("");
-              setTag("flyers");
-              void search();
-              document.querySelector("main")?.scrollTo({ top: 0 });
-            }}
-          >
-            Flyers
-          </button>
-          <button
-            type="button"
-            className="text-costco-blue font-semibold hover:underline"
-            onClick={() => {
-              setQuery("");
-              setTag("lists");
-              void search();
-              document.querySelector("main")?.scrollTo({ top: 0 });
-            }}
-          >
-            Lists
-          </button>
+      <footer className="mt-10 -mx-4 lg:-mx-5 bg-white border-t border-[#e5e5e5]">
+        <div className="px-4 lg:px-5 py-6 grid gap-6 sm:grid-cols-3">
+          <div>
+            <div className="flex items-center gap-2.5">
+              <CostcoLogo compact />
+              <span className="pl-2.5 border-l border-[#d8d8d8]">
+                <span className="block text-[14px] font-bold text-costco-blue leading-none">
+                  Same-Day
+                </span>
+                <span className="mt-1 inline-flex items-center gap-1 text-[10px] text-[#6b6b6b]">
+                  <InstacartMark size={12} />
+                  Powered by Instacart
+                </span>
+              </span>
+            </div>
+            <p className="mt-3 text-[12px] leading-relaxed text-[#666]">
+              Delivery to {formatAddress(address)}. Costco membership required.
+              Item prices are higher than warehouse.
+            </p>
+          </div>
+          <div>
+            <p className="text-[11px] font-bold tracking-[0.12em] text-[#888] uppercase">
+              Shop
+            </p>
+            <div className="mt-2 flex flex-col items-start gap-1.5">
+              <button
+                type="button"
+                className="text-[13px] text-costco-blue font-semibold hover:underline"
+                onClick={() => {
+                  clearFilters();
+                  void search();
+                  document.querySelector("main")?.scrollTo({ top: 0 });
+                }}
+              >
+                Shop
+              </button>
+              <button
+                type="button"
+                className="text-[13px] text-costco-blue font-semibold hover:underline"
+                onClick={() => {
+                  setQuery("");
+                  setTag("flyers");
+                  void search();
+                  document.querySelector("main")?.scrollTo({ top: 0 });
+                }}
+              >
+                Flyers
+              </button>
+              <button
+                type="button"
+                className="text-[13px] text-costco-blue font-semibold hover:underline"
+                onClick={() => {
+                  setQuery("");
+                  setTag("lists");
+                  void search();
+                  document.querySelector("main")?.scrollTo({ top: 0 });
+                }}
+              >
+                Lists
+              </button>
+              <button
+                type="button"
+                className="text-[13px] text-costco-blue font-semibold hover:underline"
+                onClick={() => {
+                  setQuery("");
+                  setTag("recipes");
+                  void search();
+                  document.querySelector("main")?.scrollTo({ top: 0 });
+                }}
+              >
+                Meals
+              </button>
+            </div>
+          </div>
+          <div>
+            <p className="text-[11px] font-bold tracking-[0.12em] text-[#888] uppercase">
+              Help
+            </p>
+            <div className="mt-2 flex flex-col items-start gap-1.5">
+              <button
+                type="button"
+                className="text-[13px] text-costco-blue font-semibold hover:underline"
+                onClick={() => setSheet("pricing")}
+              >
+                Pricing & fees
+              </button>
+              <button
+                type="button"
+                className="text-[13px] text-costco-blue font-semibold hover:underline"
+                onClick={() => setSheet("departments")}
+              >
+                Departments
+              </button>
+              <button
+                type="button"
+                className="text-[13px] text-costco-blue font-semibold hover:underline"
+                onClick={() => setSheet("membership")}
+              >
+                Membership
+              </button>
+              <button
+                type="button"
+                className="text-[13px] text-costco-blue font-semibold hover:underline"
+                onClick={() => setSheet("delivery")}
+              >
+                Delivery windows
+              </button>
+            </div>
+          </div>
         </div>
-        <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-[#777]">
-          <p className="inline-flex items-center gap-1.5">
-            <InstacartMark size={12} />
-            Same-Day Delivery powered by Instacart · Costco membership required
-          </p>
+        <div className="px-4 lg:px-5 py-3 border-t border-[#ececec] flex flex-wrap items-center justify-between gap-2 text-[11px] text-[#777]">
+          <p>© 2026 Costco Wholesale Corporation · Same-Day Delivery</p>
           <p>Prices, fees, and availability for {formatAddress(address)}</p>
         </div>
       </footer>

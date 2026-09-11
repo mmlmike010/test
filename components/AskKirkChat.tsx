@@ -4,7 +4,6 @@ import { useState, useRef, useEffect } from "react";
 import {
   X,
   RefreshCw,
-  Send,
   Mic,
   ShoppingCart,
   Square,
@@ -784,22 +783,6 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
       )}
 
       <div className="px-3.5 pt-2.5 pb-3 border-t border-[#e5e5e5] bg-white shrink-0">
-        <p className="text-[10px] font-bold tracking-[0.12em] text-[#666] uppercase mb-1.5">
-          Members often ask
-        </p>
-        <div className="flex flex-wrap gap-1.5 mb-2.5 content-start">
-          {suggestionChips.map((chip) => (
-            <button
-              key={chip}
-              type="button"
-              onClick={() => void sendMessage(chip)}
-              disabled={isLoading}
-              className="px-2.5 py-1.5 bg-white hover:bg-[#f7fbfe] hover:border-costco-blue hover:text-costco-blue disabled:opacity-50 text-[#1a1a1a] text-[11px] leading-snug rounded-[3px] transition-colors border border-[#c4c4c4] max-w-full text-left"
-            >
-              {chip}
-            </button>
-          ))}
-        </div>
         <div className="flex gap-1.5 items-stretch">
           <div className="relative flex-1 min-w-0">
             <Search
@@ -863,11 +846,26 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             type="button"
             onClick={() => void sendMessage(input)}
             disabled={!input.trim() || isLoading}
-            className="h-11 px-3.5 bg-costco-red text-white rounded-[3px] font-bold hover:bg-costco-red-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1 text-[13px] min-w-[72px] justify-center"
+            className="h-11 px-3.5 bg-costco-red text-white rounded-[3px] font-bold hover:bg-costco-red-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-[13px] min-w-[72px]"
           >
-            <Send className="w-3.5 h-3.5" />
-            Send
+            Search
           </button>
+        </div>
+        <p className="mt-2 text-[10px] font-bold tracking-[0.12em] text-[#666] uppercase">
+          Popular Searches
+        </p>
+        <div className="mt-1 flex flex-wrap gap-x-2.5 gap-y-1">
+          {suggestionChips.map((chip) => (
+            <button
+              key={chip}
+              type="button"
+              onClick={() => void sendMessage(chip)}
+              disabled={isLoading}
+              className="text-[11px] leading-snug text-costco-blue font-semibold hover:underline disabled:opacity-50 text-left"
+            >
+              {chip}
+            </button>
+          ))}
         </div>
         <p className="mt-2 text-[10px] text-[#888] text-center leading-snug">
           Kirkland Signature shopping help · Membership required · Prices higher

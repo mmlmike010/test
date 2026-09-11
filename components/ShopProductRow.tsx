@@ -19,28 +19,63 @@ export default function ShopProductRow({
   const unit = unitPriceLabel(product.id, product.price);
   const warehouse = tone === "warehouse";
 
+  if (warehouse) {
+    return (
+      <div className="flex w-full items-center gap-2 border border-[#c4c4c4] bg-white px-2 py-1.5 rounded-[3px]">
+        <button
+          type="button"
+          onClick={() => inspect(product)}
+          className="flex min-w-0 flex-1 items-center gap-2 text-left rounded-[3px] hover:bg-[#f7fbfe]"
+        >
+          <span className="relative h-14 w-14 shrink-0 overflow-hidden border border-[#eee] bg-white rounded-[3px]">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={product.image}
+              alt=""
+              className="absolute inset-0 h-full w-full object-contain p-0.5"
+            />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block text-[13px] font-bold leading-snug text-costco-blue line-clamp-2 hover:underline">
+              {product.brand} {product.name}
+            </span>
+            <span className="mt-0.5 flex items-center gap-1.5 min-w-0">
+              {size ? (
+                <span className="text-[11px] text-[#72767E] shrink-0">{size}</span>
+              ) : null}
+              <StarRating
+                rating={product.rating}
+                reviewCount={product.reviewCount}
+                size="sm"
+                showCount={false}
+              />
+            </span>
+            <span className="mt-0.5 block tabular-nums">
+              <span className="text-[16px] font-bold text-costco-red">
+                ${product.price.toFixed(2)}
+              </span>{" "}
+              <span className="font-normal text-[#8a8a8a] text-[11px]">each</span>
+              {product.savings > 0 ? (
+                <span className="ml-1.5 text-[11px] font-semibold text-[#188038]">
+                  Save ${product.savings.toFixed(2)}
+                </span>
+              ) : null}
+            </span>
+          </span>
+        </button>
+        <AddControl product={product} variant="inline" tone="warehouse" />
+      </div>
+    );
+  }
+
   return (
-    <div
-      className={`flex w-full items-center gap-2.5 border bg-white px-2 py-2 ${
-        warehouse
-          ? "rounded-[3px] border-[#c4c4c4]"
-          : "rounded-[12px] border-[#e8e8e8]"
-      }`}
-    >
+    <div className="flex w-full items-center gap-2.5 border border-[#e8e8e8] bg-white px-2 py-2 rounded-[12px]">
       <button
         type="button"
         onClick={() => inspect(product)}
-        className={`flex min-w-0 flex-1 items-center gap-2.5 text-left ${
-          warehouse
-            ? "rounded-[3px] hover:bg-[#f7fbfe]"
-            : "rounded-[10px] hover:bg-[#fafafa]"
-        }`}
+        className="flex min-w-0 flex-1 items-center gap-2.5 text-left rounded-[10px] hover:bg-[#fafafa]"
       >
-        <span
-          className={`relative h-[72px] w-[72px] shrink-0 overflow-hidden border border-[#eee] bg-white ${
-            warehouse ? "rounded-[3px]" : "rounded-[12px]"
-          }`}
-        >
+        <span className="relative h-[72px] w-[72px] shrink-0 overflow-hidden border border-[#eee] bg-white rounded-[12px]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={product.image}
@@ -49,36 +84,16 @@ export default function ShopProductRow({
           />
         </span>
         <span className="min-w-0 flex-1">
-          <span
-            className={`block text-[13px] leading-snug line-clamp-2 ${
-              warehouse
-                ? "font-bold text-costco-blue hover:underline"
-                : "text-[#242424]"
-            }`}
-          >
+          <span className="block text-[13px] leading-snug text-[#242424] line-clamp-2">
             {product.brand} {product.name}
           </span>
           {size ? (
             <span className="mt-0.5 block text-[12px] text-[#72767E]">{size}</span>
           ) : null}
-          {warehouse ? (
-            <span className="mt-0.5 block">
-              <StarRating
-                rating={product.rating}
-                reviewCount={product.reviewCount}
-                size="sm"
-              />
-            </span>
-          ) : unit ? (
+          {unit ? (
             <span className="mt-0.5 block text-[12px] text-[#72767E]">{unit}</span>
           ) : null}
-          <span
-            className={`mt-0.5 block tabular-nums ${
-              warehouse
-                ? "text-[16px] font-bold text-costco-red"
-                : "text-[14px] font-bold text-[#1a1a1a]"
-            }`}
-          >
+          <span className="mt-0.5 block text-[14px] font-bold tabular-nums text-[#1a1a1a]">
             ${product.price.toFixed(2)}{" "}
             <span className="font-normal text-[#8a8a8a] text-[12px]">each</span>
           </span>
@@ -89,11 +104,7 @@ export default function ShopProductRow({
           ) : null}
         </span>
       </button>
-      <AddControl
-        product={product}
-        variant="inline"
-        tone={warehouse ? "warehouse" : "sameday"}
-      />
+      <AddControl product={product} variant="inline" />
     </div>
   );
 }
