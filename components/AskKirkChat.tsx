@@ -718,49 +718,42 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                   {message.content}
                 </p>
                 {hits.length > 0 ? (
-                  <div className="mt-1 flex items-end justify-between gap-2">
+                  <div className="mt-1 flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
                     <p className="text-[12px] font-bold text-[#1a1a1a]">
                       Showing 1 – {preview.length} of {hits.length}
                     </p>
-                    <p className="text-[11px] font-semibold text-[#555]">
-                      Sort By Best Match
-                    </p>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          document
+                            .querySelector("main")
+                            ?.scrollTo({ top: 0, behavior: "smooth" });
+                        }}
+                        className="text-[12px] font-bold text-costco-blue hover:underline"
+                      >
+                        View all {hits.length}
+                      </button>
+                      <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-[3px] border border-costco-blue bg-[#f7fbfe] px-1 text-[11px] font-bold text-costco-blue">
+                        1
+                      </span>
+                      <p className="text-[11px] font-semibold text-[#555]">
+                        Sort By Best Match
+                      </p>
+                    </div>
                   </div>
                 ) : null}
               </div>
               {hits.length > 0 ? (
-                <>
-                  <div className="space-y-2 p-2">
-                    {preview.map((product) => (
-                      <WarehouseResultCard
-                        key={`${message.id}-${product.id}`}
-                        product={product}
-                        density="list"
-                      />
-                    ))}
-                  </div>
-                  <div className="flex items-center justify-between gap-2 border-t border-[#ececec] px-3.5 py-2">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        document
-                          .querySelector("main")
-                          ?.scrollTo({ top: 0, behavior: "smooth" });
-                      }}
-                      className="text-[13px] font-bold text-costco-blue hover:underline"
-                    >
-                      View all {hits.length} results
-                    </button>
-                    <nav
-                      aria-label="Search results pages"
-                      className="flex items-center gap-1"
-                    >
-                      <span className="inline-flex h-7 min-w-7 items-center justify-center rounded-[3px] border border-costco-blue bg-[#f7fbfe] px-1.5 text-[12px] font-bold text-costco-blue">
-                        1
-                      </span>
-                    </nav>
-                  </div>
-                </>
+                <div className="space-y-2 p-2">
+                  {preview.map((product) => (
+                    <WarehouseResultCard
+                      key={`${message.id}-${product.id}`}
+                      product={product}
+                      density="list"
+                    />
+                  ))}
+                </div>
               ) : null}
             </div>
           ) : (

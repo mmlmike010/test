@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useCartStore } from "@/lib/store/cart";
 import { useCatalogStore } from "@/lib/store/catalog";
 import { ChevronDown, Clock, Search, ShoppingCart, User, X } from "lucide-react";
@@ -70,6 +70,11 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
     scrollShop();
   };
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const shopRef = useRef<HTMLDivElement>(null);
+  const [shopOpen, setShopOpen] = useState(false);
+  if (!warehouseSearch && shopOpen) {
+    setShopOpen(false);
+  }
 
   useEffect(() => {
     if (timer.current) clearTimeout(timer.current);
@@ -80,6 +85,17 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
       if (timer.current) clearTimeout(timer.current);
     };
   }, [q, department, tag, search]);
+
+  useEffect(() => {
+    if (!shopOpen) return;
+    const onDoc = (event: MouseEvent) => {
+      if (!shopRef.current?.contains(event.target as Node)) {
+        setShopOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", onDoc);
+    return () => document.removeEventListener("mousedown", onDoc);
+  }, [shopOpen]);
 
   return (
     <header className="bg-white border-b border-[#e5e5e5] sticky top-0 z-[75] shrink-0">
@@ -365,14 +381,56 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
             className="max-w-[1800px] mx-auto px-3 sm:px-4 h-[40px] flex items-center gap-5 overflow-x-auto scrollbar-hide text-[14px]"
             aria-label="Departments"
           >
-            <button
-              type="button"
-              aria-current={warehouseDepts.length === 0 ? "page" : undefined}
-              className={tabClass(warehouseDepts.length === 0)}
-              onClick={() => setWarehouseFacets(EMPTY_WAREHOUSE_FACETS)}
-            >
-              Shop
-            </button>
+            <div ref={shopRef} className="relative h-full shrink-0">
+              <button
+                type="button"
+                aria-expanded={shopOpen}
+                aria-current={warehouseDepts.length === 0 ? "page" : undefined}
+                className={`${tabClass(warehouseDepts.length === 0)} inline-flex items-center gap-0.5`}
+                onClick={() => setShopOpen((open) => !open)}
+              >
+                Shop
+                <ChevronDown
+                  className={`h-3.5 w-3.5 ${shopOpen ? "rotate-180" : ""}`}
+                  aria-hidden="true"
+                />
+              </button>
+              {shopOpen ? (
+                <div className="absolute left-0 top-full z-[80] w-[min(520px,92vw)] border border-[#c4c4c4] bg-white shadow-[0_8px_24px_rgba(0,0,0,0.12)]">
+                  <p className="border-b border-[#ececec] px-3 py-2 text-[11px] font-bold uppercase tracking-[0.12em] text-[#666]">
+                    Shop
+                  </p>
+                  <div className="grid grid-cols-2 gap-x-2 p-2">
+                    <button
+                      type="button"
+                      className="px-2 py-1.5 text-left text-[13px] font-bold text-costco-blue hover:bg-[#f7fbfe] hover:underline"
+                      onClick={() => {
+                        setWarehouseFacets(EMPTY_WAREHOUSE_FACETS);
+                        setShopOpen(false);
+                      }}
+                    >
+                      Shop All
+                    </button>
+                    {WAREHOUSE_NAV.map((label) => (
+                      <button
+                        key={`shop-${label}`}
+                        type="button"
+                        className="px-2 py-1.5 text-left text-[13px] font-semibold text-costco-blue hover:bg-[#f7fbfe] hover:underline"
+                        onClick={() => {
+                          setWarehouseFacets({
+                            ...EMPTY_WAREHOUSE_FACETS,
+                            departments: [label],
+                          });
+                          setShopOpen(false);
+                        }}
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+            </div>
             {WAREHOUSE_NAV.map((label) => {
               const active = warehouseDepts.includes(label);
               return (
