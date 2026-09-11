@@ -7,7 +7,7 @@ mkdirSync(dir, { recursive: true });
 
 const W = 420;
 const H = 560;
-const PAD = 18;
+const PAD = 22;
 
 async function download(url) {
   const res = await fetch(url);
@@ -29,12 +29,16 @@ const paper = await download(
 const innerW = W - PAD * 2;
 const innerH = H - PAD * 2;
 
-// Photographic booth: paper grain, fluorescent cyc, floor sweep. No face.
-const booth = await sharp(paper)
+// Warehouse booth print: fiber, fluorescent cyc, flash. No face.
+const grain = await sharp(paper)
   .resize(innerW, innerH, { fit: "cover", position: "centre" })
+  .modulate({ brightness: 1.12, saturation: 0.35 })
+  .sharpen(1.2)
+  .toBuffer();
+
+const boothGrey = await sharp(grain)
   .greyscale()
-  .modulate({ brightness: 0.88, saturation: 0.12 })
-  .sharpen(0.8)
+  .modulate({ brightness: 0.92 })
   .toBuffer();
 
 const wash = await sharp({
@@ -42,7 +46,7 @@ const wash = await sharp({
     width: innerW,
     height: innerH,
     channels: 3,
-    background: { r: 176, g: 186, b: 194 },
+    background: { r: 168, g: 178, b: 186 },
   },
 })
   .jpeg()
@@ -54,53 +58,51 @@ const floor = await sharp(
     innerH,
     `<defs>
       <linearGradient id="cyc" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#d8e0e6" stop-opacity="0.08"/>
-        <stop offset="0.58" stop-color="#9aa6b0" stop-opacity="0.05"/>
-        <stop offset="0.72" stop-color="#6d7880" stop-opacity="0.28"/>
-        <stop offset="1" stop-color="#3f474d" stop-opacity="0.5"/>
+        <stop offset="0" stop-color="#e4ebf0" stop-opacity="0.2"/>
+        <stop offset="0.55" stop-color="#9aa6b0" stop-opacity="0.08"/>
+        <stop offset="0.74" stop-color="#6d7880" stop-opacity="0.34"/>
+        <stop offset="1" stop-color="#3f474d" stop-opacity="0.58"/>
       </linearGradient>
-      <radialGradient id="flash" cx="34%" cy="16%" r="70%">
-        <stop offset="0" stop-color="#ffffff" stop-opacity="0.42"/>
-        <stop offset="0.38" stop-color="#ffffff" stop-opacity="0.08"/>
-        <stop offset="1" stop-color="#2a3238" stop-opacity="0.28"/>
+      <radialGradient id="flash" cx="32%" cy="14%" r="68%">
+        <stop offset="0" stop-color="#ffffff" stop-opacity="0.5"/>
+        <stop offset="0.36" stop-color="#ffffff" stop-opacity="0.1"/>
+        <stop offset="1" stop-color="#2a3238" stop-opacity="0.32"/>
       </radialGradient>
     </defs>
     <rect width="${innerW}" height="${innerH}" fill="url(#cyc)"/>
     <rect width="${innerW}" height="${innerH}" fill="url(#flash)"/>
-    <ellipse cx="${innerW / 2}" cy="${innerH - 36}" rx="${innerW * 0.28}" ry="10" fill="#1a1a1a" fill-opacity="0.12"/>`
+    <ellipse cx="${innerW / 2}" cy="${innerH - 28}" rx="${innerW * 0.3}" ry="11" fill="#1a1a1a" fill-opacity="0.16"/>`
   )
 )
   .png()
   .toBuffer();
 
-const lit = await sharp(booth)
+const lit = await sharp(boothGrey)
   .composite([
     { input: wash, blend: "multiply" },
+    { input: grain, blend: "soft-light" },
     { input: floor, blend: "over" },
   ])
-  .modulate({ brightness: 1.04 })
+  .modulate({ brightness: 1.05 })
   .toBuffer();
 
-// Stamp the K after the flash so it stays Costco red on the print.
 const stamp = await sharp(
   svg(
     innerW,
     innerH,
-    `<text x="${innerW / 2}" y="${Math.round(innerH * 0.58)}" text-anchor="middle" fill="#C41230" font-family="Georgia, Times New Roman, serif" font-size="196" font-style="italic" font-weight="600">K</text>
-    <text x="${innerW / 2}" y="${innerH - 22}" text-anchor="middle" fill="#eef2f4" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="800" letter-spacing="2.8">COSTCO · 09/19</text>`
+    `<text x="${innerW / 2}" y="${Math.round(innerH * 0.56)}" text-anchor="middle" fill="#C41230" font-family="Georgia, Times New Roman, serif" font-size="228" font-style="italic" font-weight="600">K</text>
+    <text x="${innerW / 2}" y="${innerH - 18}" text-anchor="middle" fill="#f4f6f8" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="800" letter-spacing="2.6">COSTCO · 09/19</text>`
   )
 )
   .png()
   .toBuffer();
 
-const stamped = await sharp(stamp)
-  .blur(0.45)
-  .png()
-  .toBuffer();
+const stamped = await sharp(stamp).blur(0.35).png().toBuffer();
 
 const photo = await sharp(lit)
   .composite([{ input: stamped, blend: "over" }])
-  .jpeg({ quality: 88 })
+  .sharpen(0.7)
+  .jpeg({ quality: 90 })
   .toBuffer();
 
 const print = await sharp({
@@ -108,11 +110,11 @@ const print = await sharp({
     width: W,
     height: H,
     channels: 3,
-    background: { r: 246, g: 246, b: 244 },
+    background: { r: 248, g: 246, b: 240 },
   },
 })
   .composite([{ input: photo, left: PAD, top: PAD }])
-  .jpeg({ quality: 86 })
+  .jpeg({ quality: 88 })
   .toBuffer();
 
 await sharp(print).toFile(join(dir, "id-backdrop.jpg"));

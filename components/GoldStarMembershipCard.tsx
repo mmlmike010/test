@@ -23,14 +23,17 @@ export default function GoldStarMembershipCard() {
           </div>
         </div>
       </div>
-      <div className="relative flex justify-center px-3 pt-3 pb-1">
-        <MembershipQr className="h-[148px] w-[148px] border border-[#ececec] bg-white p-2" />
+      <div className="relative flex justify-center px-3 pt-3 pb-0.5">
+        <MembershipQr className="h-[168px] w-[168px] border border-[#ececec] bg-white p-2.5" />
       </div>
+      <p className="relative text-center text-[15px] font-bold text-costco-blue tabular-nums tracking-[0.12em] pt-1">
+        111 847 11217
+      </p>
       <p className="relative text-center text-[10px] font-semibold text-[#666] tracking-wide">
         Scan at the warehouse
       </p>
       <div className="relative px-3 pt-2.5 pb-1 flex gap-3 items-center">
-        <KirkIdPhoto className="w-[80px] aspect-[3/4] rounded-[3px] border border-[#d8d8d8] shadow-[inset_0_0_0_1px_#fff] shrink-0" />
+        <KirkIdPhoto className="w-[96px] aspect-[3/4] rounded-[2px] border border-[#d0d0d0] shadow-[0_1px_2px_rgba(0,0,0,0.12),inset_0_0_0_3px_#f7f6f2] shrink-0" />
         <div className="min-w-0">
           <p className="text-[20px] font-black tracking-tight text-[#1a1a1a] leading-none">
             KIRK
@@ -38,10 +41,7 @@ export default function GoldStarMembershipCard() {
           <p className="mt-1 text-[9px] font-bold tracking-[0.12em] text-costco-red uppercase">
             Gold Star Member
           </p>
-          <p className="mt-0.5 text-[13px] font-bold text-costco-blue tabular-nums tracking-[0.1em]">
-            111 847 11217
-          </p>
-          <p className="text-[8px] font-semibold tracking-[0.08em] text-[#777] uppercase">
+          <p className="mt-1 text-[8px] font-semibold tracking-[0.08em] text-[#777] uppercase">
             Member Since 2019 · Expires 09/27
           </p>
         </div>
