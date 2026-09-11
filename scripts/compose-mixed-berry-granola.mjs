@@ -122,15 +122,20 @@ const print = await sharp(
     W,
     H,
     `
-  <text x="300" y="360" text-anchor="middle" fill="#1a1a1a" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="800" letter-spacing="0.6">KIRKLAND</text>
-  <line x1="214" y1="374" x2="258" y2="374" stroke="#C9A227" stroke-width="1.5"/>
-  <text x="300" y="380" text-anchor="middle" fill="#C9A227" font-family="Georgia, Times New Roman, serif" font-size="13" font-style="italic" font-weight="700">Signature</text>
-  <line x1="342" y1="374" x2="386" y2="374" stroke="#C9A227" stroke-width="1.5"/>
-  <text x="300" y="442" text-anchor="middle" fill="#7A1F3D" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="800">MIXED BERRY</text>
-  <text x="300" y="472" text-anchor="middle" fill="#1a1a1a" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="800" letter-spacing="1.4">ORGANIC GRANOLA</text>
-  <text x="300" y="498" text-anchor="middle" fill="#555555" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="700">RASPBERRY · BLUEBERRY · STRAWBERRY</text>
-  <text x="300" y="536" text-anchor="middle" fill="#1a1a1a" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="800">3.5 LB</text>
-  <text x="300" y="556" text-anchor="middle" fill="#666666" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="700">NET WT 56 OZ (1.59 kg)</text>
+  <text x="300" y="348" text-anchor="middle" fill="#1a1a1a" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="800" letter-spacing="0.4">KIRKLAND</text>
+  <line x1="218" y1="360" x2="258" y2="360" stroke="#C9A227" stroke-width="1.4"/>
+  <text x="300" y="366" text-anchor="middle" fill="#C9A227" font-family="Georgia, Times New Roman, serif" font-size="12" font-style="italic" font-weight="700">Signature</text>
+  <line x1="342" y1="360" x2="382" y2="360" stroke="#C9A227" stroke-width="1.4"/>
+  <circle cx="168" cy="454" r="22" fill="none" stroke="#3B6B2A" stroke-width="2.2"/>
+  <circle cx="168" cy="454" r="17" fill="none" stroke="#3B6B2A" stroke-width="1"/>
+  <text x="168" y="450" text-anchor="middle" fill="#3B6B2A" font-family="Arial, Helvetica, sans-serif" font-size="6.5" font-weight="800">USDA</text>
+  <text x="168" y="460" text-anchor="middle" fill="#3B6B2A" font-family="Arial, Helvetica, sans-serif" font-size="6.5" font-weight="800">ORGANIC</text>
+  <text x="300" y="424" text-anchor="middle" fill="#7A1F3D" font-family="Georgia, Times New Roman, serif" font-size="15" font-style="italic" font-weight="700">Organic</text>
+  <text x="300" y="458" text-anchor="middle" fill="#7A1F3D" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="800">MIXED BERRY</text>
+  <text x="300" y="486" text-anchor="middle" fill="#1a1a1a" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="800" letter-spacing="1.6">GRANOLA</text>
+  <text x="300" y="510" text-anchor="middle" fill="#555555" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700">RASPBERRY · BLUEBERRY · STRAWBERRY</text>
+  <text x="300" y="542" text-anchor="middle" fill="#1a1a1a" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="800">3.5 LB</text>
+  <text x="300" y="558" text-anchor="middle" fill="#666666" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700">NET WT 56 OZ (1.59 kg)</text>
 `
   )
 )

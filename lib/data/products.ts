@@ -34,7 +34,7 @@ export const products: Product[] = [
     price: 5.29,
     originalPrice: 6.83,
     savings: 1.54,
-    image: "/products/1.png?v=5",
+    image: "/products/1.png?v=6",
     inStock: true,
     tags: ["weekly", "trending"],
     rating: 4.2,
