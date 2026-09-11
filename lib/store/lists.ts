@@ -8,11 +8,13 @@ export type ShopList = {
   productIds: string[];
 };
 
-const KEY = "costco-sameday-lists";
+const KEY = "costco-sameday-lists-v2";
 const SHOPPING_ID = "shopping";
 
 const fallback: ShopList[] = [
   { id: SHOPPING_ID, name: "Shopping list", productIds: [] },
+  { id: "breakfast", name: "Breakfast staples", productIds: ["8", "23", "21"] },
+  { id: "pantry", name: "Pantry staples", productIds: ["5", "10", "11", "4"] },
 ];
 
 function readLists(): ShopList[] {

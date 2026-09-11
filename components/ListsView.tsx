@@ -8,6 +8,99 @@ import { useCartStore } from "@/lib/store/cart";
 import { hydrateLists, useListStore } from "@/lib/store/lists";
 import ProductCard from "@/components/ProductCard";
 
+function resolveProducts(ids: string[]): Product[] {
+  return ids
+    .map((id) => products.find((product) => product.id === id))
+    .filter((product): product is Product => Boolean(product));
+}
+
+function ListThumbStack({ items }: { items: Product[] }) {
+  const shown = items.slice(0, 4);
+  if (shown.length === 0) {
+    return (
+      <div className="flex h-[72px] items-center">
+        <span className="flex h-14 w-14 items-center justify-center rounded-[12px] border border-dashed border-[#d8d8d8] bg-[#fafafa]">
+          <Heart className="h-5 w-5 text-[#c4c4c4]" />
+        </span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex h-[72px] items-center pl-1">
+      {shown.map((product, index) => (
+        <span
+          key={product.id}
+          className="relative -ml-3 first:ml-0 h-14 w-14 overflow-hidden rounded-[12px] border-2 border-white bg-white shadow-[0_1px_3px_rgba(0,0,0,0.12)]"
+          style={{ zIndex: shown.length - index }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={product.image}
+            alt=""
+            className="absolute inset-0 h-full w-full object-contain p-1"
+          />
+        </span>
+      ))}
+    </div>
+  );
+}
+
+function ListPreviewCard({
+  href,
+  title,
+  items,
+  cta,
+  onCta,
+  showHeart = false,
+}: {
+  href: string;
+  title: string;
+  items: Product[];
+  cta: string;
+  onCta: () => void;
+  showHeart?: boolean;
+}) {
+  const empty = items.length === 0;
+
+  return (
+    <div className="flex flex-col rounded-[16px] border border-[#ececec] bg-white px-4 pt-3.5 pb-3.5 hover:shadow-[0_2px_10px_rgba(0,0,0,0.07)]">
+      <a href={href} className="min-w-0">
+        <div className="flex items-start justify-between gap-2">
+          <div className="min-w-0">
+            <p className="text-[16px] font-bold text-[#1a1a1a] truncate">
+              {title}
+            </p>
+            <p className="mt-0.5 text-[13px] text-[#666]">
+              {items.length} item{items.length === 1 ? "" : "s"}
+            </p>
+          </div>
+          {showHeart ? (
+            <Heart
+              className="h-[18px] w-[18px] shrink-0 fill-costco-red text-costco-red"
+              aria-hidden="true"
+            />
+          ) : null}
+        </div>
+        <div className="mt-3">
+          <ListThumbStack items={items} />
+        </div>
+      </a>
+      <button
+        type="button"
+        onClick={onCta}
+        className={`mt-3.5 h-10 w-full rounded-full text-[13px] font-bold ${
+          empty
+            ? "border border-[#d0d0d0] bg-white text-[#1a1a1a] hover:bg-[#f6f6f6]"
+            : "bg-[#0AAD0A] text-white hover:bg-[#099809]"
+        }`}
+      >
+        {cta}
+      </button>
+    </div>
+  );
+}
+
 export default function ListsView() {
   const clearFilters = useCatalogStore((s) => s.clearFilters);
   const search = useCatalogStore((s) => s.search);
@@ -29,8 +122,8 @@ export default function ListsView() {
     document.querySelector("main")?.scrollTo({ top: 0 });
   };
 
-  const addAgain = () => {
-    for (const product of again) addItem(product);
+  const addProducts = (items: Product[]) => {
+    for (const product of items) addItem(product);
   };
 
   return (
@@ -99,29 +192,28 @@ export default function ListsView() {
         </form>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
-        <a
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 mb-6">
+        <ListPreviewCard
           href="#buy-it-again"
-          className="rounded-[12px] bg-white border border-[#ececec] px-4 py-3.5 hover:shadow-[0_2px_8px_rgba(0,0,0,0.06)]"
-        >
-          <p className="text-[15px] font-bold text-[#1a1a1a]">Buy it again</p>
-          <p className="text-[13px] text-[#666] mt-0.5">
-            {again.length} item{again.length === 1 ? "" : "s"} from this warehouse
-          </p>
-        </a>
-        {lists.map((list) => (
-          <a
-            key={list.id}
-            href={`#list-${list.id}`}
-            className="rounded-[12px] bg-white border border-[#ececec] px-4 py-3.5 hover:shadow-[0_2px_8px_rgba(0,0,0,0.06)]"
-          >
-            <p className="text-[15px] font-bold text-[#1a1a1a]">{list.name}</p>
-            <p className="text-[13px] text-[#666] mt-0.5">
-              {list.productIds.length} item
-              {list.productIds.length === 1 ? "" : "s"}
-            </p>
-          </a>
-        ))}
+          title="Buy it again"
+          items={again}
+          cta="Buy again"
+          onCta={() => addProducts(again)}
+        />
+        {lists.map((list) => {
+          const items = resolveProducts(list.productIds);
+          return (
+            <ListPreviewCard
+              key={list.id}
+              href={`#list-${list.id}`}
+              title={list.name}
+              items={items}
+              cta={items.length === 0 ? "Continue shopping" : "Buy again"}
+              onCta={items.length === 0 ? goShop : () => addProducts(items)}
+              showHeart
+            />
+          );
+        })}
       </div>
 
       <section id="buy-it-again" className="mb-7">
@@ -137,7 +229,7 @@ export default function ListsView() {
           {again.length > 0 && (
             <button
               type="button"
-              onClick={addAgain}
+              onClick={() => addProducts(again)}
               className="inline-flex items-center gap-1.5 h-10 px-3.5 rounded-full bg-[#0AAD0A] text-white text-[13px] font-bold hover:bg-[#099809]"
             >
               <ShoppingCart className="w-4 h-4" />
@@ -157,18 +249,30 @@ export default function ListsView() {
       </section>
 
       {lists.map((list) => {
-        const items = list.productIds
-          .map((id) => products.find((p) => p.id === id))
-          .filter((p): p is Product => Boolean(p));
+        const items = resolveProducts(list.productIds);
         return (
           <section key={list.id} id={`list-${list.id}`} className="mb-7">
-            <h2 className="text-[18px] lg:text-[20px] font-bold text-[#1a1a1a] tracking-tight">
-              {list.name}
-            </h2>
-            <p className="text-[13px] text-[#666] mt-0.5 mb-3">
-              {items.length} item{items.length === 1 ? "" : "s"} · Tap the heart
-              on any tile to save
-            </p>
+            <div className="mb-3 flex items-end justify-between gap-3 flex-wrap">
+              <div>
+                <h2 className="text-[18px] lg:text-[20px] font-bold text-[#1a1a1a] tracking-tight">
+                  {list.name}
+                </h2>
+                <p className="text-[13px] text-[#666] mt-0.5">
+                  {items.length} item{items.length === 1 ? "" : "s"} · Tap the
+                  heart on any tile to save
+                </p>
+              </div>
+              {items.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => addProducts(items)}
+                  className="inline-flex items-center gap-1.5 h-10 px-3.5 rounded-full bg-[#0AAD0A] text-white text-[13px] font-bold hover:bg-[#099809]"
+                >
+                  <ShoppingCart className="w-4 h-4" />
+                  Add all
+                </button>
+              )}
+            </div>
             {items.length === 0 ? (
               <div className="flex flex-col items-center text-center pt-8 pb-10 px-6 bg-white rounded-[12px] border border-[#ececec]">
                 <span className="w-14 h-14 rounded-full bg-[#f6f6f6] flex items-center justify-center">
@@ -203,7 +307,6 @@ export default function ListsView() {
           </section>
         );
       })}
-
     </div>
   );
 }
