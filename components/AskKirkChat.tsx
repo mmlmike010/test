@@ -15,7 +15,6 @@ import { useCartStore } from "@/lib/store/cart";
 import { useCatalogStore } from "@/lib/store/catalog";
 import { products } from "@/lib/data/products";
 import KirkMark from "@/components/KirkMark";
-import ProductCard from "@/components/ProductCard";
 import CostcoLogo from "@/components/CostcoLogo";
 import GoldStarMark from "@/components/GoldStarMark";
 import GoldStarMembershipCard from "@/components/GoldStarMembershipCard";
@@ -656,14 +655,31 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
               <p className="mb-1.5 text-[10px] font-bold uppercase tracking-[0.08em] text-[#666]">
                 Added to cart
               </p>
-              <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+              <div className="space-y-1.5">
                 {added.map((product) => (
-                  <ProductCard
+                  <button
                     key={`${message.id}-${product.id}`}
-                    product={product}
-                    compact
-                    onOpen={() => inspect(product)}
-                  />
+                    type="button"
+                    onClick={() => inspect(product)}
+                    className="flex w-full items-center gap-2.5 rounded-[12px] border border-[#e8e8e8] bg-white px-2 py-2 text-left hover:bg-[#fafafa]"
+                  >
+                    <span className="relative h-14 w-14 shrink-0 overflow-hidden rounded-[8px] border border-[#f0f0f0] bg-white">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={product.image}
+                        alt=""
+                        className="absolute inset-0 h-full w-full object-contain p-0.5"
+                      />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-[12px] font-semibold leading-snug text-[#1a1a1a] line-clamp-2">
+                        {product.brand} {product.name}
+                      </span>
+                      <span className="mt-0.5 block text-[13px] font-bold tabular-nums text-[#1a1a1a]">
+                        ${product.price.toFixed(2)}
+                      </span>
+                    </span>
+                  </button>
                 ))}
               </div>
             </div>

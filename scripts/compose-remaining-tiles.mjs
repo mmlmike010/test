@@ -38,22 +38,41 @@ function xml(text) {
     .replaceAll(">", "&gt;");
 }
 
-function kirkLabel({ w, h, title, line2 = "", size = "" }) {
-  const titleSize = title.length > 12 ? Math.round(w * 0.1) : Math.round(w * 0.12);
-  const line2Size = Math.round(w * 0.092);
-  const mark = Math.round(h * 0.22);
+function kirkLabel({ w, h, title, line2 = "", size = "", layout = "jar" }) {
+  const mark = Math.round(h * (layout === "tub" ? 0.28 : 0.18));
+  const titleSize =
+    title.length > 12 ? Math.round(w * 0.072) : Math.round(w * 0.1);
+  const line2Size = Math.round(w * 0.07);
+  const copyX = layout === "tub" ? w * 0.62 : w / 2;
   return Buffer.from(`<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
   <rect width="${w}" height="${h}" fill="#F7F4EC"/>
   <rect x="1" y="1" width="${w - 2}" height="${h - 2}" fill="none" stroke="#C9C2B0" stroke-width="1.25"/>
-  <text x="${w / 2}" y="${mark * 0.62}" text-anchor="middle" fill="#1a1a1a" font-family="Arial, Helvetica, sans-serif" font-size="${Math.round(w * 0.072)}" font-weight="800" letter-spacing="0.4">KIRKLAND</text>
-  <line x1="${w * 0.18}" y1="${mark * 0.86}" x2="${w * 0.34}" y2="${mark * 0.86}" stroke="#C9A227" stroke-width="1.4"/>
-  <text x="${w / 2}" y="${mark * 0.96}" text-anchor="middle" fill="#C9A227" font-family="Georgia, Times New Roman, serif" font-size="${Math.round(w * 0.042)}" font-style="italic" font-weight="700">Signature</text>
-  <line x1="${w * 0.66}" y1="${mark * 0.86}" x2="${w * 0.82}" y2="${mark * 0.86}" stroke="#C9A227" stroke-width="1.4"/>
-  <text x="${w / 2}" y="${h * 0.5}" text-anchor="middle" fill="#1a1a1a" font-family="Arial, Helvetica, sans-serif" font-size="${titleSize}" font-weight="800">${xml(title)}</text>
-  ${line2 ? `<text x="${w / 2}" y="${h * 0.66}" text-anchor="middle" fill="#1a1a1a" font-family="Arial, Helvetica, sans-serif" font-size="${line2Size}" font-weight="800">${xml(line2)}</text>` : ""}
-  ${size ? `<text x="${w / 2}" y="${h * 0.88}" text-anchor="middle" fill="#5a564c" font-family="Arial, Helvetica, sans-serif" font-size="${Math.round(w * 0.05)}" font-weight="700">${xml(size)}</text>` : ""}
+  <text x="${copyX}" y="${mark * 0.62}" text-anchor="middle" fill="#1a1a1a" font-family="Arial, Helvetica, sans-serif" font-size="${Math.round((layout === "tub" ? w * 0.042 : w * 0.068))}" font-weight="800" letter-spacing="0.4">KIRKLAND</text>
+  <line x1="${copyX - w * 0.12}" y1="${mark * 0.86}" x2="${copyX - w * 0.04}" y2="${mark * 0.86}" stroke="#C9A227" stroke-width="1.3"/>
+  <text x="${copyX}" y="${mark * 0.96}" text-anchor="middle" fill="#C9A227" font-family="Georgia, Times New Roman, serif" font-size="${Math.round((layout === "tub" ? w * 0.028 : w * 0.04))}" font-style="italic" font-weight="700">Signature</text>
+  <line x1="${copyX + w * 0.04}" y1="${mark * 0.86}" x2="${copyX + w * 0.12}" y2="${mark * 0.86}" stroke="#C9A227" stroke-width="1.3"/>
+  <text x="${copyX}" y="${layout === "tub" ? h * 0.52 : h * 0.72}" text-anchor="middle" fill="#1a1a1a" font-family="Arial, Helvetica, sans-serif" font-size="${titleSize}" font-weight="800">${xml(title)}</text>
+  ${line2 ? `<text x="${copyX}" y="${layout === "tub" ? h * 0.68 : h * 0.82}" text-anchor="middle" fill="#1a1a1a" font-family="Arial, Helvetica, sans-serif" font-size="${line2Size}" font-weight="800">${xml(line2)}</text>` : ""}
+  ${size ? `<text x="${copyX}" y="${layout === "tub" ? h * 0.88 : h * 0.94}" text-anchor="middle" fill="#5a564c" font-family="Arial, Helvetica, sans-serif" font-size="${Math.round(w * (layout === "tub" ? 0.032 : 0.048))}" font-weight="700">${xml(size)}</text>` : ""}
 </svg>`);
+}
+
+async function foodWindow(src, extract, w, h, rx = 6) {
+  const crop = await sharp(src)
+    .extract(extract)
+    .resize(w, h, { fit: "cover", position: "centre" })
+    .png()
+    .toBuffer();
+  const mask = await sharp(
+    svg(w, h, `<rect width="${w}" height="${h}" rx="${rx}" fill="#fff"/>`)
+  )
+    .png()
+    .toBuffer();
+  return sharp(crop)
+    .composite([{ input: mask, blend: "dest-in" }])
+    .png()
+    .toBuffer();
 }
 
 async function composeJars() {
@@ -64,7 +83,14 @@ async function composeJars() {
     `${CF}/large_66764c9d-6caa-47b9-a1c0-a1735bcdc630.jpeg`
   );
 
-  const beanLabel = await sharp(
+  const beanFood = await foodWindow(
+    paisley,
+    { left: 48, top: 448, width: 210, height: 128 },
+    196,
+    108,
+    5
+  );
+  const beanFace = await sharp(
     kirkLabel({
       w: 236,
       h: 268,
@@ -73,6 +99,10 @@ async function composeJars() {
       size: "15 OZ",
     })
   )
+    .png()
+    .toBuffer();
+  const beanLabel = await sharp(beanFace)
+    .composite([{ input: beanFood, left: 20, top: 62 }])
     .png()
     .toBuffer();
 
@@ -97,15 +127,27 @@ async function composeJars() {
     .toBuffer();
   await toTile(fiveBean, join(dir, "7.png"));
 
-  const lentilLabel = await sharp(
+  const lentilFood = await foodWindow(
+    salad,
+    { left: 95, top: 310, width: 155, height: 80 },
+    168,
+    88,
+    6
+  );
+  const lentilFace = await sharp(
     kirkLabel({
       w: 476,
       h: 198,
       title: "COOKED LENTILS",
       line2: "& CHICKPEAS",
       size: "17 OZ · READY TO EAT",
+      layout: "tub",
     })
   )
+    .png()
+    .toBuffer();
+  const lentilLabel = await sharp(lentilFace)
+    .composite([{ input: lentilFood, left: 14, top: 18 }])
     .png()
     .toBuffer();
 
