@@ -13,6 +13,7 @@ import GoldStarMark from "@/components/GoldStarMark";
 import { hideComposedLeftovers, officialPacksFirst } from "@/lib/ui/merchOrder";
 import { useWarehouseChrome } from "@/lib/store/warehouseChrome";
 import { productSize, unitPriceLabel, warehouseItemNumber } from "@/lib/ui/packSize";
+import { isLimitedOffer } from "@/lib/ui/warehouseSearch";
 import { aisleLabel } from "@/lib/ui/aisleLabels";
 import { storefrontOverlayClass, useSessionStore } from "@/lib/store/session";
 import { useListStore } from "@/lib/store/lists";
@@ -77,6 +78,7 @@ export default function ProductDetailModal({
   const setQuery = useCatalogStore((s) => s.setQuery);
   const setTag = useCatalogStore((s) => s.setTag);
   const setDepartment = useCatalogStore((s) => s.setDepartment);
+  const setListTone = useCatalogStore((s) => s.setListTone);
   const saved = useListStore((s) =>
     Boolean(
       s.lists
@@ -89,14 +91,12 @@ export default function ProductDetailModal({
   const perUnit = unitPriceLabel(current.id, current.price);
 
   const shopAllBrand = () => {
-    if (current.brand === "Kirkland Signature") {
-      setQuery("");
-      setTag("kirkland");
-    } else {
-      setTag(null);
-      setDepartment(null);
-      setQuery(current.brand);
-    }
+    setTag(null);
+    setDepartment(null);
+    const token =
+      current.brand === "Kirkland Signature" ? "kirkland" : current.brand;
+    setQuery(token);
+    setListTone(warehouse ? "warehouse" : "sameday");
     onClose();
   };
 
@@ -202,11 +202,15 @@ export default function ProductDetailModal({
                   className="absolute inset-0 h-full w-full object-contain p-8"
                 />
               </button>
-              {current.savings > 0 && (
+              {warehouse && isLimitedOffer(current) ? (
+                <div className="absolute left-3 top-3 bg-costco-red px-2 py-1 text-[12px] font-bold uppercase tracking-wide text-white">
+                  Limited Offer
+                </div>
+              ) : !warehouse && current.savings > 0 ? (
                 <div className="absolute left-3 top-3 rounded-[4px] bg-costco-red px-2 py-1 text-[12px] font-bold text-white">
                   ${current.savings.toFixed(2)} off
                 </div>
-              )}
+              ) : null}
               {warehouse ? null : (
                 <SaveHeart
                   productId={current.id}
@@ -294,15 +298,13 @@ export default function ProductDetailModal({
               <p className="mt-0.5 text-[14px] text-[#242424]">• {perUnit}</p>
             ) : null}
             <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1">
-              {warehouse ? null : (
-                <button
-                  type="button"
-                  onClick={shopAllBrand}
-                  className="w-fit text-[14px] font-bold text-costco-blue hover:underline"
-                >
-                  Shop all {current.brand}
-                </button>
-              )}
+              <button
+                type="button"
+                onClick={shopAllBrand}
+                className="w-fit text-[14px] font-bold text-costco-blue hover:underline"
+              >
+                Shop all {current.brand}
+              </button>
               <button
                 type="button"
                 onClick={() => toggleList(current.id)}
@@ -432,6 +434,9 @@ export default function ProductDetailModal({
                       {current.category ? <li>{current.category}</li> : null}
                       <li>Same-Day Delivery</li>
                       <li>Membership required</li>
+                      {isLimitedOffer(current) ? (
+                        <li>Limited-Time Offer</li>
+                      ) : null}
                     </ul>
                   </ItemAccordion>
                   <ItemAccordion title="Specifications">

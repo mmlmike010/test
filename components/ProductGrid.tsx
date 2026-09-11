@@ -14,6 +14,7 @@ import { useCatalogStore } from "@/lib/store/catalog";
 import ProductCard from "@/components/ProductCard";
 import WarehouseResultCard from "@/components/WarehouseResultCard";
 import WarehouseCompareSheet from "@/components/WarehouseCompareSheet";
+import WarehouseFilterRail from "@/components/WarehouseFilterRail";
 import ProductDetailModal from "@/components/ProductDetailModal";
 import CategoryScroller from "@/components/CategoryScroller";
 import InstacartMark from "@/components/InstacartMark";
@@ -22,6 +23,19 @@ import RecipesView from "@/components/RecipesView";
 import FlyersView from "@/components/FlyersView";
 import ListsView from "@/components/ListsView";
 import { formatAddress, useSessionStore } from "@/lib/store/session";
+import {
+  applyWarehouseFacets,
+  sortWarehouseItems,
+  type WarehouseFacets,
+  type WarehouseSort,
+} from "@/lib/ui/warehouseSearch";
+
+const EMPTY_WAREHOUSE_FACETS: WarehouseFacets = {
+  departments: [],
+  brands: [],
+  priceId: null,
+  minRating: 0,
+};
 
 type Aisle = {
   title: string;
@@ -144,8 +158,11 @@ export default function ProductGrid() {
   const inspect = useCatalogStore((s) => s.inspect);
   const listTone = useCatalogStore((s) => s.listTone);
   const warehouseList = listTone === "warehouse" && Boolean(q.trim());
-  const [sort, setSort] = useState<"relevance" | "price">("relevance");
-  const [warehouseDept, setWarehouseDept] = useState<string | null>(null);
+  const [sort, setSort] = useState<WarehouseSort>("relevance");
+  const [warehouseFacets, setWarehouseFacets] = useState<WarehouseFacets>(
+    EMPTY_WAREHOUSE_FACETS
+  );
+  const [hideFilters, setHideFilters] = useState(false);
   const [compareIds, setCompareIds] = useState<string[]>([]);
   const [compareOpen, setCompareOpen] = useState(false);
   const setSheet = useSessionStore((s) => s.setSheet);
@@ -226,11 +243,17 @@ export default function ProductGrid() {
       if (department === "Bakery & Desserts") allow.push("9");
     }
     const merch = hideComposedLeftovers(filtered, allow);
+    if (warehouseList) {
+      return sortWarehouseItems(
+        sort === "relevance" ? officialPacksFirst(merch) : merch,
+        sort
+      );
+    }
     if (sort === "price") {
       return [...merch].sort((a, b) => a.price - b.price);
     }
     return officialPacksFirst(merch);
-  }, [filtered, sort, q, department]);
+  }, [filtered, sort, q, department, warehouseList]);
   const related = q.trim() && shown.length > 0 && shown.length < 6
     ? relatedSearchItems(shown, products)
     : [];
@@ -238,22 +261,14 @@ export default function ProductGrid() {
   const [prevFilterKey, setPrevFilterKey] = useState(filterKey);
   if (prevFilterKey !== filterKey) {
     setPrevFilterKey(filterKey);
-    setWarehouseDept(null);
+    setWarehouseFacets(EMPTY_WAREHOUSE_FACETS);
+    setSort("relevance");
     setCompareIds([]);
     setCompareOpen(false);
   }
-  const warehouseFacets = useMemo(() => {
-    const counts = new Map<string, number>();
-    for (const product of shown) {
-      const label = aisleLabel(product.department);
-      counts.set(label, (counts.get(label) || 0) + 1);
-    }
-    return [...counts.entries()].sort((a, b) => a[0].localeCompare(b[0]));
-  }, [shown]);
-  const visible =
-    warehouseList && warehouseDept
-      ? shown.filter((product) => aisleLabel(product.department) === warehouseDept)
-      : shown;
+  const visible = warehouseList
+    ? applyWarehouseFacets(shown, warehouseFacets)
+    : shown;
   const gridItems = warehouseList ? visible : shown;
   const compareItems = compareIds
     .map((id) => products.find((product) => product.id === id))
@@ -450,6 +465,25 @@ export default function ProductGrid() {
 
       {filteredView && !recipesView && !flyersView && !listsView && (
         <>
+          {warehouseList ? (
+            <nav
+              aria-label="Breadcrumb"
+              className="mb-3 flex flex-wrap items-center gap-x-1.5 text-[12px] text-[#555]"
+            >
+              <button
+                type="button"
+                onClick={() => {
+                  clearFilters();
+                  void search();
+                }}
+                className="font-bold text-costco-blue hover:underline"
+              >
+                Home
+              </button>
+              <span aria-hidden="true">›</span>
+              <span className="text-[#1a1a1a]">Search Results</span>
+            </nav>
+          ) : (
           <button
             type="button"
             onClick={() => {
@@ -461,6 +495,7 @@ export default function ProductGrid() {
             <ChevronLeft className="w-4 h-4" aria-hidden="true" />
             Shop
           </button>
+          )}
           {activeCollection && (
             <div
               className="relative mb-4 h-[220px] sm:h-[280px] lg:h-[320px] rounded-[16px] overflow-hidden"
@@ -484,7 +519,9 @@ export default function ProductGrid() {
               {q.trim() ? (
                 <h2 className="text-[22px] lg:text-[24px] font-bold text-[#1a1a1a] tracking-tight">
                   {warehouseList
-                    ? `${gridItems.length} Result${gridItems.length === 1 ? "" : "s"}`
+                    ? warehouseFacets.departments.length === 1
+                      ? warehouseFacets.departments[0]
+                      : "Search Results"
                     : `${shown.length} result${shown.length === 1 ? "" : "s"} for “${q.trim()}”`}
                 </h2>
               ) : (
@@ -506,29 +543,47 @@ export default function ProductGrid() {
                   ? loading
                     ? "Updating…"
                     : warehouseList
-                      ? "Kirkland Signature shopping help · 11217 Brooklyn"
+                      ? `Showing ${
+                          gridItems.length ? `1 – ${gridItems.length}` : "0"
+                        } of ${gridItems.length}`
                       : "Same-Day · 11217 Brooklyn"
                   : `${shown.length} item${shown.length === 1 ? "" : "s"}${
                       loading ? " · Updating…" : ""
                     }`}
               </p>
+              {warehouseList ? (
+                <p className="text-[12px] text-[#72767E] mt-0.5">
+                  Kirkland Signature shopping help · 11217 Brooklyn
+                </p>
+              ) : null}
             </div>
             <div className="flex items-center gap-2 flex-wrap">
               {warehouseList ? (
+                <>
+                <button
+                  type="button"
+                  onClick={() => setHideFilters((value) => !value)}
+                  className="text-[13px] font-bold text-costco-blue hover:underline"
+                >
+                  {hideFilters ? "Show Filters" : "Hide Filters"}
+                </button>
                 <label className="inline-flex items-center gap-2 text-[13px] text-[#555]">
                   <span className="font-bold">Sort By</span>
                   <select
                     aria-label="Sort items"
                     value={sort}
                     onChange={(e) =>
-                      setSort(e.target.value as "relevance" | "price")
+                      setSort(e.target.value as WarehouseSort)
                     }
                     className="h-9 rounded-[3px] border border-[#c4c4c4] bg-white px-2 text-[13px] font-bold text-[#1a1a1a] focus:border-costco-blue focus:outline-none focus:ring-2 focus:ring-costco-blue/15"
                   >
                     <option value="relevance">Best Match</option>
-                    <option value="price">Price</option>
+                    <option value="price">Price (Low to High)</option>
+                    <option value="priceDesc">Price (High to Low)</option>
+                    <option value="rating">Ratings (High to Low)</option>
                   </select>
                 </label>
+                </>
               ) : (
                 <>
               <span className="text-[12px] font-bold text-[#666]">Sort</span>
@@ -631,64 +686,17 @@ export default function ProductGrid() {
           ) : (
             <div
               className={
-                warehouseList
-                  ? "lg:grid lg:grid-cols-[176px_minmax(0,1fr)] lg:items-start lg:gap-4"
+                warehouseList && !hideFilters
+                  ? "lg:grid lg:grid-cols-[200px_minmax(0,1fr)] lg:items-start lg:gap-4"
                   : ""
               }
             >
-            {warehouseList ? (
-              <aside className="mb-4 rounded-[3px] border border-[#c4c4c4] bg-white px-3 py-3 lg:mb-0 lg:sticky lg:top-0">
-                <p className="text-[13px] font-bold text-[#1a1a1a]">Delivery</p>
-                <label className="mt-2 flex items-center gap-2 text-[13px] text-[#1a1a1a]">
-                  <input
-                    type="checkbox"
-                    checked
-                    readOnly
-                    className="accent-costco-blue"
-                  />
-                  Same-Day Delivery
-                </label>
-                {warehouseFacets.length > 1 ? (
-                  <>
-                    <p className="mt-4 text-[13px] font-bold text-[#1a1a1a]">
-                      Department
-                    </p>
-                    <div className="mt-1.5 space-y-0.5">
-                      <button
-                        type="button"
-                        onClick={() => setWarehouseDept(null)}
-                        className={`flex w-full items-center justify-between rounded-[3px] px-1.5 py-1 text-left text-[12px] ${
-                          warehouseDept
-                            ? "text-[#555] hover:bg-[#f7fbfe]"
-                            : "bg-[#f7fbfe] font-bold text-costco-blue"
-                        }`}
-                      >
-                        <span>All</span>
-                        <span>{shown.length}</span>
-                      </button>
-                      {warehouseFacets.map(([label, count]) => (
-                        <button
-                          key={label}
-                          type="button"
-                          onClick={() =>
-                            setWarehouseDept(
-                              warehouseDept === label ? null : label
-                            )
-                          }
-                          className={`flex w-full items-center justify-between rounded-[3px] px-1.5 py-1 text-left text-[12px] ${
-                            warehouseDept === label
-                              ? "bg-[#f7fbfe] font-bold text-costco-blue"
-                              : "text-[#555] hover:bg-[#f7fbfe]"
-                          }`}
-                        >
-                          <span className="truncate pr-2">{label}</span>
-                          <span>{count}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </>
-                ) : null}
-              </aside>
+            {warehouseList && !hideFilters ? (
+              <WarehouseFilterRail
+                items={shown}
+                facets={warehouseFacets}
+                onChange={setWarehouseFacets}
+              />
             ) : null}
             <div>
             {warehouseList && compareItems.length > 0 ? (
@@ -728,11 +736,11 @@ export default function ProductGrid() {
             ) : null}
             {gridItems.length === 0 ? (
               <p className="rounded-[3px] border border-[#c4c4c4] bg-white px-4 py-8 text-center text-[13px] text-[#555]">
-                No items in this department.{" "}
+                No items match these filters.{" "}
                 <button
                   type="button"
                   className="font-bold text-costco-blue hover:underline"
-                  onClick={() => setWarehouseDept(null)}
+                  onClick={() => setWarehouseFacets(EMPTY_WAREHOUSE_FACETS)}
                 >
                   See all results
                 </button>
@@ -767,6 +775,16 @@ export default function ProductGrid() {
               )}
             </div>
             )}
+            {warehouseList && gridItems.length > 0 ? (
+              <nav
+                aria-label="Search results pages"
+                className="mt-5 flex items-center justify-center gap-1.5"
+              >
+                <span className="inline-flex h-9 min-w-9 items-center justify-center rounded-[3px] border border-costco-blue bg-[#f7fbfe] px-2 text-[13px] font-bold text-costco-blue">
+                  1
+                </span>
+              </nav>
+            ) : null}
             {related.length > 0 ? (
               <section className="mt-8">
                 <h3 className="mb-3 text-[20px] lg:text-[22px] font-bold text-[#1a1a1a] tracking-tight">

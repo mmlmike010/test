@@ -5,6 +5,8 @@ import type { Product } from "@/lib/data/products";
 import { useCatalogStore } from "@/lib/store/catalog";
 import { storefrontOverlayClass, useSessionStore } from "@/lib/store/session";
 import { productSize, warehouseItemNumber } from "@/lib/ui/packSize";
+import { aisleLabel } from "@/lib/ui/aisleLabels";
+import { isLimitedOffer } from "@/lib/ui/warehouseSearch";
 import AddControl from "@/components/AddControl";
 import StarRating from "@/components/StarRating";
 
@@ -85,6 +87,19 @@ export default function WarehouseCompareSheet({
             <tbody>
               <tr>
                 <th className="border border-[#c4c4c4] bg-[#f6f7f8] px-2 py-2 font-bold text-[#555]">
+                  Brand
+                </th>
+                {items.map((product) => (
+                  <td
+                    key={product.id}
+                    className="border border-[#c4c4c4] px-3 py-2 text-[#1a1a1a]"
+                  >
+                    {product.brand}
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <th className="border border-[#c4c4c4] bg-[#f6f7f8] px-2 py-2 font-bold text-[#555]">
                   Item #
                 </th>
                 {items.map((product) => (
@@ -106,6 +121,55 @@ export default function WarehouseCompareSheet({
                     className="border border-[#c4c4c4] px-3 py-2 text-[#72767E]"
                   >
                     {productSize(product.id) || "—"}
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <th className="border border-[#c4c4c4] bg-[#f6f7f8] px-2 py-2 font-bold text-[#555]">
+                  Department
+                </th>
+                {items.map((product) => (
+                  <td
+                    key={product.id}
+                    className="border border-[#c4c4c4] px-3 py-2 text-[#72767E]"
+                  >
+                    {aisleLabel(product.department)}
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <th className="border border-[#c4c4c4] bg-[#f6f7f8] px-2 py-2 font-bold text-[#555]">
+                  Features
+                </th>
+                {items.map((product) => (
+                  <td
+                    key={product.id}
+                    className="border border-[#c4c4c4] px-3 py-2 text-[#72767E]"
+                  >
+                    <ul className="list-disc space-y-0.5 pl-4">
+                      {product.category ? <li>{product.category}</li> : null}
+                      {productSize(product.id) ? (
+                        <li>{productSize(product.id)}</li>
+                      ) : null}
+                      <li>Membership required</li>
+                    </ul>
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <th className="border border-[#c4c4c4] bg-[#f6f7f8] px-2 py-2 font-bold text-[#555]">
+                  Limited-Time Offer
+                </th>
+                {items.map((product) => (
+                  <td
+                    key={product.id}
+                    className="border border-[#c4c4c4] px-3 py-2 text-[#1a1a1a]"
+                  >
+                    {isLimitedOffer(product) ? (
+                      <span className="font-bold text-costco-red">Yes</span>
+                    ) : (
+                      "—"
+                    )}
                   </td>
                 ))}
               </tr>

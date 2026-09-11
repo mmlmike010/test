@@ -3,6 +3,7 @@
 import type { Product } from "@/lib/data/products";
 import { useCatalogStore } from "@/lib/store/catalog";
 import { productSize, warehouseItemNumber } from "@/lib/ui/packSize";
+import { isLimitedOffer } from "@/lib/ui/warehouseSearch";
 import AddControl from "@/components/AddControl";
 import StarRating from "@/components/StarRating";
 
@@ -43,7 +44,7 @@ export default function WarehouseResultCard({
               featured ? "p-1.5" : "p-2.5"
             }`}
           />
-          {!featured && product.savings > 0 ? (
+          {!featured && isLimitedOffer(product) ? (
             <span className="absolute left-0 top-0 bg-costco-red px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
               Limited Offer
             </span>
@@ -93,17 +94,13 @@ export default function WarehouseResultCard({
               Save ${product.savings.toFixed(2)}
             </span>
           ) : null}
-          {featured ? null : (
-            <span className="mt-1 block text-[11px] font-semibold text-[#188038]">
-              Same-Day Delivery
-            </span>
-          )}
         </span>
       </button>
       <div className={`px-2 ${featured ? "pb-1.5" : "pb-2"}`}>
+        <AddControl product={product} variant="inline" tone="warehouse" wide />
         {catalog && onCompare ? (
           <label
-            className="mb-1.5 flex items-center gap-1.5 text-[11px] text-[#555]"
+            className="mt-1.5 flex items-center gap-1.5 text-[11px] text-[#555]"
             onClick={(e) => e.stopPropagation()}
           >
             <input
@@ -115,7 +112,6 @@ export default function WarehouseResultCard({
             Compare Product
           </label>
         ) : null}
-        <AddControl product={product} variant="inline" tone="warehouse" wide />
       </div>
     </div>
   );
