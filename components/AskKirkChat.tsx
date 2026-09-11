@@ -108,6 +108,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
   const [pendingInspire, setPendingInspire] = useState(false);
   const [lightboxUrl, setLightboxUrl] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const latestResultsRef = useRef<HTMLDivElement>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -130,6 +131,13 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
     const onlyWelcome =
       messages.length === 1 && messages[0]?.id.startsWith("welcome-");
     if (onlyWelcome && !isLoading) return;
+    if (latestResultsRef.current) {
+      latestResultsRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+      return;
+    }
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isLoading]);
 
@@ -693,7 +701,10 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
           return (
           <div key={message.id} className="space-y-2">
           {message.role === "user" ? (
-            <div className="overflow-hidden rounded-[3px] border border-[#c4c4c4] bg-white">
+            <div
+              ref={latestResultsRef}
+              className="rounded-[3px] border border-[#c4c4c4] bg-white"
+            >
               <div className="sticky top-0 z-10 border-b border-[#ececec] bg-white px-3.5 py-2">
                 <nav
                   aria-label="Breadcrumb"
