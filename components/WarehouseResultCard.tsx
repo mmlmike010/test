@@ -73,7 +73,6 @@ export default function WarehouseResultCard({
             >
               ${product.price.toFixed(2)}
             </span>
-            <span className="text-[11px] text-[#8a8a8a]">each</span>
             {product.originalPrice > product.price ? (
               <span className="text-[12px] text-[#888] line-through">
                 ${product.originalPrice.toFixed(2)}

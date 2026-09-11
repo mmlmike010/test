@@ -291,7 +291,9 @@ export default function ProductDetailModal({
               >
                 ${current.price.toFixed(2)}
               </span>
-              <span className="text-[15px] text-[#8a8a8a]">each</span>
+              {warehouse ? null : (
+                <span className="text-[15px] text-[#8a8a8a]">each</span>
+              )}
               <span className="text-sm text-[#888] line-through tabular-nums">
                 ${current.originalPrice.toFixed(2)}
               </span>
@@ -500,7 +502,9 @@ export default function ProductDetailModal({
             >
               ${current.price.toFixed(2)}
             </p>
-            <p className="text-[12px] text-[#8a8a8a] mt-0.5">each</p>
+            <p className="text-[12px] text-[#8a8a8a] mt-0.5">
+              {warehouse ? "Your Price" : "each"}
+            </p>
           </div>
           {warehouse ? (
             qty === 0 ? (

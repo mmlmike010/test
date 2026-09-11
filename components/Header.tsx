@@ -104,14 +104,14 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
             <button
               type="button"
               className="hidden md:inline text-[13px] text-costco-blue font-semibold hover:underline"
-              onClick={() => setSheet("pricing")}
+              onClick={() => setSheet("pricing", "sameday")}
             >
               Pricing & fees
             </button>
             <button
               type="button"
               className="hidden sm:inline-flex items-center gap-1 text-[13px] text-costco-blue font-semibold hover:underline"
-              onClick={() => setSheet("membership")}
+              onClick={() => setSheet("membership", "sameday")}
             >
               {membershipAdded ? (
                 <>
@@ -126,7 +126,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
             <button
               type="button"
               className="inline-flex items-center gap-1.5 text-[#333] text-[13px] font-semibold hover:text-costco-blue"
-              onClick={() => setSheet("signin")}
+              onClick={() => setSheet("signin", "sameday")}
             >
               <span className="w-7 h-7 rounded-full border border-[#c8c8c8] bg-white flex items-center justify-center">
                 <User className="w-4 h-4" />
@@ -207,7 +207,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
           <button
             type="button"
             className="hidden lg:flex text-left items-center gap-1.5 px-1.5 py-0.5 rounded-md hover:bg-[#f6f6f6]"
-            onClick={() => setSheet("delivery")}
+            onClick={() => setSheet("delivery", "sameday")}
           >
             <Clock className="w-[18px] h-[18px] text-costco-blue shrink-0" />
             <span>

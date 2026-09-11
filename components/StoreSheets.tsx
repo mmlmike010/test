@@ -22,9 +22,7 @@ import {
 } from "@/lib/store/session";
 
 function useWarehouseCheckoutSheet() {
-  const cartTone = useCartStore((s) => s.cartTone);
-  const priorSheet = useSessionStore((s) => s.priorSheet);
-  return cartTone === "warehouse" && priorSheet === "checkout";
+  return useSessionStore((s) => s.sheetTone) === "warehouse";
 }
 
 function PricingSheet() {
@@ -517,10 +515,17 @@ function CheckoutSheet() {
             </button>
           </div>
         ) : (
-          <>
+          <div
+            className={
+              warehouse
+                ? "space-y-3 xl:grid xl:grid-cols-[minmax(0,1fr)_300px] xl:items-start xl:gap-4 xl:space-y-0"
+                : "space-y-3"
+            }
+          >
+            <div className="space-y-3">
             <button
               type="button"
-              onClick={() => setSheet("delivery")}
+              onClick={() => setSheet("delivery", cartTone)}
               className={card}
             >
               <div className="min-w-0 flex-1">
@@ -536,7 +541,7 @@ function CheckoutSheet() {
             </button>
             <button
               type="button"
-              onClick={() => setSheet("membership")}
+              onClick={() => setSheet("membership", cartTone)}
               className={card}
             >
               <div className="min-w-0 flex-1">
@@ -552,7 +557,7 @@ function CheckoutSheet() {
             </button>
             <button
               type="button"
-              onClick={() => setSheet("signin")}
+              onClick={() => setSheet("signin", cartTone)}
               className={card}
             >
               <div className="min-w-0 flex-1">
@@ -654,10 +659,11 @@ function CheckoutSheet() {
                 ))}
               </div>
             )}
+            </div>
             <div
               className={
                 warehouse
-                  ? "rounded-[3px] border border-[#c4c4c4] bg-white px-4 py-4"
+                  ? "rounded-[3px] border border-[#c4c4c4] bg-white px-4 py-4 xl:sticky xl:top-0"
                   : "rounded-xl border border-[#e0e0e0] bg-white px-4 py-4 shadow-sm"
               }
             >
@@ -717,7 +723,7 @@ function CheckoutSheet() {
                   : "Same-Day Delivery powered by Instacart · Membership required"}
               </p>
             </div>
-          </>
+          </div>
         )}
       </div>
     </StoreSheet>

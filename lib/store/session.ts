@@ -12,6 +12,9 @@ export type StoreSheet =
   | "checkout"
   | null;
 
+/** UI chrome only — never sent to Kirk. Header always sameday. */
+export type SheetTone = "sameday" | "warehouse";
+
 export type DeliveryWindow = {
   id: string;
   label: string;
@@ -93,10 +96,11 @@ function writeSession(state: Persisted) {
 type SessionState = Persisted & {
   sheet: StoreSheet;
   priorSheet: StoreSheet;
+  sheetTone: SheetTone;
   orderPlaced: boolean;
   kirkOpen: boolean;
   setKirkOpen: (open: boolean) => void;
-  setSheet: (sheet: StoreSheet) => void;
+  setSheet: (sheet: StoreSheet, tone?: SheetTone) => void;
   closeSheet: () => void;
   signIn: (displayName: string, email: string) => void;
   signOut: () => void;
@@ -125,22 +129,28 @@ export const useSessionStore = create<SessionState>((set, get) => ({
   ...fallback,
   sheet: null,
   priorSheet: null,
+  sheetTone: "sameday",
   orderPlaced: false,
   kirkOpen: true,
   setKirkOpen: (kirkOpen) => set({ kirkOpen }),
-  setSheet: (sheet) => {
+  setSheet: (sheet, tone = "sameday") => {
     if (sheet === null) {
-      set({ sheet: null, priorSheet: null });
+      set({ sheet: null, priorSheet: null, sheetTone: "sameday" });
       return;
     }
     const current = get().sheet;
     set({
       priorSheet: current === "checkout" ? "checkout" : get().priorSheet,
       sheet,
+      sheetTone: tone,
     });
   },
   closeSheet: () => {
-    set({ sheet: get().priorSheet, priorSheet: null });
+    set({
+      sheet: get().priorSheet,
+      priorSheet: null,
+      sheetTone: "sameday",
+    });
   },
   signIn: (displayName, email) => {
     const next = {
@@ -150,6 +160,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
       email: email.trim() || KIRK_EMAIL,
       sheet: get().priorSheet,
       priorSheet: null as StoreSheet,
+      sheetTone: "sameday" as SheetTone,
     };
     writeSession(persistable(next));
     set(next);
@@ -163,6 +174,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
       orderPlaced: false,
       sheet: get().priorSheet,
       priorSheet: null as StoreSheet,
+      sheetTone: "sameday" as SheetTone,
     };
     writeSession(persistable(next));
     set(next);
@@ -175,6 +187,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
       membershipNumber: cleaned || KIRK_MEMBERSHIP,
       sheet: get().priorSheet,
       priorSheet: null as StoreSheet,
+      sheetTone: "sameday" as SheetTone,
     };
     writeSession(persistable(next));
     set(next);
@@ -186,6 +199,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
       membershipNumber: "",
       sheet: get().priorSheet,
       priorSheet: null as StoreSheet,
+      sheetTone: "sameday" as SheetTone,
     };
     writeSession(persistable(next));
     set(next);
@@ -201,6 +215,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
       },
       sheet: get().priorSheet,
       priorSheet: null as StoreSheet,
+      sheetTone: "sameday" as SheetTone,
     };
     writeSession(persistable(next));
     set(next);
@@ -211,6 +226,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
       specialRequest: note.trim(),
       sheet: get().priorSheet,
       priorSheet: null as StoreSheet,
+      sheetTone: "sameday" as SheetTone,
     };
     writeSession(persistable(next));
     set(next);
@@ -224,6 +240,7 @@ export function hydrateSession() {
     ...readSession(),
     sheet: null,
     priorSheet: null,
+    sheetTone: "sameday",
     orderPlaced: false,
   });
 }

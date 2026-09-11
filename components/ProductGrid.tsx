@@ -573,7 +573,7 @@ export default function ProductGrid() {
                 <button
                   type="button"
                   className="text-[13px] text-costco-blue font-bold hover:underline"
-                  onClick={() => setSheet("request")}
+                  onClick={() => setSheet("request", "sameday")}
                 >
                   Add a special request
                 </button>
@@ -710,28 +710,28 @@ export default function ProductGrid() {
               <button
                 type="button"
                 className="text-[13px] text-costco-blue font-semibold hover:underline"
-                onClick={() => setSheet("pricing")}
+                onClick={() => setSheet("pricing", "sameday")}
               >
                 Pricing & fees
               </button>
               <button
                 type="button"
                 className="text-[13px] text-costco-blue font-semibold hover:underline"
-                onClick={() => setSheet("departments")}
+                onClick={() => setSheet("departments", "sameday")}
               >
                 Departments
               </button>
               <button
                 type="button"
                 className="text-[13px] text-costco-blue font-semibold hover:underline"
-                onClick={() => setSheet("membership")}
+                onClick={() => setSheet("membership", "sameday")}
               >
                 Membership
               </button>
               <button
                 type="button"
                 className="text-[13px] text-costco-blue font-semibold hover:underline"
-                onClick={() => setSheet("delivery")}
+                onClick={() => setSheet("delivery", "sameday")}
               >
                 Delivery windows
               </button>

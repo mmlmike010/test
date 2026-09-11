@@ -88,96 +88,107 @@ export default function CartDrawer() {
               </button>
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-3 xl:grid xl:grid-cols-[minmax(0,1fr)_300px] xl:items-start xl:gap-4 xl:space-y-0">
+              <div className="space-y-3">
               <div className="overflow-hidden rounded-[3px] border border-[#c4c4c4] bg-white">
-                <p className="border-b border-[#ececec] bg-[#f6f7f8] px-4 py-2 text-[12px] font-bold text-[#666]">
-                  {totalItems} item{totalItems === 1 ? "" : "s"} · {slot.when}{" "}
-                  {slot.label}
-                </p>
+                <div className="border-b border-[#ececec] bg-[#f6f7f8] px-4 py-2 text-[12px] font-bold text-[#666]">
+                  <p>
+                    {totalItems} item{totalItems === 1 ? "" : "s"} · {slot.when}{" "}
+                    {slot.label}
+                  </p>
+                  <div className="mt-2 hidden grid-cols-[minmax(0,1fr)_88px_104px_80px] gap-2 sm:grid">
+                    <span>Item</span>
+                    <span className="text-right">Item Price</span>
+                    <span className="text-center">Quantity</span>
+                    <span className="text-right">Total</span>
+                  </div>
+                </div>
                 {items.map(({ product, quantity }) => (
                   <div
                     key={product.id}
-                    className="flex gap-3 border-b border-[#f0f0f0] px-4 py-3.5 last:border-b-0"
+                    className="border-b border-[#f0f0f0] px-4 py-3.5 last:border-b-0"
                   >
-                    <button
-                      type="button"
-                      onClick={() => inspect(product, "warehouse")}
-                      className="relative h-[96px] w-[96px] shrink-0 overflow-hidden rounded-[3px] border border-[#eee] bg-white"
-                      aria-label={`View ${product.brand} ${product.name}`}
-                    >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={product.image}
-                        alt=""
-                        className="absolute inset-0 h-full w-full object-contain p-1"
-                      />
-                    </button>
-                    <div className="min-w-0 flex-1">
-                      <button
-                        type="button"
-                        onClick={() => inspect(product, "warehouse")}
-                        className="text-left text-[14px] font-bold leading-snug text-costco-blue line-clamp-2 hover:underline"
-                      >
-                        {product.brand} {product.name}
-                      </button>
-                      {productSize(product.id) ? (
-                        <p className="mt-0.5 text-[13px] text-[#72767E]">
-                          {productSize(product.id)}
-                        </p>
-                      ) : null}
-                      <p className="mt-0.5 text-[12px] text-[#72767E]">
-                        Item {warehouseItemNumber(product.id)}
-                      </p>
-                      <div className="mt-2.5 flex flex-wrap items-end justify-between gap-3">
-                        <div>
-                          <p className="text-[11px] font-bold uppercase tracking-[0.06em] text-[#666]">
-                            Item Price
-                          </p>
-                          <p className="mt-0.5 text-[15px] font-bold tabular-nums text-costco-red">
-                            ${product.price.toFixed(2)}
-                          </p>
-                        </div>
-                        <div className="flex items-center overflow-hidden rounded-[3px] border border-[#c4c4c4] bg-white">
+                    <div className="flex flex-wrap items-end justify-between gap-3 sm:grid sm:grid-cols-[minmax(0,1fr)_88px_104px_80px] sm:items-start sm:gap-2">
+                      <div className="flex w-full min-w-0 gap-3 sm:w-auto">
+                        <button
+                          type="button"
+                          onClick={() => inspect(product, "warehouse")}
+                          className="relative h-[96px] w-[96px] shrink-0 overflow-hidden rounded-[3px] border border-[#eee] bg-white"
+                          aria-label={`View ${product.brand} ${product.name}`}
+                        >
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={product.image}
+                            alt=""
+                            className="absolute inset-0 h-full w-full object-contain p-1"
+                          />
+                        </button>
+                        <div className="min-w-0">
                           <button
                             type="button"
-                            className="flex h-9 w-9 items-center justify-center text-costco-blue hover:bg-[#f7fbfe]"
-                            onClick={() =>
-                              updateQuantity(product.id, quantity - 1)
-                            }
-                            aria-label="Decrease quantity"
+                            onClick={() => inspect(product, "warehouse")}
+                            className="text-left text-[14px] font-bold leading-snug text-costco-blue line-clamp-2 hover:underline"
                           >
-                            <Minus className="h-3.5 w-3.5" />
+                            {product.brand} {product.name}
                           </button>
-                          <span className="min-w-[1.5rem] px-1 text-center text-sm font-bold tabular-nums text-[#1a1a1a]">
-                            {quantity}
-                          </span>
+                          {productSize(product.id) ? (
+                            <p className="mt-0.5 text-[13px] text-[#72767E]">
+                              {productSize(product.id)}
+                            </p>
+                          ) : null}
+                          <p className="mt-0.5 text-[12px] text-[#72767E]">
+                            Item {warehouseItemNumber(product.id)}
+                          </p>
                           <button
                             type="button"
-                            className="flex h-9 w-9 items-center justify-center text-costco-blue hover:bg-[#f7fbfe]"
-                            onClick={() =>
-                              updateQuantity(product.id, quantity + 1)
-                            }
-                            aria-label="Increase quantity"
+                            onClick={() => removeItem(product.id)}
+                            className="mt-2 text-[13px] font-bold text-costco-blue hover:underline"
                           >
-                            <Plus className="h-3.5 w-3.5" />
+                            Remove
                           </button>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-[11px] font-bold uppercase tracking-[0.06em] text-[#666]">
-                            Total
-                          </p>
-                          <p className="mt-0.5 text-[15px] font-bold tabular-nums text-costco-red">
-                            ${(product.price * quantity).toFixed(2)}
-                          </p>
                         </div>
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => removeItem(product.id)}
-                        className="mt-2 text-[13px] font-bold text-costco-blue hover:underline"
-                      >
-                        Remove
-                      </button>
+                      <div>
+                        <p className="text-[11px] font-bold uppercase tracking-[0.06em] text-[#666] sm:hidden">
+                          Item Price
+                        </p>
+                        <p className="mt-0.5 text-[15px] font-bold tabular-nums text-costco-red sm:mt-0 sm:text-right">
+                          ${product.price.toFixed(2)}
+                        </p>
+                      </div>
+                      <div className="flex items-center overflow-hidden rounded-[3px] border border-[#c4c4c4] bg-white sm:justify-self-center">
+                        <button
+                          type="button"
+                          className="flex h-9 w-9 items-center justify-center text-costco-blue hover:bg-[#f7fbfe]"
+                          onClick={() =>
+                            updateQuantity(product.id, quantity - 1)
+                          }
+                          aria-label="Decrease quantity"
+                        >
+                          <Minus className="h-3.5 w-3.5" />
+                        </button>
+                        <span className="min-w-[1.5rem] px-1 text-center text-sm font-bold tabular-nums text-[#1a1a1a]">
+                          {quantity}
+                        </span>
+                        <button
+                          type="button"
+                          className="flex h-9 w-9 items-center justify-center text-costco-blue hover:bg-[#f7fbfe]"
+                          onClick={() =>
+                            updateQuantity(product.id, quantity + 1)
+                          }
+                          aria-label="Increase quantity"
+                        >
+                          <Plus className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-[11px] font-bold uppercase tracking-[0.06em] text-[#666] sm:hidden">
+                          Total
+                        </p>
+                        <p className="mt-0.5 text-[15px] font-bold tabular-nums text-costco-red sm:mt-0">
+                          ${(product.price * quantity).toFixed(2)}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -194,7 +205,8 @@ export default function CartDrawer() {
               >
                 Continue Shopping
               </button>
-              <div className="rounded-[3px] border border-[#c4c4c4] bg-white px-4 py-4">
+              </div>
+              <div className="rounded-[3px] border border-[#c4c4c4] bg-white px-4 py-4 xl:sticky xl:top-0">
                 <p className="text-[15px] font-bold text-[#1a1a1a]">
                   Order Summary
                 </p>
