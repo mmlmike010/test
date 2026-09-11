@@ -121,6 +121,9 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
   const kirkMember = useSessionStore((s) => s.membershipAdded);
 
   useEffect(() => {
+    const onlyWelcome =
+      messages.length === 1 && messages[0]?.id.startsWith("welcome-");
+    if (onlyWelcome && !isLoading) return;
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isLoading]);
 
