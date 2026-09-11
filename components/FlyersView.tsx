@@ -2,20 +2,20 @@
 
 import { useState } from "react";
 import { ChevronLeft, X } from "lucide-react";
-import { filterProducts } from "@/lib/data/products";
-import { hideComposedLeftovers, officialPacksFirst } from "@/lib/ui/merchOrder";
+import { products } from "@/lib/data/products";
+import { FLYER_DEAL_IDS } from "@/lib/ui/merchOrder";
 import { useCatalogStore } from "@/lib/store/catalog";
 import { storefrontOverlayClass, useSessionStore } from "@/lib/store/session";
 import ProductCard from "@/components/ProductCard";
 
 const pages = [
   {
-    src: "/products/flyer-page-1.jpg?v=10",
-    label: "Page 1 · Coupon book",
+    src: "/products/flyer-page-1.jpg?v=11",
+    label: "Page 1 · Member savings",
   },
   {
-    src: "/products/flyer-page-2.jpg?v=10",
-    label: "Page 2 · Flyer deals",
+    src: "/products/flyer-page-2.jpg?v=11",
+    label: "Page 2 · Pantry & snacks",
   },
 ] as const;
 
@@ -25,9 +25,9 @@ export default function FlyersView() {
   const kirkOpen = useSessionStore((s) => s.kirkOpen);
   const inspect = useCatalogStore((s) => s.inspect);
   const [page, setPage] = useState<(typeof pages)[number] | null>(null);
-  const deals = hideComposedLeftovers(
-    officialPacksFirst(filterProducts({ tag: "weekly" }))
-  );
+  const deals = FLYER_DEAL_IDS.map((id) =>
+    products.find((product) => product.id === id)
+  ).filter((product): product is (typeof products)[number] => Boolean(product));
 
   return (
     <div>
@@ -46,7 +46,7 @@ export default function FlyersView() {
 
       <div className="mb-4">
         <h1 className="text-[22px] lg:text-[24px] font-bold text-[#1a1a1a] tracking-tight">
-          Flyers
+          This week&apos;s flyer
         </h1>
         <p className="text-[13px] text-[#666] mt-0.5">
           Valid 8/24/26 – 9/21/26 · Costco · 11217 Brooklyn

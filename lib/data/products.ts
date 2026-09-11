@@ -973,11 +973,7 @@ export function filterProducts(filters: ProductFilters = {}): Product[] {
         return p.department === "Trending" || tags.includes("trending");
       if (tag === "new") return p.department === "What's New" || tags.includes("new");
       if (tag === "weekly")
-        // id 1 is composed Mixed Berry — keep it off weekly so flyer pages stay the four printed deals.
-        return (
-          p.id !== "1" &&
-          (p.department === "Weekly Savings" || tags.includes("weekly"))
-        );
+        return p.department === "Weekly Savings" || tags.includes("weekly");
       if (tag === "kirkland")
         return (
           p.department === "Kirkland Signature" ||

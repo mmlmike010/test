@@ -3,6 +3,18 @@ import type { Product } from "@/lib/data/products";
 /** Composed leftover tiles. UI merch only — never sent to Kirk. */
 export const COMPOSED_IDS = new Set(["1", "6", "7", "9", "13", "17"]);
 
+/** Official packs printed on the composed circular. UI merch only. */
+export const FLYER_DEAL_IDS = [
+  "24",
+  "2",
+  "3",
+  "10",
+  "5",
+  "11",
+  "21",
+  "12",
+] as const;
+
 export function officialPacksFirst(items: Product[]): Product[] {
   return [...items].sort((a, b) => {
     const left = COMPOSED_IDS.has(a.id) ? 1 : 0;

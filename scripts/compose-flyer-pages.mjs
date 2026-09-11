@@ -131,7 +131,8 @@ async function coupon({
     .toBuffer();
 }
 
-const deals = [
+/** Official pack shots only — leftover SKUs stay off the printed pages. */
+const page1 = [
   {
     id: "24",
     brand: "Costco",
@@ -140,6 +141,7 @@ const deals = [
     was: "6.99",
     save: "2.00",
     size: "1 ct",
+    featured: true,
   },
   {
     id: "2",
@@ -160,13 +162,52 @@ const deals = [
     size: "8 x 14.5 oz",
   },
   {
-    id: "7",
+    id: "10",
     brand: "Kirkland Signature",
-    name: "Five Bean Salad",
-    price: "3.17",
-    was: "4.50",
-    save: "1.33",
-    size: "15 oz",
+    name: "Organic EVOO",
+    price: "18.99",
+    was: "24.99",
+    save: "6.00",
+    size: "2 L",
+  },
+];
+
+const page2 = [
+  {
+    id: "5",
+    brand: "Sabra",
+    name: "Hummus Classic",
+    price: "4.05",
+    was: "5.50",
+    save: "1.45",
+    size: "32 oz",
+  },
+  {
+    id: "11",
+    brand: "Kirkland Signature",
+    name: "Organic Quinoa",
+    price: "12.99",
+    was: "16.99",
+    save: "4.00",
+    size: "4.5 lb",
+  },
+  {
+    id: "21",
+    brand: "Kirkland Signature",
+    name: "Colombian Coffee",
+    price: "18.49",
+    was: "22.99",
+    save: "4.50",
+    size: "2 x 2.5 lb",
+  },
+  {
+    id: "12",
+    brand: "Kirkland Signature",
+    name: "Trail Mix",
+    price: "9.99",
+    was: "13.99",
+    save: "4.00",
+    size: "4 lb",
   },
 ];
 
@@ -189,7 +230,7 @@ const coverIntro = await sharp(
   .toBuffer();
 
 const coverGrid = [];
-for (const deal of deals) {
+for (const deal of page1) {
   coverGrid.push(await coupon({ ...deal, w: 378, h: 430 }));
 }
 
@@ -221,7 +262,7 @@ const pageIntro = await sharp(
     64,
     `
   <rect width="${W}" height="64" fill="#ffffff"/>
-  <text x="32" y="40" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="800" fill="#1A1A1A">Flyer deals · Aug 24 – Sep 21</text>
+  <text x="32" y="40" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="800" fill="#1A1A1A">Pantry &amp; snacks · Aug 24 – Sep 21</text>
 `
   )
 )
@@ -229,7 +270,7 @@ const pageIntro = await sharp(
   .toBuffer();
 
 const grid = [];
-for (const deal of deals) {
+for (const deal of page2) {
   grid.push(await coupon({ ...deal, w: 378, h: 430 }));
 }
 

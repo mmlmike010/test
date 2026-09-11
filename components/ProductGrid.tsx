@@ -216,7 +216,6 @@ export default function ProductGrid() {
   const shown = useMemo(() => {
     const allow: string[] = [];
     if (!q.trim()) {
-      if (tag === "weekly") allow.push("7");
       if (department === "Bakery & Desserts") allow.push("9");
     }
     const merch = hideComposedLeftovers(filtered, allow);
@@ -224,7 +223,7 @@ export default function ProductGrid() {
       return [...merch].sort((a, b) => a.price - b.price);
     }
     return officialPacksFirst(merch);
-  }, [filtered, sort, q, tag, department]);
+  }, [filtered, sort, q, department]);
   const related = q.trim() && shown.length > 0 && shown.length < 6
     ? relatedSearchItems(shown, products)
     : [];
@@ -250,11 +249,11 @@ export default function ProductGrid() {
     {
       title: "Member Only Savings",
       items: officialPacksFirst(
-        filtered.filter(
-          (p) =>
-            // Same exclusion as filterProducts({ tag: "weekly" }) — flyer pages stay four deals.
-            p.id !== "1" &&
-            (p.department === "Weekly Savings" || p.tags?.includes("weekly"))
+        hideComposedLeftovers(
+          filtered.filter(
+            (p) =>
+              p.department === "Weekly Savings" || p.tags?.includes("weekly")
+          )
         )
       ),
       onShowAll: () => showAisle({ tag: "weekly" }),
