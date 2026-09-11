@@ -21,7 +21,7 @@ function ListThumbStack({ items }: { items: Product[] }) {
   if (shown.length === 0) {
     return (
       <div className="flex h-[120px] items-center">
-        <span className="flex h-[108px] w-[108px] items-center justify-center rounded-full bg-[#e8e8e8] ring-[3px] ring-white shadow-[0_1px_4px_rgba(0,0,0,0.08)]">
+        <span className="flex h-[108px] w-[108px] items-center justify-center rounded-full border border-[#c8c8c8] bg-[#e0e0e0] ring-[3px] ring-white shadow-[0_1px_4px_rgba(0,0,0,0.08)]">
           <Heart className="h-7 w-7 text-[#c4c4c4]" />
         </span>
       </div>
@@ -33,7 +33,7 @@ function ListThumbStack({ items }: { items: Product[] }) {
       {shown.map((product, index) => (
         <span
           key={product.id}
-          className="relative h-[108px] w-[108px] shrink-0 overflow-hidden rounded-full bg-[#e8e8e8] shadow-[0_1px_5px_rgba(0,0,0,0.16)] ring-[3px] ring-white"
+          className="relative h-[108px] w-[108px] shrink-0 overflow-hidden rounded-full border border-[#c8c8c8] bg-[#e0e0e0] shadow-[0_1px_5px_rgba(0,0,0,0.16)] ring-[3px] ring-white"
           style={{
             zIndex: shown.length - index,
             marginLeft: index === 0 ? 0 : -48,
@@ -43,7 +43,7 @@ function ListThumbStack({ items }: { items: Product[] }) {
           <img
             src={product.image}
             alt=""
-            className="absolute inset-0 h-full w-full object-cover"
+            className="absolute inset-0 h-full w-full object-contain p-2"
           />
         </span>
       ))}
