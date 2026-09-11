@@ -299,10 +299,14 @@ export default function ProductDetailModal({
             >
               {current.inStock
                 ? warehouse
-                  ? "In stock · Same-Day Delivery"
+                  ? "In Stock"
                   : "Many in stock"
                 : "Out of stock"}
-              {warehouse ? null : (
+              {warehouse ? (
+                <span className="block font-normal text-[#666]">
+                  Same-Day Delivery
+                </span>
+              ) : (
                 <span className="text-[#666]">
                   {" "}
                   · {aisleLabel(current.department)}
