@@ -89,6 +89,32 @@ export function MobileAisles() {
         >
           Meals
         </button>
+        {(
+          [
+            ["pantry", "Pantry"],
+            ["snacks", "Snacks"],
+          ] as const
+        ).map(([value, label]) => {
+          const active = tag === value;
+          return (
+            <button
+              key={value}
+              type="button"
+              onClick={() => {
+                setQuery("");
+                setTag(active ? null : value);
+                void search();
+              }}
+              className={`shrink-0 px-2.5 py-1 rounded-full text-[12px] border ${
+                active
+                  ? "bg-[#e8f2fa] border-costco-blue text-costco-blue font-bold"
+                  : "bg-white border-[#d0d0d0] text-[#333]"
+              }`}
+            >
+              {label}
+            </button>
+          );
+        })}
         {departments.map((dept) => {
           const active = selected === dept;
           return (

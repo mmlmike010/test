@@ -42,6 +42,8 @@ const categories = {
   "cat-kirkland": 10,
   "cat-dairy": 23,
   "cat-bakery": 15,
+  "cat-pantry": 10,
+  "cat-snacks": 2,
   "cat-prepared": 24,
   "cat-coffee": 21,
   "cat-wine": 16,

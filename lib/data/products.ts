@@ -879,6 +879,18 @@ export const categories: ShopCategory[] = [
     department: "Bakery & Desserts",
   },
   {
+    id: "pantry",
+    name: "Pantry",
+    image: "/products/cat-pantry.jpg?v=1",
+    tag: "pantry",
+  },
+  {
+    id: "snacks",
+    name: "Snacks",
+    image: "/products/cat-snacks.jpg?v=1",
+    tag: "snacks",
+  },
+  {
     id: "prepared",
     name: "Prepared foods",
     image: "/products/cat-prepared.jpg?v=1",
