@@ -7,6 +7,7 @@ import { MobileAisles } from "@/components/DepartmentsSidebar";
 import ProductGrid from "@/components/ProductGrid";
 import AskKirkChat from "@/components/AskKirkChat";
 import CartDrawer from "@/components/CartDrawer";
+import WarehouseAddedModal from "@/components/WarehouseAddedModal";
 import { hydrateLists } from "@/lib/store/lists";
 import { hydrateSession, useSessionStore } from "@/lib/store/session";
 import StoreSheets from "@/components/StoreSheets";
@@ -50,6 +51,7 @@ export default function Home() {
       </div>
 
       <CartDrawer />
+      <WarehouseAddedModal />
       <StoreSheets />
     </div>
   );

@@ -10,9 +10,13 @@ import StarRating from "@/components/StarRating";
 export default function WarehouseResultCard({
   product,
   density = "search",
+  compareChecked = false,
+  onCompare,
 }: {
   product: Product;
   density?: "search" | "featured" | "catalog";
+  compareChecked?: boolean;
+  onCompare?: (checked: boolean) => void;
 }) {
   const inspect = useCatalogStore((s) => s.inspect);
   const size = productSize(product.id);
@@ -92,6 +96,20 @@ export default function WarehouseResultCard({
         </span>
       </button>
       <div className={`px-2 ${featured ? "pb-1.5" : "pb-2"}`}>
+        {catalog && onCompare ? (
+          <label
+            className="mb-1.5 flex items-center gap-1.5 text-[11px] text-[#555]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <input
+              type="checkbox"
+              checked={compareChecked}
+              onChange={(e) => onCompare(e.target.checked)}
+              className="accent-costco-blue"
+            />
+            Compare Product
+          </label>
+        ) : null}
         <AddControl product={product} variant="inline" tone="warehouse" wide />
       </div>
     </div>

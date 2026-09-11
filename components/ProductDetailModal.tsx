@@ -9,7 +9,9 @@ import StarRating from "@/components/StarRating";
 import ProductCard from "@/components/ProductCard";
 import WarehouseResultCard from "@/components/WarehouseResultCard";
 import WarehouseQtySelect from "@/components/WarehouseQtySelect";
+import GoldStarMark from "@/components/GoldStarMark";
 import { hideComposedLeftovers, officialPacksFirst } from "@/lib/ui/merchOrder";
+import { useWarehouseChrome } from "@/lib/store/warehouseChrome";
 import { productSize, unitPriceLabel, warehouseItemNumber } from "@/lib/ui/packSize";
 import { aisleLabel } from "@/lib/ui/aisleLabels";
 import { storefrontOverlayClass, useSessionStore } from "@/lib/store/session";
@@ -112,6 +114,7 @@ export default function ProductDetailModal({
   const onAdd = () => {
     addItem(current, warehouse ? buyQty : 1);
     if (warehouse) {
+      useWarehouseChrome.getState().showAdded(current, buyQty);
       setJustAdded(true);
       window.setTimeout(() => setJustAdded(false), 900);
     }
@@ -163,7 +166,12 @@ export default function ProductDetailModal({
           <div className="h-[3px] bg-gradient-to-r from-[#a3841c] via-[#f3e3a3] to-[#a3841c]" />
         ) : null}
 
-        <div ref={scrollerRef} className="min-h-0 flex-1 overflow-y-auto">
+        <div
+          ref={scrollerRef}
+          className={`min-h-0 flex-1 overflow-y-auto ${
+            warehouse ? "pb-8" : ""
+          }`}
+        >
           <div
             className={
               kirkOpen
@@ -241,6 +249,26 @@ export default function ProductDetailModal({
             </div>
           </div>
           <div className={`flex flex-col p-5 ${warehouse ? "bg-white" : ""}`}>
+            {warehouse ? (
+              <nav
+                aria-label="Breadcrumb"
+                className="mb-3 flex flex-wrap items-center gap-x-1.5 text-[12px] text-[#555]"
+              >
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="font-bold text-costco-blue hover:underline"
+                >
+                  Home
+                </button>
+                <span aria-hidden="true">›</span>
+                <span>{aisleLabel(current.department)}</span>
+                <span aria-hidden="true">›</span>
+                <span className="line-clamp-1 text-[#1a1a1a]">
+                  {current.brand} {current.name}
+                </span>
+              </nav>
+            ) : null}
             <h2
               className={`text-[22px] font-bold leading-snug ${
                 warehouse ? "text-costco-blue" : "text-[#1a1a1a]"
@@ -289,8 +317,12 @@ export default function ProductDetailModal({
             </div>
 
             {warehouse ? (
-              <p className="mt-4 text-[12px] font-bold uppercase tracking-[0.06em] text-[#555]">
+              <p className="mt-4 inline-flex items-center gap-1.5 text-[12px] font-bold uppercase tracking-[0.06em] text-[#555]">
                 Your Price
+                <span className="inline-flex items-center gap-1 normal-case tracking-normal text-costco-blue">
+                  <GoldStarMark size={12} />
+                  Member
+                </span>
               </p>
             ) : null}
             <div
@@ -390,14 +422,13 @@ export default function ProductDetailModal({
               {warehouse ? (
                 <>
                   <ItemAccordion title="Features" defaultOpen>
-                    <p>
-                      {aisleLabel(current.department)}
-                      {current.category ? ` · ${current.category}` : ""}
-                    </p>
-                    <p className="mt-1.5 text-[12px] text-[#888]">
-                      Kirkland Signature shopping help · Membership required ·
-                      Prices higher than warehouse
-                    </p>
+                    <ul className="list-disc space-y-1 pl-5">
+                      <li>{current.brand}</li>
+                      {size ? <li>{size}</li> : null}
+                      {current.category ? <li>{current.category}</li> : null}
+                      <li>Same-Day Delivery</li>
+                      <li>Membership required</li>
+                    </ul>
                   </ItemAccordion>
                   <ItemAccordion title="Specifications">
                     <ul className="space-y-1">
