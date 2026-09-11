@@ -499,9 +499,11 @@ export default function ProductGrid() {
               </button>
             </div>
           </div>
-          <div className="-mx-4 lg:-mx-5 mb-4">
-            <CategoryScroller />
-          </div>
+          {!q.trim() && (
+            <div className="-mx-4 lg:-mx-5 mb-4">
+              <CategoryScroller />
+            </div>
+          )}
 
           {!loading && filtered.length === 0 ? (
             <div className="flex flex-col items-center text-center pt-10 pb-12 px-6">
