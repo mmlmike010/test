@@ -26,11 +26,16 @@ async function headerBar() {
       112,
       `
   <rect width="${W}" height="112" fill="#E31837"/>
-  <text x="32" y="48" font-family="Arial, Helvetica, sans-serif" font-size="36" font-weight="800" fill="#ffffff">COSTCO</text>
-  <text x="32" y="82" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700" fill="#ffffff">Warehouse Coupon Book</text>
+  <text x="118" y="44" text-anchor="middle" font-family="Arial Black, Arial, Helvetica, sans-serif" font-size="28" font-weight="900" fill="#ffffff">COSTCO</text>
+  <rect x="62" y="50" width="112" height="2.5" fill="#ffffff"/>
+  <rect x="62" y="55.5" width="112" height="2.5" fill="#ffffff"/>
+  <rect x="62" y="61" width="112" height="2.5" fill="#ffffff"/>
+  <text x="118" y="80" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="9" font-weight="700" fill="#ffffff" letter-spacing="4.2">WHOLESALE</text>
+  <text x="196" y="48" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="800" fill="#ffffff">Warehouse Coupon Book</text>
+  <text x="196" y="72" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" fill="#F3E3A3">Gold Star · Same-Day · 11217 Brooklyn</text>
   <text x="${W - 32}" y="46" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700" fill="#ffffff">8/24/26 – 9/21/26</text>
-  <text x="${W - 32}" y="70" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" fill="#F3E3A3">Gold Star · Same-Day</text>
-  <text x="${W - 32}" y="90" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#ffffff">Sale ends in 10 days</text>
+  <text x="${W - 32}" y="70" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" fill="#F3E3A3">Sale ends in 10 days</text>
+  <text x="${W - 32}" y="90" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#ffffff">While supplies last</text>
 `
     )
   )

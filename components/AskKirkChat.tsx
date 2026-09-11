@@ -610,7 +610,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                 <GoldStarMembershipCard />
                 <div className="flex gap-2 justify-start">
                   <KirkMark size={28} className="mt-0.5 shrink-0" />
-                  <div className="max-w-[82%] px-3.5 py-2.5 text-[13px] leading-relaxed rounded-2xl rounded-bl-md bg-white text-[#1a1a1a] border border-[#e8e8e8] shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
+                  <div className="max-w-[82%] px-3.5 py-2.5 text-[13px] leading-relaxed rounded-[3px] bg-white text-[#1a1a1a] border border-[#e8e8e8] border-l-[3px] border-l-costco-red">
                     <p className="whitespace-pre-line">{message.content}</p>
                   </div>
                 </div>
@@ -631,10 +631,10 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
               <KirkMark size={28} className="mt-0.5 shrink-0" />
             )}
             <div
-              className={`max-w-[82%] px-3.5 py-2.5 text-[13px] leading-relaxed rounded-2xl ${
+              className={`max-w-[82%] px-3.5 py-2.5 text-[13px] leading-relaxed rounded-[3px] ${
                 message.role === "user"
-                  ? "bg-costco-blue text-white rounded-br-md"
-                  : "bg-white text-[#1a1a1a] border border-[#e8e8e8] rounded-bl-md shadow-[0_1px_2px_rgba(0,0,0,0.04)]"
+                  ? "bg-costco-blue text-white"
+                  : "bg-white text-[#1a1a1a] border border-[#e8e8e8] border-l-[3px] border-l-costco-red"
               }`}
             >
               <p className="whitespace-pre-line">{message.content}</p>
@@ -684,7 +684,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
         {isLoading && (
           <div className="flex justify-start gap-2">
             <KirkMark size={28} className="mt-0.5 shrink-0" />
-            <div className="bg-white border border-[#ededed] rounded-2xl rounded-bl-md px-3.5 py-3 max-w-[82%]">
+            <div className="bg-white border border-[#ededed] border-l-[3px] border-l-costco-red rounded-[3px] px-3.5 py-3 max-w-[82%]">
               <div className="flex gap-1.5 items-center">
                 <span className="text-[11px] text-[#666] mr-1 font-semibold">Kirk</span>
                 <div className="w-1.5 h-1.5 bg-[#999] rounded-full animate-bounce" />
