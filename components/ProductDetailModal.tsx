@@ -7,6 +7,7 @@ import { useCartStore } from "@/lib/store/cart";
 import { useCatalogStore } from "@/lib/store/catalog";
 import StarRating from "@/components/StarRating";
 import ProductCard from "@/components/ProductCard";
+import WarehouseResultCard from "@/components/WarehouseResultCard";
 import { hideComposedLeftovers, officialPacksFirst } from "@/lib/ui/merchOrder";
 import { productSize, unitPriceLabel, warehouseItemNumber } from "@/lib/ui/packSize";
 import { aisleLabel } from "@/lib/ui/aisleLabels";
@@ -188,11 +189,13 @@ export default function ProductDetailModal({
                   ${current.savings.toFixed(2)} off
                 </div>
               )}
-              <SaveHeart
-                productId={current.id}
-                productName={current.name}
-                className="absolute right-3 top-3 h-9 w-9"
-              />
+              {warehouse ? null : (
+                <SaveHeart
+                  productId={current.id}
+                  productName={current.name}
+                  className="absolute right-3 top-3 h-9 w-9"
+                />
+              )}
               <button
                 type="button"
                 onClick={() => setZoomed(true)}
@@ -283,12 +286,22 @@ export default function ProductDetailModal({
                 Save ${current.savings.toFixed(2)}
               </p>
             )}
-            <p className="text-[12px] text-[#188038] mt-2">
-              {current.inStock ? "Many in stock" : "Out of stock"}
-              <span className="text-[#666]">
-                {" "}
-                · {aisleLabel(current.department)}
-              </span>
+            <p
+              className={`text-[12px] mt-2 ${
+                warehouse ? "font-semibold text-[#188038]" : "text-[#188038]"
+              }`}
+            >
+              {current.inStock
+                ? warehouse
+                  ? "In stock · Same-Day Delivery"
+                  : "Many in stock"
+                : "Out of stock"}
+              {warehouse ? null : (
+                <span className="text-[#666]">
+                  {" "}
+                  · {aisleLabel(current.department)}
+                </span>
+              )}
             </p>
             <p className="mt-0.5 text-[12px] text-[#666]">Sold by Costco</p>
             <div className="mt-5" key={current.id}>
@@ -319,16 +332,24 @@ export default function ProductDetailModal({
             <h3 className="text-[15px] font-bold text-[#1a1a1a] mb-2.5">
               Related products
             </h3>
-            <div className="flex gap-2.5 overflow-x-auto scrollbar-hide -mx-1 px-1 pb-1">
-              {related.map((item) => (
-                <ProductCard
-                  key={item.id}
-                  product={item}
-                  compact
-                  onOpen={() => openRelated(item)}
-                />
-              ))}
-            </div>
+            {warehouse ? (
+              <div className="grid grid-cols-2 gap-2">
+                {related.map((item) => (
+                  <WarehouseResultCard key={item.id} product={item} />
+                ))}
+              </div>
+            ) : (
+              <div className="flex gap-2.5 overflow-x-auto scrollbar-hide -mx-1 px-1 pb-1">
+                {related.map((item) => (
+                  <ProductCard
+                    key={item.id}
+                    product={item}
+                    compact
+                    onOpen={() => openRelated(item)}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         )}
 
