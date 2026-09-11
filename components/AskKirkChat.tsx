@@ -25,6 +25,7 @@ import {
   storefrontOverlayClass,
   useSessionStore,
 } from "@/lib/store/session";
+import { kirklandWarehousePreview } from "@/lib/ui/merchOrder";
 
 interface Message {
   id: string;
@@ -544,7 +545,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             <button
               type="button"
               onClick={onClose}
-              className="p-1.5 text-white hover:bg-white/15 rounded-full transition-colors"
+              className="p-1.5 text-white hover:bg-white/15 rounded-[3px] transition-colors"
               title="Close"
               aria-label="Close Ask Kirk"
             >
@@ -602,10 +603,14 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
         </div>
       )}
 
-      <div className="flex-1 overflow-y-auto px-3.5 py-3.5 space-y-3 bg-white min-h-0">
+      <div className="flex-1 overflow-y-auto px-3.5 py-3.5 space-y-3 bg-[#f6f7f8] min-h-0">
         {messages.map((message) => {
           const isWelcome = message.id.startsWith("welcome-");
           if (isWelcome) {
+            const asked = messages.some((m) => m.role === "user");
+            const preview = asked
+              ? []
+              : kirklandWarehousePreview(products);
             return (
               <div key={message.id} className="space-y-2.5">
                 <GoldStarMembershipCard />
@@ -621,6 +626,22 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                     </p>
                   </div>
                 </div>
+                {preview.length > 0 ? (
+                  <div>
+                    <p className="mb-1.5 text-[13px] font-bold text-[#1a1a1a]">
+                      Shop Kirkland Signature
+                    </p>
+                    <div className="space-y-1.5">
+                      {preview.map((product) => (
+                        <ShopProductRow
+                          key={`preview-${product.id}`}
+                          product={product}
+                          tone="warehouse"
+                        />
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
               </div>
             );
           }

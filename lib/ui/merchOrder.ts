@@ -10,3 +10,13 @@ export function officialPacksFirst(items: Product[]): Product[] {
     return left - right;
   });
 }
+
+/** Idle Kirk rail merch. UI only — never sent to Kirk. */
+export function kirklandWarehousePreview(
+  items: Product[],
+  n = 3
+): Product[] {
+  return officialPacksFirst(
+    items.filter((p) => p.brand === "Kirkland Signature")
+  ).slice(0, n);
+}
