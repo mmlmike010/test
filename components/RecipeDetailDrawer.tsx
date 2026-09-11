@@ -5,9 +5,9 @@ import { Check, Clock, Users, X } from "lucide-react";
 import { products } from "@/lib/data/products";
 import type { Recipe } from "@/lib/data/recipes";
 import { useCartStore } from "@/lib/store/cart";
-import ProductCard from "@/components/ProductCard";
 import type { Product } from "@/lib/data/products";
 import { useCatalogStore } from "@/lib/store/catalog";
+import { productSize } from "@/lib/ui/packSize";
 import { storefrontOverlayClass, useSessionStore } from "@/lib/store/session";
 
 export default function RecipeDetailDrawer({
@@ -88,27 +88,55 @@ export default function RecipeDetailDrawer({
                 Shop the Same-Day ingredients, then follow the steps. Membership
                 required · Prices higher than warehouse.
               </p>
+              <div className="mt-5">
+                <h3 className="text-[15px] font-bold text-[#1a1a1a]">
+                  Ingredients to shop
+                </h3>
+                <p className="mt-0.5 text-[12px] text-[#666]">
+                  {ingredients.length} Same-Day item
+                  {ingredients.length === 1 ? "" : "s"} · ${total.toFixed(2)}
+                </p>
+                <div className="mt-2.5 space-y-1.5">
+                  {ingredients.map((product) => (
+                    <button
+                      key={product.id}
+                      type="button"
+                      onClick={() => inspect(product)}
+                      className="flex w-full items-center gap-2.5 rounded-[12px] border border-[#e8e8e8] bg-white px-2 py-2 text-left hover:bg-[#fafafa]"
+                    >
+                      <span className="relative h-14 w-14 shrink-0 overflow-hidden rounded-[8px] border border-[#f0f0f0] bg-white">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={product.image}
+                          alt=""
+                          className="absolute inset-0 h-full w-full object-contain p-0.5"
+                        />
+                      </span>
+                      <span className="min-w-0 flex-1">
+                        <span className="block text-[13px] leading-snug text-[#242424] line-clamp-2">
+                          {product.brand} {product.name}
+                        </span>
+                        {productSize(product.id) ? (
+                          <span className="mt-0.5 block text-[12px] text-[#72767E]">
+                            {productSize(product.id)}
+                          </span>
+                        ) : null}
+                        <span className="mt-0.5 block text-[13px] font-bold tabular-nums text-[#1a1a1a]">
+                          ${product.price.toFixed(2)}{" "}
+                          <span className="font-normal text-[#8a8a8a]">
+                            each
+                          </span>
+                        </span>
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
 
           <div className="border-t border-[#eee] px-5 py-5">
             <h3 className="text-[16px] font-bold text-[#1a1a1a]">
-              Ingredients to shop
-            </h3>
-            <p className="mt-0.5 text-[13px] text-[#666]">
-              {ingredients.length} Same-Day items · ${total.toFixed(2)}
-            </p>
-            <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3">
-              {ingredients.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  onOpen={() => inspect(product)}
-                />
-              ))}
-            </div>
-
-            <h3 className="mt-6 text-[16px] font-bold text-[#1a1a1a]">
               Directions
             </h3>
             <ol className="mt-2 space-y-2">
