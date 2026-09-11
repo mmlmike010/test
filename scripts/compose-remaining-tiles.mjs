@@ -224,17 +224,17 @@ async function composeJasons() {
   const bagAlpha = await sharp(bagMask).extractChannel("alpha").toBuffer();
   const film = await sharp(body).joinChannel(bagAlpha).png().toBuffer();
 
-  const winW = 248;
-  const winH = 220;
+  const winW = 272;
+  const winH = 268;
   const winX = Math.round((pw - winW) / 2);
-  const winY = 148;
+  const winY = 124;
   const loaf = await sharp(crumbShot)
-    .extract({ left: 1180, top: 620, width: 2100, height: 1480 })
+    .extract({ left: 1120, top: 480, width: 2240, height: 1500 })
     .resize(winW, winH, { fit: "cover", position: "centre" })
     .png()
     .toBuffer();
   const windowMask = await sharp(
-    svg(winW, winH, `<rect width="${winW}" height="${winH}" rx="2" ry="2" fill="#fff"/>`)
+    svg(winW, winH, `<rect width="${winW}" height="${winH}" rx="6" ry="6" fill="#fff"/>`)
   )
     .png()
     .toBuffer();
@@ -254,7 +254,7 @@ async function composeJasons() {
         <stop offset="1" stop-color="#3a1830" stop-opacity="0.12"/>
       </linearGradient>
     </defs>
-    <rect width="${winW}" height="${winH}" rx="2" fill="url(#film)"/>
+    <rect width="${winW}" height="${winH}" rx="6" fill="url(#film)"/>
   `
     )
   )
@@ -267,14 +267,14 @@ async function composeJasons() {
       ph,
       `
   <text x="${pw / 2}" y="32" text-anchor="middle" fill="#3a1830" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="800" letter-spacing="1.8">RESEAL TO KEEP FRESH</text>
-  <rect x="${winX - 4}" y="${winY - 4}" width="${winW + 8}" height="${winH + 8}" rx="3" fill="#4a2434"/>
-  <text x="${pw / 2}" y="86" text-anchor="middle" fill="#f7ead2" font-family="Georgia, Times New Roman, serif" font-size="44" font-style="italic" font-weight="700">Jason's</text>
-  <text x="${pw / 2}" y="112" text-anchor="middle" fill="#f0d8c8" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="800" letter-spacing="5.4">SOURDOUGH</text>
-  <text x="${pw / 2}" y="400" text-anchor="middle" fill="#f7ead2" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="800" letter-spacing="2">GRAINS &amp; SEEDS</text>
-  <text x="${pw / 2}" y="424" text-anchor="middle" fill="#f0d8c8" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="800" letter-spacing="2.4">TASTE THE MAGIC</text>
-  <rect x="${pw / 2 - 82}" y="438" width="164" height="26" rx="2" fill="#C9A227"/>
-  <text x="${pw / 2}" y="456" text-anchor="middle" fill="#3a1830" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="800" letter-spacing="1.4">RECIPE NO 11</text>
-  <text x="${pw / 2}" y="500" text-anchor="middle" fill="#f0d8c8" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" letter-spacing="2">24 OZ</text>
+  <rect x="${winX - 5}" y="${winY - 5}" width="${winW + 10}" height="${winH + 10}" rx="7" fill="#4a2434"/>
+  <text x="${pw / 2}" y="82" text-anchor="middle" fill="#f7ead2" font-family="Georgia, Times New Roman, serif" font-size="40" font-style="italic" font-weight="700">Jason's</text>
+  <text x="${pw / 2}" y="106" text-anchor="middle" fill="#f0d8c8" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="800" letter-spacing="5.4">SOURDOUGH</text>
+  <text x="${pw / 2}" y="418" text-anchor="middle" fill="#f7ead2" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="800" letter-spacing="2">GRAINS &amp; SEEDS</text>
+  <text x="${pw / 2}" y="440" text-anchor="middle" fill="#f0d8c8" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="800" letter-spacing="2.4">TASTE THE MAGIC</text>
+  <rect x="${pw / 2 - 82}" y="452" width="164" height="26" rx="2" fill="#C9A227"/>
+  <text x="${pw / 2}" y="470" text-anchor="middle" fill="#3a1830" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="800" letter-spacing="1.4">RECIPE NO 11</text>
+  <text x="${pw / 2}" y="510" text-anchor="middle" fill="#f0d8c8" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" letter-spacing="2">24 OZ</text>
 `
     )
   )

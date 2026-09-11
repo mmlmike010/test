@@ -50,13 +50,13 @@ export default function FlyersView() {
         </p>
       </div>
 
-      <div className="flex gap-3 overflow-x-auto scrollbar-hide mb-6">
+      <div className="flex gap-4 overflow-x-auto scrollbar-hide mb-6">
         {pages.map((item) => (
           <button
             key={item.src}
             type="button"
             onClick={() => setPage(item)}
-            className="shrink-0 w-[168px] sm:w-[200px] text-left group"
+            className="shrink-0 w-[240px] sm:w-[280px] lg:w-[300px] text-left group"
           >
             <span className="relative block aspect-[850/1100] rounded-[8px] overflow-hidden bg-white border border-[#e0e0e0] shadow-[0_1px_4px_rgba(0,0,0,0.08)]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
