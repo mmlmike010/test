@@ -35,68 +35,70 @@ export default function RecipeDetailDrawer({
 
   return (
     <div
-      className={`fixed z-[70] flex justify-end ${storefrontOverlayClass(kirkOpen)}`}
+      className={`fixed z-[70] flex min-h-0 flex-col bg-white ${storefrontOverlayClass(kirkOpen)}`}
     >
-      <button
-        type="button"
-        className="absolute inset-0 bg-black/40"
-        aria-label="Close recipe"
-        onClick={onClose}
-      />
       <div
         role="dialog"
         aria-modal="true"
         aria-label={recipe.title}
-        className="relative w-full max-w-[480px] h-full bg-white shadow-2xl flex flex-col"
+        className="flex h-full min-h-0 flex-col"
       >
-        <div className="sticky top-0 z-10 flex items-center justify-between px-4 py-3 border-b border-[#ececec] bg-white shrink-0">
-          <p className="text-[13px] font-bold text-[#1a1a1a] truncate pr-3">
+        <div className="flex shrink-0 items-center justify-between border-b border-[#ececec] bg-white px-4 py-3">
+          <p className="truncate pr-3 text-[13px] font-bold text-[#1a1a1a]">
             {recipe.title}
           </p>
           <button
             type="button"
             onClick={onClose}
-            className="p-2 rounded-full hover:bg-[#f6f6f6] shrink-0"
+            className="shrink-0 rounded-full p-2 hover:bg-[#f6f6f6]"
             aria-label="Close"
           >
-            <X className="w-5 h-5 text-[#555]" />
+            <X className="h-5 w-5 text-[#555]" />
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto min-h-0">
-          <div className="relative aspect-[4/3] bg-[#f3f3f3]">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={recipe.image}
-              alt=""
-              className="absolute inset-0 w-full h-full object-cover"
-            />
+        <div className="min-h-0 flex-1 overflow-y-auto">
+          <div className="lg:grid lg:grid-cols-2 lg:items-start">
+            <div className="relative aspect-[4/3] bg-[#f3f3f3] lg:aspect-square lg:border-r lg:border-[#eee]">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={recipe.image}
+                alt=""
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+            </div>
+            <div className="p-5">
+              <p className="text-[12px] font-bold uppercase tracking-wide text-costco-blue">
+                {recipe.course}
+              </p>
+              <h2 className="mt-1 text-[22px] font-bold leading-snug text-[#1a1a1a]">
+                {recipe.title}
+              </h2>
+              <p className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px] text-[#666]">
+                <span className="inline-flex items-center gap-1">
+                  <Clock className="h-3.5 w-3.5" aria-hidden="true" />
+                  {recipe.minutes} min
+                </span>
+                <span className="inline-flex items-center gap-1">
+                  <Users className="h-3.5 w-3.5" aria-hidden="true" />
+                  {recipe.servings} servings
+                </span>
+              </p>
+              <p className="mt-3 text-[13px] leading-snug text-[#555]">
+                Shop the Same-Day ingredients, then follow the steps. Membership
+                required · Prices higher than warehouse.
+              </p>
+            </div>
           </div>
-          <div className="p-5">
-            <p className="text-[12px] font-bold uppercase tracking-wide text-costco-blue">
-              {recipe.course}
-            </p>
-            <h2 className="text-[22px] font-bold text-[#1a1a1a] leading-snug mt-1">
-              {recipe.title}
-            </h2>
-            <p className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px] text-[#666]">
-              <span className="inline-flex items-center gap-1">
-                <Clock className="w-3.5 h-3.5" aria-hidden="true" />
-                {recipe.minutes} min
-              </span>
-              <span className="inline-flex items-center gap-1">
-                <Users className="w-3.5 h-3.5" aria-hidden="true" />
-                {recipe.servings} servings
-              </span>
-            </p>
 
-            <h3 className="mt-5 text-[16px] font-bold text-[#1a1a1a]">
+          <div className="border-t border-[#eee] px-5 py-5">
+            <h3 className="text-[16px] font-bold text-[#1a1a1a]">
               Ingredients to shop
             </h3>
-            <p className="text-[13px] text-[#666] mt-0.5">
+            <p className="mt-0.5 text-[13px] text-[#666]">
               {ingredients.length} Same-Day items · ${total.toFixed(2)}
             </p>
-            <div className="mt-3 grid grid-cols-2 gap-3">
+            <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3">
               {ingredients.map((product) => (
                 <ProductCard
                   key={product.id}
@@ -113,9 +115,9 @@ export default function RecipeDetailDrawer({
               {recipe.steps.map((step, index) => (
                 <li
                   key={step}
-                  className="flex gap-2.5 text-[14px] text-[#333] leading-snug"
+                  className="flex gap-2.5 text-[14px] leading-snug text-[#333]"
                 >
-                  <span className="w-5 h-5 rounded-full bg-[#e8f2fa] text-costco-blue text-[11px] font-bold flex items-center justify-center shrink-0 mt-0.5">
+                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#e8f2fa] text-[11px] font-bold text-costco-blue">
                     {index + 1}
                   </span>
                   {step}
@@ -129,11 +131,11 @@ export default function RecipeDetailDrawer({
           <button
             type="button"
             onClick={addAll}
-            className="w-full h-12 rounded-full bg-[#0AAD0A] hover:bg-[#099809] text-white text-[15px] font-bold inline-flex items-center justify-center gap-2"
+            className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#0AAD0A] text-[15px] font-bold text-white hover:bg-[#099809]"
           >
             {justAdded ? (
               <>
-                <Check className="w-5 h-5" aria-hidden="true" />
+                <Check className="h-5 w-5" aria-hidden="true" />
                 Added to cart
               </>
             ) : (
@@ -142,7 +144,6 @@ export default function RecipeDetailDrawer({
           </button>
         </div>
       </div>
-
     </div>
   );
 }
