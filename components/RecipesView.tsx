@@ -26,6 +26,13 @@ export default function RecipesView() {
       );
     });
   }, [q, course]);
+  const featured =
+    !q.trim() && course === "All"
+      ? shown.find((recipe) => recipe.id === "tomato-basil-pasta") || null
+      : null;
+  const gridRecipes = featured
+    ? shown.filter((recipe) => recipe.id !== featured.id)
+    : shown;
 
   return (
     <div>
@@ -86,6 +93,50 @@ export default function RecipesView() {
         })}
       </div>
 
+      {featured && (
+        <button
+          type="button"
+          onClick={() => {
+            setOpenRecipe(featured.id);
+            document.querySelector("main")?.scrollTo({ top: 0 });
+          }}
+          className="mb-4 w-full text-left group rounded-[16px] bg-white border border-[#ececec] overflow-hidden hover:shadow-[0_2px_10px_rgba(0,0,0,0.07)]"
+        >
+          <span className="relative block aspect-[16/9] bg-[#f3f3f3]">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={featured.image}
+              alt=""
+              className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-300"
+            />
+            <span className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/65 to-transparent" />
+            <span className="absolute left-3 top-3 rounded-full bg-white px-2 py-1 text-[11px] font-bold text-[#1a1a1a] shadow-[0_1px_3px_rgba(0,0,0,0.12)]">
+              Featured meal
+            </span>
+            <span className="absolute bottom-3 left-3 right-3">
+              <span className="block text-[20px] sm:text-[24px] font-bold text-white leading-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.55)]">
+                {featured.title}
+              </span>
+              <span className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[12px] font-semibold text-white/95">
+                <span className="inline-flex items-center gap-1">
+                  <Clock className="w-3.5 h-3.5" aria-hidden="true" />
+                  {featured.minutes} min
+                </span>
+                <span className="inline-flex items-center gap-1">
+                  <Users className="w-3.5 h-3.5" aria-hidden="true" />
+                  {featured.servings} servings
+                </span>
+                <span>{featured.course}</span>
+              </span>
+              <span className="mt-2 inline-flex items-center gap-0.5 text-[13px] font-bold text-white">
+                Shop ingredients
+                <ChevronRight className="w-4 h-4" aria-hidden="true" />
+              </span>
+            </span>
+          </span>
+        </button>
+      )}
+
       {shown.length === 0 ? (
         <div className="flex flex-col items-center text-center pt-10 pb-12 px-6">
           <span className="w-16 h-16 rounded-full bg-white border border-[#eee] flex items-center justify-center shadow-[0_1px_4px_rgba(0,0,0,0.06)]">
@@ -112,7 +163,7 @@ export default function RecipesView() {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {shown.map((recipe) => (
+          {gridRecipes.map((recipe) => (
             <button
               key={recipe.id}
               type="button"

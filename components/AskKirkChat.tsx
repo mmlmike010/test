@@ -10,6 +10,7 @@ import {
   Square,
   Sparkles,
   ChevronRight,
+  Search,
 } from "lucide-react";
 import { useCartStore } from "@/lib/store/cart";
 import { products } from "@/lib/data/products";
@@ -762,7 +763,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
       )}
 
       <div className="px-3.5 pt-2.5 pb-3 border-t border-[#e5e5e5] bg-white shrink-0">
-        <p className="text-[11px] font-bold text-[#666] mb-1.5">
+        <p className="text-[10px] font-bold tracking-[0.12em] text-[#666] uppercase mb-1.5">
           Members often ask
         </p>
         <div className="flex flex-wrap gap-1.5 mb-2.5 content-start">
@@ -772,28 +773,34 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
               type="button"
               onClick={() => void sendMessage(chip)}
               disabled={isLoading}
-              className="px-2.5 py-1 bg-white hover:bg-[#e8f2fa] hover:border-costco-blue hover:text-costco-blue disabled:opacity-50 text-[#333] text-[11px] leading-snug rounded-full transition-colors border border-[#d0d0d0] max-w-full"
+              className="px-2.5 py-1.5 bg-white hover:bg-[#f7fbfe] hover:border-costco-blue hover:text-costco-blue disabled:opacity-50 text-[#1a1a1a] text-[11px] leading-snug rounded-[3px] transition-colors border border-[#c4c4c4] max-w-full text-left"
             >
               {chip}
             </button>
           ))}
         </div>
         <div className="flex gap-1.5 items-stretch">
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder={
-              isTranscribing
-                ? "Transcribing…"
-                : isRecording
-                  ? "Listening…"
-                  : "Ask Kirk for a cart"
-            }
-            className="flex-1 min-w-0 h-11 px-3.5 bg-white border border-[#c4c4c4] rounded-[3px] text-[14px] text-[#1a1a1a] placeholder:text-[#8a8a8a] focus:outline-none focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15"
-            disabled={isLoading || isRecording || isTranscribing}
-          />
+          <div className="relative flex-1 min-w-0">
+            <Search
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8a8a8a] w-[18px] h-[18px] pointer-events-none"
+              aria-hidden="true"
+            />
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder={
+                isTranscribing
+                  ? "Transcribing…"
+                  : isRecording
+                    ? "Listening…"
+                    : "Ask Kirk for a cart"
+              }
+              className="w-full h-11 pl-10 pr-3.5 bg-white border border-[#c4c4c4] rounded-[3px] text-[14px] text-[#1a1a1a] placeholder:text-[#8a8a8a] focus:outline-none focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15"
+              disabled={isLoading || isRecording || isTranscribing}
+            />
+          </div>
           <button
             type="button"
             onClick={() => {
