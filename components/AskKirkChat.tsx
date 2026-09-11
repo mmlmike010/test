@@ -630,8 +630,10 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
       )}
 
       <div
-        className={`flex-1 overflow-y-auto px-3.5 py-3.5 space-y-3 min-h-0 ${
-          hasUserAsk ? "bg-white" : "bg-[#f6f7f8]"
+        className={`flex-1 overflow-y-auto px-3.5 min-h-0 ${
+          hasUserAsk
+            ? "bg-white py-3.5 space-y-3"
+            : "bg-[#f6f7f8] py-2.5 space-y-2"
         }`}
       >
         {messages.map((message) => {
@@ -663,6 +665,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                         <WarehouseResultCard
                           key={`preview-${product.id}`}
                           product={product}
+                          density="featured"
                         />
                       ))}
                     </div>
@@ -899,14 +902,14 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             <p className="mt-2 text-[10px] font-bold tracking-[0.12em] text-[#666] uppercase">
               Popular Searches
             </p>
-            <div className="mt-1 flex flex-wrap gap-x-2.5 gap-y-1">
+            <div className="mt-1 grid grid-cols-2 gap-x-2.5 gap-y-0.5">
               {suggestionChips.map((chip) => (
                 <button
                   key={chip}
                   type="button"
                   onClick={() => void sendMessage(chip)}
                   disabled={isLoading}
-                  className="text-[11px] leading-snug text-costco-blue font-semibold hover:underline disabled:opacity-50 text-left"
+                  className="text-[11px] leading-tight text-costco-blue font-semibold hover:underline disabled:opacity-50 text-left line-clamp-2"
                 >
                   {chip}
                 </button>

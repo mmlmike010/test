@@ -23,26 +23,26 @@ export default function GoldStarMembershipCard() {
           </div>
         </div>
       </div>
-      <div className="px-3 pt-1.5 pb-1 flex gap-2.5 items-center">
-        <KirkIdPhoto className="w-[56px] aspect-[3/4] rounded-[2px] border border-[#d0d0d0] shadow-[0_1px_2px_rgba(0,0,0,0.12),inset_0_0_0_3px_#f7f6f2] shrink-0" />
+      <div className="px-3 pt-1 pb-1 flex gap-2 items-center">
+        <KirkIdPhoto className="w-[44px] aspect-[3/4] rounded-[2px] border border-[#d0d0d0] shadow-[0_1px_2px_rgba(0,0,0,0.12),inset_0_0_0_3px_#f7f6f2] shrink-0" />
         <div className="min-w-0 flex-1">
-          <p className="text-[18px] font-black tracking-tight text-[#1a1a1a] leading-none">
+          <p className="text-[16px] font-black tracking-tight text-[#1a1a1a] leading-none">
             KIRK
           </p>
-          <p className="mt-1 text-[9px] font-bold tracking-[0.12em] text-costco-red uppercase">
+          <p className="mt-0.5 text-[8px] font-bold tracking-[0.12em] text-costco-red uppercase">
             Gold Star Member
           </p>
-          <p className="mt-1 text-[14px] font-bold text-costco-blue tabular-nums tracking-[0.1em]">
+          <p className="mt-0.5 text-[13px] font-bold text-costco-blue tabular-nums tracking-[0.1em]">
             111 847 11217
           </p>
-          <p className="mt-1 text-[8px] font-semibold tracking-[0.08em] text-[#777] uppercase">
+          <p className="mt-0.5 text-[8px] font-semibold tracking-[0.08em] text-[#777] uppercase">
             Member Since 2019 · Expires 09/27
           </p>
         </div>
-        <MembershipQr className="h-[56px] w-[56px] border border-[#ececec] bg-white p-1 shrink-0" />
+        <MembershipQr className="h-[44px] w-[44px] border border-[#ececec] bg-white p-1 shrink-0" />
       </div>
-      <div className="px-3 pb-2">
-        <MembershipBarcode className="h-5 w-full text-[#1a1a1a]" />
+      <div className="px-3 pb-1.5">
+        <MembershipBarcode className="h-4 w-full text-[#1a1a1a]" />
         <div className="mt-1 flex items-center justify-between gap-2">
           <span className="inline-flex h-4 items-center rounded-[2px] bg-costco-red px-1.5 text-[8px] font-black tracking-wide text-white">
             MEMBER
