@@ -125,7 +125,7 @@ if (only === "all" || only === "kirkland") {
     file: "large_83cdd023-627e-4ee5-8d7e-6d23e8a79fba.jpeg",
     wash: { r: 0, g: 70, b: 140, alpha: 0.36 },
     outName: "hero-kirkland.jpg",
-    scale: 0.94,
+    scale: 0.8,
     nudgeX: 90,
   });
 }

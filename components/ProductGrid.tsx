@@ -174,7 +174,7 @@ export default function ProductGrid() {
     {
       tag: "kirkland",
       title: "Kirkland Signature",
-      image: "/products/hero-kirkland.jpg?v=19",
+      image: "/products/hero-kirkland.jpg?v=20",
       wash: "#3d5470",
     },
     {

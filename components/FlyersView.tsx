@@ -9,11 +9,11 @@ import ProductCard from "@/components/ProductCard";
 
 const pages = [
   {
-    src: "/products/flyer-page-1.jpg?v=7",
+    src: "/products/flyer-page-1.jpg?v=8",
     label: "Page 1 · Coupon book",
   },
   {
-    src: "/products/flyer-page-2.jpg?v=7",
+    src: "/products/flyer-page-2.jpg?v=8",
     label: "Page 2 · Flyer deals",
   },
 ] as const;

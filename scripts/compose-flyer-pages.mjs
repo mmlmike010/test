@@ -102,7 +102,8 @@ async function coupon({
       h,
       `
   <rect width="${w}" height="${h}" fill="#ffffff"/>
-  <rect x="0.75" y="0.75" width="${w - 1.5}" height="${h - 1.5}" fill="none" stroke="#d0d0d0" stroke-width="1.5"/>
+  <rect x="0.75" y="0.75" width="${w - 1.5}" height="${h - 1.5}" fill="none" stroke="#1a1a1a" stroke-width="1.5"/>
+  <rect x="7" y="7" width="${w - 14}" height="${h - 14}" fill="none" stroke="#c4c4c4" stroke-width="1.25" stroke-dasharray="3 4"/>
   <rect width="${w}" height="28" fill="#E31837"/>
   <text x="10" y="19" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="800" fill="#ffffff" letter-spacing="0.8">WAREHOUSE COUPON</text>
   <text x="${w - 10}" y="19" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700" fill="#F3E3A3">LIMIT 2</text>
