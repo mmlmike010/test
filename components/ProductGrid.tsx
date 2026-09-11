@@ -684,8 +684,10 @@ export default function ProductGrid() {
             <div
               className={
                 warehouseList && !hideFilters
-                  ? "lg:grid lg:grid-cols-[200px_minmax(0,1fr)] lg:items-start lg:gap-4"
-                  : ""
+                  ? "min-h-[calc(100dvh-220px)] lg:grid lg:grid-cols-[200px_minmax(0,1fr)] lg:items-start lg:gap-4"
+                  : warehouseList
+                    ? "min-h-[calc(100dvh-220px)]"
+                    : ""
               }
             >
             {warehouseList && !hideFilters ? (

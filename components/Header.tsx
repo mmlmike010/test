@@ -149,54 +149,111 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
       <div className="max-w-[1800px] mx-auto px-3 sm:px-4 py-2">
         <div className="flex items-center gap-2.5">
           <form
-            className="relative flex-1 min-w-0"
+            className={
+              warehouseSearch
+                ? "flex h-11 min-w-0 flex-1"
+                : "relative flex-1 min-w-0"
+            }
             onSubmit={(e) => {
               e.preventDefault();
               void search();
             }}
           >
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8a8a8a] w-[18px] h-[18px]" />
-            <input
-              type="search"
-              value={q}
-              onChange={(e) => {
-                const next = e.target.value;
-                if (next.trim() && (tag || department)) {
-                  setTag(null);
-                  setDepartment(null);
-                }
-                setQuery(next);
-                setListTone("sameday");
-              }}
-              placeholder="Search products"
-              className={`w-full h-11 pl-11 pr-10 bg-[#f6f6f6] border text-[15px] text-[#222] placeholder:text-[#8a8a8a] focus:outline-none focus:bg-white focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15 ${
-                warehouseSearch
-                  ? "rounded-[3px] border-[#c4c4c4]"
-                  : "rounded-full border-[#d8d8d8]"
-              }`}
-            />
-            {q && (
-              <button
-                type="button"
-                aria-label="Clear search"
-                className={`absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-100 ${
-                  warehouseSearch ? "rounded-[3px]" : "rounded-full"
-                }`}
-                onClick={() => {
-                  setQuery("");
-                  setListTone("sameday");
-                  void search();
-                }}
-              >
-                <X className="w-4 h-4 text-[#666]" />
-              </button>
+            {warehouseSearch ? (
+              <label className="relative shrink-0">
+                <span className="sr-only">Department</span>
+                <select
+                  aria-label="Department"
+                  value={
+                    warehouseFacets.departments.length === 1
+                      ? warehouseFacets.departments[0]
+                      : ""
+                  }
+                  onChange={(e) => {
+                    const label = e.target.value;
+                    setWarehouseFacets(
+                      label
+                        ? {
+                            ...EMPTY_WAREHOUSE_FACETS,
+                            departments: [label],
+                          }
+                        : EMPTY_WAREHOUSE_FACETS
+                    );
+                  }}
+                  className="h-11 appearance-none rounded-l-[3px] border border-r-0 border-[#c4c4c4] bg-[#f6f6f6] pl-3 pr-8 text-[13px] font-bold text-[#1a1a1a] focus:border-costco-blue focus:outline-none focus:ring-2 focus:ring-costco-blue/15"
+                >
+                  <option value="">All</option>
+                  {WAREHOUSE_NAV.map((label) => (
+                    <option key={label} value={label}>
+                      {label}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown
+                  className="pointer-events-none absolute right-2 top-1/2 h-4 w-4 -translate-y-1/2 text-[#666]"
+                  aria-hidden="true"
+                />
+              </label>
+            ) : (
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8a8a8a] w-[18px] h-[18px]" />
             )}
+            <div className={warehouseSearch ? "relative min-w-0 flex-1" : ""}>
+              <input
+                type="search"
+                value={q}
+                onChange={(e) => {
+                  const next = e.target.value;
+                  if (next.trim() && (tag || department)) {
+                    setTag(null);
+                    setDepartment(null);
+                  }
+                  setQuery(next);
+                  setListTone("sameday");
+                }}
+                placeholder={
+                  warehouseSearch ? "Search Costco" : "Search products"
+                }
+                className={
+                  warehouseSearch
+                    ? "h-11 w-full border border-[#c4c4c4] bg-white pl-3 pr-10 text-[15px] text-[#222] placeholder:text-[#8a8a8a] focus:border-costco-blue focus:outline-none focus:ring-2 focus:ring-costco-blue/15"
+                    : "w-full h-11 pl-11 pr-10 bg-[#f6f6f6] border border-[#d8d8d8] rounded-full text-[15px] text-[#222] placeholder:text-[#8a8a8a] focus:outline-none focus:bg-white focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15"
+                }
+              />
+              {q ? (
+                <button
+                  type="button"
+                  aria-label="Clear search"
+                  className={`absolute top-1/2 -translate-y-1/2 p-1 hover:bg-gray-100 ${
+                    warehouseSearch
+                      ? "right-2 rounded-[3px]"
+                      : "right-3 rounded-full"
+                  }`}
+                  onClick={() => {
+                    setQuery("");
+                    setListTone("sameday");
+                    void search();
+                  }}
+                >
+                  <X className="w-4 h-4 text-[#666]" />
+                </button>
+              ) : null}
+            </div>
+            {warehouseSearch ? (
+              <button
+                type="submit"
+                className="h-11 shrink-0 rounded-r-[3px] bg-costco-red px-4 text-[14px] font-bold text-white hover:bg-costco-red-hover"
+              >
+                Search
+              </button>
+            ) : null}
           </form>
 
           <button
             type="button"
             onClick={onAskKirkClick}
-            className="hidden sm:inline-flex items-center gap-1.5 h-10 px-3 bg-white border-2 border-costco-red text-costco-red rounded-full font-bold hover:bg-[#fff5f6] whitespace-nowrap"
+            className={`hidden sm:inline-flex items-center gap-1.5 h-10 px-3 bg-white border-2 border-costco-red text-costco-red font-bold hover:bg-[#fff5f6] whitespace-nowrap ${
+              warehouseSearch ? "rounded-[3px]" : "rounded-full"
+            }`}
           >
             <KirkMark size={22} />
             <span className="text-[13px]">Ask Kirk</span>
@@ -204,15 +261,29 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
           <button
             type="button"
             onClick={onAskKirkClick}
-            className="sm:hidden h-10 w-10 rounded-full border-2 border-costco-red flex items-center justify-center"
+            className={`sm:hidden h-10 w-10 border-2 border-costco-red flex items-center justify-center ${
+              warehouseSearch ? "rounded-[3px]" : "rounded-full"
+            }`}
             aria-label="Ask Kirk"
           >
             <KirkMark size={22} />
           </button>
 
+          {warehouseSearch ? (
+            <button
+              type="button"
+              className="hidden xl:inline text-[13px] font-semibold text-costco-blue hover:underline"
+              onClick={() => setSheet("signin", "sameday")}
+            >
+              Orders & Returns
+            </button>
+          ) : null}
+
           <button
             type="button"
-            className="hidden lg:flex text-left items-center gap-1.5 px-1.5 py-0.5 rounded-md hover:bg-[#f6f6f6]"
+            className={`hidden lg:flex text-left items-center gap-1.5 px-1.5 py-0.5 hover:bg-[#f6f6f6] ${
+              warehouseSearch ? "rounded-[3px]" : "rounded-md"
+            }`}
             onClick={() => setSheet("delivery", "sameday")}
           >
             <Clock className="w-[18px] h-[18px] text-costco-blue shrink-0" />
@@ -232,13 +303,21 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
             type="button"
             onClick={openCart}
             aria-label={`View Cart. Items in cart: ${totalItems}`}
-            className="relative inline-flex items-center gap-1.5 h-10 px-3 border border-[#c4c4c4] rounded-full hover:bg-[#f6f6f6] bg-white"
+            className={`relative inline-flex items-center gap-1.5 h-10 px-3 border border-[#c4c4c4] hover:bg-[#f6f6f6] bg-white ${
+              warehouseSearch ? "rounded-[3px]" : "rounded-full"
+            }`}
           >
             <ShoppingCart className="w-5 h-5 text-[#333]" />
             <span className="hidden sm:inline font-bold text-[13px] text-[#333]">
               Cart
             </span>
-            <span className="absolute -top-1.5 -right-1 min-w-[20px] h-[20px] px-1 bg-[#0AAD0A] text-white text-[11px] font-bold rounded-full flex items-center justify-center">
+            <span
+              className={`absolute -top-1.5 -right-1 min-w-[20px] h-[20px] px-1 text-white text-[11px] font-bold flex items-center justify-center ${
+                warehouseSearch
+                  ? "rounded-[3px] bg-costco-red"
+                  : "rounded-full bg-[#0AAD0A]"
+              }`}
+            >
               {totalItems}
             </span>
           </button>
