@@ -673,7 +673,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                         <WarehouseResultCard
                           key={`preview-${product.id}`}
                           product={product}
-                          density="featured"
+                          density="preview"
                         />
                       ))}
                     </div>
@@ -717,7 +717,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                       <WarehouseResultCard
                         key={`${message.id}-${product.id}`}
                         product={product}
-                        density="featured"
+                        density="preview"
                       />
                     ))}
                   </div>

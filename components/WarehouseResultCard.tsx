@@ -15,14 +15,16 @@ export default function WarehouseResultCard({
   onCompare,
 }: {
   product: Product;
-  density?: "search" | "featured" | "catalog";
+  density?: "search" | "featured" | "preview" | "catalog";
   compareChecked?: boolean;
   onCompare?: (checked: boolean) => void;
 }) {
   const inspect = useCatalogStore((s) => s.inspect);
   const size = productSize(product.id);
   const featured = density === "featured";
+  const preview = density === "preview";
   const catalog = density === "catalog";
+  const chrome = !featured;
 
   return (
     <div className="flex flex-col border border-[#c4c4c4] bg-white rounded-[3px] overflow-hidden">
@@ -33,7 +35,13 @@ export default function WarehouseResultCard({
       >
         <span
           className={`relative bg-white ${
-            featured ? "h-[88px]" : catalog ? "h-[180px]" : "aspect-square"
+            featured
+              ? "h-[88px]"
+              : preview
+                ? "h-[112px]"
+                : catalog
+                  ? "h-[180px]"
+                  : "aspect-square"
           }`}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -41,10 +49,10 @@ export default function WarehouseResultCard({
             src={product.image}
             alt=""
             className={`absolute inset-0 h-full w-full object-contain ${
-              featured ? "p-1.5" : "p-2.5"
+              featured || preview ? "p-1.5" : "p-2.5"
             }`}
           />
-          {!featured && isLimitedOffer(product) ? (
+          {chrome && isLimitedOffer(product) ? (
             <span className="absolute left-0 top-0 bg-costco-red px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
               Limited Offer
             </span>
@@ -53,7 +61,11 @@ export default function WarehouseResultCard({
         <span className={`min-w-0 px-2 ${featured ? "pb-1 pt-0.5" : "pb-2 pt-1"}`}>
           <span
             className={`block font-bold leading-snug text-costco-blue hover:underline ${
-              featured ? "text-[12px] line-clamp-1" : "text-[13px] line-clamp-2"
+              featured
+                ? "text-[12px] line-clamp-1"
+                : preview
+                  ? "text-[12px] line-clamp-2"
+                  : "text-[13px] line-clamp-2"
             }`}
           >
             {product.brand} {product.name}
@@ -61,24 +73,25 @@ export default function WarehouseResultCard({
           {size ? (
             <span className="mt-0.5 block text-[11px] text-[#72767E]">{size}</span>
           ) : null}
-          {featured ? null : (
+          {chrome ? (
             <span className="mt-0.5 block text-[11px] text-[#72767E]">
               Item {warehouseItemNumber(product.id)}
             </span>
-          )}
-          {featured ? null : (
+          ) : null}
+          {chrome ? (
             <span className="mt-0.5 block">
               <StarRating
                 rating={product.rating}
                 reviewCount={product.reviewCount}
                 size="sm"
+                showCount={!preview}
               />
             </span>
-          )}
+          ) : null}
           <span className="mt-1 flex flex-wrap items-baseline gap-x-1 tabular-nums">
             <span
               className={`font-bold text-costco-red ${
-                featured ? "text-[16px]" : "text-[18px]"
+                featured || preview ? "text-[16px]" : "text-[18px]"
               }`}
             >
               ${product.price.toFixed(2)}
