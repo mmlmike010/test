@@ -1,15 +1,51 @@
 "use client";
 
-import { X, Minus, Plus, Star } from "lucide-react";
+import { ChevronDown, X, Minus, Plus, Star } from "lucide-react";
 import SaveHeart from "@/components/SaveHeart";
 import { products, type Product } from "@/lib/data/products";
 import { useCartStore } from "@/lib/store/cart";
+import { useCatalogStore } from "@/lib/store/catalog";
 import StarRating from "@/components/StarRating";
 import ProductCard from "@/components/ProductCard";
 import { productSize } from "@/lib/ui/packSize";
 import { aisleLabel } from "@/lib/ui/aisleLabels";
 import { storefrontOverlayClass, useSessionStore } from "@/lib/store/session";
-import { useRef, useState } from "react";
+import { useRef, useState, type ReactNode } from "react";
+
+function ItemAccordion({
+  title,
+  defaultOpen = false,
+  children,
+}: {
+  title: string;
+  defaultOpen?: boolean;
+  children: ReactNode;
+}) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <div className="border-b border-[#e8e8e8]">
+      <button
+        type="button"
+        aria-expanded={open}
+        onClick={() => setOpen((v) => !v)}
+        className="flex w-full items-center justify-between py-3.5 text-left"
+      >
+        <span className="text-[15px] font-bold text-[#1a1a1a]">{title}</span>
+        <ChevronDown
+          className={`h-5 w-5 shrink-0 text-[#555] transition-transform ${
+            open ? "rotate-180" : ""
+          }`}
+          aria-hidden="true"
+        />
+      </button>
+      {open ? (
+        <div className="pb-3.5 text-[13px] leading-relaxed text-[#555]">
+          {children}
+        </div>
+      ) : null}
+    </div>
+  );
+}
 
 export default function ProductDetailModal({
   product,
@@ -26,6 +62,22 @@ export default function ProductDetailModal({
   );
   const scrollerRef = useRef<HTMLDivElement>(null);
   const kirkOpen = useSessionStore((s) => s.kirkOpen);
+  const setQuery = useCatalogStore((s) => s.setQuery);
+  const setTag = useCatalogStore((s) => s.setTag);
+  const setDepartment = useCatalogStore((s) => s.setDepartment);
+  const size = productSize(current.id);
+
+  const shopAllBrand = () => {
+    if (current.brand === "Kirkland Signature") {
+      setQuery("");
+      setTag("kirkland");
+    } else {
+      setTag(null);
+      setDepartment(null);
+      setQuery(current.brand);
+    }
+    onClose();
+  };
 
   const related = products
     .filter(
@@ -93,11 +145,16 @@ export default function ProductDetailModal({
             <h2 className="text-[22px] font-bold text-[#1a1a1a] leading-snug">
               {current.brand} {current.name}
             </h2>
-            {productSize(current.id) && (
-              <p className="text-[14px] text-[#6b6b6b] mt-1">
-                {productSize(current.id)}
-              </p>
-            )}
+            {size ? (
+              <p className="mt-1 text-[14px] text-[#242424]">• {size}</p>
+            ) : null}
+            <button
+              type="button"
+              onClick={shopAllBrand}
+              className="mt-2 w-fit text-[14px] font-bold text-costco-blue hover:underline"
+            >
+              Shop all {current.brand}
+            </button>
             <div className="mt-2">
               <StarRating
                 rating={current.rating}
@@ -127,17 +184,24 @@ export default function ProductDetailModal({
                 · {aisleLabel(current.department)}
               </span>
             </p>
-            <div className="mt-5 pt-4 border-t border-[#eee]">
-              <h3 className="text-[15px] font-bold text-[#1a1a1a]">Details</h3>
-              <p className="text-[13px] text-[#555] mt-1.5 leading-snug">
-                {aisleLabel(current.department)}
-                {current.category ? ` · ${current.category}` : ""}
-                {productSize(current.id) ? ` · ${productSize(current.id)}` : ""}
-              </p>
-              <p className="text-[12px] text-[#888] mt-1.5">
-                Same-Day price · Membership required · Prices higher than
-                warehouse
-              </p>
+            <div className="mt-5" key={current.id}>
+              <ItemAccordion title="Details" defaultOpen>
+                <p>
+                  {aisleLabel(current.department)}
+                  {current.category ? ` · ${current.category}` : ""}
+                  {size ? ` · ${size}` : ""}
+                </p>
+                <p className="mt-1.5 text-[12px] text-[#888]">
+                  Same-Day price · Membership required · Prices higher than
+                  warehouse
+                </p>
+              </ItemAccordion>
+              <ItemAccordion title="Ingredients">
+                <p>See the warehouse package for the full ingredient list.</p>
+              </ItemAccordion>
+              <ItemAccordion title="Directions">
+                <p>See the warehouse package for preparation and storage.</p>
+              </ItemAccordion>
             </div>
           </div>
           </div>
