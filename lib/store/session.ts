@@ -236,8 +236,8 @@ export function formatAddress(address: DeliveryAddress): string {
   return `${address.zip} ${address.city}`;
 }
 
-/** Sit below the Same-Day lockup + search row so titles are not under the sticky header. */
-export const HEADER_LOCKUP_OFFSET = "top-[112px]";
+/** Sit below lockup + search + Shop/Flyers/Lists/Meals so titles are not under the sticky header. */
+export const HEADER_LOCKUP_OFFSET = "top-[156px]";
 
 /** Leave the Ask Kirk rail uncovered on desktop. Matches AskKirkChat widths. */
 export function kirkDrawerOffset(open: boolean) {

@@ -43,10 +43,21 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
   const slot = deliveryWindow(windowId);
   const tabClass = (active: boolean) =>
     active
-      ? "text-costco-blue font-bold border-b-[3px] border-costco-blue py-3"
-      : "text-[#333] hover:text-costco-blue py-3";
+      ? "h-full text-costco-blue font-bold border-b-[3px] border-costco-blue"
+      : "h-full text-[#333] hover:text-costco-blue border-b-[3px] border-transparent";
   const scrollShop = () => {
     document.querySelector("main")?.scrollTo({ top: 0 });
+  };
+  const goShop = () => {
+    clearFilters();
+    void search();
+    scrollShop();
+  };
+  const goTab = (next: "flyers" | "lists" | "recipes") => {
+    setQuery("");
+    setTag(next);
+    void search();
+    scrollShop();
   };
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -85,59 +96,6 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
                 </span>
               </span>
             </button>
-            <nav className="hidden lg:flex items-center gap-5 text-[14px]">
-              <button
-                type="button"
-                aria-current={onShop ? "page" : undefined}
-                className={tabClass(onShop)}
-                onClick={() => {
-                  clearFilters();
-                  void search();
-                  scrollShop();
-                }}
-              >
-                Shop
-              </button>
-              <button
-                type="button"
-                aria-current={onFlyers ? "page" : undefined}
-                className={tabClass(onFlyers)}
-                onClick={() => {
-                  setQuery("");
-                  setTag("flyers");
-                  void search();
-                  scrollShop();
-                }}
-              >
-                Flyers
-              </button>
-              <button
-                type="button"
-                aria-current={onLists ? "page" : undefined}
-                className={tabClass(onLists)}
-                onClick={() => {
-                  setQuery("");
-                  setTag("lists");
-                  void search();
-                  scrollShop();
-                }}
-              >
-                Lists
-              </button>
-              <button
-                type="button"
-                aria-current={onRecipes ? "page" : undefined}
-                className={tabClass(onRecipes)}
-                onClick={() => {
-                  setQuery("");
-                  setTag("recipes");
-                  void search();
-                  scrollShop();
-                }}
-              >
-                Meals
-              </button>
-            </nav>
           </div>
           <div className="flex items-center gap-3 shrink-0">
             <button
@@ -269,6 +227,46 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
           </button>
         </div>
       </div>
+      </div>
+
+      <div className="bg-white border-b border-[#ececec]">
+        <nav
+          className="max-w-[1800px] mx-auto px-3 sm:px-4 h-[40px] flex items-center gap-5 overflow-x-auto scrollbar-hide text-[14px]"
+          aria-label="Same-Day sections"
+        >
+          <button
+            type="button"
+            aria-current={onShop ? "page" : undefined}
+            className={tabClass(onShop)}
+            onClick={goShop}
+          >
+            Shop
+          </button>
+          <button
+            type="button"
+            aria-current={onFlyers ? "page" : undefined}
+            className={tabClass(onFlyers)}
+            onClick={() => goTab("flyers")}
+          >
+            Flyers
+          </button>
+          <button
+            type="button"
+            aria-current={onLists ? "page" : undefined}
+            className={tabClass(onLists)}
+            onClick={() => goTab("lists")}
+          >
+            Lists
+          </button>
+          <button
+            type="button"
+            aria-current={onRecipes ? "page" : undefined}
+            className={tabClass(onRecipes)}
+            onClick={() => goTab("recipes")}
+          >
+            Meals
+          </button>
+        </nav>
       </div>
     </header>
   );
