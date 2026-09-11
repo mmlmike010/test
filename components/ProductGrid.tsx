@@ -547,7 +547,7 @@ export default function ProductGrid() {
             <div
               className={
                 kirkOpen
-                  ? "grid grid-cols-2 gap-3"
+                  ? "grid grid-cols-[repeat(auto-fill,minmax(220px,240px))] gap-3"
                   : "grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3"
               }
             >
