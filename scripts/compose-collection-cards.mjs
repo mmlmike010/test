@@ -2,8 +2,8 @@ import { join } from "node:path";
 import sharp from "sharp";
 
 const dir = join(process.cwd(), "public", "products");
-const W = 1400;
-const H = 788;
+const W = 1600;
+const H = 520;
 
 async function download(url) {
   const res = await fetch(url);
@@ -81,12 +81,12 @@ async function merchHero({ file, wash, outName, scale = 0.92, nudgeX = 80 }) {
   const cut = await knockoutWhite(src);
   const pack = await sharp(cut)
     .trim()
-    .resize(Math.round(H * scale * 1.15), Math.round(H * scale), { fit: "inside" })
+    .resize(Math.round(H * scale * 1.35), Math.round(H * scale), { fit: "inside" })
     .png()
     .toBuffer();
   const meta = await sharp(pack).metadata();
-  const left = Math.round((W - meta.width) / 2) + nudgeX;
-  const top = Math.round((H - meta.height) / 2) + 12;
+  const left = Math.round((W - meta.width) / 2) + Math.round(nudgeX * 0.35);
+  const top = Math.round((H - meta.height) / 2);
   const shadow = await sharp(
     Buffer.from(
       `<svg xmlns="http://www.w3.org/2000/svg" width="${meta.width}" height="110"><ellipse cx="${meta.width / 2}" cy="58" rx="${meta.width * 0.34}" ry="16" fill="black" fill-opacity="0.32"/></svg>`
