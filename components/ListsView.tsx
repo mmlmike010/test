@@ -8,6 +8,8 @@ import { useCartStore } from "@/lib/store/cart";
 import { hydrateLists, useListStore } from "@/lib/store/lists";
 import ProductCard from "@/components/ProductCard";
 
+const AGAIN_ID = "again";
+
 function resolveProducts(ids: string[]): Product[] {
   return ids
     .map((id) => products.find((product) => product.id === id))
@@ -50,17 +52,17 @@ function ListThumbStack({ items }: { items: Product[] }) {
 }
 
 function ListPreviewCard({
-  href,
   title,
   items,
   cta,
+  onOpen,
   onCta,
   showHeart = false,
 }: {
-  href: string;
   title: string;
   items: Product[];
   cta: string;
+  onOpen: () => void;
   onCta: () => void;
   showHeart?: boolean;
 }) {
@@ -68,7 +70,7 @@ function ListPreviewCard({
 
   return (
     <div className="flex flex-col rounded-[16px] border border-[#ececec] bg-white px-4 pt-3.5 pb-3.5 hover:shadow-[0_2px_10px_rgba(0,0,0,0.07)]">
-      <a href={href} className="min-w-0">
+      <button type="button" onClick={onOpen} className="min-w-0 text-left">
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0">
             <p className="text-[16px] font-bold text-[#1a1a1a] truncate">
@@ -88,7 +90,7 @@ function ListPreviewCard({
         <div className="mt-3">
           <ListThumbStack items={items} />
         </div>
-      </a>
+      </button>
       <button
         type="button"
         onClick={onCta}
@@ -113,21 +115,125 @@ export default function ListsView() {
   const inspect = useCatalogStore((s) => s.inspect);
   const [newName, setNewName] = useState("");
   const [creating, setCreating] = useState(false);
+  const [openList, setOpenList] = useState<string | null>(null);
   const again = filterProducts({ tag: "again" });
 
   useEffect(() => {
     hydrateLists();
   }, []);
 
+  const scrollShop = () => {
+    document.querySelector("main")?.scrollTo({ top: 0 });
+  };
+
   const goShop = () => {
     clearFilters();
     void search();
-    document.querySelector("main")?.scrollTo({ top: 0 });
+    scrollShop();
   };
 
   const addProducts = (items: Product[]) => {
     for (const product of items) addItem(product);
   };
+
+  const openPage = (id: string) => {
+    setOpenList(id);
+    scrollShop();
+  };
+
+  const closePage = () => {
+    setOpenList(null);
+    scrollShop();
+  };
+
+  const opened =
+    openList === AGAIN_ID
+      ? {
+          title: "Buy it again",
+          items: again,
+          emptyHint:
+            "Items you buy from this warehouse show up here for a faster reorder.",
+        }
+      : openList
+        ? (() => {
+            const list = lists.find((entry) => entry.id === openList);
+            if (!list) return null;
+            return {
+              title: list.name,
+              items: resolveProducts(list.productIds),
+              emptyHint:
+                "Save items from Shop with the heart, or ask Kirk to build a cart.",
+            };
+          })()
+        : null;
+
+  if (opened) {
+    return (
+      <div>
+        <button
+          type="button"
+          onClick={closePage}
+          className="mb-3 inline-flex items-center gap-0.5 text-[13px] font-bold text-costco-blue hover:underline"
+        >
+          <ChevronLeft className="w-4 h-4" aria-hidden="true" />
+          Lists
+        </button>
+
+        <div className="mb-4 flex items-end justify-between gap-3 flex-wrap">
+          <div>
+            <h1 className="text-[22px] lg:text-[24px] font-bold text-[#1a1a1a] tracking-tight">
+              {opened.title}
+            </h1>
+            <p className="text-[13px] text-[#666] mt-0.5">
+              {opened.items.length} item
+              {opened.items.length === 1 ? "" : "s"} · Same-Day · 11217 Brooklyn
+            </p>
+          </div>
+          {opened.items.length > 0 && (
+            <button
+              type="button"
+              onClick={() => addProducts(opened.items)}
+              className="inline-flex items-center gap-1.5 h-10 px-3.5 rounded-full bg-[#0AAD0A] text-white text-[13px] font-bold hover:bg-[#099809]"
+            >
+              <ShoppingCart className="w-4 h-4" />
+              Add all
+            </button>
+          )}
+        </div>
+
+        {opened.items.length === 0 ? (
+          <div className="flex flex-col items-center text-center pt-8 pb-10 px-6 bg-white rounded-[16px] border border-[#ececec]">
+            <span className="w-14 h-14 rounded-full bg-[#f6f6f6] flex items-center justify-center">
+              <Heart className="w-6 h-6 text-[#8a8a8a]" />
+            </span>
+            <p className="font-bold text-[#1a1a1a] text-[16px] mt-3">
+              This list is empty
+            </p>
+            <p className="text-[13px] text-[#666] mt-1.5 max-w-[22rem]">
+              {opened.emptyHint}
+            </p>
+            <button
+              type="button"
+              onClick={goShop}
+              className="mt-4 px-5 py-2.5 bg-[#0AAD0A] text-white text-[14px] font-bold rounded-full hover:bg-[#099809]"
+            >
+              Browse store
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3">
+            {opened.items.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                onOpen={() => inspect(product)}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -195,12 +301,12 @@ export default function ListsView() {
         </form>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <ListPreviewCard
-          href="#buy-it-again"
           title="Buy it again"
           items={again}
           cta="Buy again"
+          onOpen={() => openPage(AGAIN_ID)}
           onCta={() => addProducts(again)}
         />
         {lists.map((list) => {
@@ -208,108 +314,16 @@ export default function ListsView() {
           return (
             <ListPreviewCard
               key={list.id}
-              href={`#list-${list.id}`}
               title={list.name}
               items={items}
               cta={items.length === 0 ? "Continue shopping" : "Buy again"}
+              onOpen={() => openPage(list.id)}
               onCta={items.length === 0 ? goShop : () => addProducts(items)}
               showHeart
             />
           );
         })}
       </div>
-
-      <section id="buy-it-again" className="mb-7">
-        <div className="mb-3 flex items-end justify-between gap-3 flex-wrap">
-          <div>
-            <h2 className="text-[18px] lg:text-[20px] font-bold text-[#1a1a1a] tracking-tight">
-              Buy it again
-            </h2>
-            <p className="text-[13px] text-[#666] mt-0.5">
-              {again.length} item{again.length === 1 ? "" : "s"} · Gold Star member
-            </p>
-          </div>
-          {again.length > 0 && (
-            <button
-              type="button"
-              onClick={() => addProducts(again)}
-              className="inline-flex items-center gap-1.5 h-10 px-3.5 rounded-full bg-[#0AAD0A] text-white text-[13px] font-bold hover:bg-[#099809]"
-            >
-              <ShoppingCart className="w-4 h-4" />
-              Add all
-            </button>
-          )}
-        </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3">
-          {again.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              onOpen={() => inspect(product)}
-            />
-          ))}
-        </div>
-      </section>
-
-      {lists.map((list) => {
-        const items = resolveProducts(list.productIds);
-        return (
-          <section key={list.id} id={`list-${list.id}`} className="mb-7">
-            <div className="mb-3 flex items-end justify-between gap-3 flex-wrap">
-              <div>
-                <h2 className="text-[18px] lg:text-[20px] font-bold text-[#1a1a1a] tracking-tight">
-                  {list.name}
-                </h2>
-                <p className="text-[13px] text-[#666] mt-0.5">
-                  {items.length} item{items.length === 1 ? "" : "s"} · Tap the
-                  heart on any tile to save
-                </p>
-              </div>
-              {items.length > 0 && (
-                <button
-                  type="button"
-                  onClick={() => addProducts(items)}
-                  className="inline-flex items-center gap-1.5 h-10 px-3.5 rounded-full bg-[#0AAD0A] text-white text-[13px] font-bold hover:bg-[#099809]"
-                >
-                  <ShoppingCart className="w-4 h-4" />
-                  Add all
-                </button>
-              )}
-            </div>
-            {items.length === 0 ? (
-              <div className="flex flex-col items-center text-center pt-8 pb-10 px-6 bg-white rounded-[12px] border border-[#ececec]">
-                <span className="w-14 h-14 rounded-full bg-[#f6f6f6] flex items-center justify-center">
-                  <Heart className="w-6 h-6 text-[#8a8a8a]" />
-                </span>
-                <p className="font-bold text-[#1a1a1a] text-[16px] mt-3">
-                  This list is empty
-                </p>
-                <p className="text-[13px] text-[#666] mt-1.5 max-w-[22rem]">
-                  Save items from Shop with the heart, or ask Kirk to build a
-                  cart.
-                </p>
-                <button
-                  type="button"
-                  onClick={goShop}
-                  className="mt-4 px-5 py-2.5 bg-[#0AAD0A] text-white text-[14px] font-bold rounded-full hover:bg-[#099809]"
-                >
-                  Browse store
-                </button>
-              </div>
-            ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3">
-                {items.map((product) => (
-                  <ProductCard
-                    key={product.id}
-                    product={product}
-                    onOpen={() => inspect(product)}
-                  />
-                ))}
-              </div>
-            )}
-          </section>
-        );
-      })}
     </div>
   );
 }
