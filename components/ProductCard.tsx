@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Check, Minus, Plus } from "lucide-react";
 import type { Product } from "@/lib/data/products";
 import { useCartStore } from "@/lib/store/cart";
-import { productSize } from "@/lib/ui/packSize";
+import { productSize, unitPriceLabel } from "@/lib/ui/packSize";
 import SaveHeart from "@/components/SaveHeart";
 
 function AddControl({ product }: { product: Product }) {
@@ -76,6 +76,9 @@ export default function ProductCard({
   onOpen: () => void;
   compact?: boolean;
 }) {
+  const size = productSize(product.id);
+  const unit = unitPriceLabel(product.id, product.price);
+
   return (
     <div
       role="button"
@@ -128,11 +131,14 @@ export default function ProductCard({
         <h3 className="text-[14px] font-normal text-[#242424] leading-snug mt-1.5 line-clamp-3">
           {product.brand} {product.name}
         </h3>
-        {productSize(product.id) && (
+        {size ? (
           <p className="text-[14px] leading-[18px] text-[#72767E] mt-0.5">
-            {productSize(product.id)}
+            {size}
           </p>
-        )}
+        ) : null}
+        {unit ? (
+          <p className="text-[13px] leading-[18px] text-[#72767E]">{unit}</p>
+        ) : null}
         <p className="text-[12px] text-[#188038] mt-0.5">
           {product.inStock ? "Many in stock" : "Out of stock"}
         </p>

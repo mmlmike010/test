@@ -3,7 +3,7 @@
 import { Minus, Plus, ShoppingCart, Trash2, X } from "lucide-react";
 import { useCartStore } from "@/lib/store/cart";
 import { useCatalogStore } from "@/lib/store/catalog";
-import { productSize } from "@/lib/ui/packSize";
+import { productSize, unitPriceLabel } from "@/lib/ui/packSize";
 import {
   deliveryWindow,
   formatAddress,
@@ -112,6 +112,11 @@ export default function CartDrawer() {
                         {productSize(product.id)}
                       </p>
                     )}
+                    {unitPriceLabel(product.id, product.price) ? (
+                      <p className="text-[13px] text-[#72767E] mt-0.5">
+                        {unitPriceLabel(product.id, product.price)}
+                      </p>
+                    ) : null}
                     <p className="text-[13px] text-[#8a8a8a] mt-0.5 tabular-nums">
                       ${product.price.toFixed(2)} each
                     </p>

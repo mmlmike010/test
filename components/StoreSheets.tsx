@@ -8,7 +8,7 @@ import GoldStarMembershipCard from "@/components/GoldStarMembershipCard";
 import InstacartMark from "@/components/InstacartMark";
 import { departments } from "@/lib/data/products";
 import { aisleLabel } from "@/lib/ui/aisleLabels";
-import { productSize } from "@/lib/ui/packSize";
+import { productSize, unitPriceLabel } from "@/lib/ui/packSize";
 import { useCatalogStore } from "@/lib/store/catalog";
 import { useCartStore } from "@/lib/store/cart";
 import {
@@ -498,6 +498,11 @@ function CheckoutSheet() {
                       {productSize(product.id) ? (
                         <p className="mt-0.5 text-[13px] text-[#72767E]">
                           {productSize(product.id)}
+                        </p>
+                      ) : null}
+                      {unitPriceLabel(product.id, product.price) ? (
+                        <p className="mt-0.5 text-[13px] text-[#72767E]">
+                          {unitPriceLabel(product.id, product.price)}
                         </p>
                       ) : null}
                       <p className="mt-0.5 text-[13px] tabular-nums text-[#8a8a8a]">

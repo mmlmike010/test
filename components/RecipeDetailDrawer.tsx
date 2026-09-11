@@ -7,7 +7,7 @@ import type { Recipe } from "@/lib/data/recipes";
 import { useCartStore } from "@/lib/store/cart";
 import type { Product } from "@/lib/data/products";
 import { useCatalogStore } from "@/lib/store/catalog";
-import { productSize } from "@/lib/ui/packSize";
+import { productSize, unitPriceLabel } from "@/lib/ui/packSize";
 import { storefrontOverlayClass, useSessionStore } from "@/lib/store/session";
 
 export default function RecipeDetailDrawer({
@@ -131,6 +131,11 @@ export default function RecipeDetailDrawer({
                         {productSize(product.id) ? (
                           <span className="mt-0.5 block text-[12px] text-[#72767E]">
                             {productSize(product.id)}
+                          </span>
+                        ) : null}
+                        {unitPriceLabel(product.id, product.price) ? (
+                          <span className="mt-0.5 block text-[12px] text-[#72767E]">
+                            {unitPriceLabel(product.id, product.price)}
                           </span>
                         ) : null}
                         <span className="mt-0.5 block text-[14px] font-bold tabular-nums text-[#1a1a1a]">

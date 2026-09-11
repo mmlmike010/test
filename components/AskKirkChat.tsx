@@ -14,7 +14,7 @@ import {
 import { useCartStore } from "@/lib/store/cart";
 import { useCatalogStore } from "@/lib/store/catalog";
 import { products } from "@/lib/data/products";
-import { productSize } from "@/lib/ui/packSize";
+import { productSize, unitPriceLabel } from "@/lib/ui/packSize";
 import KirkMark from "@/components/KirkMark";
 import CostcoLogo from "@/components/CostcoLogo";
 import GoldStarMark from "@/components/GoldStarMark";
@@ -678,6 +678,11 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                       {productSize(product.id) ? (
                         <span className="mt-0.5 block text-[12px] text-[#72767E]">
                           {productSize(product.id)}
+                        </span>
+                      ) : null}
+                      {unitPriceLabel(product.id, product.price) ? (
+                        <span className="mt-0.5 block text-[12px] text-[#72767E]">
+                          {unitPriceLabel(product.id, product.price)}
                         </span>
                       ) : null}
                       <span className="mt-0.5 block text-[14px] font-bold tabular-nums text-[#1a1a1a]">
