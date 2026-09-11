@@ -2,9 +2,13 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Search } from "lucide-react";
-import { categories, filterProducts } from "@/lib/data/products";
+import { categories, filterProducts, products } from "@/lib/data/products";
 import { aisleLabel } from "@/lib/ui/aisleLabels";
-import { hideComposedLeftovers, officialPacksFirst } from "@/lib/ui/merchOrder";
+import {
+  hideComposedLeftovers,
+  officialPacksFirst,
+  relatedSearchItems,
+} from "@/lib/ui/merchOrder";
 import type { Product } from "@/lib/data/products";
 import { useCatalogStore } from "@/lib/store/catalog";
 import ProductCard from "@/components/ProductCard";
@@ -211,14 +215,18 @@ export default function ProductGrid() {
       if (tag === "weekly") allow.push("7");
       if (department === "Bakery & Desserts") allow.push("9");
     }
-    const merch = q.trim()
-      ? filtered
-      : hideComposedLeftovers(filtered, allow);
+    const merch = hideComposedLeftovers(filtered, allow);
     if (sort === "price") {
       return [...merch].sort((a, b) => a.price - b.price);
     }
     return officialPacksFirst(merch);
   }, [filtered, sort, q, tag, department]);
+  const related = q.trim() && shown.length > 0 && shown.length < 6
+    ? relatedSearchItems(shown, products)
+    : [];
+  const searchGridClass = kirkOpen
+    ? "grid grid-cols-[repeat(auto-fill,minmax(220px,240px))] gap-3"
+    : "grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3";
 
   const showAisle = (next: { department?: string; tag?: string }) => {
     setQuery("");
@@ -434,7 +442,7 @@ export default function ProductGrid() {
             <div>
               {q.trim() ? (
                 <h2 className="text-[22px] lg:text-[24px] font-bold text-[#1a1a1a] tracking-tight">
-                  {`${filtered.length} result${filtered.length === 1 ? "" : "s"} for “${q.trim()}”`}
+                  {`${shown.length} result${shown.length === 1 ? "" : "s"} for “${q.trim()}”`}
                 </h2>
               ) : (
                 <h2 className="text-[22px] lg:text-[24px] font-bold text-[#1a1a1a] tracking-tight">
@@ -506,7 +514,7 @@ export default function ProductGrid() {
             </div>
           )}
 
-          {!loading && filtered.length === 0 ? (
+          {!loading && shown.length === 0 ? (
             <div className="flex flex-col items-center text-center pt-10 pb-12 px-6">
               <span className="w-16 h-16 rounded-full bg-white border border-[#eee] flex items-center justify-center shadow-[0_1px_4px_rgba(0,0,0,0.06)]">
                 <Search className="w-7 h-7 text-[#8a8a8a]" aria-hidden="true" />
@@ -544,13 +552,8 @@ export default function ProductGrid() {
               </div>
             </div>
           ) : (
-            <div
-              className={
-                kirkOpen
-                  ? "grid grid-cols-[repeat(auto-fill,minmax(220px,240px))] gap-3"
-                  : "grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3"
-              }
-            >
+            <>
+            <div className={searchGridClass}>
               {shown.map((product) => (
                 <ProductCard
                   key={product.id}
@@ -559,6 +562,23 @@ export default function ProductGrid() {
                 />
               ))}
             </div>
+            {related.length > 0 ? (
+              <section className="mt-8">
+                <h3 className="mb-3 text-[20px] lg:text-[22px] font-bold text-[#1a1a1a] tracking-tight">
+                  Related products
+                </h3>
+                <div className={searchGridClass}>
+                  {related.map((product) => (
+                    <ProductCard
+                      key={`related-${product.id}`}
+                      product={product}
+                      onOpen={() => inspect(product)}
+                    />
+                  ))}
+                </div>
+              </section>
+            ) : null}
+            </>
           )}
         </>
       )}

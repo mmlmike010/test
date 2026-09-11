@@ -11,7 +11,7 @@ export function officialPacksFirst(items: Product[]): Product[] {
   });
 }
 
-/** Drop leftover photography from browse. Search / Kirk still see the SKUs. */
+/** Drop leftover photography from browse and search grids. Kirk's catalog is unchanged. */
 export function hideComposedLeftovers(
   items: Product[],
   allow: Iterable<string> = []
@@ -119,4 +119,46 @@ export function storefrontQueryForKirk(query: string, hits: Product[]): string {
     .split(/[^a-z0-9]+/)
     .find((token) => token.length >= 4);
   return fallback || first.brand.toLowerCase();
+}
+
+/** Fill a thin Same-Day search page. UI only — never sent to Kirk. */
+export function relatedSearchItems(
+  hits: Product[],
+  catalog: Product[],
+  n = 8
+): Product[] {
+  if (!hits.length) return [];
+  const hitIds = new Set(hits.map((hit) => hit.id));
+  const depts = new Set(hits.map((hit) => hit.department));
+  const cats = new Set(hits.map((hit) => hit.category));
+  const tags = new Set(hits.flatMap((hit) => hit.tags || []));
+  const weakDepts = new Set(["Trending", "What's New", "Weekly Savings"]);
+  const weakTags = new Set([
+    "trending",
+    "new",
+    "weekly",
+    "treasure",
+    "kirkland",
+    "again",
+  ]);
+  return hideComposedLeftovers(catalog)
+    .filter((product) => !hitIds.has(product.id))
+    .map((product) => {
+      let score = 0;
+      if (depts.has(product.department) && !weakDepts.has(product.department)) {
+        score += 3;
+      }
+      if (cats.has(product.category)) score += 3;
+      for (const tag of product.tags || []) {
+        if (tags.has(tag) && !weakTags.has(tag)) score += 1;
+      }
+      return { product, score };
+    })
+    .filter((row) => row.score > 0)
+    .sort(
+      (a, b) =>
+        b.score - a.score || Number(a.product.id) - Number(b.product.id)
+    )
+    .map((row) => row.product)
+    .slice(0, n);
 }
