@@ -42,16 +42,16 @@ export const recipes: Recipe[] = [
   },
   {
     id: "quinoa-chicken-bowl",
-    title: "Rotisserie quinoa bowl",
+    title: "Tomato quinoa skillet",
     minutes: 20,
     servings: 4,
     course: "Lunch",
-    image: "/products/recipe-quinoa.jpg?v=1",
-    ingredientIds: ["24", "11", "23", "10"],
+    image: "/products/recipe-quinoa.jpg?v=2",
+    ingredientIds: ["11", "3", "10"],
     steps: [
       "Cook the quinoa per the bag, then fluff.",
-      "Shred the rotisserie chicken and fold it through with a scrambled egg.",
-      "Finish with Kirkland extra virgin olive oil and black pepper.",
+      "Warm Hunt’s diced tomatoes in a skillet with Kirkland olive oil.",
+      "Fold the quinoa through the tomatoes and serve family-style.",
     ],
   },
   {
