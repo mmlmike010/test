@@ -51,6 +51,9 @@ export default function WarehouseResultCard({ product }: { product: Product }) {
               Save ${product.savings.toFixed(2)}
             </span>
           ) : null}
+          <span className="mt-1 block text-[11px] font-semibold text-[#188038]">
+            Same-Day Delivery
+          </span>
         </span>
       </button>
       <div className="px-2 pb-2">

@@ -225,7 +225,7 @@ export default function ProductGrid() {
     ? relatedSearchItems(shown, products)
     : [];
   const searchGridClass = kirkOpen
-    ? "grid grid-cols-[repeat(auto-fill,minmax(220px,240px))] gap-3"
+    ? "grid grid-cols-2 xl:grid-cols-3 gap-3"
     : "grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3";
 
   const showAisle = (next: { department?: string; tag?: string }) => {

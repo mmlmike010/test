@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight, Clock, Search, Users } from "lucide-react";
 import { recipeCourses, recipes, type RecipeCourse } from "@/lib/data/recipes";
 import { useCatalogStore } from "@/lib/store/catalog";
+import { useSessionStore } from "@/lib/store/session";
 import RecipeDetailDrawer from "@/components/RecipeDetailDrawer";
 
 export default function RecipesView() {
@@ -13,6 +14,7 @@ export default function RecipesView() {
   const setOpenRecipe = useCatalogStore((s) => s.setOpenRecipe);
   const [q, setQ] = useState("");
   const [course, setCourse] = useState<"All" | RecipeCourse>("All");
+  const kirkOpen = useSessionStore((s) => s.kirkOpen);
   const open = recipes.find((recipe) => recipe.id === openRecipeId) || null;
 
   const shown = useMemo(() => {
@@ -102,7 +104,11 @@ export default function RecipesView() {
           }}
           className="mb-4 w-full text-left group rounded-[16px] bg-white border border-[#ececec] overflow-hidden hover:shadow-[0_2px_10px_rgba(0,0,0,0.07)]"
         >
-          <span className="relative block aspect-[16/9] bg-[#f3f3f3]">
+          <span
+            className={`relative block bg-[#f3f3f3] ${
+              kirkOpen ? "h-[168px] sm:h-[188px]" : "aspect-[16/9]"
+            }`}
+          >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={featured.image}
