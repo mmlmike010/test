@@ -161,7 +161,7 @@ export default function ProductDetailModal({
                 <ZoomIn className="h-4 w-4 text-[#333]" />
               </button>
             </div>
-            <div className="flex justify-center border-b border-[#eee] bg-white py-3 lg:border-b-0">
+            <div className="flex justify-start gap-2 border-b border-[#eee] bg-white px-4 py-3 lg:border-b-0">
               <button
                 type="button"
                 onClick={() => setZoomed(true)}
