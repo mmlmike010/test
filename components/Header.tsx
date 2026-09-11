@@ -108,40 +108,85 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
             </button>
           </div>
           <div className="flex items-center gap-3 shrink-0">
-            <button
-              type="button"
-              className="hidden md:inline text-[13px] text-costco-blue font-semibold hover:underline"
-              onClick={() => setSheet("pricing", "sameday")}
-            >
-              Pricing & fees
-            </button>
-            <button
-              type="button"
-              className="hidden sm:inline-flex items-center gap-1 text-[13px] text-costco-blue font-semibold hover:underline"
-              onClick={() => setSheet("membership", "sameday")}
-            >
-              {membershipAdded ? (
-                <>
-                  <GoldStarMark size={14} />
-                  Gold Star
-                  <span className="hidden xl:inline"> · {membershipNumber}</span>
-                </>
-              ) : (
-                "Add membership"
-              )}
-            </button>
-            <button
-              type="button"
-              className="inline-flex items-center gap-1.5 text-[#333] text-[13px] font-semibold hover:text-costco-blue"
-              onClick={() => setSheet("signin", "sameday")}
-            >
-              <span className="w-7 h-7 rounded-full border border-[#c8c8c8] bg-white flex items-center justify-center">
-                <User className="w-4 h-4" />
-              </span>
-              <span className="hidden sm:inline">
-                {signedIn ? displayName : "Sign In / Register"}
-              </span>
-            </button>
+            {warehouseSearch ? (
+              <>
+                <button
+                  type="button"
+                  className="hidden sm:inline-flex items-center gap-1 text-[13px] font-semibold text-costco-blue hover:underline"
+                  onClick={() => setSheet("membership", "sameday")}
+                >
+                  {membershipAdded ? (
+                    <>
+                      <GoldStarMark size={14} />
+                      Gold Star
+                      <span className="hidden xl:inline">
+                        {" "}
+                        · {membershipNumber}
+                      </span>
+                    </>
+                  ) : (
+                    "Membership"
+                  )}
+                </button>
+                <button
+                  type="button"
+                  className="text-[13px] font-semibold text-costco-blue hover:underline"
+                  onClick={() => setSheet("signin", "sameday")}
+                >
+                  {signedIn ? displayName : "Sign In / Register"}
+                </button>
+                <span className="hidden text-[#ccc] sm:inline" aria-hidden="true">
+                  |
+                </span>
+                <button
+                  type="button"
+                  className="hidden sm:inline text-[13px] font-semibold text-costco-blue hover:underline"
+                  onClick={() => setSheet("signin", "sameday")}
+                >
+                  Orders & Returns
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  className="hidden md:inline text-[13px] text-costco-blue font-semibold hover:underline"
+                  onClick={() => setSheet("pricing", "sameday")}
+                >
+                  Pricing & fees
+                </button>
+                <button
+                  type="button"
+                  className="hidden sm:inline-flex items-center gap-1 text-[13px] text-costco-blue font-semibold hover:underline"
+                  onClick={() => setSheet("membership", "sameday")}
+                >
+                  {membershipAdded ? (
+                    <>
+                      <GoldStarMark size={14} />
+                      Gold Star
+                      <span className="hidden xl:inline">
+                        {" "}
+                        · {membershipNumber}
+                      </span>
+                    </>
+                  ) : (
+                    "Add membership"
+                  )}
+                </button>
+                <button
+                  type="button"
+                  className="inline-flex items-center gap-1.5 text-[#333] text-[13px] font-semibold hover:text-costco-blue"
+                  onClick={() => setSheet("signin", "sameday")}
+                >
+                  <span className="w-7 h-7 rounded-full border border-[#c8c8c8] bg-white flex items-center justify-center">
+                    <User className="w-4 h-4" />
+                  </span>
+                  <span className="hidden sm:inline">
+                    {signedIn ? displayName : "Sign In / Register"}
+                  </span>
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -179,7 +224,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
                         : EMPTY_WAREHOUSE_FACETS
                     );
                   }}
-                  className="h-11 appearance-none rounded-l-[3px] border border-r-0 border-[#c4c4c4] bg-[#f6f6f6] pl-3 pr-8 text-[13px] font-bold text-[#1a1a1a] focus:border-costco-blue focus:outline-none focus:ring-2 focus:ring-costco-blue/15"
+                  className="h-11 w-[7.25rem] appearance-none rounded-l-[3px] border border-r-0 border-[#c4c4c4] bg-[#f6f6f6] pl-3 pr-8 text-[13px] font-bold text-[#1a1a1a] focus:border-costco-blue focus:outline-none focus:ring-2 focus:ring-costco-blue/15"
                 >
                   <option value="">All</option>
                   {WAREHOUSE_NAV.map((label) => (
@@ -267,16 +312,6 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
           >
             <KirkMark size={22} />
           </button>
-
-          {warehouseSearch ? (
-            <button
-              type="button"
-              className="hidden xl:inline text-[13px] font-semibold text-costco-blue hover:underline"
-              onClick={() => setSheet("signin", "sameday")}
-            >
-              Orders & Returns
-            </button>
-          ) : null}
 
           <button
             type="button"

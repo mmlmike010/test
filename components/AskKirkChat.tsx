@@ -689,6 +689,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             message.role === "user"
               ? kirkQueryPreview(products, message.content)
               : [];
+          const preview = hits.slice(0, 4);
           return (
           <div key={message.id} className="space-y-2">
           {message.role === "user" ? (
@@ -705,18 +706,18 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                 <div>
                   <div className="mb-1.5 flex items-end justify-between gap-2">
                     <p className="text-[13px] font-bold text-[#1a1a1a]">
-                      Showing {hits.length ? `1 – ${hits.length}` : "0"} of{" "}
-                      {hits.length}
+                      Showing 1 – {preview.length} of {hits.length}
                     </p>
                     <p className="text-[11px] font-semibold text-[#555]">
                       Sort By Best Match
                     </p>
                   </div>
                   <div className="grid grid-cols-2 gap-2">
-                    {hits.map((product) => (
+                    {preview.map((product) => (
                       <WarehouseResultCard
                         key={`${message.id}-${product.id}`}
                         product={product}
+                        density="featured"
                       />
                     ))}
                   </div>
