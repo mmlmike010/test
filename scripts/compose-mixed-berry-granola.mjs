@@ -134,10 +134,8 @@ const print = await sharp(
     W,
     H,
     `
-  <text x="300" y="348" text-anchor="middle" fill="#1a1a1a" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="800" letter-spacing="0.4">KIRKLAND</text>
-  <line x1="218" y1="360" x2="258" y2="360" stroke="#C9A227" stroke-width="1.4"/>
-  <text x="300" y="366" text-anchor="middle" fill="#C9A227" font-family="Georgia, Times New Roman, serif" font-size="12" font-style="italic" font-weight="700">Signature</text>
-  <line x1="342" y1="360" x2="382" y2="360" stroke="#C9A227" stroke-width="1.4"/>
+  <text x="300" y="348" text-anchor="middle" fill="#1A1A1A" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="900" letter-spacing="0.5">KIRKLAND</text>
+  <text x="300" y="368" text-anchor="middle" fill="#E31837" font-family="Georgia, Times New Roman, serif" font-size="14" font-style="italic" font-weight="700">Signature</text>
   <circle cx="168" cy="454" r="22" fill="none" stroke="#3B6B2A" stroke-width="2.2"/>
   <circle cx="168" cy="454" r="17" fill="none" stroke="#3B6B2A" stroke-width="1"/>
   <text x="168" y="450" text-anchor="middle" fill="#3B6B2A" font-family="Arial, Helvetica, sans-serif" font-size="6.5" font-weight="800">USDA</text>

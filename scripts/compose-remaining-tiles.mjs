@@ -58,17 +58,17 @@ function kirkLabel({ w, h, title, line2 = "", size = "", layout = "jar" }) {
     title.length > 12 ? Math.round(w * 0.072) : Math.round(w * 0.1);
   const line2Size = Math.round(w * 0.07);
   const copyX = layout === "tub" ? w * 0.62 : w / 2;
+  const kirkSize = Math.round(layout === "tub" ? w * 0.044 : w * 0.07);
+  const sigSize = Math.round(layout === "tub" ? w * 0.034 : w * 0.048);
   return Buffer.from(`<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
-  <rect width="${w}" height="${h}" fill="#F7F4EC"/>
-  <rect x="1" y="1" width="${w - 2}" height="${h - 2}" fill="none" stroke="#C9C2B0" stroke-width="1.25"/>
-  <text x="${copyX}" y="${mark * 0.62}" text-anchor="middle" fill="#1a1a1a" font-family="Arial, Helvetica, sans-serif" font-size="${Math.round((layout === "tub" ? w * 0.042 : w * 0.068))}" font-weight="800" letter-spacing="0.4">KIRKLAND</text>
-  <line x1="${copyX - w * 0.12}" y1="${mark * 0.86}" x2="${copyX - w * 0.04}" y2="${mark * 0.86}" stroke="#C9A227" stroke-width="1.3"/>
-  <text x="${copyX}" y="${mark * 0.96}" text-anchor="middle" fill="#C9A227" font-family="Georgia, Times New Roman, serif" font-size="${Math.round((layout === "tub" ? w * 0.028 : w * 0.04))}" font-style="italic" font-weight="700">Signature</text>
-  <line x1="${copyX + w * 0.04}" y1="${mark * 0.86}" x2="${copyX + w * 0.12}" y2="${mark * 0.86}" stroke="#C9A227" stroke-width="1.3"/>
-  <text x="${copyX}" y="${layout === "tub" ? h * 0.52 : h * 0.72}" text-anchor="middle" fill="#1a1a1a" font-family="Arial, Helvetica, sans-serif" font-size="${titleSize}" font-weight="800">${xml(title)}</text>
-  ${line2 ? `<text x="${copyX}" y="${layout === "tub" ? h * 0.68 : h * 0.82}" text-anchor="middle" fill="#1a1a1a" font-family="Arial, Helvetica, sans-serif" font-size="${line2Size}" font-weight="800">${xml(line2)}</text>` : ""}
-  ${size ? `<text x="${copyX}" y="${layout === "tub" ? h * 0.88 : h * 0.94}" text-anchor="middle" fill="#5a564c" font-family="Arial, Helvetica, sans-serif" font-size="${Math.round(w * (layout === "tub" ? 0.032 : 0.048))}" font-weight="700">${xml(size)}</text>` : ""}
+  <rect width="${w}" height="${h}" fill="#FFFFFF"/>
+  <rect x="0.75" y="0.75" width="${w - 1.5}" height="${h - 1.5}" fill="none" stroke="#E8E8E8" stroke-width="1"/>
+  <text x="${copyX}" y="${mark * 0.58}" text-anchor="middle" fill="#1A1A1A" font-family="Arial, Helvetica, sans-serif" font-size="${kirkSize}" font-weight="900" letter-spacing="0.5">KIRKLAND</text>
+  <text x="${copyX}" y="${mark * 0.98}" text-anchor="middle" fill="#E31837" font-family="Georgia, Times New Roman, serif" font-size="${sigSize}" font-style="italic" font-weight="700">Signature</text>
+  <text x="${copyX}" y="${layout === "tub" ? h * 0.52 : h * 0.72}" text-anchor="middle" fill="#1A1A1A" font-family="Arial, Helvetica, sans-serif" font-size="${titleSize}" font-weight="800">${xml(title)}</text>
+  ${line2 ? `<text x="${copyX}" y="${layout === "tub" ? h * 0.68 : h * 0.82}" text-anchor="middle" fill="#1A1A1A" font-family="Arial, Helvetica, sans-serif" font-size="${line2Size}" font-weight="800">${xml(line2)}</text>` : ""}
+  ${size ? `<text x="${copyX}" y="${layout === "tub" ? h * 0.88 : h * 0.94}" text-anchor="middle" fill="#666666" font-family="Arial, Helvetica, sans-serif" font-size="${Math.round(w * (layout === "tub" ? 0.032 : 0.048))}" font-weight="700">${xml(size)}</text>` : ""}
 </svg>`);
 }
 
@@ -104,21 +104,17 @@ async function composeJars() {
     108,
     5
   );
-  const beanFace = await paperize(
-    await sharp(
-      kirkLabel({
-        w: 236,
-        h: 268,
-        title: "FIVE BEAN",
-        line2: "SALAD",
-        size: "15 OZ",
-      })
-    )
-      .png()
-      .toBuffer(),
-    236,
-    268
-  );
+  const beanFace = await sharp(
+    kirkLabel({
+      w: 236,
+      h: 268,
+      title: "FIVE BEAN",
+      line2: "SALAD",
+      size: "15 OZ",
+    })
+  )
+    .png()
+    .toBuffer();
   const beanLabel = await sharp(beanFace)
     .composite([{ input: beanFood, left: 20, top: 62 }])
     .png()
@@ -129,7 +125,7 @@ async function composeJars() {
       width: 18,
       height: 24,
       channels: 3,
-      background: { r: 246, g: 243, b: 234 },
+      background: { r: 255, g: 255, b: 255 },
     },
   })
     .png()
@@ -152,22 +148,18 @@ async function composeJars() {
     88,
     6
   );
-  const lentilFace = await paperize(
-    await sharp(
-      kirkLabel({
-        w: 476,
-        h: 198,
-        title: "COOKED LENTILS",
-        line2: "& CHICKPEAS",
-        size: "17 OZ · READY TO EAT",
-        layout: "tub",
-      })
-    )
-      .png()
-      .toBuffer(),
-    476,
-    198
-  );
+  const lentilFace = await sharp(
+    kirkLabel({
+      w: 476,
+      h: 198,
+      title: "COOKED LENTILS",
+      line2: "& CHICKPEAS",
+      size: "17 OZ · READY TO EAT",
+      layout: "tub",
+    })
+  )
+    .png()
+    .toBuffer();
   const lentilLabel = await sharp(lentilFace)
     .composite([{ input: lentilFood, left: 14, top: 18 }])
     .png()
