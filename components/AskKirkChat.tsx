@@ -733,12 +733,12 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
               </div>
               {hits.length > 0 ? (
                 <>
-                  <div className="grid grid-cols-2 gap-2 p-2">
+                  <div className="space-y-2 p-2">
                     {preview.map((product) => (
                       <WarehouseResultCard
                         key={`${message.id}-${product.id}`}
                         product={product}
-                        density="preview"
+                        density="list"
                       />
                     ))}
                   </div>
@@ -876,8 +876,8 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
       )}
 
       <div className="px-3.5 pt-2.5 pb-3 border-t border-[#e5e5e5] bg-white shrink-0">
-        <div className="flex gap-1.5 items-stretch">
-          <div className="relative flex-1 min-w-0">
+        <div className="flex h-11 items-stretch">
+          <div className="relative min-w-0 flex-1">
             <Search
               className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8a8a8a] w-[18px] h-[18px] pointer-events-none"
               aria-hidden="true"
@@ -894,52 +894,48 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                     ? "Listening…"
                     : "Ask Kirk for a cart"
               }
-              className="w-full h-11 pl-10 pr-3.5 bg-white border border-[#c4c4c4] rounded-[3px] text-[14px] text-[#1a1a1a] placeholder:text-[#8a8a8a] focus:outline-none focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15"
+              className="h-11 w-full rounded-l-[3px] border border-r-0 border-[#c4c4c4] bg-white pl-10 pr-10 text-[14px] text-[#1a1a1a] placeholder:text-[#8a8a8a] focus:outline-none focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15"
               disabled={isLoading || isRecording || isTranscribing}
             />
-          </div>
-          <button
-            type="button"
-            onClick={() => {
-              if (isSpeaking) {
-                stopSpeaking();
-                return;
+            <button
+              type="button"
+              onClick={() => {
+                if (isSpeaking) {
+                  stopSpeaking();
+                  return;
+                }
+                if (isRecording) stopRecording();
+                else void startRecording();
+              }}
+              disabled={isLoading || isTranscribing}
+              className={`absolute right-1 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-[3px] ${
+                isRecording || isSpeaking
+                  ? "bg-costco-red text-white kirk-listening"
+                  : "text-[#555] hover:bg-[#f6f6f6]"
+              }`}
+              title={
+                isSpeaking
+                  ? "Stop speaking"
+                  : isRecording
+                    ? "Stop"
+                    : "Speak — stops when you pause; I'll read the reply aloud"
               }
-              if (isRecording) stopRecording();
-              else void startRecording();
-            }}
-            disabled={isLoading || isTranscribing}
-            className={`h-11 px-2 border transition-colors text-[10px] font-bold flex flex-col items-center justify-center gap-0.5 min-w-[52px] rounded-[3px] ${
-              isRecording || isSpeaking
-                ? "bg-costco-red text-white border-costco-red kirk-listening"
-                : "border-[#c4c4c4] hover:bg-[#f6f6f6] text-[#333]"
-            }`}
-            title={
-              isSpeaking
-                ? "Stop speaking"
-                : isRecording
-                  ? "Stop"
-                  : "Speak — stops when you pause; I'll read the reply aloud"
-            }
-          >
-            {isRecording || isSpeaking ? (
-              <Square className="w-4 h-4" />
-            ) : (
-              <Mic className="w-4 h-4" />
-            )}
-            {isSpeaking
-              ? "Stop"
-              : isRecording
-                ? "Stop"
-                : isTranscribing
-                  ? "…"
-                  : "Speak"}
-          </button>
+              aria-label={
+                isSpeaking ? "Stop speaking" : isRecording ? "Stop" : "Speak"
+              }
+            >
+              {isRecording || isSpeaking ? (
+                <Square className="w-4 h-4" />
+              ) : (
+                <Mic className="w-4 h-4" />
+              )}
+            </button>
+          </div>
           <button
             type="button"
             onClick={() => void sendMessage(input)}
             disabled={!input.trim() || isLoading}
-            className="h-11 px-3.5 bg-costco-red text-white rounded-[3px] font-bold hover:bg-costco-red-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-[13px] min-w-[72px]"
+            className="h-11 shrink-0 rounded-r-[3px] bg-costco-red px-4 text-[14px] font-bold text-white hover:bg-costco-red-hover disabled:cursor-not-allowed disabled:opacity-50"
           >
             Search
           </button>

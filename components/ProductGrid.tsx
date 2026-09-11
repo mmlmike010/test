@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ChevronLeft, ChevronRight, Search } from "lucide-react";
+import { ChevronLeft, ChevronRight, LayoutGrid, List, Search } from "lucide-react";
 import { categories, filterProducts, products } from "@/lib/data/products";
 import { aisleLabel } from "@/lib/ui/aisleLabels";
 import {
@@ -158,6 +158,7 @@ export default function ProductGrid() {
   const [hideFilters, setHideFilters] = useState(false);
   const [compareIds, setCompareIds] = useState<string[]>([]);
   const [compareOpen, setCompareOpen] = useState(false);
+  const [warehouseView, setWarehouseView] = useState<"grid" | "list">("grid");
   const setSheet = useSessionStore((s) => s.setSheet);
   const address = useSessionStore((s) => s.address);
   const kirkOpen = useSessionStore((s) => s.kirkOpen);
@@ -258,6 +259,7 @@ export default function ProductGrid() {
     setSort("relevance");
     setCompareIds([]);
     setCompareOpen(false);
+    setWarehouseView("grid");
   }
   const visible = warehouseList
     ? applyWarehouseFacets(shown, warehouseFacets)
@@ -579,6 +581,39 @@ export default function ProductGrid() {
                     <option value="rating">Ratings (High to Low)</option>
                   </select>
                 </label>
+                <div
+                  className="inline-flex items-center gap-1"
+                  role="group"
+                  aria-label="View"
+                >
+                  <span className="text-[13px] font-bold text-[#555]">View</span>
+                  <button
+                    type="button"
+                    aria-pressed={warehouseView === "grid"}
+                    aria-label="Grid view"
+                    onClick={() => setWarehouseView("grid")}
+                    className={`flex h-9 w-9 items-center justify-center rounded-[3px] border ${
+                      warehouseView === "grid"
+                        ? "border-costco-blue bg-[#f7fbfe] text-costco-blue"
+                        : "border-[#c4c4c4] bg-white text-[#555] hover:border-costco-blue"
+                    }`}
+                  >
+                    <LayoutGrid className="h-4 w-4" />
+                  </button>
+                  <button
+                    type="button"
+                    aria-pressed={warehouseView === "list"}
+                    aria-label="List view"
+                    onClick={() => setWarehouseView("list")}
+                    className={`flex h-9 w-9 items-center justify-center rounded-[3px] border ${
+                      warehouseView === "list"
+                        ? "border-costco-blue bg-[#f7fbfe] text-costco-blue"
+                        : "border-[#c4c4c4] bg-white text-[#555] hover:border-costco-blue"
+                    }`}
+                  >
+                    <List className="h-4 w-4" />
+                  </button>
+                </div>
                 </>
               ) : (
                 <>
@@ -772,13 +807,19 @@ export default function ProductGrid() {
                 </button>
               </p>
             ) : (
-            <div className={searchGridClass}>
+            <div
+              className={
+                warehouseList && warehouseView === "list"
+                  ? "space-y-2"
+                  : searchGridClass
+              }
+            >
               {gridItems.map((product) =>
                 warehouseList ? (
                   <WarehouseResultCard
                     key={product.id}
                     product={product}
-                    density="catalog"
+                    density={warehouseView === "list" ? "list" : "catalog"}
                     compareChecked={compareIds.includes(product.id)}
                     onCompare={(checked) =>
                       setCompareIds((ids) => {

@@ -1,12 +1,50 @@
 "use client";
 
+import { Heart } from "lucide-react";
 import type { Product } from "@/lib/data/products";
 import { useCatalogStore } from "@/lib/store/catalog";
+import { useListStore } from "@/lib/store/lists";
 import { productSize, warehouseItemNumber } from "@/lib/ui/packSize";
 import { isLimitedOffer } from "@/lib/ui/warehouseSearch";
 import AddControl from "@/components/AddControl";
 import LimitedTimeOfferBadge from "@/components/LimitedTimeOfferBadge";
 import StarRating from "@/components/StarRating";
+
+function AddToListLink({
+  productId,
+  productName,
+}: {
+  productId: string;
+  productName: string;
+}) {
+  const saved = useListStore((s) =>
+    Boolean(
+      s.lists
+        .find((list) => list.id === "shopping")
+        ?.productIds.includes(productId)
+    )
+  );
+  const toggle = useListStore((s) => s.toggle);
+  return (
+    <button
+      type="button"
+      onClick={(e) => {
+        e.stopPropagation();
+        toggle(productId);
+      }}
+      className="inline-flex items-center gap-1 text-[11px] font-bold text-costco-blue hover:underline"
+      aria-pressed={saved}
+      aria-label={
+        saved
+          ? `Remove ${productName} from shopping list`
+          : `Add ${productName} to list`
+      }
+    >
+      <Heart className={`h-3 w-3 ${saved ? "fill-current" : ""}`} />
+      {saved ? "Saved to List" : "Add to List"}
+    </button>
+  );
+}
 
 /** costco.com search-grid tile. UI only — never sent to Kirk. */
 export default function WarehouseResultCard({
@@ -16,7 +54,7 @@ export default function WarehouseResultCard({
   onCompare,
 }: {
   product: Product;
-  density?: "search" | "featured" | "preview" | "catalog";
+  density?: "search" | "featured" | "preview" | "catalog" | "list";
   compareChecked?: boolean;
   onCompare?: (checked: boolean) => void;
 }) {
@@ -25,7 +63,91 @@ export default function WarehouseResultCard({
   const featured = density === "featured";
   const preview = density === "preview";
   const catalog = density === "catalog";
+  const list = density === "list";
   const chrome = !featured;
+
+  if (list) {
+    return (
+      <div className="flex gap-2.5 border border-[#c4c4c4] bg-white rounded-[3px] p-2">
+        <button
+          type="button"
+          onClick={() => inspect(product, "warehouse")}
+          className="relative h-[88px] w-[88px] shrink-0 overflow-hidden border border-[#eee] bg-white rounded-[3px] hover:bg-[#f7fbfe]"
+          aria-label={`View ${product.brand} ${product.name}`}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={product.image}
+            alt=""
+            className="absolute inset-0 h-full w-full object-contain p-1"
+          />
+          {isLimitedOffer(product) ? (
+            <LimitedTimeOfferBadge compact />
+          ) : null}
+        </button>
+        <div className="min-w-0 flex-1">
+          <button
+            type="button"
+            onClick={() => inspect(product, "warehouse")}
+            className="block w-full text-left"
+          >
+            <span className="block text-[13px] font-bold leading-snug text-costco-blue line-clamp-2 hover:underline">
+              {product.brand} {product.name}
+            </span>
+            {size ? (
+              <span className="mt-0.5 block text-[11px] text-[#72767E]">
+                {size}
+              </span>
+            ) : null}
+            <span className="mt-0.5 block text-[11px] text-[#72767E]">
+              Item {warehouseItemNumber(product.id)}
+            </span>
+            <span className="mt-0.5 block">
+              <StarRating
+                rating={product.rating}
+                reviewCount={product.reviewCount}
+                size="sm"
+                showCount={false}
+              />
+            </span>
+            <span className="mt-1 flex flex-wrap items-baseline gap-x-1 tabular-nums">
+              <span className="text-[16px] font-bold text-[#1a1a1a]">
+                ${product.price.toFixed(2)}
+              </span>
+              {product.originalPrice > product.price ? (
+                <span className="text-[12px] text-[#888] line-through">
+                  ${product.originalPrice.toFixed(2)}
+                </span>
+              ) : null}
+              {product.savings > 0 ? (
+                <span className="text-[11px] font-semibold text-[#188038]">
+                  Save ${product.savings.toFixed(2)}
+                </span>
+              ) : null}
+            </span>
+          </button>
+          <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1">
+            <AddControl product={product} variant="inline" tone="warehouse" />
+            {onCompare ? (
+              <label
+                className="flex items-center gap-1.5 text-[11px] text-[#555]"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <input
+                  type="checkbox"
+                  checked={compareChecked}
+                  onChange={(e) => onCompare(e.target.checked)}
+                  className="accent-costco-blue"
+                />
+                Compare Product
+              </label>
+            ) : null}
+            <AddToListLink productId={product.id} productName={product.name} />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col border border-[#c4c4c4] bg-white rounded-[3px] overflow-hidden">
@@ -50,7 +172,7 @@ export default function WarehouseResultCard({
             src={product.image}
             alt=""
             className={`absolute inset-0 h-full w-full object-contain ${
-              featured || preview ? "p-1.5" : "p-2.5"
+              featured || preview ? "p-1.5 pt-5" : "p-2.5 pt-7"
             }`}
           />
           {chrome && isLimitedOffer(product) ? (
@@ -128,6 +250,11 @@ export default function WarehouseResultCard({
             />
             Compare Product
           </label>
+        ) : null}
+        {catalog ? (
+          <div className="mt-1.5">
+            <AddToListLink productId={product.id} productName={product.name} />
+          </div>
         ) : null}
       </div>
     </div>
