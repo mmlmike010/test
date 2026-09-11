@@ -68,18 +68,18 @@ export default function WarehouseResultCard({
 
   if (list) {
     return (
-      <div className="flex gap-2.5 border border-[#c4c4c4] bg-white rounded-[3px] p-2">
+      <div className="flex gap-2 border border-[#c4c4c4] bg-white rounded-[3px] px-2 py-1.5">
         <button
           type="button"
           onClick={() => inspect(product, "warehouse")}
-          className="relative h-[88px] w-[88px] shrink-0 overflow-hidden border border-[#eee] bg-white rounded-[3px] hover:bg-[#f7fbfe]"
+          className="relative h-[72px] w-[72px] shrink-0 overflow-hidden border border-[#eee] bg-white rounded-[3px] hover:bg-[#f7fbfe]"
           aria-label={`View ${product.brand} ${product.name}`}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={product.image}
             alt=""
-            className="absolute inset-0 h-full w-full object-contain p-1"
+            className="absolute inset-0 h-full w-full object-contain p-1 pt-4"
           />
           {isLimitedOffer(product) ? (
             <LimitedTimeOfferBadge compact />
@@ -94,28 +94,21 @@ export default function WarehouseResultCard({
             <span className="block text-[13px] font-bold leading-snug text-costco-blue line-clamp-2 hover:underline">
               {product.brand} {product.name}
             </span>
-            {size ? (
-              <span className="mt-0.5 block text-[11px] text-[#72767E]">
-                {size}
-              </span>
-            ) : null}
             <span className="mt-0.5 block text-[11px] text-[#72767E]">
-              Item {warehouseItemNumber(product.id)}
+              {size ? `${size} · ` : ""}Item {warehouseItemNumber(product.id)}
             </span>
-            <span className="mt-0.5 block">
+            <span className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5">
               <StarRating
                 rating={product.rating}
                 reviewCount={product.reviewCount}
                 size="sm"
                 showCount={false}
               />
-            </span>
-            <span className="mt-1 flex flex-wrap items-baseline gap-x-1 tabular-nums">
-              <span className="text-[16px] font-bold text-[#1a1a1a]">
+              <span className="text-[15px] font-bold tabular-nums text-[#1a1a1a]">
                 ${product.price.toFixed(2)}
               </span>
               {product.originalPrice > product.price ? (
-                <span className="text-[12px] text-[#888] line-through">
+                <span className="text-[12px] text-[#888] line-through tabular-nums">
                   ${product.originalPrice.toFixed(2)}
                 </span>
               ) : null}
@@ -126,7 +119,7 @@ export default function WarehouseResultCard({
               ) : null}
             </span>
           </button>
-          <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1">
+          <div className="mt-1 flex flex-wrap items-center gap-x-2.5 gap-y-1">
             <AddControl product={product} variant="inline" tone="warehouse" />
             {onCompare ? (
               <label

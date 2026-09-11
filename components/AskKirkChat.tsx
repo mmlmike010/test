@@ -742,17 +742,27 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                       />
                     ))}
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      document
-                        .querySelector("main")
-                        ?.scrollTo({ top: 0, behavior: "smooth" });
-                    }}
-                    className="block w-full border-t border-[#ececec] px-3.5 py-2 text-left text-[13px] font-bold text-costco-blue hover:bg-[#f7fbfe]"
-                  >
-                    View all {hits.length} results
-                  </button>
+                  <div className="flex items-center justify-between gap-2 border-t border-[#ececec] px-3.5 py-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        document
+                          .querySelector("main")
+                          ?.scrollTo({ top: 0, behavior: "smooth" });
+                      }}
+                      className="text-[13px] font-bold text-costco-blue hover:underline"
+                    >
+                      View all {hits.length} results
+                    </button>
+                    <nav
+                      aria-label="Search results pages"
+                      className="flex items-center gap-1"
+                    >
+                      <span className="inline-flex h-7 min-w-7 items-center justify-center rounded-[3px] border border-costco-blue bg-[#f7fbfe] px-1.5 text-[12px] font-bold text-costco-blue">
+                        1
+                      </span>
+                    </nav>
+                  </div>
                 </>
               ) : null}
             </div>
@@ -940,30 +950,34 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             Search
           </button>
         </div>
-        {!hasUserAsk ? (
-          <>
-            <p className="mt-2 text-[10px] font-bold tracking-[0.12em] text-[#666] uppercase">
-              Popular Searches
-            </p>
-            <div className="mt-1 grid grid-cols-2 gap-x-2.5 gap-y-1">
-              {suggestionChips.map((chip) => (
-                <button
-                  key={chip}
-                  type="button"
-                  onClick={() => void sendMessage(chip)}
-                  disabled={isLoading}
-                  className="flex items-start gap-1 text-[11px] leading-tight text-costco-blue font-semibold hover:underline disabled:opacity-50 text-left"
-                >
-                  <Search
-                    className="mt-0.5 h-3 w-3 shrink-0 text-[#8a8a8a]"
-                    aria-hidden="true"
-                  />
-                  <span className="line-clamp-2">{chip}</span>
-                </button>
-              ))}
-            </div>
-          </>
-        ) : null}
+        <p className="mt-2 text-[10px] font-bold tracking-[0.12em] text-[#666] uppercase">
+          {hasUserAsk ? "Related Searches" : "Popular Searches"}
+        </p>
+        <div className="mt-1 grid grid-cols-2 gap-x-2.5 gap-y-1">
+          {suggestionChips
+            .filter((chip) => {
+              if (!hasUserAsk) return true;
+              const lastAsk = [...messages]
+                .reverse()
+                .find((message) => message.role === "user")?.content;
+              return chip !== lastAsk;
+            })
+            .map((chip) => (
+              <button
+                key={chip}
+                type="button"
+                onClick={() => void sendMessage(chip)}
+                disabled={isLoading}
+                className="flex items-start gap-1 text-[11px] leading-tight text-costco-blue font-semibold hover:underline disabled:opacity-50 text-left"
+              >
+                <Search
+                  className="mt-0.5 h-3 w-3 shrink-0 text-[#8a8a8a]"
+                  aria-hidden="true"
+                />
+                <span className="line-clamp-2">{chip}</span>
+              </button>
+            ))}
+        </div>
         <p className="mt-2 text-[10px] text-[#888] text-center leading-snug">
           Kirkland Signature shopping help · Membership required · Prices higher
           than warehouse
