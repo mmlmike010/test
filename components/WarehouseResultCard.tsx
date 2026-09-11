@@ -22,7 +22,7 @@ export default function WarehouseResultCard({
     <div className="flex flex-col border border-[#c4c4c4] bg-white rounded-[3px] overflow-hidden">
       <button
         type="button"
-        onClick={() => inspect(product)}
+        onClick={() => inspect(product, "warehouse")}
         className="flex min-w-0 flex-1 flex-col text-left hover:bg-[#f7fbfe]"
       >
         <span

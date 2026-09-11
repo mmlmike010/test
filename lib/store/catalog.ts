@@ -12,6 +12,7 @@ type CatalogState = {
   loading: boolean;
   error: string | null;
   inspecting: Product | null;
+  inspectTone: "sameday" | "warehouse";
   openList: string | null;
   openRecipe: string | null;
   setQuery: (q: string) => void;
@@ -19,7 +20,7 @@ type CatalogState = {
   setTag: (tag: string | null) => void;
   setOpenList: (openList: string | null) => void;
   setOpenRecipe: (openRecipe: string | null) => void;
-  inspect: (product: Product | null) => void;
+  inspect: (product: Product | null, tone?: "sameday" | "warehouse") => void;
   clearFilters: () => void;
   search: () => Promise<void>;
 };
@@ -32,6 +33,7 @@ export const useCatalogStore = create<CatalogState>((set, get) => ({
   loading: false,
   error: null,
   inspecting: null,
+  inspectTone: "sameday",
   openList: null,
   openRecipe: null,
   setQuery: (q) => set({ q }),
@@ -40,7 +42,8 @@ export const useCatalogStore = create<CatalogState>((set, get) => ({
   setTag: (tag) => set({ tag, department: null, openList: null, openRecipe: null }),
   setOpenList: (openList) => set({ openList }),
   setOpenRecipe: (openRecipe) => set({ openRecipe }),
-  inspect: (inspecting) => set({ inspecting }),
+  inspect: (inspecting, tone = "sameday") =>
+    set({ inspecting, inspectTone: inspecting ? tone : "sameday" }),
   clearFilters: () =>
     set({ q: "", department: null, tag: null, openList: null, openRecipe: null }),
   search: async () => {

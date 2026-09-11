@@ -24,7 +24,7 @@ export default function ShopProductRow({
       <div className="flex w-full items-center gap-2 border border-[#c4c4c4] bg-white px-2 py-1.5 rounded-[3px]">
         <button
           type="button"
-          onClick={() => inspect(product)}
+          onClick={() => inspect(product, "warehouse")}
           className="flex min-w-0 flex-1 items-center gap-2 text-left rounded-[3px] hover:bg-[#f7fbfe]"
         >
           <span className="relative h-14 w-14 shrink-0 overflow-hidden border border-[#eee] bg-white rounded-[3px]">

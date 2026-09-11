@@ -8,7 +8,7 @@ import { useCatalogStore } from "@/lib/store/catalog";
 import StarRating from "@/components/StarRating";
 import ProductCard from "@/components/ProductCard";
 import { hideComposedLeftovers, officialPacksFirst } from "@/lib/ui/merchOrder";
-import { productSize, unitPriceLabel } from "@/lib/ui/packSize";
+import { productSize, unitPriceLabel, warehouseItemNumber } from "@/lib/ui/packSize";
 import { aisleLabel } from "@/lib/ui/aisleLabels";
 import { storefrontOverlayClass, useSessionStore } from "@/lib/store/session";
 import { useListStore } from "@/lib/store/lists";
@@ -65,6 +65,8 @@ export default function ProductDetailModal({
   );
   const scrollerRef = useRef<HTMLDivElement>(null);
   const kirkOpen = useSessionStore((s) => s.kirkOpen);
+  const inspectTone = useCatalogStore((s) => s.inspectTone);
+  const warehouse = inspectTone === "warehouse";
   const setQuery = useCatalogStore((s) => s.setQuery);
   const setTag = useCatalogStore((s) => s.setTag);
   const setDepartment = useCatalogStore((s) => s.setDepartment);
@@ -123,19 +125,32 @@ export default function ProductDetailModal({
         aria-label={`${current.brand} ${current.name}`}
         className="flex h-full min-h-0 flex-col"
       >
-        <div className="flex shrink-0 items-center justify-between border-b border-[#ececec] bg-white px-4 py-3">
+        <div
+          className={`flex shrink-0 items-center justify-between px-4 py-3 ${
+            warehouse
+              ? "border-b border-[#c4c4c4] bg-white"
+              : "border-b border-[#ececec] bg-white"
+          }`}
+        >
           <p className="truncate pr-3 text-[13px] font-bold text-[#1a1a1a]">
             {current.brand} {current.name}
           </p>
           <button
             type="button"
             onClick={onClose}
-            className="shrink-0 rounded-full p-2 hover:bg-[#f6f6f6]"
+            className={`shrink-0 p-2 ${
+              warehouse
+                ? "rounded-[3px] hover:bg-[#f7fbfe]"
+                : "rounded-full hover:bg-[#f6f6f6]"
+            }`}
             aria-label="Close"
           >
             <X className="h-5 w-5 text-[#555]" />
           </button>
         </div>
+        {warehouse ? (
+          <div className="h-[3px] bg-gradient-to-r from-[#a3841c] via-[#f3e3a3] to-[#a3841c]" />
+        ) : null}
 
         <div ref={scrollerRef} className="min-h-0 flex-1 overflow-y-auto">
           <div
@@ -150,7 +165,11 @@ export default function ProductDetailModal({
               kirkOpen ? "xl:border-r xl:border-[#eee]" : "lg:border-r lg:border-[#eee]"
             }
           >
-            <div className="relative aspect-square bg-[#f3f4f5]">
+            <div
+              className={`relative aspect-square ${
+                warehouse ? "bg-white" : "bg-[#f3f4f5]"
+              }`}
+            >
               <button
                 type="button"
                 onClick={() => setZoomed(true)}
@@ -191,7 +210,9 @@ export default function ProductDetailModal({
               <button
                 type="button"
                 onClick={() => setZoomed(true)}
-                className="relative h-14 w-14 overflow-hidden rounded-[8px] border-2 border-[#1a1a1a] bg-white"
+                className={`relative h-14 w-14 overflow-hidden border-2 border-[#1a1a1a] bg-white ${
+                  warehouse ? "rounded-[3px]" : "rounded-[8px]"
+                }`}
                 aria-label="Selected product photo"
                 aria-current="true"
               >
@@ -210,6 +231,11 @@ export default function ProductDetailModal({
             </h2>
             {size ? (
               <p className="mt-1 text-[14px] text-[#242424]">• {size}</p>
+            ) : null}
+            {warehouse ? (
+              <p className="mt-0.5 text-[13px] text-[#72767E]">
+                Item {warehouseItemNumber(current.id)}
+              </p>
             ) : null}
             {perUnit ? (
               <p className="mt-0.5 text-[14px] text-[#242424]">• {perUnit}</p>
@@ -240,7 +266,11 @@ export default function ProductDetailModal({
             </div>
 
             <div className="mt-4 flex items-baseline gap-2 flex-wrap">
-              <span className="text-[28px] font-bold text-[#1a1a1a] tabular-nums leading-none">
+              <span
+                className={`text-[28px] font-bold tabular-nums leading-none ${
+                  warehouse ? "text-costco-red" : "text-[#1a1a1a]"
+                }`}
+              >
                 ${current.price.toFixed(2)}
               </span>
               <span className="text-[15px] text-[#8a8a8a]">each</span>
@@ -269,8 +299,9 @@ export default function ProductDetailModal({
                   {size ? ` · ${size}` : ""}
                 </p>
                 <p className="mt-1.5 text-[12px] text-[#888]">
-                  Same-Day price · Membership required · Prices higher than
-                  warehouse
+                  {warehouse
+                    ? "Kirkland Signature shopping help · Membership required · Prices higher than warehouse"
+                    : "Same-Day price · Membership required · Prices higher than warehouse"}
                 </p>
               </ItemAccordion>
               <ItemAccordion title="Ingredients">
@@ -340,14 +371,55 @@ export default function ProductDetailModal({
         </div>
         </div>
 
-        <div className="shrink-0 border-t border-[#eee] bg-white px-5 py-3 flex items-center gap-3">
+        <div
+          className={`shrink-0 border-t bg-white px-5 py-3 flex items-center gap-3 ${
+            warehouse ? "border-[#c4c4c4]" : "border-[#eee]"
+          }`}
+        >
           <div className="min-w-0">
-            <p className="text-[20px] font-bold text-[#1a1a1a] tabular-nums leading-none">
+            <p
+              className={`text-[20px] font-bold tabular-nums leading-none ${
+                warehouse ? "text-costco-red" : "text-[#1a1a1a]"
+              }`}
+            >
               ${current.price.toFixed(2)}
             </p>
             <p className="text-[12px] text-[#8a8a8a] mt-0.5">each</p>
           </div>
-          {qty === 0 ? (
+          {warehouse ? (
+            qty === 0 ? (
+              <button
+                type="button"
+                onClick={onAdd}
+                className="flex-1 h-12 font-bold transition-colors flex items-center justify-center gap-2 rounded-[3px] bg-costco-red text-white hover:bg-costco-red-hover"
+              >
+                <Plus className="w-4 h-4" />
+                Add
+              </button>
+            ) : (
+              <div className="flex-1 h-12 flex items-center justify-between rounded-[3px] border border-[#c4c4c4] bg-white overflow-hidden">
+                <button
+                  type="button"
+                  className="w-14 h-12 flex items-center justify-center text-costco-blue hover:bg-[#f7fbfe]"
+                  onClick={() => updateQuantity(current.id, qty - 1)}
+                  aria-label="Decrease quantity"
+                >
+                  <Minus className="w-4 h-4" />
+                </button>
+                <span className="text-[16px] font-bold tabular-nums min-w-[1.5rem] text-center text-[#1a1a1a]">
+                  {qty}
+                </span>
+                <button
+                  type="button"
+                  className="w-14 h-12 flex items-center justify-center text-costco-blue hover:bg-[#f7fbfe]"
+                  onClick={onAdd}
+                  aria-label="Increase quantity"
+                >
+                  <Plus className="w-4 h-4" />
+                </button>
+              </div>
+            )
+          ) : qty === 0 ? (
             <button
               type="button"
               onClick={onAdd}
