@@ -44,7 +44,7 @@ export default function FlyersView() {
 
       <div className="mb-4">
         <h1 className="text-[22px] lg:text-[24px] font-bold text-[#1a1a1a] tracking-tight">
-          Weekly Ad
+          Flyers
         </h1>
         <p className="text-[13px] text-[#666] mt-0.5">
           Valid 8/24/26 – 9/21/26 · Costco · 11217 Brooklyn

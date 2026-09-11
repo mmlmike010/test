@@ -14,7 +14,7 @@ export function officialPacksFirst(items: Product[]): Product[] {
 /** Idle Kirk rail merch. UI only — never sent to Kirk. */
 export function kirklandWarehousePreview(
   items: Product[],
-  n = 3
+  n = 4
 ): Product[] {
   return officialPacksFirst(
     items.filter((p) => p.brand === "Kirkland Signature")

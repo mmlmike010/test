@@ -9,10 +9,12 @@ export default function AddControl({
   product,
   variant = "overlay",
   tone = "sameday",
+  wide = false,
 }: {
   product: Product;
   variant?: "overlay" | "inline";
   tone?: "sameday" | "warehouse";
+  wide?: boolean;
 }) {
   const qty = useCartStore(
     (s) => s.items.find((i) => i.product.id === product.id)?.quantity || 0
@@ -38,7 +40,7 @@ export default function AddControl({
           type="button"
           onClick={add}
           aria-label={`Add 1 ct ${product.name}`}
-          className={`${place} h-9 min-w-[52px] px-3 rounded-[3px] bg-costco-red text-white text-[13px] font-bold hover:bg-costco-red-hover ${
+          className={`${place} h-9 ${wide ? "w-full" : "min-w-[52px]"} px-3 rounded-[3px] bg-costco-red text-white text-[13px] font-bold hover:bg-costco-red-hover ${
             justAdded ? "bg-costco-red-hover" : ""
           }`}
         >
@@ -49,7 +51,7 @@ export default function AddControl({
 
     return (
       <div
-        className={`${place} h-9 flex items-center rounded-[3px] border border-[#c4c4c4] bg-white overflow-hidden`}
+        className={`${place} h-9 ${wide ? "w-full justify-between" : ""} flex items-center rounded-[3px] border border-[#c4c4c4] bg-white overflow-hidden`}
         onClick={(e) => e.stopPropagation()}
       >
         <button

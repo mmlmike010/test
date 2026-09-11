@@ -15,6 +15,7 @@ import { useCartStore } from "@/lib/store/cart";
 import { products } from "@/lib/data/products";
 import KirkMark from "@/components/KirkMark";
 import ShopProductRow from "@/components/ShopProductRow";
+import WarehouseResultCard from "@/components/WarehouseResultCard";
 import CostcoLogo from "@/components/CostcoLogo";
 import GoldStarMark from "@/components/GoldStarMark";
 import GoldStarMembershipCard from "@/components/GoldStarMembershipCard";
@@ -613,29 +614,26 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             return (
               <div key={message.id} className="space-y-2.5">
                 <GoldStarMembershipCard />
-                <div className="bg-white border border-[#e8e8e8] rounded-[3px] overflow-hidden">
-                  <div className="bg-costco-red px-3.5 py-1.5">
-                    <p className="text-[10px] font-bold tracking-[0.16em] text-white uppercase">
-                      Kirkland Signature
-                    </p>
-                  </div>
-                  <div className="px-3.5 py-2.5">
-                    <p className="text-[13px] leading-relaxed text-[#1a1a1a] whitespace-pre-line">
-                      {message.content}
-                    </p>
-                  </div>
+                <div className="bg-white border border-[#e8e8e8] rounded-[3px] px-3 py-2">
+                  <p className="text-[12px] leading-relaxed text-[#1a1a1a] whitespace-pre-line">
+                    {message.content}
+                  </p>
                 </div>
                 {preview.length > 0 ? (
                   <div>
-                    <p className="mb-1.5 text-[13px] font-bold text-[#1a1a1a]">
-                      Shop Kirkland Signature
-                    </p>
-                    <div className="space-y-1.5">
+                    <div className="mb-1.5 flex items-end justify-between gap-2">
+                      <p className="text-[13px] font-bold text-[#1a1a1a]">
+                        Kirkland Signature
+                      </p>
+                      <p className="text-[11px] font-semibold text-[#666] tabular-nums">
+                        {preview.length} items
+                      </p>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
                       {preview.map((product) => (
-                        <ShopProductRow
+                        <WarehouseResultCard
                           key={`preview-${product.id}`}
                           product={product}
-                          tone="warehouse"
                         />
                       ))}
                     </div>
