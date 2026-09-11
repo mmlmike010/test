@@ -664,28 +664,34 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                     onClick={() => inspect(product)}
                     className="flex w-full items-center gap-2.5 rounded-[12px] border border-[#e8e8e8] bg-white px-2 py-2 text-left hover:bg-[#fafafa]"
                   >
-                    <span className="relative h-14 w-14 shrink-0 overflow-hidden rounded-[8px] border border-[#f0f0f0] bg-white">
+                    <span className="relative h-[72px] w-[72px] shrink-0 overflow-hidden rounded-[12px] border border-[#eee] bg-white">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={product.image}
                         alt=""
-                        className="absolute inset-0 h-full w-full object-contain p-0.5"
+                        className="absolute inset-0 h-full w-full object-contain p-1"
                       />
                     </span>
                     <span className="min-w-0 flex-1">
-                      <span className="block text-[12px] leading-snug text-[#242424] line-clamp-2">
+                      <span className="block text-[13px] leading-snug text-[#242424] line-clamp-2">
                         {product.brand} {product.name}
                       </span>
                       {productSize(product.id) ? (
-                        <span className="mt-0.5 block text-[11px] text-[#72767E]">
+                        <span className="mt-0.5 block text-[12px] text-[#72767E]">
                           {productSize(product.id)}
                         </span>
                       ) : null}
-                      <span className="mt-0.5 block text-[13px] font-bold tabular-nums text-[#1a1a1a]">
+                      <span className="mt-0.5 block text-[14px] font-bold tabular-nums text-[#1a1a1a]">
                         ${product.price.toFixed(2)}{" "}
                         <span className="font-normal text-[#8a8a8a]">each</span>
                       </span>
+                      {product.savings > 0 ? (
+                        <span className="mt-0.5 block text-[12px] font-semibold text-[#188038]">
+                          Save ${product.savings.toFixed(2)}
+                        </span>
+                      ) : null}
                     </span>
+                    <ChevronRight className="h-4 w-4 shrink-0 text-costco-blue" />
                   </button>
                 ))}
               </div>

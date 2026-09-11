@@ -293,6 +293,10 @@ export default function ProductGrid() {
 
       {!filteredView && (
         <>
+          <div className="-mx-4 lg:-mx-5 mb-4">
+            <CategoryScroller />
+          </div>
+
           <section className="mb-5 grid grid-cols-2 gap-3">
             {collectionTiles.map((tile) => (
               <button
@@ -330,10 +334,6 @@ export default function ProductGrid() {
               </button>
             ))}
           </section>
-
-          <div className="-mx-4 lg:-mx-5 mb-5">
-            <CategoryScroller />
-          </div>
 
           {aisles.map((aisle) => (
             <AisleRow
