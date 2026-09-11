@@ -30,6 +30,11 @@ export function productSize(id: string): string | undefined {
   return PRODUCT_SIZES[id];
 }
 
+/** costco.com search-tile item #. UI only — never sent to Kirk. */
+export function warehouseItemNumber(id: string): string {
+  return `18471${id.padStart(2, "0")}`;
+}
+
 function money(price: number, qty: number): string {
   return `$${(price / qty).toFixed(2)}`;
 }

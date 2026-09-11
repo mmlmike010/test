@@ -2,7 +2,7 @@
 
 import type { Product } from "@/lib/data/products";
 import { useCatalogStore } from "@/lib/store/catalog";
-import { productSize, unitPriceLabel } from "@/lib/ui/packSize";
+import { productSize, unitPriceLabel, warehouseItemNumber } from "@/lib/ui/packSize";
 import AddControl from "@/components/AddControl";
 import StarRating from "@/components/StarRating";
 
@@ -43,6 +43,9 @@ export default function ShopProductRow({
               {size ? (
                 <span className="text-[11px] text-[#72767E] shrink-0">{size}</span>
               ) : null}
+              <span className="text-[11px] text-[#72767E] shrink-0">
+                Item {warehouseItemNumber(product.id)}
+              </span>
               <StarRating
                 rating={product.rating}
                 reviewCount={product.reviewCount}

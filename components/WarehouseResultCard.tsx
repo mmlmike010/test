@@ -2,7 +2,7 @@
 
 import type { Product } from "@/lib/data/products";
 import { useCatalogStore } from "@/lib/store/catalog";
-import { productSize } from "@/lib/ui/packSize";
+import { productSize, warehouseItemNumber } from "@/lib/ui/packSize";
 import AddControl from "@/components/AddControl";
 import StarRating from "@/components/StarRating";
 
@@ -50,6 +50,11 @@ export default function WarehouseResultCard({
           {size ? (
             <span className="mt-0.5 block text-[11px] text-[#72767E]">{size}</span>
           ) : null}
+          {featured ? null : (
+            <span className="mt-0.5 block text-[11px] text-[#72767E]">
+              Item {warehouseItemNumber(product.id)}
+            </span>
+          )}
           {featured ? null : (
             <span className="mt-0.5 block">
               <StarRating
