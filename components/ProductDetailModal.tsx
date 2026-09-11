@@ -243,6 +243,7 @@ export default function ProductDetailModal({
                 · {aisleLabel(current.department)}
               </span>
             </p>
+            <p className="mt-0.5 text-[12px] text-[#666]">Sold by Costco</p>
             <div className="mt-5" key={current.id}>
               <ItemAccordion title="Details" defaultOpen>
                 <p>

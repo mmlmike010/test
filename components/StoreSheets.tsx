@@ -459,6 +459,15 @@ function CheckoutSheet() {
                 Special request: {specialRequest}
               </p>
             )}
+            <div className="rounded-xl border border-[#e0e0e0] bg-white px-4 py-3.5 shadow-sm">
+              <p className="text-[12px] font-bold text-[#666]">Payment</p>
+              <p className="mt-0.5 text-[14px] font-bold text-[#1a1a1a]">
+                Item subtotal only
+              </p>
+              <p className="mt-0.5 text-[13px] text-[#555]">
+                Service, delivery, and tax are not estimated in this demo
+              </p>
+            </div>
             {items.length > 0 && (
               <div className="overflow-hidden rounded-xl border border-[#e0e0e0] bg-white shadow-sm">
                 <p className="border-b border-[#ececec] bg-[#f6f7f8] px-4 py-2 text-[12px] font-bold text-[#666]">
@@ -467,9 +476,9 @@ function CheckoutSheet() {
                 {items.map(({ product, quantity }) => (
                   <div
                     key={product.id}
-                    className="flex gap-3 border-b border-[#f0f0f0] px-4 py-2.5 last:border-b-0"
+                    className="flex gap-3 border-b border-[#f0f0f0] px-4 py-3 last:border-b-0"
                   >
-                    <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-[10px] border border-[#eee] bg-white">
+                    <div className="relative h-[72px] w-[72px] shrink-0 overflow-hidden rounded-[12px] border border-[#eee] bg-white">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={product.image}
@@ -478,17 +487,28 @@ function CheckoutSheet() {
                       />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="line-clamp-2 text-[13px] leading-snug text-[#242424]">
-                        {product.brand} {product.name}
+                      <div className="flex items-start justify-between gap-2">
+                        <p className="line-clamp-2 text-[14px] leading-snug text-[#242424]">
+                          {product.brand} {product.name}
+                        </p>
+                        <p className="shrink-0 text-[15px] font-bold tabular-nums text-[#1a1a1a]">
+                          ${(product.price * quantity).toFixed(2)}
+                        </p>
+                      </div>
+                      {productSize(product.id) ? (
+                        <p className="mt-0.5 text-[13px] text-[#72767E]">
+                          {productSize(product.id)}
+                        </p>
+                      ) : null}
+                      <p className="mt-0.5 text-[13px] tabular-nums text-[#8a8a8a]">
+                        {quantity} × ${product.price.toFixed(2)} each
                       </p>
-                      <p className="mt-0.5 text-[12px] text-[#72767E]">
-                        {quantity} × ${product.price.toFixed(2)}
-                        {productSize(product.id) ? ` · ${productSize(product.id)}` : ""}
-                      </p>
+                      {product.savings > 0 ? (
+                        <p className="mt-0.5 text-[12px] font-semibold text-[#188038]">
+                          Save ${product.savings.toFixed(2)}
+                        </p>
+                      ) : null}
                     </div>
-                    <p className="shrink-0 text-[14px] font-bold tabular-nums text-[#1a1a1a]">
-                      ${(product.price * quantity).toFixed(2)}
-                    </p>
                   </div>
                 ))}
               </div>
@@ -518,8 +538,7 @@ function CheckoutSheet() {
               </button>
               <p className="mt-3 inline-flex w-full items-center justify-center gap-1.5 text-center text-[11px] leading-snug text-[#888]">
                 <InstacartMark size={12} />
-                Item subtotal only. Service, delivery, and tax are not
-                estimated in this demo.
+                Same-Day Delivery powered by Instacart · Membership required
               </p>
             </div>
           </>

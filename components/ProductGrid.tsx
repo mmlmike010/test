@@ -373,7 +373,7 @@ export default function ProductGrid() {
               <img
                 src={activeCollection.image}
                 alt=""
-                className="absolute inset-0 w-full h-full object-contain"
+                className="absolute inset-0 w-full h-full object-cover"
               />
               <span className="absolute inset-0 bg-gradient-to-t from-black/58 via-black/15 to-black/10" />
               {"badge" in activeCollection && activeCollection.badge && (
