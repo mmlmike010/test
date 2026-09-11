@@ -46,7 +46,7 @@ export const recipes: Recipe[] = [
     minutes: 20,
     servings: 4,
     course: "Lunch",
-    image: "/products/recipe-quinoa.jpg?v=2",
+    image: "/products/recipe-quinoa.jpg?v=3",
     ingredientIds: ["11", "3", "10"],
     steps: [
       "Cook the quinoa per the bag, then fluff.",

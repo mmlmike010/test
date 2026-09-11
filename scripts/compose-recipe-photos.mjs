@@ -51,3 +51,49 @@ await plated(`${JH}/dried-fruit-and-nut-mix.png`, "recipe-trail.jpg");
     .toFile(join(dir, "recipe-soup.jpg"));
   process.stdout.write("wrote recipe-soup.jpg\n");
 }
+
+/** Official catalog packs only — no plated corn/bean leftover. */
+{
+  const pack = (id, w, h) =>
+    sharp(join(dir, `${id}.png`))
+      .trim({ threshold: 18 })
+      .resize(w, h, { fit: "inside" })
+      .png()
+      .toBuffer();
+  const quinoa = await pack("11", 520, 680);
+  const tomatoes = await pack("3", 300, 360);
+  const oil = await pack("10", 240, 460);
+  const q = await sharp(quinoa).metadata();
+  const t = await sharp(tomatoes).metadata();
+  const o = await sharp(oil).metadata();
+  await sharp({
+    create: {
+      width: W,
+      height: H,
+      channels: 3,
+      background: { r: 243, g: 244, b: 245 },
+    },
+  })
+    .composite([
+      {
+        input: quinoa,
+        left: 190,
+        top: Math.round((H - (q.height || 680)) / 2),
+      },
+      {
+        input: oil,
+        left: 780,
+        top: 150,
+      },
+      {
+        input: tomatoes,
+        left: 800,
+        top: H - 120 - (t.height || 360),
+      },
+    ])
+    .jpeg({ quality: 90 })
+    .toFile(join(dir, "recipe-quinoa.jpg"));
+  process.stdout.write(
+    `wrote recipe-quinoa.jpg from official packs ${q.width}x${q.height} ${o.width} ${t.width}\n`
+  );
+}
