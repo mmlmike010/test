@@ -215,7 +215,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
       }
     }
 
-    if (shouldOpen) openCart();
+    if (shouldOpen) openCart("warehouse");
     if (notices.length) {
       setCartNotice(notices[0]);
       window.setTimeout(() => setCartNotice(null), 3500);
@@ -588,7 +588,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
         {kirkCartCount > 0 && (
           <button
             type="button"
-            onClick={openCart}
+            onClick={() => openCart("warehouse")}
             className="mx-3.5 my-2 w-[calc(100%-1.75rem)] flex items-center justify-between rounded-[3px] bg-white border border-[#c4c4c4] px-3.5 py-2 text-left hover:border-costco-blue hover:bg-[#f7fbfe]"
           >
             <span className="flex items-center gap-2 min-w-0">

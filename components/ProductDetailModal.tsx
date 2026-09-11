@@ -417,7 +417,7 @@ export default function ProductDetailModal({
                 className="flex-1 h-12 font-bold transition-colors flex items-center justify-center gap-2 rounded-[3px] bg-costco-red text-white hover:bg-costco-red-hover"
               >
                 <Plus className="w-4 h-4" />
-                Add
+                Add to Cart
               </button>
             ) : (
               <div className="flex-1 h-12 flex items-center justify-between rounded-[3px] border border-[#c4c4c4] bg-white overflow-hidden">

@@ -20,11 +20,12 @@ export type CartSnapshotItem = {
 interface CartStore {
   items: CartItem[];
   isOpen: boolean;
+  cartTone: "sameday" | "warehouse";
   addItem: (product: Product, qty?: number) => void;
   removeItem: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;
-  openCart: () => void;
+  openCart: (tone?: "sameday" | "warehouse") => void;
   closeCart: () => void;
   toggleCart: () => void;
   getTotalItems: () => number;
@@ -39,6 +40,7 @@ interface CartStore {
 export const useCartStore = create<CartStore>((set, get) => ({
   items: [],
   isOpen: false,
+  cartTone: "sameday",
   addItem: (product, qty = 1) =>
     set((state) => {
       const n = Math.max(1, Math.floor(qty));
@@ -74,8 +76,8 @@ export const useCartStore = create<CartStore>((set, get) => ({
       };
     }),
   clearCart: () => set({ items: [] }),
-  openCart: () => set({ isOpen: true }),
-  closeCart: () => set({ isOpen: false }),
+  openCart: (tone = "sameday") => set({ isOpen: true, cartTone: tone }),
+  closeCart: () => set({ isOpen: false, cartTone: "sameday" }),
   toggleCart: () => set((s) => ({ isOpen: !s.isOpen })),
   getTotalItems: () =>
     get().items.reduce((total, item) => total + item.quantity, 0),

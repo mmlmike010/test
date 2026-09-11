@@ -3,7 +3,7 @@
 import { Minus, Plus, ShoppingCart, Trash2, X } from "lucide-react";
 import { useCartStore } from "@/lib/store/cart";
 import { useCatalogStore } from "@/lib/store/catalog";
-import { productSize, unitPriceLabel } from "@/lib/ui/packSize";
+import { productSize, unitPriceLabel, warehouseItemNumber } from "@/lib/ui/packSize";
 import {
   deliveryWindow,
   formatAddress,
@@ -22,6 +22,8 @@ export default function CartDrawer() {
   const totalItems = useCartStore((s) => s.getTotalItems());
   const setSheet = useSessionStore((s) => s.setSheet);
   const inspect = useCatalogStore((s) => s.inspect);
+  const cartTone = useCartStore((s) => s.cartTone);
+  const warehouse = cartTone === "warehouse";
   const kirkOpen = useSessionStore((s) => s.kirkOpen);
   const windowId = useSessionStore((s) => s.windowId);
   const address = useSessionStore((s) => s.address);
@@ -41,12 +43,20 @@ export default function CartDrawer() {
         onClick={closeCart}
       />
       <aside className="relative w-full max-w-[400px] h-full bg-white shadow-2xl flex flex-col">
-        <div className="px-4 py-3.5 border-b border-[#ececec] flex items-center justify-between shrink-0">
+        <div
+          className={`px-4 py-3.5 flex items-center justify-between shrink-0 ${
+            warehouse ? "border-b border-[#c4c4c4]" : "border-b border-[#ececec]"
+          }`}
+        >
           <div>
             <h2 className="font-bold text-[#1a1a1a] text-[18px] leading-none">
-              Cart
+              {warehouse ? "Shopping Cart" : "Cart"}
             </h2>
-            <p className="text-[12px] text-[#188038] font-semibold mt-1.5">
+            <p
+              className={`text-[12px] font-semibold mt-1.5 ${
+                warehouse ? "text-[#555]" : "text-[#188038]"
+              }`}
+            >
               {totalItems} item{totalItems === 1 ? "" : "s"} · Delivery{" "}
               {slot.label} · {formatAddress(address)}
             </p>
@@ -54,12 +64,19 @@ export default function CartDrawer() {
           <button
             type="button"
             onClick={closeCart}
-            className="p-2 rounded-full hover:bg-[#f6f6f6]"
+            className={`p-2 ${
+              warehouse
+                ? "rounded-[3px] hover:bg-[#f7fbfe]"
+                : "rounded-full hover:bg-[#f6f6f6]"
+            }`}
             aria-label="Close cart"
           >
             <X className="w-5 h-5 text-[#555]" />
           </button>
         </div>
+        {warehouse ? (
+          <div className="h-[3px] bg-gradient-to-r from-[#a3841c] via-[#f3e3a3] to-[#a3841c]" />
+        ) : null}
 
         <div className="flex-1 overflow-y-auto px-4 py-3 bg-white">
           {items.length === 0 ? (
@@ -83,8 +100,12 @@ export default function CartDrawer() {
                 >
                   <button
                     type="button"
-                    onClick={() => inspect(product)}
-                    className="relative w-[72px] h-[72px] overflow-hidden bg-white border border-[#eee] rounded-[12px] shrink-0"
+                    onClick={() =>
+                      inspect(product, warehouse ? "warehouse" : "sameday")
+                    }
+                    className={`relative w-[72px] h-[72px] overflow-hidden bg-white border border-[#eee] shrink-0 ${
+                      warehouse ? "rounded-[3px]" : "rounded-[12px]"
+                    }`}
                     aria-label={`View ${product.brand} ${product.name}`}
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -98,12 +119,22 @@ export default function CartDrawer() {
                     <div className="flex items-start justify-between gap-2">
                       <button
                         type="button"
-                        onClick={() => inspect(product)}
-                        className="text-left text-[14px] text-[#242424] leading-snug line-clamp-2 hover:underline"
+                        onClick={() =>
+                          inspect(product, warehouse ? "warehouse" : "sameday")
+                        }
+                        className={`text-left text-[14px] leading-snug line-clamp-2 hover:underline ${
+                          warehouse
+                            ? "font-bold text-costco-blue"
+                            : "text-[#242424]"
+                        }`}
                       >
                         {product.brand} {product.name}
                       </button>
-                      <p className="text-[15px] font-bold text-[#1a1a1a] tabular-nums shrink-0">
+                      <p
+                        className={`text-[15px] font-bold tabular-nums shrink-0 ${
+                          warehouse ? "text-costco-red" : "text-[#1a1a1a]"
+                        }`}
+                      >
                         ${(product.price * quantity).toFixed(2)}
                       </p>
                     </div>
@@ -112,6 +143,11 @@ export default function CartDrawer() {
                         {productSize(product.id)}
                       </p>
                     )}
+                    {warehouse ? (
+                      <p className="text-[12px] text-[#72767E] mt-0.5">
+                        Item {warehouseItemNumber(product.id)}
+                      </p>
+                    ) : null}
                     {unitPriceLabel(product.id, product.price) ? (
                       <p className="text-[13px] text-[#72767E] mt-0.5">
                         {unitPriceLabel(product.id, product.price)}
@@ -122,10 +158,20 @@ export default function CartDrawer() {
                     </p>
                     <p className="text-[12px] text-[#666] mt-0.5">Sold by Costco</p>
                     <div className="mt-2.5 flex items-center justify-between gap-2">
-                      <div className="flex items-center rounded-full overflow-hidden h-9 bg-[#0AAD0A] text-white">
+                      <div
+                        className={`flex items-center overflow-hidden h-9 ${
+                          warehouse
+                            ? "rounded-[3px] border border-[#c4c4c4] bg-white"
+                            : "rounded-full bg-[#0AAD0A] text-white"
+                        }`}
+                      >
                         <button
                           type="button"
-                          className="w-9 h-9 flex items-center justify-center hover:bg-[#099809]"
+                          className={`w-9 h-9 flex items-center justify-center ${
+                            warehouse
+                              ? "text-costco-blue hover:bg-[#f7fbfe]"
+                              : "hover:bg-[#099809]"
+                          }`}
                           onClick={() =>
                             updateQuantity(product.id, quantity - 1)
                           }
@@ -133,12 +179,20 @@ export default function CartDrawer() {
                         >
                           <Minus className="w-3.5 h-3.5" />
                         </button>
-                        <span className="px-1 text-sm font-bold min-w-[1.5rem] text-center tabular-nums">
+                        <span
+                          className={`px-1 text-sm font-bold min-w-[1.5rem] text-center tabular-nums ${
+                            warehouse ? "text-[#1a1a1a]" : ""
+                          }`}
+                        >
                           {quantity}
                         </span>
                         <button
                           type="button"
-                          className="w-9 h-9 flex items-center justify-center hover:bg-[#099809]"
+                          className={`w-9 h-9 flex items-center justify-center ${
+                            warehouse
+                              ? "text-costco-blue hover:bg-[#f7fbfe]"
+                              : "hover:bg-[#099809]"
+                          }`}
                           onClick={() =>
                             updateQuantity(product.id, quantity + 1)
                           }
@@ -180,7 +234,11 @@ export default function CartDrawer() {
             <span className="text-[#555] text-[13px] font-semibold">
               Estimated total
             </span>
-            <span className="font-bold text-[#1a1a1a] text-[24px] tabular-nums leading-none">
+            <span
+              className={`font-bold text-[24px] tabular-nums leading-none ${
+                warehouse ? "text-costco-red" : "text-[#1a1a1a]"
+              }`}
+            >
               ${subtotal.toFixed(2)}
             </span>
           </div>
@@ -204,7 +262,11 @@ export default function CartDrawer() {
                 closeCart();
                 setSheet("checkout");
               }}
-              className="flex-1 py-3 bg-[#0AAD0A] text-white rounded-full font-bold hover:bg-[#099809] text-[15px]"
+              className={`flex-1 py-3 text-white font-bold text-[15px] ${
+                warehouse
+                  ? "rounded-[3px] bg-costco-red hover:bg-costco-red-hover"
+                  : "rounded-full bg-[#0AAD0A] hover:bg-[#099809]"
+              }`}
             >
               {items.length ? "Go to checkout" : "Browse products"}
             </button>
