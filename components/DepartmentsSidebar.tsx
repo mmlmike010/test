@@ -27,10 +27,13 @@ const aisleThumbs: Record<string, string> = {
 export function MobileAisles() {
   const selected = useCatalogStore((s) => s.department);
   const tag = useCatalogStore((s) => s.tag);
+  const q = useCatalogStore((s) => s.q);
+  const listTone = useCatalogStore((s) => s.listTone);
   const setDepartment = useCatalogStore((s) => s.setDepartment);
   const setTag = useCatalogStore((s) => s.setTag);
   const setQuery = useCatalogStore((s) => s.setQuery);
   const search = useCatalogStore((s) => s.search);
+  if (listTone === "warehouse" && q.trim()) return null;
   return (
     <div className="md:hidden bg-white border-b border-[#ececec] px-3 py-2">
       <p className="text-[12px] font-bold text-[#1a1a1a] mb-1.5 px-0.5">

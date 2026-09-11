@@ -12,11 +12,12 @@ export default function WarehouseResultCard({
   density = "search",
 }: {
   product: Product;
-  density?: "search" | "featured";
+  density?: "search" | "featured" | "catalog";
 }) {
   const inspect = useCatalogStore((s) => s.inspect);
   const size = productSize(product.id);
   const featured = density === "featured";
+  const catalog = density === "catalog";
 
   return (
     <div className="flex flex-col border border-[#c4c4c4] bg-white rounded-[3px] overflow-hidden">
@@ -27,7 +28,7 @@ export default function WarehouseResultCard({
       >
         <span
           className={`relative bg-white ${
-            featured ? "h-[88px]" : "aspect-square"
+            featured ? "h-[88px]" : catalog ? "h-[156px]" : "aspect-square"
           }`}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}

@@ -6,6 +6,9 @@ export default function PromoBanner() {
   const setQuery = useCatalogStore((s) => s.setQuery);
   const setTag = useCatalogStore((s) => s.setTag);
   const search = useCatalogStore((s) => s.search);
+  const q = useCatalogStore((s) => s.q);
+  const listTone = useCatalogStore((s) => s.listTone);
+  if (listTone === "warehouse" && q.trim()) return null;
 
   return (
     <div className="bg-[#eef5fb] border-b border-[#d4e3f0] text-[#1a1a1a] shrink-0">

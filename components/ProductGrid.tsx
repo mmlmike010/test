@@ -346,7 +346,11 @@ export default function ProductGrid() {
   ];
 
   return (
-    <div className="bg-[#f6f7f8] p-4 lg:px-5 lg:py-4">
+    <div
+      className={`p-4 lg:px-5 lg:py-4 ${
+        warehouseList ? "bg-[#e8eaed]" : "bg-[#f6f7f8]"
+      }`}
+    >
       {error && (
         <div className="mb-4 border border-red-200 bg-red-50 text-red-700 px-3 py-2 text-sm">
           {error}
@@ -580,7 +584,11 @@ export default function ProductGrid() {
             <div className={searchGridClass}>
               {shown.map((product) =>
                 warehouseList ? (
-                  <WarehouseResultCard key={product.id} product={product} />
+                  <WarehouseResultCard
+                    key={product.id}
+                    product={product}
+                    density="catalog"
+                  />
                 ) : (
                   <ProductCard
                     key={product.id}
@@ -601,6 +609,7 @@ export default function ProductGrid() {
                       <WarehouseResultCard
                         key={`related-${product.id}`}
                         product={product}
+                        density="catalog"
                       />
                     ) : (
                       <ProductCard
