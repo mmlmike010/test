@@ -752,9 +752,12 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
           </div>
         )}
         {error && (
-          <p className="text-[12px] text-costco-red bg-[#fff5f6] border border-[#f3c5cb] px-3 py-2">
-            {error}
-          </p>
+          <div className="bg-white border border-[#c4c4c4] border-l-[3px] border-l-costco-red rounded-[3px] px-3.5 py-2.5">
+            <p className="text-[10px] font-bold tracking-[0.12em] text-costco-red uppercase">
+              We&apos;re sorry
+            </p>
+            <p className="mt-1 text-[13px] text-[#1a1a1a]">{error}</p>
+          </div>
         )}
         <div ref={messagesEndRef} />
       </div>

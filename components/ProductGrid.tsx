@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Search } from "lucide-react";
 import { categories, filterProducts } from "@/lib/data/products";
 import { aisleLabel } from "@/lib/ui/aisleLabels";
-import { officialPacksFirst } from "@/lib/ui/merchOrder";
+import { hideComposedLeftovers, officialPacksFirst } from "@/lib/ui/merchOrder";
 import type { Product } from "@/lib/data/products";
 import { useCatalogStore } from "@/lib/store/catalog";
 import ProductCard from "@/components/ProductCard";
@@ -205,11 +205,19 @@ export default function ProductGrid() {
   ].filter(Boolean);
 
   const shown = useMemo(() => {
-    if (sort === "price") {
-      return [...filtered].sort((a, b) => a.price - b.price);
+    const allow: string[] = [];
+    if (!q.trim()) {
+      if (tag === "weekly") allow.push("7");
+      if (department === "Bakery & Desserts") allow.push("9");
     }
-    return officialPacksFirst(filtered);
-  }, [filtered, sort]);
+    const merch = q.trim()
+      ? filtered
+      : hideComposedLeftovers(filtered, allow);
+    if (sort === "price") {
+      return [...merch].sort((a, b) => a.price - b.price);
+    }
+    return officialPacksFirst(merch);
+  }, [filtered, sort, q, tag, department]);
 
   const showAisle = (next: { department?: string; tag?: string }) => {
     setQuery("");
@@ -222,7 +230,7 @@ export default function ProductGrid() {
     {
       title: "Buy it again",
       items: officialPacksFirst(
-        filtered.filter((p) => p.tags?.includes("again"))
+        hideComposedLeftovers(filtered.filter((p) => p.tags?.includes("again")))
       ),
       onShowAll: () => showAisle({ tag: "again" }),
     },
@@ -241,11 +249,13 @@ export default function ProductGrid() {
     {
       title: "Kirkland Signature",
       items: officialPacksFirst(
-        filtered.filter(
-          (p) =>
-            p.brand === "Kirkland Signature" ||
-            p.department === "Kirkland Signature" ||
-            p.tags?.includes("kirkland")
+        hideComposedLeftovers(
+          filtered.filter(
+            (p) =>
+              p.brand === "Kirkland Signature" ||
+              p.department === "Kirkland Signature" ||
+              p.tags?.includes("kirkland")
+          )
         )
       ),
       onShowAll: () => showAisle({ tag: "kirkland" }),
@@ -253,12 +263,10 @@ export default function ProductGrid() {
     {
       title: "What's New",
       items: officialPacksFirst(
-        filtered.filter(
-          (p) =>
-            // Composed leftover packs stay on the What's New landing, not the homepage rail.
-            p.id !== "1" &&
-            p.id !== "6" &&
-            (p.department === "What's New" || p.tags?.includes("new"))
+        hideComposedLeftovers(
+          filtered.filter(
+            (p) => p.department === "What's New" || p.tags?.includes("new")
+          )
         )
       ),
       onShowAll: () => showAisle({ tag: "new" }),
@@ -266,8 +274,10 @@ export default function ProductGrid() {
     {
       title: "This week's featured items",
       items: officialPacksFirst(
-        filtered.filter(
-          (p) => p.department === "Trending" || p.tags?.includes("trending")
+        hideComposedLeftovers(
+          filtered.filter(
+            (p) => p.department === "Trending" || p.tags?.includes("trending")
+          )
         )
       ),
       onShowAll: () => showAisle({ tag: "trending" }),
@@ -275,35 +285,46 @@ export default function ProductGrid() {
     {
       title: "Discounts on household favorites",
       items: officialPacksFirst(
-        filtered.filter((p) => p.tags?.includes("treasure"))
+        hideComposedLeftovers(
+          filtered.filter((p) => p.tags?.includes("treasure"))
+        )
       ),
       onShowAll: () => showAisle({ tag: "treasure" }),
     },
     {
       title: "Dairy & Eggs",
       items: officialPacksFirst(
-        filtered.filter((p) => p.department === "Dairy & Eggs")
+        hideComposedLeftovers(
+          filtered.filter((p) => p.department === "Dairy & Eggs")
+        )
       ),
       onShowAll: () => showAisle({ department: "Dairy & Eggs" }),
     },
     {
       title: "Pantry",
       items: officialPacksFirst(
-        filtered.filter((p) => p.tags?.includes("pantry"))
+        hideComposedLeftovers(
+          filtered.filter((p) => p.tags?.includes("pantry"))
+        )
       ),
       onShowAll: () => showAisle({ tag: "pantry" }),
     },
     {
       title: "Snacks",
       items: officialPacksFirst(
-        filtered.filter((p) => p.tags?.includes("snacks"))
+        hideComposedLeftovers(
+          filtered.filter((p) => p.tags?.includes("snacks"))
+        )
       ),
       onShowAll: () => showAisle({ tag: "snacks" }),
     },
     {
       title: "Bakery",
       items: officialPacksFirst(
-        filtered.filter((p) => p.department === "Bakery & Desserts")
+        hideComposedLeftovers(
+          filtered.filter((p) => p.department === "Bakery & Desserts"),
+          ["9"]
+        )
       ),
       onShowAll: () => showAisle({ department: "Bakery & Desserts" }),
     },
@@ -433,7 +454,7 @@ export default function ProductGrid() {
                   ? loading
                     ? "Updating…"
                     : "Same-Day · 11217 Brooklyn"
-                  : `${filtered.length} item${filtered.length === 1 ? "" : "s"}${
+                  : `${shown.length} item${shown.length === 1 ? "" : "s"}${
                       loading ? " · Updating…" : ""
                     }`}
               </p>
