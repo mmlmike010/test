@@ -6,19 +6,36 @@ import { productSize, unitPriceLabel } from "@/lib/ui/packSize";
 import AddControl from "@/components/AddControl";
 
 /** Same-Day shoppable row used in Meals and Ask Kirk. UI only. */
-export default function ShopProductRow({ product }: { product: Product }) {
+export default function ShopProductRow({
+  product,
+  tone = "sameday",
+}: {
+  product: Product;
+  tone?: "sameday" | "warehouse";
+}) {
   const inspect = useCatalogStore((s) => s.inspect);
   const size = productSize(product.id);
   const unit = unitPriceLabel(product.id, product.price);
+  const warehouse = tone === "warehouse";
 
   return (
-    <div className="flex w-full items-center gap-2.5 rounded-[12px] border border-[#e8e8e8] bg-white px-2 py-2">
+    <div
+      className={`flex w-full items-center gap-2.5 border border-[#e8e8e8] bg-white px-2 py-2 ${
+        warehouse ? "rounded-[3px]" : "rounded-[12px]"
+      }`}
+    >
       <button
         type="button"
         onClick={() => inspect(product)}
-        className="flex min-w-0 flex-1 items-center gap-2.5 rounded-[10px] text-left hover:bg-[#fafafa]"
+        className={`flex min-w-0 flex-1 items-center gap-2.5 text-left hover:bg-[#fafafa] ${
+          warehouse ? "rounded-[3px]" : "rounded-[10px]"
+        }`}
       >
-        <span className="relative h-[72px] w-[72px] shrink-0 overflow-hidden rounded-[12px] border border-[#eee] bg-white">
+        <span
+          className={`relative h-[72px] w-[72px] shrink-0 overflow-hidden border border-[#eee] bg-white ${
+            warehouse ? "rounded-[3px]" : "rounded-[12px]"
+          }`}
+        >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={product.image}

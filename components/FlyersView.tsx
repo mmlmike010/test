@@ -114,7 +114,7 @@ export default function FlyersView() {
             <button
               type="button"
               onClick={() => setPage(null)}
-              className="absolute -top-11 right-0 inline-flex items-center gap-1 bg-white text-[#1a1a1a] px-3 py-1.5 text-[13px] font-bold rounded-full"
+              className="absolute -top-11 right-0 inline-flex items-center gap-1 bg-white text-[#1a1a1a] px-3 py-1.5 text-[13px] font-bold rounded-[3px] border border-[#c4c4c4]"
             >
               <X className="w-4 h-4" />
               Close

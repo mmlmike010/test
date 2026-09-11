@@ -561,15 +561,15 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
           <button
             type="button"
             onClick={openCart}
-            className="mx-3.5 my-2 w-[calc(100%-1.75rem)] flex items-center justify-between rounded-full bg-[#e8f2fa] border border-[#c5d8ea] px-3.5 py-2 text-left hover:bg-[#dceaf6]"
+            className="mx-3.5 my-2 w-[calc(100%-1.75rem)] flex items-center justify-between rounded-[3px] bg-white border border-[#c4c4c4] px-3.5 py-2 text-left hover:border-costco-blue hover:bg-[#f7fbfe]"
           >
             <span className="flex items-center gap-2 min-w-0">
               <span className="flex items-center pl-0.5">
                 {kirkItems.slice(0, 3).map(({ product }, index) => (
                   <span
                     key={product.id}
-                    className="relative h-9 w-9 overflow-hidden rounded-full border border-white bg-white shadow-[0_0_0_1px_#c5d8ea]"
-                    style={{ marginLeft: index === 0 ? 0 : -10, zIndex: 3 - index }}
+                    className="relative h-9 w-9 overflow-hidden rounded-[3px] border border-[#e8e8e8] bg-white"
+                    style={{ marginLeft: index === 0 ? 0 : -8, zIndex: 3 - index }}
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
@@ -601,17 +601,22 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
         </div>
       )}
 
-      <div className="flex-1 overflow-y-auto px-3.5 py-3.5 space-y-3 bg-[#f6f7f8] min-h-0">
+      <div className="flex-1 overflow-y-auto px-3.5 py-3.5 space-y-3 bg-white min-h-0">
         {messages.map((message) => {
           const isWelcome = message.id.startsWith("welcome-");
           if (isWelcome) {
             return (
               <div key={message.id} className="space-y-2.5">
                 <GoldStarMembershipCard />
-                <div className="flex gap-2 justify-start">
-                  <KirkMark size={28} className="mt-0.5 shrink-0" />
-                  <div className="max-w-[82%] px-3.5 py-2.5 text-[13px] leading-relaxed rounded-[3px] bg-white text-[#1a1a1a] border border-[#e8e8e8] border-l-[3px] border-l-costco-red">
-                    <p className="whitespace-pre-line">{message.content}</p>
+                <div className="bg-white border border-[#e8e8e8] rounded-[3px] overflow-hidden">
+                  <div className="h-[3px] bg-costco-red" />
+                  <div className="px-3.5 py-2.5">
+                    <p className="text-[10px] font-bold tracking-[0.14em] text-costco-red uppercase">
+                      Kirkland Signature
+                    </p>
+                    <p className="mt-1.5 text-[13px] leading-relaxed text-[#1a1a1a] whitespace-pre-line">
+                      {message.content}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -622,21 +627,19 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             .filter((p): p is (typeof products)[number] => Boolean(p));
           return (
           <div key={message.id} className="space-y-2">
-          <div
-            className={`flex gap-2 ${
-              message.role === "user" ? "justify-end" : "justify-start"
-            }`}
-          >
-            {message.role === "assistant" && (
-              <KirkMark size={28} className="mt-0.5 shrink-0" />
-            )}
-            <div
-              className={`max-w-[82%] px-3.5 py-2.5 text-[13px] leading-relaxed rounded-[3px] ${
-                message.role === "user"
-                  ? "bg-costco-blue text-white"
-                  : "bg-white text-[#1a1a1a] border border-[#e8e8e8] border-l-[3px] border-l-costco-red"
-              }`}
-            >
+          {message.role === "user" ? (
+            <div className="bg-white border border-[#e8e8e8] border-l-[3px] border-l-costco-blue rounded-[3px] px-3.5 py-2">
+              <p className="text-[10px] font-bold tracking-[0.12em] text-costco-blue uppercase">
+                You asked
+              </p>
+              <p className="mt-1 text-[13px] font-semibold text-[#1a1a1a] whitespace-pre-line">
+                {message.content}
+              </p>
+            </div>
+          ) : (
+            <div className="bg-white border border-[#e8e8e8] rounded-[3px] overflow-hidden">
+              <div className="h-[3px] bg-costco-red" />
+              <div className="px-3.5 py-2.5 text-[13px] leading-relaxed text-[#1a1a1a]">
               <p className="whitespace-pre-line">{message.content}</p>
               {message.imageUrl && (
                 <div className="mt-2.5 overflow-hidden border border-[#e8e8e8] bg-white">
@@ -661,10 +664,11 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                   </p>
                 </div>
               )}
+              </div>
             </div>
-          </div>
+          )}
           {added.length > 0 ? (
-            <div className="ml-9">
+            <div>
               <p className="mb-1.5 text-[10px] font-bold uppercase tracking-[0.08em] text-[#666]">
                 Added to cart
               </p>
@@ -673,6 +677,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                   <ShopProductRow
                     key={`${message.id}-${product.id}`}
                     product={product}
+                    tone="warehouse"
                   />
                 ))}
               </div>
@@ -682,11 +687,13 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
           );
         })}
         {isLoading && (
-          <div className="flex justify-start gap-2">
-            <KirkMark size={28} className="mt-0.5 shrink-0" />
-            <div className="bg-white border border-[#ededed] border-l-[3px] border-l-costco-red rounded-[3px] px-3.5 py-3 max-w-[82%]">
+          <div className="bg-white border border-[#e8e8e8] rounded-[3px] overflow-hidden">
+            <div className="h-[3px] bg-costco-red" />
+            <div className="px-3.5 py-3">
               <div className="flex gap-1.5 items-center">
-                <span className="text-[11px] text-[#666] mr-1 font-semibold">Kirk</span>
+                <span className="text-[10px] font-bold tracking-[0.14em] text-costco-red uppercase mr-1">
+                  Kirkland Signature
+                </span>
                 <div className="w-1.5 h-1.5 bg-[#999] rounded-full animate-bounce" />
                 <div
                   className="w-1.5 h-1.5 bg-[#999] rounded-full animate-bounce"
