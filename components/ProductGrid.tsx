@@ -365,7 +365,7 @@ export default function ProductGrid() {
                 <img
                   src={tile.image}
                   alt=""
-                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  className="absolute inset-0 w-full h-full object-cover object-[78%_center] group-hover:scale-105 transition-transform duration-300"
                 />
                 <span className="absolute inset-y-0 left-0 w-[62%] bg-gradient-to-r from-black/58 via-black/22 to-transparent" />
                 {"badge" in tile && tile.badge && (

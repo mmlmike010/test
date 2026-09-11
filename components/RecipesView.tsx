@@ -102,11 +102,13 @@ export default function RecipesView() {
             setOpenRecipe(featured.id);
             document.querySelector("main")?.scrollTo({ top: 0 });
           }}
-          className="mb-4 w-full text-left group rounded-[16px] bg-white border border-[#ececec] overflow-hidden hover:shadow-[0_2px_10px_rgba(0,0,0,0.07)]"
+          className="mb-4 flex w-full text-left group rounded-[16px] bg-white border border-[#ececec] overflow-hidden hover:shadow-[0_2px_10px_rgba(0,0,0,0.07)]"
         >
           <span
-            className={`relative block bg-[#f3f3f3] ${
-              kirkOpen ? "h-[168px] sm:h-[188px]" : "aspect-[16/9]"
+            className={`relative shrink-0 bg-[#f3f3f3] ${
+              kirkOpen
+                ? "w-[44%] max-w-[280px] aspect-[4/3]"
+                : "w-[46%] max-w-[420px] aspect-[16/10]"
             }`}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -115,29 +117,28 @@ export default function RecipesView() {
               alt=""
               className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-300"
             />
-            <span className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/65 to-transparent" />
-            <span className="absolute left-3 top-3 rounded-full bg-white px-2 py-1 text-[11px] font-bold text-[#1a1a1a] shadow-[0_1px_3px_rgba(0,0,0,0.12)]">
+          </span>
+          <span className="flex min-w-0 flex-1 flex-col justify-center px-4 py-3.5">
+            <span className="w-fit rounded-full bg-[#e8f2fa] px-2 py-1 text-[11px] font-bold text-costco-blue">
               Featured meal
             </span>
-            <span className="absolute bottom-3 left-3 right-3">
-              <span className="block text-[20px] sm:text-[24px] font-bold text-white leading-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.55)]">
-                {featured.title}
+            <span className="mt-2 block text-[18px] sm:text-[22px] font-bold text-[#1a1a1a] leading-tight">
+              {featured.title}
+            </span>
+            <span className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[12px] font-semibold text-[#666]">
+              <span className="inline-flex items-center gap-1">
+                <Clock className="w-3.5 h-3.5" aria-hidden="true" />
+                {featured.minutes} min
               </span>
-              <span className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[12px] font-semibold text-white/95">
-                <span className="inline-flex items-center gap-1">
-                  <Clock className="w-3.5 h-3.5" aria-hidden="true" />
-                  {featured.minutes} min
-                </span>
-                <span className="inline-flex items-center gap-1">
-                  <Users className="w-3.5 h-3.5" aria-hidden="true" />
-                  {featured.servings} servings
-                </span>
-                <span>{featured.course}</span>
+              <span className="inline-flex items-center gap-1">
+                <Users className="w-3.5 h-3.5" aria-hidden="true" />
+                {featured.servings} servings
               </span>
-              <span className="mt-2 inline-flex items-center gap-0.5 text-[13px] font-bold text-white">
-                Shop ingredients
-                <ChevronRight className="w-4 h-4" aria-hidden="true" />
-              </span>
+              <span>{featured.course}</span>
+            </span>
+            <span className="mt-2.5 inline-flex items-center gap-0.5 text-[13px] font-bold text-[#0AAD0A]">
+              Shop ingredients
+              <ChevronRight className="w-4 h-4" aria-hidden="true" />
             </span>
           </span>
         </button>
