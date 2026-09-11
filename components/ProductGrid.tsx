@@ -13,6 +13,7 @@ import type { Product } from "@/lib/data/products";
 import { useCatalogStore } from "@/lib/store/catalog";
 import ProductCard from "@/components/ProductCard";
 import WarehouseResultCard from "@/components/WarehouseResultCard";
+import WarehouseCompareSheet from "@/components/WarehouseCompareSheet";
 import ProductDetailModal from "@/components/ProductDetailModal";
 import CategoryScroller from "@/components/CategoryScroller";
 import InstacartMark from "@/components/InstacartMark";
@@ -146,6 +147,7 @@ export default function ProductGrid() {
   const [sort, setSort] = useState<"relevance" | "price">("relevance");
   const [warehouseDept, setWarehouseDept] = useState<string | null>(null);
   const [compareIds, setCompareIds] = useState<string[]>([]);
+  const [compareOpen, setCompareOpen] = useState(false);
   const setSheet = useSessionStore((s) => s.setSheet);
   const address = useSessionStore((s) => s.address);
   const kirkOpen = useSessionStore((s) => s.kirkOpen);
@@ -238,6 +240,7 @@ export default function ProductGrid() {
     setPrevFilterKey(filterKey);
     setWarehouseDept(null);
     setCompareIds([]);
+    setCompareOpen(false);
   }
   const warehouseFacets = useMemo(() => {
     const counts = new Map<string, number>();
@@ -255,6 +258,9 @@ export default function ProductGrid() {
   const compareItems = compareIds
     .map((id) => products.find((product) => product.id === id))
     .filter((product): product is Product => Boolean(product));
+  if (compareOpen && compareItems.length < 2) {
+    setCompareOpen(false);
+  }
   const searchGridClass = kirkOpen
     ? "grid grid-cols-2 xl:grid-cols-3 gap-3"
     : "grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3";
@@ -690,6 +696,14 @@ export default function ProductGrid() {
                 <span className="text-[13px] font-bold text-[#1a1a1a]">
                   Compare ({compareItems.length})
                 </span>
+                <button
+                  type="button"
+                  disabled={compareItems.length < 2}
+                  onClick={() => setCompareOpen(true)}
+                  className="rounded-[3px] bg-costco-blue px-2.5 py-1 text-[12px] font-bold text-white hover:bg-costco-blue-hover disabled:cursor-not-allowed disabled:bg-[#c4c4c4] disabled:text-[#666]"
+                >
+                  Compare Products
+                </button>
                 {compareItems.map((product) => (
                   <button
                     key={product.id}
@@ -702,7 +716,10 @@ export default function ProductGrid() {
                 ))}
                 <button
                   type="button"
-                  onClick={() => setCompareIds([])}
+                  onClick={() => {
+                    setCompareIds([]);
+                    setCompareOpen(false);
+                  }}
                   className="text-[12px] font-bold text-costco-blue hover:underline"
                 >
                   Clear
@@ -897,6 +914,16 @@ export default function ProductGrid() {
         </div>
       </footer>
       )}
+
+      {compareOpen && compareItems.length >= 2 ? (
+        <WarehouseCompareSheet
+          items={compareItems}
+          onClose={() => setCompareOpen(false)}
+          onRemove={(id) =>
+            setCompareIds((ids) => ids.filter((itemId) => itemId !== id))
+          }
+        />
+      ) : null}
 
       {inspecting && (
         <ProductDetailModal

@@ -262,7 +262,11 @@ export default function ProductDetailModal({
                   Home
                 </button>
                 <span aria-hidden="true">›</span>
-                <span>{aisleLabel(current.department)}</span>
+                <span>
+                  {current.brand === "Kirkland Signature"
+                    ? "Kirkland Signature"
+                    : aisleLabel(current.department)}
+                </span>
                 <span aria-hidden="true">›</span>
                 <span className="line-clamp-1 text-[#1a1a1a]">
                   {current.brand} {current.name}

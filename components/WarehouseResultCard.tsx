@@ -43,6 +43,11 @@ export default function WarehouseResultCard({
               featured ? "p-1.5" : "p-2.5"
             }`}
           />
+          {!featured && product.savings > 0 ? (
+            <span className="absolute left-0 top-0 bg-costco-red px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
+              Limited Offer
+            </span>
+          ) : null}
         </span>
         <span className={`min-w-0 px-2 ${featured ? "pb-1 pt-0.5" : "pb-2 pt-1"}`}>
           <span
