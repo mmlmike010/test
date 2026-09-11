@@ -9,11 +9,13 @@ export default function StoreSheet({
   onClose,
   children,
   wide = false,
+  page = false,
 }: {
   title: string;
   onClose: () => void;
   children: React.ReactNode;
   wide?: boolean;
+  page?: boolean;
 }) {
   const kirkOpen = useSessionStore((s) => s.kirkOpen);
 
@@ -25,9 +27,41 @@ export default function StoreSheet({
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
 
+  if (page) {
+    return (
+      <div
+        className={`fixed z-[90] flex min-h-0 flex-col bg-[#f6f7f8] ${storefrontOverlayClass(kirkOpen)}`}
+      >
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={title}
+          className="flex h-full min-h-0 flex-col"
+        >
+          <div className="flex shrink-0 items-center justify-between border-b border-[#ececec] bg-white px-4 py-3.5">
+            <h2 className="pr-3 text-[18px] font-bold leading-none text-[#1a1a1a]">
+              {title}
+            </h2>
+            <button
+              type="button"
+              onClick={onClose}
+              className="shrink-0 rounded-full p-2 hover:bg-[#f6f6f6]"
+              aria-label="Close"
+            >
+              <X className="h-5 w-5 text-[#555]" />
+            </button>
+          </div>
+          <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4">
+            {children}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
-      className={`fixed z-[90] flex items-end sm:items-center justify-center sm:p-4 ${storefrontOverlayClass(kirkOpen)}`}
+      className={`fixed z-[90] flex items-end justify-center sm:items-center sm:p-4 ${storefrontOverlayClass(kirkOpen)}`}
     >
       <button
         type="button"
@@ -39,24 +73,24 @@ export default function StoreSheet({
         role="dialog"
         aria-modal="true"
         aria-label={title}
-        className={`relative w-full ${
+        className={`relative flex w-full max-h-[92dvh] flex-col overflow-hidden rounded-t-[16px] bg-white shadow-2xl sm:rounded-[16px] ${
           wide ? "max-w-[560px]" : "max-w-[440px]"
-        } max-h-[92dvh] bg-white rounded-t-[16px] sm:rounded-[16px] shadow-2xl flex flex-col overflow-hidden`}
+        }`}
       >
-        <div className="px-4 py-3.5 border-b border-[#ececec] flex items-center justify-between shrink-0">
-          <h2 className="font-bold text-[#1a1a1a] text-[18px] leading-none pr-3">
+        <div className="flex shrink-0 items-center justify-between border-b border-[#ececec] px-4 py-3.5">
+          <h2 className="pr-3 text-[18px] font-bold leading-none text-[#1a1a1a]">
             {title}
           </h2>
           <button
             type="button"
             onClick={onClose}
-            className="p-2 rounded-full hover:bg-[#f6f6f6] shrink-0"
+            className="shrink-0 rounded-full p-2 hover:bg-[#f6f6f6]"
             aria-label="Close"
           >
-            <X className="w-5 h-5 text-[#555]" />
+            <X className="h-5 w-5 text-[#555]" />
           </button>
         </div>
-        <div className="flex-1 overflow-y-auto min-h-0">{children}</div>
+        <div className="min-h-0 flex-1 overflow-y-auto">{children}</div>
       </div>
     </div>
   );

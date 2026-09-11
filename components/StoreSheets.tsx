@@ -380,10 +380,10 @@ function CheckoutSheet() {
   const ready = signedIn && membershipAdded && items.length > 0;
 
   return (
-    <StoreSheet title="Checkout" onClose={() => setSheet(null)} wide>
-      <div className="px-4 py-4 space-y-3">
+    <StoreSheet title="Checkout" onClose={() => setSheet(null)} page>
+      <div className="space-y-3">
         {orderPlaced ? (
-          <div className="rounded-[12px] border border-[#b7d7b0] bg-[#eef7ee] px-3.5 py-4">
+          <div className="rounded-xl bg-[#eef7ee] px-4 py-5">
             <p className="text-[16px] font-bold text-[#1e5b24]">
               Order placed
             </p>
@@ -407,10 +407,10 @@ function CheckoutSheet() {
             <button
               type="button"
               onClick={() => setSheet("delivery")}
-              className="w-full text-left rounded-[12px] border border-[#e0e0e0] px-3.5 py-3 hover:bg-[#f6f6f6]"
+              className="w-full rounded-xl bg-white px-4 py-3.5 text-left shadow-[0_1px_2px_rgba(0,0,0,0.06)] hover:bg-[#fafafa]"
             >
               <p className="text-[12px] font-bold text-[#666]">Delivery</p>
-              <p className="text-[14px] font-bold text-[#1a1a1a] mt-0.5">
+              <p className="mt-0.5 text-[14px] font-bold text-[#1a1a1a]">
                 {slot.when} · {slot.label}
               </p>
               <p className="text-[13px] text-[#555]">
@@ -420,10 +420,10 @@ function CheckoutSheet() {
             <button
               type="button"
               onClick={() => setSheet("membership")}
-              className="w-full text-left rounded-[12px] border border-[#e0e0e0] px-3.5 py-3 hover:bg-[#f6f6f6]"
+              className="w-full rounded-xl bg-white px-4 py-3.5 text-left shadow-[0_1px_2px_rgba(0,0,0,0.06)] hover:bg-[#fafafa]"
             >
               <p className="text-[12px] font-bold text-[#666]">Membership</p>
-              <p className="text-[14px] font-bold text-[#1a1a1a] mt-0.5 inline-flex items-center gap-1.5">
+              <p className="mt-0.5 inline-flex items-center gap-1.5 text-[14px] font-bold text-[#1a1a1a]">
                 <GoldStarMark size={16} />
                 {membershipAdded
                   ? `Gold Star · ${membershipNumber}`
@@ -433,78 +433,81 @@ function CheckoutSheet() {
             <button
               type="button"
               onClick={() => setSheet("signin")}
-              className="w-full text-left rounded-[12px] border border-[#e0e0e0] px-3.5 py-3 hover:bg-[#f6f6f6]"
+              className="w-full rounded-xl bg-white px-4 py-3.5 text-left shadow-[0_1px_2px_rgba(0,0,0,0.06)] hover:bg-[#fafafa]"
             >
               <p className="text-[12px] font-bold text-[#666]">Account</p>
-              <p className="text-[14px] font-bold text-[#1a1a1a] mt-0.5">
+              <p className="mt-0.5 text-[14px] font-bold text-[#1a1a1a]">
                 {signedIn ? `Signed in as ${displayName}` : "Sign in to check out"}
               </p>
             </button>
             {specialRequest && (
-              <p className="text-[12px] text-[#555] leading-snug">
+              <p className="px-1 text-[12px] leading-snug text-[#555]">
                 Special request: {specialRequest}
               </p>
             )}
             {items.length > 0 && (
-              <div className="rounded-[12px] border border-[#e0e0e0] overflow-hidden">
-                <p className="px-3.5 py-2 text-[12px] font-bold text-[#666] bg-[#f6f6f6] border-b border-[#ececec]">
+              <div className="overflow-hidden rounded-xl bg-white shadow-[0_1px_2px_rgba(0,0,0,0.06)]">
+                <p className="border-b border-[#ececec] bg-[#f6f7f8] px-4 py-2 text-[12px] font-bold text-[#666]">
                   {items.length} item{items.length === 1 ? "" : "s"}
                 </p>
                 {items.map(({ product, quantity }) => (
                   <div
                     key={product.id}
-                    className="flex gap-3 px-3.5 py-2.5 border-b border-[#f0f0f0] last:border-b-0"
+                    className="flex gap-3 border-b border-[#f0f0f0] px-4 py-2.5 last:border-b-0"
                   >
-                    <div className="relative w-14 h-14 overflow-hidden bg-white border border-[#eee] rounded-[10px] shrink-0">
+                    <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-[10px] border border-[#eee] bg-white">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={product.image}
                         alt=""
-                        className="absolute inset-0 w-full h-full object-contain p-1"
+                        className="absolute inset-0 h-full w-full object-contain p-1"
                       />
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-[13px] text-[#242424] leading-snug line-clamp-2">
+                    <div className="min-w-0 flex-1">
+                      <p className="line-clamp-2 text-[13px] leading-snug text-[#242424]">
                         {product.brand} {product.name}
                       </p>
-                      <p className="text-[12px] text-[#72767E] mt-0.5">
+                      <p className="mt-0.5 text-[12px] text-[#72767E]">
                         {quantity} × ${product.price.toFixed(2)}
                         {productSize(product.id) ? ` · ${productSize(product.id)}` : ""}
                       </p>
                     </div>
-                    <p className="text-[14px] font-bold text-[#1a1a1a] tabular-nums shrink-0">
+                    <p className="shrink-0 text-[14px] font-bold tabular-nums text-[#1a1a1a]">
                       ${(product.price * quantity).toFixed(2)}
                     </p>
                   </div>
                 ))}
               </div>
             )}
-            <div className="flex items-end justify-between pt-1">
-              <span className="text-[#555] text-[13px] font-semibold">
-                Estimated total
-              </span>
-              <span className="font-bold text-[#1a1a1a] text-[24px] tabular-nums leading-none">
-                ${subtotal.toFixed(2)}
-              </span>
+            <div className="rounded-xl bg-white px-4 py-4 shadow-[0_1px_2px_rgba(0,0,0,0.06)]">
+              <div className="flex items-end justify-between">
+                <span className="text-[13px] font-semibold text-[#555]">
+                  Estimated total
+                </span>
+                <span className="text-[24px] font-bold leading-none tabular-nums text-[#1a1a1a]">
+                  ${subtotal.toFixed(2)}
+                </span>
+              </div>
+              <button
+                type="button"
+                disabled={!ready}
+                onClick={placeOrder}
+                className="mt-4 w-full rounded-full bg-[#0AAD0A] py-3 text-[15px] font-bold text-white hover:bg-[#099809] disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {items.length === 0
+                  ? "Add items to check out"
+                  : !signedIn
+                    ? "Sign in to check out"
+                    : !membershipAdded
+                      ? "Add membership to check out"
+                      : "Place order"}
+              </button>
+              <p className="mt-3 inline-flex w-full items-center justify-center gap-1.5 text-center text-[11px] leading-snug text-[#888]">
+                <InstacartMark size={12} />
+                Item subtotal only. Service, delivery, and tax are not
+                estimated in this demo.
+              </p>
             </div>
-            <button
-              type="button"
-              disabled={!ready}
-              onClick={placeOrder}
-              className="w-full py-3 bg-[#0AAD0A] text-white rounded-full font-bold hover:bg-[#099809] text-[15px] disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {items.length === 0
-                ? "Add items to check out"
-                : !signedIn
-                  ? "Sign in to check out"
-                  : !membershipAdded
-                    ? "Add membership to check out"
-                    : "Place order"}
-            </button>
-            <p className="text-[11px] text-[#888] text-center leading-snug inline-flex items-center justify-center gap-1.5 w-full">
-              <InstacartMark size={12} />
-              Service, delivery, and tax calculated at checkout
-            </p>
           </>
         )}
       </div>
