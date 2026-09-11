@@ -25,7 +25,12 @@ import {
   storefrontOverlayClass,
   useSessionStore,
 } from "@/lib/store/session";
-import { kirklandWarehousePreview, kirkQueryPreview } from "@/lib/ui/merchOrder";
+import { useCatalogStore } from "@/lib/store/catalog";
+import {
+  kirklandWarehousePreview,
+  kirkQueryPreview,
+  storefrontQueryForKirk,
+} from "@/lib/ui/merchOrder";
 
 interface Message {
   id: string;
@@ -161,6 +166,11 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
     setLightboxUrl(null);
     setError(null);
     setCartNotice(null);
+    const catalog = useCatalogStore.getState();
+    catalog.clearFilters();
+    catalog.inspect(null);
+    void catalog.search();
+    document.querySelector("main")?.scrollTo({ top: 0 });
   };
 
   const applyActions = (actions: KirkAction[]) => {
@@ -263,6 +273,17 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
     setIsLoading(true);
     setPendingInspire(looksLikeInspireAsk(trimmed));
     setError(null);
+
+    const hits = kirkQueryPreview(products, trimmed);
+    if (hits.length) {
+      const storefrontQ = storefrontQueryForKirk(trimmed, hits);
+      const catalog = useCatalogStore.getState();
+      catalog.clearFilters();
+      catalog.setQuery(storefrontQ);
+      catalog.inspect(null);
+      void catalog.search();
+      document.querySelector("main")?.scrollTo({ top: 0 });
+    }
 
     try {
       const res = await fetch("/api/kirk", {
