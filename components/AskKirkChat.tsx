@@ -534,6 +534,8 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
 
   if (!isOpen) return null;
 
+  const hasUserAsk = messages.some((m) => m.role === "user");
+
   return (
     <>
     <aside className="fixed inset-y-0 right-0 z-40 w-full max-w-[420px] lg:static lg:z-30 lg:w-[380px] xl:w-[420px] lg:max-w-none shrink-0 bg-white border-l border-[#e5e5e5] h-full flex flex-col">
@@ -627,7 +629,11 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
         </div>
       )}
 
-      <div className="flex-1 overflow-y-auto px-3.5 py-3.5 space-y-3 bg-[#f6f7f8] min-h-0">
+      <div
+        className={`flex-1 overflow-y-auto px-3.5 py-3.5 space-y-3 min-h-0 ${
+          hasUserAsk ? "bg-white" : "bg-[#f6f7f8]"
+        }`}
+      >
         {messages.map((message) => {
           const isWelcome = message.id.startsWith("welcome-");
           if (isWelcome) {
@@ -888,22 +894,26 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             Search
           </button>
         </div>
-        <p className="mt-2 text-[10px] font-bold tracking-[0.12em] text-[#666] uppercase">
-          Popular Searches
-        </p>
-        <div className="mt-1 flex flex-wrap gap-x-2.5 gap-y-1">
-          {suggestionChips.map((chip) => (
-            <button
-              key={chip}
-              type="button"
-              onClick={() => void sendMessage(chip)}
-              disabled={isLoading}
-              className="text-[11px] leading-snug text-costco-blue font-semibold hover:underline disabled:opacity-50 text-left"
-            >
-              {chip}
-            </button>
-          ))}
-        </div>
+        {!hasUserAsk ? (
+          <>
+            <p className="mt-2 text-[10px] font-bold tracking-[0.12em] text-[#666] uppercase">
+              Popular Searches
+            </p>
+            <div className="mt-1 flex flex-wrap gap-x-2.5 gap-y-1">
+              {suggestionChips.map((chip) => (
+                <button
+                  key={chip}
+                  type="button"
+                  onClick={() => void sendMessage(chip)}
+                  disabled={isLoading}
+                  className="text-[11px] leading-snug text-costco-blue font-semibold hover:underline disabled:opacity-50 text-left"
+                >
+                  {chip}
+                </button>
+              ))}
+            </div>
+          </>
+        ) : null}
         <p className="mt-2 text-[10px] text-[#888] text-center leading-snug">
           Kirkland Signature shopping help · Membership required · Prices higher
           than warehouse

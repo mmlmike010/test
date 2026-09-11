@@ -18,16 +18,16 @@ export default function WarehouseResultCard({ product }: { product: Product }) {
         onClick={() => inspect(product)}
         className="flex min-w-0 flex-1 flex-col text-left hover:bg-[#f7fbfe]"
       >
-        <span className="relative h-[88px] bg-white">
+        <span className="relative h-[140px] bg-white">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={product.image}
             alt=""
-            className="absolute inset-0 h-full w-full object-contain p-2"
+            className="absolute inset-0 h-full w-full object-contain p-2.5"
           />
         </span>
         <span className="min-w-0 px-2 pb-2 pt-1">
-          <span className="block text-[12px] font-bold leading-snug text-costco-blue line-clamp-2 hover:underline">
+          <span className="block text-[13px] font-bold leading-snug text-costco-blue line-clamp-2 hover:underline">
             {product.brand} {product.name}
           </span>
           {size ? (
@@ -38,11 +38,10 @@ export default function WarehouseResultCard({ product }: { product: Product }) {
               rating={product.rating}
               reviewCount={product.reviewCount}
               size="sm"
-              showCount={false}
             />
           </span>
           <span className="mt-1 block tabular-nums">
-            <span className="text-[16px] font-bold text-costco-red">
+            <span className="text-[18px] font-bold text-costco-red">
               ${product.price.toFixed(2)}
             </span>
             <span className="ml-0.5 text-[11px] text-[#8a8a8a]">each</span>

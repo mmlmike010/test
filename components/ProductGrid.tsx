@@ -139,6 +139,7 @@ export default function ProductGrid() {
   const [sort, setSort] = useState<"relevance" | "price">("relevance");
   const setSheet = useSessionStore((s) => s.setSheet);
   const address = useSessionStore((s) => s.address);
+  const kirkOpen = useSessionStore((s) => s.kirkOpen);
 
   useEffect(() => {
     void search();
@@ -543,7 +544,13 @@ export default function ProductGrid() {
               </div>
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3">
+            <div
+              className={
+                kirkOpen
+                  ? "grid grid-cols-2 gap-3"
+                  : "grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3"
+              }
+            >
               {shown.map((product) => (
                 <ProductCard
                   key={product.id}
@@ -556,6 +563,7 @@ export default function ProductGrid() {
         </>
       )}
 
+      {q.trim() ? null : (
       <footer className="mt-10 -mx-4 lg:-mx-5 bg-white border-t border-[#e5e5e5]">
         <div className="px-4 lg:px-5 py-6 grid gap-6 sm:grid-cols-3">
           <div>
@@ -671,6 +679,7 @@ export default function ProductGrid() {
           <p>Prices, fees, and availability for {formatAddress(address)}</p>
         </div>
       </footer>
+      )}
 
       {inspecting && (
         <ProductDetailModal
