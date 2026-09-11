@@ -31,6 +31,7 @@ import {
   kirkQueryPreview,
   storefrontQueryForKirk,
 } from "@/lib/ui/merchOrder";
+import { EMPTY_WAREHOUSE_FACETS } from "@/lib/ui/warehouseSearch";
 
 interface Message {
   id: string;
@@ -278,10 +279,16 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
     if (hits.length) {
       const storefrontQ = storefrontQueryForKirk(trimmed, hits);
       const catalog = useCatalogStore.getState();
-      catalog.clearFilters();
-      catalog.setQuery(storefrontQ);
-      catalog.setListTone("warehouse");
       catalog.inspect(null);
+      useCatalogStore.setState({
+        q: storefrontQ,
+        department: null,
+        tag: null,
+        openList: null,
+        openRecipe: null,
+        listTone: "warehouse",
+        warehouseFacets: EMPTY_WAREHOUSE_FACETS,
+      });
       void catalog.search();
       document.querySelector("main")?.scrollTo({ top: 0 });
     }

@@ -37,6 +37,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
   const listTone = useCatalogStore((s) => s.listTone);
   const warehouseFacets = useCatalogStore((s) => s.warehouseFacets);
   const setWarehouseFacets = useCatalogStore((s) => s.setWarehouseFacets);
+  const warehouseDepts = warehouseFacets?.departments ?? [];
   const warehouseSearch = listTone === "warehouse" && Boolean(q.trim());
   const onRecipes = tag === "recipes";
   const onFlyers = tag === "flyers";
@@ -165,9 +166,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
                 <select
                   aria-label="Department"
                   value={
-                    warehouseFacets.departments.length === 1
-                      ? warehouseFacets.departments[0]
-                      : ""
+                    warehouseDepts.length === 1 ? warehouseDepts[0] : ""
                   }
                   onChange={(e) => {
                     const label = e.target.value;
@@ -333,16 +332,14 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
           >
             <button
               type="button"
-              aria-current={
-                warehouseFacets.departments.length === 0 ? "page" : undefined
-              }
-              className={tabClass(warehouseFacets.departments.length === 0)}
+              aria-current={warehouseDepts.length === 0 ? "page" : undefined}
+              className={tabClass(warehouseDepts.length === 0)}
               onClick={() => setWarehouseFacets(EMPTY_WAREHOUSE_FACETS)}
             >
               Shop
             </button>
             {WAREHOUSE_NAV.map((label) => {
-              const active = warehouseFacets.departments.includes(label);
+              const active = warehouseDepts.includes(label);
               return (
                 <button
                   key={label}
