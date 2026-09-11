@@ -55,6 +55,11 @@ export default function ShopProductRow({
                 ${product.price.toFixed(2)}
               </span>{" "}
               <span className="font-normal text-[#8a8a8a] text-[11px]">each</span>
+              {product.originalPrice > product.price ? (
+                <span className="ml-1 text-[12px] text-[#888] line-through">
+                  ${product.originalPrice.toFixed(2)}
+                </span>
+              ) : null}
               {product.savings > 0 ? (
                 <span className="ml-1.5 text-[11px] font-semibold text-[#188038]">
                   Save ${product.savings.toFixed(2)}

@@ -89,10 +89,12 @@ function tokenizeKirkQuery(query: string): string[] {
 export function kirkQueryPreview(
   items: Product[],
   query: string,
-  n = 4
+  n = 12
 ): Product[] {
   const tokens = tokenizeKirkQuery(query);
   if (!tokens.length) return [];
+
+  const productTokens = tokens.filter((token) => token !== "kirkland");
 
   const scored = items
     .map((p) => {
@@ -100,9 +102,13 @@ export function kirkQueryPreview(
         .join(" ")
         .toLowerCase();
       const score = tokens.filter((token) => hay.includes(token)).length;
-      return { p, score };
+      const productScore = productTokens.filter((token) =>
+        hay.includes(token)
+      ).length;
+      return { p, score, productScore };
     })
     .filter((row) => row.score > 0)
+    .filter((row) => (productTokens.length ? row.productScore > 0 : true))
     .sort((a, b) => {
       if (b.score !== a.score) return b.score - a.score;
       const left = COMPOSED_IDS.has(a.p.id) ? 1 : 0;

@@ -18,7 +18,7 @@ export default function WarehouseResultCard({ product }: { product: Product }) {
         onClick={() => inspect(product)}
         className="flex min-w-0 flex-1 flex-col text-left hover:bg-[#f7fbfe]"
       >
-        <span className="relative h-[140px] bg-white">
+        <span className="relative aspect-square bg-white">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={product.image}
@@ -40,11 +40,16 @@ export default function WarehouseResultCard({ product }: { product: Product }) {
               size="sm"
             />
           </span>
-          <span className="mt-1 block tabular-nums">
+          <span className="mt-1 flex flex-wrap items-baseline gap-x-1 tabular-nums">
             <span className="text-[18px] font-bold text-costco-red">
               ${product.price.toFixed(2)}
             </span>
-            <span className="ml-0.5 text-[11px] text-[#8a8a8a]">each</span>
+            <span className="text-[11px] text-[#8a8a8a]">each</span>
+            {product.originalPrice > product.price ? (
+              <span className="text-[12px] text-[#888] line-through">
+                ${product.originalPrice.toFixed(2)}
+              </span>
+            ) : null}
           </span>
           {product.savings > 0 ? (
             <span className="mt-0.5 block text-[11px] font-semibold text-[#188038]">
