@@ -44,7 +44,7 @@ function PromoTile({
       <img
         src={src}
         alt=""
-        className="absolute inset-0 h-full w-full object-cover object-[72%_center] transition-transform duration-300 group-hover:scale-[1.02]"
+        className="absolute inset-0 h-full w-full origin-[72%_center] scale-[1.35] object-cover object-[72%_center] transition-transform duration-300 group-hover:scale-[1.4]"
       />
       <span className="absolute inset-y-0 left-0 flex w-[48%] flex-col justify-end bg-gradient-to-r from-black/70 via-black/35 to-transparent px-6 pb-6 pt-8">
         <span className="block text-[28px] font-bold leading-tight text-white">
