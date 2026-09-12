@@ -4,6 +4,7 @@ import { useState, type ReactNode } from "react";
 import type { Product } from "@/lib/data/products";
 import { warehouseAisleLabel } from "@/lib/ui/aisleLabels";
 import {
+  applyWarehouseFacets,
   facetCounts,
   WAREHOUSE_NAV,
   WAREHOUSE_PRICE_BUCKETS,
@@ -95,11 +96,22 @@ export default function WarehouseFilterRail({
   const departments = WAREHOUSE_NAV.map((label) => [
     label,
     departmentCounts.get(label) || 0,
-  ] as const).filter(([, count]) => count > 0);
-  const brands = facetCounts(items, (product) => product.brand);
+  ] as const)
+    .filter(([, count]) => count > 0)
+    .filter(
+      ([label]) =>
+        facets.departments.length !== 1 || facets.departments.includes(label)
+    );
+  const afterDepartment = applyWarehouseFacets(items, {
+    ...facets,
+    brands: [],
+    priceId: null,
+    minRating: 0,
+  });
+  const brands = facetCounts(afterDepartment, (product) => product.brand);
   const prices = WAREHOUSE_PRICE_BUCKETS.map((bucket) => ({
     ...bucket,
-    count: items.filter(
+    count: afterDepartment.filter(
       (product) => product.price >= bucket.min && product.price < bucket.max
     ).length,
   })).filter((bucket) => bucket.count > 0);
@@ -112,7 +124,7 @@ export default function WarehouseFilterRail({
     .map(([min, label]) => ({
       min,
       label,
-      count: items.filter((product) => product.rating >= min).length,
+      count: afterDepartment.filter((product) => product.rating >= min).length,
     }))
     .filter((row) => row.count > 0);
 
@@ -157,7 +169,7 @@ export default function WarehouseFilterRail({
             className="accent-costco-blue"
           />
           Same-Day Delivery
-          <span className="ml-auto text-[#72767E]">{items.length}</span>
+          <span className="ml-auto text-[#72767E]">{afterDepartment.length}</span>
         </label>
       </FacetSection>
 
