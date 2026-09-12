@@ -5,7 +5,7 @@ import { ChevronLeft, X } from "lucide-react";
 import { products } from "@/lib/data/products";
 import { FLYER_DEAL_IDS } from "@/lib/ui/merchOrder";
 import { useCatalogStore } from "@/lib/store/catalog";
-import { storefrontOverlayClass, useSessionStore } from "@/lib/store/session";
+import { useStorefrontOverlayClass, useSessionStore } from "@/lib/store/session";
 import ProductCard from "@/components/ProductCard";
 
 const pages = [
@@ -23,6 +23,7 @@ export default function FlyersView() {
   const clearFilters = useCatalogStore((s) => s.clearFilters);
   const search = useCatalogStore((s) => s.search);
   const kirkOpen = useSessionStore((s) => s.kirkOpen);
+  const overlayClass = useStorefrontOverlayClass(kirkOpen);
   const inspect = useCatalogStore((s) => s.inspect);
   const [page, setPage] = useState<(typeof pages)[number] | null>(null);
   const deals = FLYER_DEAL_IDS.map((id) =>
@@ -110,7 +111,7 @@ export default function FlyersView() {
 
       {page && (
         <div
-          className={`fixed z-[74] flex items-center justify-center bg-black/70 p-4 ${storefrontOverlayClass(kirkOpen)}`}
+          className={`fixed z-[74] flex items-center justify-center bg-black/70 p-4 ${overlayClass}`}
         >
           <button
             type="button"

@@ -17,7 +17,7 @@ import { productSize, unitPriceLabel, warehouseItemNumber } from "@/lib/ui/packS
 import { isLimitedOffer } from "@/lib/ui/warehouseSearch";
 import LimitedTimeOfferBadge from "@/components/LimitedTimeOfferBadge";
 import { aisleLabel } from "@/lib/ui/aisleLabels";
-import { storefrontOverlayClass, useSessionStore } from "@/lib/store/session";
+import { useStorefrontOverlayClass, useSessionStore } from "@/lib/store/session";
 import { useListStore } from "@/lib/store/lists";
 import { useRef, useState, type ReactNode } from "react";
 
@@ -75,6 +75,8 @@ export default function ProductDetailModal({
   );
   const scrollerRef = useRef<HTMLDivElement>(null);
   const kirkOpen = useSessionStore((s) => s.kirkOpen);
+  const overlayClass = useStorefrontOverlayClass(kirkOpen);
+  const kirkShopPage = useSessionStore((s) => s.kirkShopPage);
   const inspectTone = useCatalogStore((s) => s.inspectTone);
   const warehouse = inspectTone === "warehouse";
   const setQuery = useCatalogStore((s) => s.setQuery);
@@ -133,7 +135,7 @@ export default function ProductDetailModal({
     <div
       className={`fixed z-[74] flex min-h-0 flex-col ${
         warehouse ? "bg-[#e8eaed]" : "bg-white"
-      } ${storefrontOverlayClass(kirkOpen)}`}
+      } ${overlayClass}`}
     >
       <div
         role="dialog"
@@ -176,14 +178,16 @@ export default function ProductDetailModal({
         >
           <div
             className={
-              kirkOpen
+              kirkOpen && !kirkShopPage
                 ? "xl:grid xl:grid-cols-2 xl:items-start"
                 : "lg:grid lg:grid-cols-2 lg:items-start"
             }
           >
           <div
             className={
-              kirkOpen ? "xl:border-r xl:border-[#eee]" : "lg:border-r lg:border-[#eee]"
+              kirkOpen && !kirkShopPage
+                ? "xl:border-r xl:border-[#eee]"
+                : "lg:border-r lg:border-[#eee]"
             }
           >
             <div
@@ -231,7 +235,7 @@ export default function ProductDetailModal({
             </div>
             <div
               className={`flex justify-start gap-2 border-b border-[#eee] bg-white px-4 py-3 ${
-                kirkOpen ? "xl:border-b-0" : "lg:border-b-0"
+                  kirkOpen && !kirkShopPage ? "xl:border-b-0" : "lg:border-b-0"
               }`}
             >
               <button
@@ -607,7 +611,7 @@ export default function ProductDetailModal({
     </div>
     {zoomed ? (
       <div
-        className={`fixed z-[80] flex items-center justify-center bg-black/70 p-4 ${storefrontOverlayClass(kirkOpen)}`}
+        className={`fixed z-[80] flex items-center justify-center bg-black/70 p-4 ${overlayClass}`}
         onClick={() => setZoomed(false)}
         role="dialog"
         aria-modal="true"

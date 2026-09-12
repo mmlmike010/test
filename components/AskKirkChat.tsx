@@ -28,7 +28,7 @@ import WarehouseCompareSheet from "@/components/WarehouseCompareSheet";
 import {
   deliveryWindow,
   formatAddress,
-  storefrontOverlayClass,
+  useStorefrontOverlayClass,
   useSessionStore,
 } from "@/lib/store/session";
 import { useCatalogStore } from "@/lib/store/catalog";
@@ -168,6 +168,8 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
   const setWarehouseFacets = useCatalogStore((s) => s.setWarehouseFacets);
   const warehouseSort = useCatalogStore((s) => s.warehouseSort);
   const setWarehouseSort = useCatalogStore((s) => s.setWarehouseSort);
+  const kirkShopPage = useSessionStore((s) => s.kirkShopPage);
+  const overlayClass = useStorefrontOverlayClass(isOpen);
 
   useEffect(() => {
     const onlyWelcome =
@@ -221,6 +223,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
     setKirkFiltersOpen(false);
     setKirkCompareIds([]);
     setKirkCompareOpen(false);
+    useSessionStore.getState().setKirkShopPage(false);
     const catalog = useCatalogStore.getState();
     catalog.clearFilters();
     catalog.inspect(null);
@@ -334,6 +337,8 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
       const storefrontQ = storefrontQueryForKirk(trimmed, hits);
       const catalog = useCatalogStore.getState();
       catalog.inspect(null);
+      useSessionStore.getState().setKirkShopPage(true);
+      setKirkFiltersOpen(true);
       useCatalogStore.setState({
         q: storefrontQ,
         department: null,
@@ -633,7 +638,13 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
 
   return (
     <>
-    <aside className="fixed inset-y-0 right-0 z-40 w-full max-w-[420px] lg:static lg:z-30 lg:w-[380px] xl:w-[420px] lg:max-w-none shrink-0 bg-white border-l border-[#e5e5e5] h-full flex flex-col">
+    <aside
+      className={`fixed inset-y-0 right-0 z-40 flex h-full w-full flex-col border-l border-[#e5e5e5] bg-white lg:static lg:z-30 ${
+        kirkShopPage
+          ? "max-w-none min-w-0 flex-1"
+          : "max-w-[420px] shrink-0 lg:w-[380px] lg:max-w-none xl:w-[420px]"
+      }`}
+    >
       <div className="relative shrink-0 bg-white">
         <div className="bg-costco-red px-3.5 py-2 flex items-center justify-between gap-2">
           <div className="flex items-center gap-2.5 min-w-0">
@@ -725,10 +736,12 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
       )}
 
       <div
-        className={`flex-1 overflow-y-auto px-3.5 min-h-0 ${
+        className={`min-h-0 flex-1 overflow-y-auto ${
           hasUserAsk
-            ? "bg-[#e8eaed] py-3.5 space-y-3"
-            : "bg-[#f6f7f8] py-2.5 space-y-2"
+            ? kirkShopPage
+              ? "space-y-4 bg-[#e8eaed] px-4 py-4 lg:px-6"
+              : "space-y-3 bg-[#e8eaed] px-3.5 py-3.5"
+            : "space-y-2 bg-[#f6f7f8] px-3.5 py-2.5"
         }`}
       >
         {messages.map((message) => {
@@ -825,7 +838,11 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                   <span aria-hidden="true">›</span>
                   <span className="text-[#1a1a1a]">Search Results</span>
                 </nav>
-                <h2 className="mt-0.5 text-[16px] font-bold leading-snug text-[#1a1a1a] whitespace-pre-line">
+                <h2
+                  className={`mt-0.5 font-bold leading-snug text-[#1a1a1a] whitespace-pre-line ${
+                    kirkShopPage ? "text-[22px]" : "text-[16px]"
+                  }`}
+                >
                   {message.content}
                 </h2>
                 {hits.length > 0 ? (
@@ -955,14 +972,16 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                 <div
                   className={
                     kirkFiltersOpen
-                      ? "grid grid-cols-[168px_minmax(0,1fr)] items-start gap-2"
+                      ? kirkShopPage
+                        ? "lg:grid lg:grid-cols-[220px_minmax(0,1fr)] lg:items-start lg:gap-4"
+                        : "grid grid-cols-[168px_minmax(0,1fr)] items-start gap-2"
                       : undefined
                   }
                 >
                   {kirkFiltersOpen ? (
                     <WarehouseFilterRail
                       id="kirk-filter-results"
-                      compact
+                      compact={!kirkShopPage}
                       items={unfilteredHits}
                       facets={warehouseFacets}
                       onChange={setWarehouseFacets}
@@ -973,9 +992,11 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                       <div
                         className={
                           kirkResultsView === "grid"
-                            ? kirkFiltersOpen
-                              ? "grid grid-cols-1 gap-2"
-                              : "grid grid-cols-2 gap-2"
+                            ? kirkShopPage
+                              ? "grid grid-cols-2 gap-3 lg:grid-cols-3 xl:grid-cols-4"
+                              : kirkFiltersOpen
+                                ? "grid grid-cols-1 gap-2"
+                                : "grid grid-cols-2 gap-2"
                             : "space-y-2"
                         }
                       >
@@ -984,7 +1005,11 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                             key={`${message.id}-${product.id}`}
                             product={product}
                             density={
-                              kirkResultsView === "grid" ? "search" : "list"
+                              kirkResultsView === "grid"
+                                ? kirkShopPage
+                                  ? "catalog"
+                                  : "search"
+                                : "list"
                             }
                             compareChecked={kirkCompareIds.includes(product.id)}
                             onCompare={(checked) =>
@@ -1317,7 +1342,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
     ) : null}
     {lightboxUrl && (
       <div
-        className={`fixed z-[80] flex items-center justify-center bg-black/70 p-4 ${storefrontOverlayClass(isOpen)}`}
+        className={`fixed z-[80] flex items-center justify-center bg-black/70 p-4 ${overlayClass}`}
         onClick={() => setLightboxUrl(null)}
         role="dialog"
         aria-modal="true"

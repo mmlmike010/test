@@ -6,13 +6,14 @@ import { useCatalogStore } from "@/lib/store/catalog";
 import { useSessionStore } from "@/lib/store/session";
 import { useWarehouseChrome } from "@/lib/store/warehouseChrome";
 import { productSize, warehouseItemNumber } from "@/lib/ui/packSize";
-import { storefrontOverlayClass } from "@/lib/store/session";
+import { useStorefrontOverlayClass } from "@/lib/store/session";
 
 /** costco.com “Item Added to Cart” confirm. UI only. */
 export default function WarehouseAddedModal() {
   const added = useWarehouseChrome((s) => s.added);
   const clearAdded = useWarehouseChrome((s) => s.clearAdded);
   const kirkOpen = useSessionStore((s) => s.kirkOpen);
+  const overlayClass = useStorefrontOverlayClass(kirkOpen);
   const setSheet = useSessionStore((s) => s.setSheet);
   const inspect = useCatalogStore((s) => s.inspect);
   const openCart = useCartStore((s) => s.openCart);
@@ -39,7 +40,7 @@ export default function WarehouseAddedModal() {
 
   return (
     <div
-      className={`fixed z-[76] flex items-end justify-center sm:items-center sm:p-4 ${storefrontOverlayClass(kirkOpen)}`}
+      className={`fixed z-[76] flex items-end justify-center sm:items-center sm:p-4 ${overlayClass}`}
     >
       <button
         type="button"

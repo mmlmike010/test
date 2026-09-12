@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { X } from "lucide-react";
-import { storefrontOverlayClass, useSessionStore } from "@/lib/store/session";
+import { useStorefrontOverlayClass, useSessionStore } from "@/lib/store/session";
 
 export default function StoreSheet({
   title,
@@ -20,6 +20,7 @@ export default function StoreSheet({
   tone?: "sameday" | "warehouse";
 }) {
   const kirkOpen = useSessionStore((s) => s.kirkOpen);
+  const overlayClass = useStorefrontOverlayClass(kirkOpen);
   const warehouse = tone === "warehouse";
 
   useEffect(() => {
@@ -33,7 +34,7 @@ export default function StoreSheet({
   if (page) {
     return (
       <div
-        className={`fixed z-[90] flex min-h-0 flex-col bg-[#e8eaed] ${storefrontOverlayClass(kirkOpen)}`}
+        className={`fixed z-[90] flex min-h-0 flex-col bg-[#e8eaed] ${overlayClass}`}
       >
         <div
           role="dialog"
@@ -75,7 +76,7 @@ export default function StoreSheet({
 
   return (
     <div
-      className={`fixed z-[90] flex items-end justify-center sm:items-center sm:p-4 ${storefrontOverlayClass(kirkOpen)}`}
+      className={`fixed z-[90] flex items-end justify-center sm:items-center sm:p-4 ${overlayClass}`}
     >
       <button
         type="button"

@@ -6,7 +6,7 @@ import { products } from "@/lib/data/products";
 import type { Recipe } from "@/lib/data/recipes";
 import { useCartStore } from "@/lib/store/cart";
 import type { Product } from "@/lib/data/products";
-import { storefrontOverlayClass, useSessionStore } from "@/lib/store/session";
+import { useStorefrontOverlayClass, useSessionStore } from "@/lib/store/session";
 import ShopProductRow from "@/components/ShopProductRow";
 
 export default function RecipeDetailDrawer({
@@ -19,6 +19,7 @@ export default function RecipeDetailDrawer({
   const addItem = useCartStore((s) => s.addItem);
   const [justAdded, setJustAdded] = useState(false);
   const kirkOpen = useSessionStore((s) => s.kirkOpen);
+  const overlayClass = useStorefrontOverlayClass(kirkOpen);
 
   const ingredients = recipe.ingredientIds
     .map((id) => products.find((p) => p.id === id))
@@ -33,7 +34,7 @@ export default function RecipeDetailDrawer({
 
   return (
     <div
-      className={`fixed z-[74] flex min-h-0 flex-col bg-white ${storefrontOverlayClass(kirkOpen)}`}
+      className={`fixed z-[74] flex min-h-0 flex-col bg-white ${overlayClass}`}
     >
       <div
         role="dialog"

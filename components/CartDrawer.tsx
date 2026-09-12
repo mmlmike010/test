@@ -8,7 +8,7 @@ import { productSize, unitPriceLabel, warehouseItemNumber } from "@/lib/ui/packS
 import {
   deliveryWindow,
   formatAddress,
-  storefrontOverlayClass,
+  useStorefrontOverlayClass,
   useSessionStore,
 } from "@/lib/store/session";
 
@@ -26,6 +26,7 @@ export default function CartDrawer() {
   const cartTone = useCartStore((s) => s.cartTone);
   const warehouse = cartTone === "warehouse";
   const kirkOpen = useSessionStore((s) => s.kirkOpen);
+  const overlayClass = useStorefrontOverlayClass(kirkOpen);
   const windowId = useSessionStore((s) => s.windowId);
   const address = useSessionStore((s) => s.address);
   const specialRequest = useSessionStore((s) => s.specialRequest);
@@ -45,7 +46,7 @@ export default function CartDrawer() {
   if (warehouse) {
     return (
       <div
-        className={`fixed z-[72] flex min-h-0 flex-col bg-[#e8eaed] ${storefrontOverlayClass(kirkOpen)}`}
+        className={`fixed z-[72] flex min-h-0 flex-col bg-[#e8eaed] ${overlayClass}`}
       >
         <div className="flex shrink-0 items-center justify-between border-b border-[#c4c4c4] bg-white px-4 py-3.5">
           <div>
@@ -237,7 +238,7 @@ export default function CartDrawer() {
 
   return (
     <div
-      className={`fixed z-[72] flex justify-end ${storefrontOverlayClass(kirkOpen)}`}
+      className={`fixed z-[72] flex justify-end ${overlayClass}`}
     >
       <button
         type="button"

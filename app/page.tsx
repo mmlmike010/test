@@ -14,6 +14,7 @@ import StoreSheets from "@/components/StoreSheets";
 
 export default function Home() {
   const isKirkOpen = useSessionStore((s) => s.kirkOpen);
+  const kirkShopPage = useSessionStore((s) => s.kirkShopPage);
   const setKirkOpen = useSessionStore((s) => s.setKirkOpen);
 
   useEffect(() => {
@@ -26,7 +27,13 @@ export default function Home() {
       <Header onAskKirkClick={() => setKirkOpen(true)} />
 
       <div className="flex flex-1 min-h-0">
-        <div className="flex flex-col flex-1 min-w-0">
+        <div
+          className={
+            kirkShopPage && isKirkOpen
+              ? "hidden"
+              : "flex min-w-0 flex-1 flex-col"
+          }
+        >
           <PromoBanner />
           <main className="flex-1 min-w-0 overflow-y-auto overflow-x-hidden">
             <MobileAisles />

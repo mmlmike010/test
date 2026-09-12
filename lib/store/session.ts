@@ -100,6 +100,8 @@ type SessionState = Persisted & {
   orderPlaced: boolean;
   kirkOpen: boolean;
   setKirkOpen: (open: boolean) => void;
+  kirkShopPage: boolean;
+  setKirkShopPage: (open: boolean) => void;
   setSheet: (sheet: StoreSheet, tone?: SheetTone) => void;
   closeSheet: () => void;
   signIn: (displayName: string, email: string) => void;
@@ -133,6 +135,8 @@ export const useSessionStore = create<SessionState>((set, get) => ({
   orderPlaced: false,
   kirkOpen: true,
   setKirkOpen: (kirkOpen) => set({ kirkOpen }),
+  kirkShopPage: false,
+  setKirkShopPage: (kirkShopPage) => set({ kirkShopPage }),
   setSheet: (sheet, tone = "sameday") => {
     if (sheet === null) {
       set({ sheet: null, priorSheet: null, sheetTone: "sameday" });
@@ -242,6 +246,7 @@ export function hydrateSession() {
     priorSheet: null,
     sheetTone: "sameday",
     orderPlaced: false,
+    kirkShopPage: false,
   });
 }
 
@@ -256,12 +261,18 @@ export function formatAddress(address: DeliveryAddress): string {
 /** Sit below lockup + search + Shop/Flyers/Lists/Meals so titles are not under the sticky header. */
 export const HEADER_LOCKUP_OFFSET = "top-[156px]";
 
-/** Leave the Ask Kirk rail uncovered on desktop. Matches AskKirkChat widths. */
-export function kirkDrawerOffset(open: boolean) {
-  return open ? "lg:right-[380px] xl:right-[420px]" : "";
+/** Leave the Ask Kirk rail uncovered unless Kirk is the Costco shop page. */
+export function kirkDrawerOffset(open: boolean, shopPage = false) {
+  if (!open || shopPage) return "";
+  return "lg:right-[380px] xl:right-[420px]";
 }
 
-/** Storefront-column overlay: below the header, beside Ask Kirk. */
-export function storefrontOverlayClass(open: boolean) {
-  return `inset-x-0 bottom-0 ${HEADER_LOCKUP_OFFSET} ${kirkDrawerOffset(open)}`;
+/** Storefront overlay: below the header, beside the idle rail or full-width on shop page. */
+export function storefrontOverlayClass(open: boolean, shopPage = false) {
+  return `inset-x-0 bottom-0 ${HEADER_LOCKUP_OFFSET} ${kirkDrawerOffset(open, shopPage)}`;
+}
+
+export function useStorefrontOverlayClass(open: boolean) {
+  const shopPage = useSessionStore((s) => s.kirkShopPage);
+  return storefrontOverlayClass(open, shopPage);
 }

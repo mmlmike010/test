@@ -3,7 +3,7 @@
 import { X } from "lucide-react";
 import type { Product } from "@/lib/data/products";
 import { useCatalogStore } from "@/lib/store/catalog";
-import { storefrontOverlayClass, useSessionStore } from "@/lib/store/session";
+import { useStorefrontOverlayClass, useSessionStore } from "@/lib/store/session";
 import { instantSavingsText } from "@/lib/ui/instantSavings";
 import { productSize, warehouseItemNumber } from "@/lib/ui/packSize";
 import { aisleLabel } from "@/lib/ui/aisleLabels";
@@ -22,11 +22,12 @@ export default function WarehouseCompareSheet({
   onRemove: (id: string) => void;
 }) {
   const kirkOpen = useSessionStore((s) => s.kirkOpen);
+  const overlayClass = useStorefrontOverlayClass(kirkOpen);
   const inspect = useCatalogStore((s) => s.inspect);
 
   return (
     <div
-      className={`fixed z-[78] flex min-h-0 flex-col bg-[#e8eaed] ${storefrontOverlayClass(kirkOpen)}`}
+      className={`fixed z-[78] flex min-h-0 flex-col bg-[#e8eaed] ${overlayClass}`}
     >
       <div className="flex shrink-0 items-center justify-between border-b border-[#c4c4c4] bg-white px-4 py-3.5">
         <h2 className="text-[18px] font-bold leading-none text-[#1a1a1a]">
