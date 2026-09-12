@@ -736,26 +736,11 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                   onPick={browseWarehouseDepartment}
                 />
                 {preview.length > 0 ? (
-                  <div className="rounded-[3px] border border-[#c4c4c4] bg-white">
-                    <div className="h-[3px] bg-gradient-to-r from-[#8c7318] via-[#f3e3a3] to-[#8c7318]" />
-                    <div className="flex items-end justify-between gap-2 border-b border-[#ececec] px-3 py-1.5">
-                      <p className="text-[13px] font-bold text-[#1a1a1a]">
-                        {aisleTitle}
-                      </p>
-                      <button
-                        type="button"
-                        className="inline-flex items-center gap-0.5 text-[12px] font-bold text-costco-blue hover:underline"
-                        onClick={showAllAisle}
-                      >
-                        Show all
-                        <ChevronRight
-                          className="h-3.5 w-3.5"
-                          aria-hidden="true"
-                        />
-                      </button>
-                    </div>
-                    <WarehouseAisleScroller products={preview} />
-                  </div>
+                  <WarehouseAisleScroller
+                    title={aisleTitle}
+                    products={preview}
+                    onShowAll={showAllAisle}
+                  />
                 ) : (
                   <p className="rounded-[3px] border border-[#c4c4c4] bg-white px-3 py-5 text-center text-[13px] text-[#555]">
                     No items match these filters.{" "}
