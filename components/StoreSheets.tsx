@@ -545,70 +545,159 @@ function CheckoutSheet() {
     >
       <div className="space-y-3">
         {orderPlaced ? (
-          <div
-            className={
-              warehouse
-                ? "rounded-[3px] border border-[#c4c4c4] bg-white px-5 py-8"
-                : "rounded-xl border border-[#b7d7b0] bg-[#eef7ee] px-5 py-8 text-center"
-            }
-          >
-            <div
-              className={
-                warehouse
-                  ? "mx-auto flex h-12 w-12 items-center justify-center rounded-[3px] bg-[#f7fbfe] text-xl text-costco-blue"
-                  : "mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-white text-xl text-[#1e5b24]"
-              }
-            >
+          warehouse ? (
+            <div className="space-y-4 xl:grid xl:grid-cols-[minmax(0,1fr)_320px] xl:items-start xl:gap-5 xl:space-y-0">
+              <div className="space-y-4">
+                <div className="rounded-[3px] border border-[#c4c4c4] bg-white px-5 py-5">
+                  <p className="text-[22px] font-extrabold text-costco-blue">
+                    Thank You
+                  </p>
+                  <p className="mt-1 text-[13px] text-[#555]">
+                    Your order has been received.
+                  </p>
+                  <p className="mt-3 text-[15px] font-bold text-[#1a1a1a]">
+                    Order Number: KS-1847111217
+                  </p>
+                  <p className="mt-1 text-[13px] leading-snug text-[#555]">
+                    We&apos;ll send a confirmation to{" "}
+                    <span className="font-semibold text-[#1a1a1a]">
+                      {email || KIRK_EMAIL}
+                    </span>
+                    .
+                  </p>
+                  <p className="mt-2 inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#1a1a1a]">
+                    <GoldStarMark size={16} />
+                    Gold Star {membershipNumber}
+                  </p>
+                </div>
+                <div className="rounded-[3px] border border-[#c4c4c4] bg-white px-4 py-3.5">
+                  <p className="text-[12px] font-bold uppercase tracking-[0.06em] text-[#666]">
+                    Delivery
+                  </p>
+                  <p className="mt-1 text-[15px] font-bold text-[#1a1a1a]">
+                    Same-Day Delivery
+                  </p>
+                  <p className="mt-0.5 text-[13px] text-[#555]">
+                    {slot.when} · {slot.label}
+                  </p>
+                  <p className="text-[13px] text-[#555]">
+                    {address.line1}, {formatAddress(address)}
+                  </p>
+                </div>
+                {items.length > 0 ? (
+                  <div className="overflow-hidden rounded-[3px] border border-[#c4c4c4] bg-white">
+                    <p className="border-b border-[#ececec] bg-[#f6f7f8] px-4 py-2 text-[12px] font-bold text-[#666]">
+                      {totalItems} item{totalItems === 1 ? "" : "s"}
+                    </p>
+                    {items.map(({ product, quantity }) => (
+                      <div
+                        key={product.id}
+                        className="flex gap-3 border-b border-[#f0f0f0] px-4 py-3 last:border-b-0"
+                      >
+                        <div className="relative h-[72px] w-[72px] shrink-0 overflow-hidden rounded-[3px] border border-[#eee] bg-white">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={product.image}
+                            alt=""
+                            className="absolute inset-0 h-full w-full object-contain p-1"
+                          />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-start justify-between gap-2">
+                            <p className="line-clamp-2 text-[14px] font-bold leading-snug text-costco-blue">
+                              {product.brand} {product.name}
+                            </p>
+                            <p className="shrink-0 text-[15px] font-bold tabular-nums text-[#1a1a1a]">
+                              ${(product.price * quantity).toFixed(2)}
+                            </p>
+                          </div>
+                          {productSize(product.id) ? (
+                            <p className="mt-0.5 text-[13px] text-[#72767E]">
+                              {productSize(product.id)}
+                            </p>
+                          ) : null}
+                          <p className="mt-0.5 text-[12px] text-[#72767E]">
+                            Item {warehouseItemNumber(product.id)}
+                          </p>
+                          <p className="mt-0.5 text-[13px] tabular-nums text-[#8a8a8a]">
+                            {quantity} × ${product.price.toFixed(2)} each
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
+                <button
+                  type="button"
+                  className="text-[13px] font-bold text-costco-blue hover:underline"
+                  onClick={() => {
+                    clearOrder();
+                    setSheet(null);
+                  }}
+                >
+                  Continue Shopping
+                </button>
+              </div>
+              <div className="rounded-[3px] border border-[#c4c4c4] bg-white px-4 py-4 xl:sticky xl:top-0">
+                <p className="mb-3 text-[15px] font-bold text-[#1a1a1a]">
+                  Order Summary
+                </p>
+                <div className="mb-2 flex items-center justify-between text-[13px] text-[#555]">
+                  <span>
+                    Subtotal ({totalItems} item{totalItems === 1 ? "" : "s"})
+                  </span>
+                  <span className="tabular-nums">${subtotal.toFixed(2)}</span>
+                </div>
+                {savingsTotal > 0 ? (
+                  <div className="mb-2 flex items-center justify-between text-[13px] font-semibold text-[#188038]">
+                    <span>You Saved</span>
+                    <span className="tabular-nums">
+                      ${savingsTotal.toFixed(2)}
+                    </span>
+                  </div>
+                ) : null}
+                <div className="mb-2 flex items-center justify-between text-[13px] text-[#555]">
+                  <span>Shipping &amp; Handling</span>
+                  <span>T.B.D.</span>
+                </div>
+                <div className="mb-3 flex items-center justify-between text-[13px] text-[#555]">
+                  <span>Estimated Taxes</span>
+                  <span>T.B.D.</span>
+                </div>
+                <div className="flex items-end justify-between border-t border-[#ececec] pt-3">
+                  <span className="text-[13px] font-semibold text-[#555]">
+                    Estimated Total
+                  </span>
+                  <span className="text-[24px] font-bold leading-none tabular-nums text-[#1a1a1a]">
+                    ${subtotal.toFixed(2)}
+                  </span>
+                </div>
+              </div>
+            </div>
+          ) : (
+          <div className="rounded-xl border border-[#b7d7b0] bg-[#eef7ee] px-5 py-8 text-center">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-white text-xl text-[#1e5b24]">
               ✓
             </div>
-            <p
-              className={`mt-3 text-[22px] font-extrabold ${
-                warehouse ? "text-center text-costco-blue" : "text-[#1e5b24]"
-              }`}
-            >
-              {warehouse ? "Thank You" : "Order placed"}
+            <p className="mt-3 text-[22px] font-extrabold text-[#1e5b24]">
+              Order placed
             </p>
-            {warehouse ? (
-              <div className="mx-auto mt-3 max-w-[420px] space-y-2 text-center text-[13px] leading-snug text-[#555]">
-                <p>Your order has been received.</p>
-                <p className="text-[15px] font-bold text-[#1a1a1a]">
-                  Order Number: KS-1847111217
-                </p>
-                <p>
-                  We&apos;ll send a confirmation to{" "}
-                  <span className="font-semibold text-[#1a1a1a]">
-                    {email || KIRK_EMAIL}
-                  </span>
-                  .
-                </p>
-                <p>
-                  Same-Day Delivery {slot.when} · {slot.label} · {address.line1},{" "}
-                  {formatAddress(address)}
-                </p>
-                <p className="inline-flex items-center justify-center gap-1.5">
-                  <GoldStarMark size={16} />
-                  Gold Star {membershipNumber}
-                </p>
-              </div>
-            ) : (
-              <p className="mt-1 text-[13px] leading-snug text-[#1e5b24]">
-                Delivery {slot.label} · {formatAddress(address)} · Gold Star{" "}
-                {membershipNumber}
-              </p>
-            )}
-            <div className={warehouse ? "mt-5 text-center" : ""}>
-              <button
-                type="button"
-                className="text-[13px] font-bold text-costco-blue hover:underline"
-                onClick={() => {
-                  clearOrder();
-                  setSheet(null);
-                }}
-              >
-                {warehouse ? "Continue Shopping" : "Keep shopping"}
-              </button>
-            </div>
+            <p className="mt-1 text-[13px] leading-snug text-[#1e5b24]">
+              Delivery {slot.label} · {formatAddress(address)} · Gold Star{" "}
+              {membershipNumber}
+            </p>
+            <button
+              type="button"
+              className="mt-4 text-[13px] font-bold text-costco-blue hover:underline"
+              onClick={() => {
+                clearOrder();
+                setSheet(null);
+              }}
+            >
+              Keep shopping
+            </button>
           </div>
+          )
         ) : (
           <div
             className={
