@@ -1275,6 +1275,98 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
           </section>
         )}
         <div ref={messagesEndRef} />
+        {kirkShopPage ? null : (
+          <div className="border-t border-[#ececec] bg-white px-1 pt-5 pb-2">
+            <div className="flex h-11 items-stretch">
+              <div className="relative min-w-0 flex-1">
+                <Search
+                  className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-[#8a8a8a]"
+                  aria-hidden="true"
+                />
+                <input
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder={
+                    isTranscribing
+                      ? "Transcribing…"
+                      : isRecording
+                        ? "Listening…"
+                        : "Ask Kirk for a cart"
+                  }
+                  className="h-11 w-full rounded-l-[3px] border border-r-0 border-[#c4c4c4] bg-white pl-10 pr-10 text-[14px] text-[#1a1a1a] placeholder:text-[#8a8a8a] focus:border-costco-blue focus:outline-none focus:ring-2 focus:ring-costco-blue/15"
+                  disabled={isLoading || isRecording || isTranscribing}
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (isSpeaking) {
+                      stopSpeaking();
+                      return;
+                    }
+                    if (isRecording) stopRecording();
+                    else void startRecording();
+                  }}
+                  disabled={isLoading || isTranscribing}
+                  className={`absolute right-1 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-[3px] ${
+                    isRecording || isSpeaking
+                      ? "bg-costco-red text-white kirk-listening"
+                      : "text-[#555] hover:bg-[#f6f6f6]"
+                  }`}
+                  title={
+                    isSpeaking
+                      ? "Stop speaking"
+                      : isRecording
+                        ? "Stop"
+                        : "Speak — stops when you pause; I'll read the reply aloud"
+                  }
+                  aria-label={
+                    isSpeaking ? "Stop speaking" : isRecording ? "Stop" : "Speak"
+                  }
+                >
+                  {isRecording || isSpeaking ? (
+                    <Square className="h-4 w-4" />
+                  ) : (
+                    <Mic className="h-4 w-4" />
+                  )}
+                </button>
+              </div>
+              <button
+                type="button"
+                onClick={() => void sendMessage(input)}
+                disabled={!input.trim() || isLoading}
+                className="h-11 shrink-0 rounded-r-[3px] bg-costco-red px-4 text-[14px] font-bold text-white hover:bg-costco-red-hover disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Search
+              </button>
+            </div>
+            {!hasUserAsk ? (
+              <>
+                <p className="mt-2 text-[13px] font-bold text-[#1a1a1a]">
+                  Popular Searches
+                </p>
+                <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1">
+                  {suggestionChips.map((chip) => (
+                    <button
+                      key={chip}
+                      type="button"
+                      onClick={() => void sendMessage(chip)}
+                      disabled={isLoading}
+                      className="text-left text-[12px] font-bold leading-tight text-costco-blue hover:underline disabled:opacity-50"
+                    >
+                      {chip}
+                    </button>
+                  ))}
+                </div>
+              </>
+            ) : null}
+            <p className="mt-2 text-center text-[10px] leading-snug text-[#888]">
+              Kirkland Signature shopping help · Membership required · Prices
+              higher than warehouse
+            </p>
+          </div>
+        )}
         </div>
         <WarehouseFooter className="mt-8" />
       </div>
@@ -1349,101 +1441,6 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
           </button>
         </div>
       ) : null}
-
-      {kirkShopPage ? null : (
-      <div className="border-t border-[#e5e5e5] bg-white px-4 pt-2.5 pb-3 shrink-0">
-      <div className="mx-auto max-w-[1400px]">
-        <div className="flex h-11 items-stretch">
-          <div className="relative min-w-0 flex-1">
-            <Search
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8a8a8a] w-[18px] h-[18px] pointer-events-none"
-              aria-hidden="true"
-            />
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder={
-                isTranscribing
-                  ? "Transcribing…"
-                  : isRecording
-                    ? "Listening…"
-                    : "Ask Kirk for a cart"
-              }
-              className="h-11 w-full rounded-l-[3px] border border-r-0 border-[#c4c4c4] bg-white pl-10 pr-10 text-[14px] text-[#1a1a1a] placeholder:text-[#8a8a8a] focus:outline-none focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15"
-              disabled={isLoading || isRecording || isTranscribing}
-            />
-            <button
-              type="button"
-              onClick={() => {
-                if (isSpeaking) {
-                  stopSpeaking();
-                  return;
-                }
-                if (isRecording) stopRecording();
-                else void startRecording();
-              }}
-              disabled={isLoading || isTranscribing}
-              className={`absolute right-1 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-[3px] ${
-                isRecording || isSpeaking
-                  ? "bg-costco-red text-white kirk-listening"
-                  : "text-[#555] hover:bg-[#f6f6f6]"
-              }`}
-              title={
-                isSpeaking
-                  ? "Stop speaking"
-                  : isRecording
-                    ? "Stop"
-                    : "Speak — stops when you pause; I'll read the reply aloud"
-              }
-              aria-label={
-                isSpeaking ? "Stop speaking" : isRecording ? "Stop" : "Speak"
-              }
-            >
-              {isRecording || isSpeaking ? (
-                <Square className="w-4 h-4" />
-              ) : (
-                <Mic className="w-4 h-4" />
-              )}
-            </button>
-          </div>
-          <button
-            type="button"
-            onClick={() => void sendMessage(input)}
-            disabled={!input.trim() || isLoading}
-            className="h-11 shrink-0 rounded-r-[3px] bg-costco-red px-4 text-[14px] font-bold text-white hover:bg-costco-red-hover disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            Search
-          </button>
-        </div>
-        {!hasUserAsk ? (
-          <>
-            <p className="mt-2 text-[13px] font-bold text-[#1a1a1a]">
-              Popular Searches
-            </p>
-            <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1">
-              {suggestionChips.map((chip) => (
-                <button
-                  key={chip}
-                  type="button"
-                  onClick={() => void sendMessage(chip)}
-                  disabled={isLoading}
-                  className="text-left text-[12px] font-bold leading-tight text-costco-blue hover:underline disabled:opacity-50"
-                >
-                  {chip}
-                </button>
-              ))}
-            </div>
-          </>
-        ) : null}
-        <p className="mt-2 text-center text-[10px] leading-snug text-[#888]">
-          Kirkland Signature shopping help · Membership required · Prices higher
-          than warehouse
-        </p>
-      </div>
-      </div>
-      )}
     </aside>
     {kirkCompareOpen
       ? createPortal(
