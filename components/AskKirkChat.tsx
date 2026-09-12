@@ -649,6 +649,11 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
   });
 
   const hasUserAsk = messages.some((m) => m.role === "user");
+  const shopHasHits = messages.some(
+    (message) =>
+      message.role === "user" &&
+      kirkQueryPreview(products, message.content).length > 0
+  );
   const lastUserId = [...messages]
     .reverse()
     .find((message) => message.role === "user")?.id;
@@ -695,7 +700,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
       <div className="relative shrink-0 bg-white">
         <div className="bg-costco-red px-3.5 py-2 flex items-center justify-between gap-2">
           <div className="flex items-center gap-2.5 min-w-0">
-            <CostcoLogo compact tone="onRed" />
+            <CostcoLogo compact tone="onRed" wordmark />
             <span className="w-px h-8 bg-white/35 shrink-0" />
             <KirkMark size={28} tone="onRed" className="shrink-0" />
             <div className="min-w-0">
@@ -732,7 +737,6 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             </button>
           </div>
         </div>
-        <div className="h-[3px] bg-gradient-to-r from-[#a3841c] via-[#f3e3a3] to-[#a3841c]" />
         <p className="px-3.5 py-1.5 flex items-center gap-1.5 text-[11px] text-white font-semibold bg-costco-blue">
           <span className="w-1.5 h-1.5 rounded-full bg-[#f3e3a3]" />
           Delivery {kirkWindow.label} · {formatAddress(kirkAddress)} ·{" "}
@@ -1261,11 +1265,30 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
         {error && (
           <section
             className={
-              kirkShopPage
+              kirkShopPage && !shopHasHits
                 ? "rounded-[3px] border border-[#c4c4c4] bg-white px-6 py-10 text-center"
                 : "overflow-hidden rounded-[3px] border border-[#c4c4c4] bg-white"
             }
           >
+            {kirkShopPage && shopHasHits ? (
+              <>
+                <p className="border-b border-[#c4c4c4] bg-[#f6f7f8] px-3.5 py-2 text-[13px] font-bold text-[#1a1a1a]">
+                  We&apos;re sorry
+                </p>
+                <div className="px-3.5 py-2.5">
+                  <p className="text-[13px] text-[#1a1a1a]">{error}</p>
+                  {messages.some(
+                    (message) =>
+                      message.role === "assistant" &&
+                      message.content === GROK_FALLBACK
+                  ) ? (
+                    <p className="mt-1 text-[13px] text-[#1a1a1a]">
+                      {GROK_FALLBACK}
+                    </p>
+                  ) : null}
+                </div>
+              </>
+            ) : (
             <div
               className={
                 kirkShopPage
@@ -1295,6 +1318,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                 <p className="mt-1 text-[13px] text-[#1a1a1a]">{GROK_FALLBACK}</p>
               ) : null}
             </div>
+            )}
           </section>
         )}
         <div ref={messagesEndRef} />

@@ -251,7 +251,7 @@ export default function WarehouseResultCard({
               />
             </span>
           ) : null}
-          {chrome && !featured && !preview ? (
+          {chrome && !preview ? (
             <span className="mt-1 block text-[11px] font-bold uppercase tracking-[0.06em] text-[#555]">
               Your Price
             </span>
