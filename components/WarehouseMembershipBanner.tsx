@@ -8,8 +8,8 @@ export default function WarehouseMembershipBanner({
 }) {
   return (
     <section className="overflow-hidden">
-      <div className="grid items-stretch md:grid-cols-[minmax(0,1fr)_340px]">
-        <div className="bg-costco-blue px-8 py-10">
+      <div className="grid items-stretch md:grid-cols-[minmax(0,1fr)_420px]">
+        <div className="bg-costco-blue px-8 py-10 lg:px-16">
           <p className="text-[12px] font-bold uppercase tracking-[0.16em] text-white/80">
             Gold Star
           </p>
@@ -27,7 +27,7 @@ export default function WarehouseMembershipBanner({
             Shop member savings ›
           </button>
         </div>
-        <div className="flex items-center justify-center bg-white px-6 py-8">
+        <div className="flex items-center justify-center bg-white px-10 py-12">
           <GoldStarMembershipCard />
         </div>
       </div>
