@@ -639,12 +639,13 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
   return (
     <>
     <aside
-      className={`fixed inset-y-0 right-0 z-40 flex h-full w-full flex-col border-l border-[#e5e5e5] bg-white lg:static lg:z-30 ${
+      className={`fixed inset-y-0 right-0 z-40 flex h-full w-full flex-col bg-white lg:static lg:z-30 ${
         kirkShopPage
           ? "max-w-none min-w-0 flex-1"
-          : "max-w-[420px] shrink-0 lg:w-[380px] lg:max-w-none xl:w-[420px]"
+          : "max-w-[420px] shrink-0 border-l border-[#e5e5e5] lg:w-[380px] lg:max-w-none xl:w-[420px]"
       }`}
     >
+      {kirkShopPage ? null : (
       <div className="relative shrink-0 bg-white">
         <div className="bg-costco-red px-3.5 py-2 flex items-center justify-between gap-2">
           <div className="flex items-center gap-2.5 min-w-0">
@@ -727,6 +728,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
           </button>
         )}
       </div>
+      )}
 
       {cartNotice && (
         <div className="mx-4 mt-3 flex items-center gap-2 border border-[#c4c4c4] bg-[#f7fbfe] px-3 py-2 text-[12px] font-semibold text-costco-blue shrink-0">
@@ -830,6 +832,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
           {message.role === "user" ? (
             <div ref={latestResultsRef} className="space-y-2">
               <div className="sticky top-0 z-10 border border-[#c4c4c4] bg-white px-3 py-1.5">
+                <div className="flex items-start justify-between gap-2">
                 <nav
                   aria-label="Breadcrumb"
                   className="flex flex-wrap items-center gap-x-1.5 text-[11px] text-[#555]"
@@ -838,6 +841,28 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                   <span aria-hidden="true">›</span>
                   <span className="text-[#1a1a1a]">Search Results</span>
                 </nav>
+                {kirkShopPage ? (
+                  <div className="flex shrink-0 items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={handleReset}
+                      className="text-[12px] font-bold text-costco-blue hover:underline"
+                      title="Reset"
+                    >
+                      Reset
+                    </button>
+                    <button
+                      type="button"
+                      onClick={onClose}
+                      className="rounded-[3px] p-1 text-[#555] hover:bg-[#f7fbfe]"
+                      title="Close"
+                      aria-label="Close Ask Kirk"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  </div>
+                ) : null}
+                </div>
                 <h2
                   className={`mt-0.5 font-bold leading-snug text-[#1a1a1a] whitespace-pre-line ${
                     kirkShopPage ? "text-[22px]" : "text-[16px]"
@@ -1325,9 +1350,23 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             </div>
           </>
         ) : null}
-        <p className="mt-2 text-[10px] text-[#888] text-center leading-snug">
+        <p className="mt-2 text-center text-[10px] leading-snug text-[#888]">
           Kirkland Signature shopping help · Membership required · Prices higher
           than warehouse
+          {kirkShopPage ? (
+            <>
+              {" "}
+              ·{" "}
+              <button
+                type="button"
+                onClick={handleReset}
+                title="Reset"
+                className="font-bold text-costco-blue hover:underline"
+              >
+                Reset
+              </button>
+            </>
+          ) : null}
         </p>
       </div>
     </aside>
