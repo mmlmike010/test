@@ -32,6 +32,7 @@ import {
   useSessionStore,
 } from "@/lib/store/session";
 import { useCatalogStore } from "@/lib/store/catalog";
+import { useKirkAskStore } from "@/lib/store/kirkAsk";
 import {
   kirklandWarehousePreview,
   kirkQueryPreview,
@@ -601,6 +602,30 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
   };
 
   if (!isOpen) return null;
+
+  useEffect(() => {
+    useKirkAskStore.getState().registerAsk((text) => {
+      void sendMessage(text);
+    });
+    useKirkAskStore.getState().registerSpeak(() => {
+      if (isSpeaking) {
+        stopSpeaking();
+        return;
+      }
+      if (isRecording) stopRecording();
+      else void startRecording();
+    });
+    useKirkAskStore.getState().setVoice({
+      speaking: isSpeaking,
+      recording: isRecording,
+      transcribing: isTranscribing,
+      loading: isLoading,
+    });
+    return () => {
+      useKirkAskStore.getState().registerAsk(null);
+      useKirkAskStore.getState().registerSpeak(null);
+    };
+  });
 
   const hasUserAsk = messages.some((m) => m.role === "user");
   const lastUserId = [...messages]
@@ -1265,6 +1290,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
         </div>
       ) : null}
 
+      {kirkShopPage ? null : (
       <div className="px-3.5 pt-2.5 pb-3 border-t border-[#e5e5e5] bg-white shrink-0">
         <div className="flex h-11 items-stretch">
           <div className="relative min-w-0 flex-1">
@@ -1353,22 +1379,9 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
         <p className="mt-2 text-center text-[10px] leading-snug text-[#888]">
           Kirkland Signature shopping help · Membership required · Prices higher
           than warehouse
-          {kirkShopPage ? (
-            <>
-              {" "}
-              ·{" "}
-              <button
-                type="button"
-                onClick={handleReset}
-                title="Reset"
-                className="font-bold text-costco-blue hover:underline"
-              >
-                Reset
-              </button>
-            </>
-          ) : null}
         </p>
       </div>
+      )}
     </aside>
     {kirkCompareOpen ? (
       <WarehouseCompareSheet

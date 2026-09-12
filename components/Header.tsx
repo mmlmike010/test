@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useCartStore } from "@/lib/store/cart";
 import { useCatalogStore } from "@/lib/store/catalog";
-import { ChevronDown, Clock, Search, ShoppingCart, User, X } from "lucide-react";
+import { ChevronDown, Clock, Mic, Search, ShoppingCart, Square, User, X } from "lucide-react";
 import CostcoLogo from "@/components/CostcoLogo";
 import KirkMark from "@/components/KirkMark";
 import InstacartMark from "@/components/InstacartMark";
@@ -18,6 +18,7 @@ import {
   WAREHOUSE_NAV,
 } from "@/lib/ui/warehouseSearch";
 import WarehouseShopMenu from "@/components/WarehouseShopMenu";
+import { useKirkAskStore } from "@/lib/store/kirkAsk";
 
 interface HeaderProps {
   onAskKirkClick: () => void;
@@ -39,6 +40,13 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
   const warehouseFacets = useCatalogStore((s) => s.warehouseFacets);
   const setWarehouseFacets = useCatalogStore((s) => s.setWarehouseFacets);
   const warehouseDepts = warehouseFacets?.departments ?? [];
+  const kirkShopPage = useSessionStore((s) => s.kirkShopPage);
+  const kirkAsk = useKirkAskStore((s) => s.ask);
+  const kirkSpeak = useKirkAskStore((s) => s.speak);
+  const kirkSpeaking = useKirkAskStore((s) => s.speaking);
+  const kirkRecording = useKirkAskStore((s) => s.recording);
+  const kirkTranscribing = useKirkAskStore((s) => s.transcribing);
+  const kirkLoading = useKirkAskStore((s) => s.loading);
   const warehouseSearch = listTone === "warehouse" && Boolean(q.trim());
   const chromeTone = warehouseSearch ? "warehouse" : "sameday";
   const onRecipes = tag === "recipes";
@@ -220,6 +228,11 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
             }
             onSubmit={(e) => {
               e.preventDefault();
+              if (kirkShopPage) {
+                const next = q.trim();
+                if (next) kirkAsk?.(next);
+                return;
+              }
               void search();
             }}
           >
@@ -265,6 +278,10 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
                 value={q}
                 onChange={(e) => {
                   const next = e.target.value;
+                  if (kirkShopPage) {
+                    setQuery(next);
+                    return;
+                  }
                   if (next.trim() && (tag || department)) {
                     setTag(null);
                     setDepartment(null);
@@ -273,7 +290,19 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
                   setListTone("sameday");
                 }}
                 placeholder={
-                  warehouseSearch ? "Search Costco" : "Search products"
+                  kirkShopPage
+                    ? kirkTranscribing
+                      ? "Transcribing…"
+                      : kirkRecording
+                        ? "Listening…"
+                        : "Search Costco"
+                    : warehouseSearch
+                      ? "Search Costco"
+                      : "Search products"
+                }
+                disabled={
+                  kirkShopPage &&
+                  (kirkLoading || kirkRecording || kirkTranscribing)
                 }
                 className={
                   warehouseSearch
@@ -281,7 +310,38 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
                     : "w-full h-11 pl-11 pr-10 bg-[#f6f6f6] border border-[#d8d8d8] rounded-full text-[15px] text-[#222] placeholder:text-[#8a8a8a] focus:outline-none focus:bg-white focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15"
                 }
               />
-              {q ? (
+              {kirkShopPage ? (
+                <button
+                  type="button"
+                  onClick={() => kirkSpeak?.()}
+                  disabled={kirkLoading || kirkTranscribing}
+                  className={`absolute right-1 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-[3px] ${
+                    kirkRecording || kirkSpeaking
+                      ? "bg-costco-red text-white kirk-listening"
+                      : "text-[#555] hover:bg-[#f6f6f6]"
+                  }`}
+                  title={
+                    kirkSpeaking
+                      ? "Stop speaking"
+                      : kirkRecording
+                        ? "Stop"
+                        : "Speak — stops when you pause; I'll read the reply aloud"
+                  }
+                  aria-label={
+                    kirkSpeaking
+                      ? "Stop speaking"
+                      : kirkRecording
+                        ? "Stop"
+                        : "Speak"
+                  }
+                >
+                  {kirkRecording || kirkSpeaking ? (
+                    <Square className="h-4 w-4" />
+                  ) : (
+                    <Mic className="h-4 w-4" />
+                  )}
+                </button>
+              ) : q ? (
                 <button
                   type="button"
                   aria-label="Clear search"
@@ -303,7 +363,10 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
             {warehouseSearch ? (
               <button
                 type="submit"
-                className="h-11 shrink-0 rounded-r-[3px] bg-costco-red px-4 text-[14px] font-bold text-white hover:bg-costco-red-hover"
+                disabled={
+                  kirkShopPage && (!q.trim() || kirkLoading || kirkTranscribing)
+                }
+                className="h-11 shrink-0 rounded-r-[3px] bg-costco-red px-4 text-[14px] font-bold text-white hover:bg-costco-red-hover disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Search
               </button>
