@@ -767,6 +767,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                 <WarehouseHomepageHero
                   onKirkland={showAllAisle}
                   onOffers={showAllAisle}
+                  onPick={browseWarehouseDepartment}
                 />
                 <WarehouseHomepageShortcuts
                   onOffers={showAllAisle}

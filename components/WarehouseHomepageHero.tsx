@@ -10,7 +10,7 @@ const SLIDES = [
     title: "Member Only Savings",
     panel: "bg-costco-red",
     cta: "text-costco-red",
-    zoom: "scale-[1.95] group-hover:scale-[2.05]",
+    zoom: "scale-[1.7] group-hover:scale-[1.8]",
     action: "offers" as const,
   },
   {
@@ -19,8 +19,17 @@ const SLIDES = [
     title: "Member favorites",
     panel: "bg-costco-blue",
     cta: "text-costco-blue",
-    zoom: "scale-[1.55] group-hover:scale-[1.65]",
+    zoom: "scale-[1.35] group-hover:scale-[1.45]",
     action: "kirkland" as const,
+  },
+  {
+    src: "/products/23.png",
+    kicker: "Grocery",
+    title: "Dairy & Eggs",
+    panel: "bg-[#1a1a1a]",
+    cta: "text-[#1a1a1a]",
+    zoom: "scale-[1.55] group-hover:scale-[1.65]",
+    action: "dairy" as const,
   },
 ];
 
@@ -28,15 +37,22 @@ const SLIDES = [
 export default function WarehouseHomepageHero({
   onKirkland,
   onOffers,
+  onPick,
 }: {
   onKirkland: () => void;
   onOffers: () => void;
+  onPick: (label: string) => void;
 }) {
   const [index, setIndex] = useState(0);
   const slide = SLIDES[index];
   const go = (next: number) => {
     const count = SLIDES.length;
     setIndex(((next % count) + count) % count);
+  };
+  const shop = () => {
+    if (slide.action === "offers") onOffers();
+    else if (slide.action === "kirkland") onKirkland();
+    else onPick("Dairy & Eggs");
   };
 
   return (
@@ -48,10 +64,12 @@ export default function WarehouseHomepageHero({
       >
         <button
           type="button"
-          onClick={slide.action === "offers" ? onOffers : onKirkland}
-          className={`group relative flex h-[380px] w-full overflow-hidden text-left ${slide.panel}`}
+          onClick={shop}
+          className="group relative flex h-[400px] w-full overflow-hidden text-left"
         >
-          <span className="relative z-10 flex w-[44%] flex-col justify-center py-8 pl-20 pr-6 lg:pl-24">
+          <span
+            className={`relative z-10 flex w-[48%] flex-col justify-center py-8 pl-20 pr-8 lg:pl-24 ${slide.panel}`}
+          >
             <span className="text-[12px] font-bold uppercase tracking-[0.16em] text-white/80">
               {slide.kicker}
             </span>
@@ -64,15 +82,13 @@ export default function WarehouseHomepageHero({
               Shop Now <span aria-hidden="true">›</span>
             </span>
           </span>
-          <span className="relative flex flex-1 items-center justify-center">
-            <span className="relative h-[280px] w-[280px] overflow-hidden bg-white">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={slide.src}
-                alt=""
-                className={`absolute inset-0 h-full w-full object-contain transition-transform duration-300 ${slide.zoom}`}
-              />
-            </span>
+          <span className="relative flex w-[52%] items-center justify-center overflow-hidden bg-white">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={slide.src}
+              alt=""
+              className={`h-[92%] w-[78%] object-contain transition-transform duration-300 ${slide.zoom}`}
+            />
           </span>
         </button>
         <button
@@ -91,7 +107,7 @@ export default function WarehouseHomepageHero({
         >
           <ChevronRight className="h-5 w-5" aria-hidden="true" />
         </button>
-        <div className="absolute bottom-3 left-1/2 z-10 flex -translate-x-1/2 gap-1.5">
+        <div className="absolute bottom-4 left-20 z-10 flex gap-1.5 lg:left-24">
           {SLIDES.map((item, i) => (
             <button
               key={item.title}

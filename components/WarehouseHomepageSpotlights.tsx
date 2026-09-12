@@ -12,7 +12,7 @@ export default function WarehouseHomepageSpotlights({
         title="Dairy & Eggs"
         panel="bg-costco-blue"
         cta="text-costco-blue"
-        zoom="scale-[1.55] group-hover:scale-[1.65]"
+        zoom="scale-[1.45] group-hover:scale-[1.55]"
         onClick={() => onPick("Dairy & Eggs")}
       />
       <SpotlightTile
@@ -21,7 +21,7 @@ export default function WarehouseHomepageSpotlights({
         title="Laundry & more"
         panel="bg-costco-red"
         cta="text-costco-red"
-        zoom="scale-[1.4] group-hover:scale-[1.5]"
+        zoom="scale-[1.3] group-hover:scale-[1.4]"
         onClick={() => onPick("Household")}
       />
       <SpotlightTile
@@ -30,7 +30,7 @@ export default function WarehouseHomepageSpotlights({
         title="Fresh from the case"
         panel="bg-[#1a1a1a]"
         cta="text-[#1a1a1a]"
-        zoom="scale-[1.5] group-hover:scale-[1.6]"
+        zoom="scale-[1.4] group-hover:scale-[1.5]"
         onClick={() => onPick("Bakery")}
       />
     </div>
@@ -58,9 +58,11 @@ function SpotlightTile({
     <button
       type="button"
       onClick={onClick}
-      className={`group relative h-[184px] overflow-hidden text-left ${panel}`}
+      className="group flex h-[184px] overflow-hidden text-left"
     >
-      <span className="absolute inset-y-0 left-0 z-10 flex w-[48%] flex-col justify-center px-4 py-4">
+      <span
+        className={`flex w-[48%] flex-col justify-center px-4 py-4 ${panel}`}
+      >
         <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/80">
           {kicker}
         </span>
@@ -73,15 +75,13 @@ function SpotlightTile({
           Shop Now <span aria-hidden="true">›</span>
         </span>
       </span>
-      <span className="absolute inset-y-0 right-0 flex w-[50%] items-center justify-center">
-        <span className="relative h-[132px] w-[132px] overflow-hidden bg-white">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={src}
-            alt=""
-            className={`absolute inset-0 h-full w-full object-contain transition-transform duration-300 ${zoom}`}
-          />
-        </span>
+      <span className="flex w-[52%] items-center justify-center overflow-hidden bg-white">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={src}
+          alt=""
+          className={`h-[88%] w-[80%] object-contain transition-transform duration-300 ${zoom}`}
+        />
       </span>
     </button>
   );
