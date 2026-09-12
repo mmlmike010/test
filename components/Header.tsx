@@ -392,22 +392,26 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
           <button
             type="button"
             onClick={onAskKirkClick}
-            className={`hidden sm:inline-flex items-center gap-1.5 h-10 px-3 bg-white border-2 border-costco-red text-costco-red font-bold hover:bg-[#fff5f6] whitespace-nowrap ${
-              warehouseSearch ? "rounded-[3px]" : "rounded-full"
+            className={`hidden sm:inline-flex items-center gap-1.5 h-10 px-3 font-bold whitespace-nowrap ${
+              warehouseSearch
+                ? "rounded-[3px] bg-costco-red text-white hover:bg-costco-red-hover"
+                : "rounded-full border-2 border-costco-red bg-white text-costco-red hover:bg-[#fff5f6]"
             }`}
           >
-            <KirkMark size={22} />
+            <KirkMark size={22} tone={warehouseSearch ? "onRed" : "default"} />
             <span className="text-[13px]">Ask Kirk</span>
           </button>
           <button
             type="button"
             onClick={onAskKirkClick}
-            className={`sm:hidden h-10 w-10 border-2 border-costco-red flex items-center justify-center ${
-              warehouseSearch ? "rounded-[3px]" : "rounded-full"
+            className={`sm:hidden h-10 w-10 flex items-center justify-center ${
+              warehouseSearch
+                ? "rounded-[3px] bg-costco-red"
+                : "rounded-full border-2 border-costco-red"
             }`}
             aria-label="Ask Kirk"
           >
-            <KirkMark size={22} />
+            <KirkMark size={22} tone={warehouseSearch ? "onRed" : "default"} />
           </button>
 
           <button

@@ -13,6 +13,7 @@ import { departments } from "@/lib/data/products";
 import { aisleLabel } from "@/lib/ui/aisleLabels";
 import { instantSavingsAmount, instantSavingsText } from "@/lib/ui/instantSavings";
 import { productSize, unitPriceLabel, warehouseItemNumber } from "@/lib/ui/packSize";
+import { EMPTY_WAREHOUSE_FACETS } from "@/lib/ui/warehouseSearch";
 import { useCatalogStore } from "@/lib/store/catalog";
 import { useCartStore } from "@/lib/store/cart";
 import {
@@ -753,6 +754,10 @@ function CheckoutSheet() {
     setSheet(null);
     openCart("warehouse");
   };
+  const [cardName, setCardName] = useState(displayName || KIRK_NAME);
+  const [cardNumber, setCardNumber] = useState("•••• •••• •••• 1117");
+  const [cardExp, setCardExp] = useState("12/28");
+  const [cardCvv, setCardCvv] = useState("");
 
   return (
     <StoreSheet
@@ -1019,6 +1024,51 @@ function CheckoutSheet() {
                       </label>
                     </div>
                   </div>
+                  <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                    <label className="block text-[12px] font-bold text-[#555]">
+                      Name on card
+                      <input
+                        value={cardName}
+                        onChange={(e) => setCardName(e.target.value)}
+                        autoComplete="off"
+                        className="mt-1 h-10 w-full rounded-[3px] border border-[#c4c4c4] bg-white px-3 text-[14px] font-normal text-[#1a1a1a] focus:border-costco-blue focus:outline-none focus:ring-2 focus:ring-costco-blue/15"
+                      />
+                    </label>
+                    <label className="block text-[12px] font-bold text-[#555]">
+                      Card number
+                      <input
+                        value={cardNumber}
+                        onChange={(e) => setCardNumber(e.target.value)}
+                        autoComplete="off"
+                        inputMode="numeric"
+                        className="mt-1 h-10 w-full rounded-[3px] border border-[#c4c4c4] bg-white px-3 text-[14px] font-normal tabular-nums text-[#1a1a1a] focus:border-costco-blue focus:outline-none focus:ring-2 focus:ring-costco-blue/15"
+                      />
+                    </label>
+                    <label className="block text-[12px] font-bold text-[#555]">
+                      Expiration
+                      <input
+                        value={cardExp}
+                        onChange={(e) => setCardExp(e.target.value)}
+                        autoComplete="off"
+                        placeholder="MM/YY"
+                        className="mt-1 h-10 w-full rounded-[3px] border border-[#c4c4c4] bg-white px-3 text-[14px] font-normal tabular-nums text-[#1a1a1a] focus:border-costco-blue focus:outline-none focus:ring-2 focus:ring-costco-blue/15"
+                      />
+                    </label>
+                    <label className="block text-[12px] font-bold text-[#555]">
+                      Security code
+                      <input
+                        value={cardCvv}
+                        onChange={(e) => setCardCvv(e.target.value)}
+                        autoComplete="off"
+                        inputMode="numeric"
+                        className="mt-1 h-10 w-full rounded-[3px] border border-[#c4c4c4] bg-white px-3 text-[14px] font-normal tabular-nums text-[#1a1a1a] focus:border-costco-blue focus:outline-none focus:ring-2 focus:ring-costco-blue/15"
+                      />
+                    </label>
+                  </div>
+                  <p className="mt-2 text-[11px] leading-snug text-[#72767E]">
+                    Payment details stay on this page. This demo does not charge
+                    a card.
+                  </p>
                 </CheckoutStep>
               </>
             ) : (
@@ -1266,6 +1316,23 @@ function CheckoutSheet() {
 function CustomerServiceSheet() {
   const closeSheet = useSessionStore((s) => s.closeSheet);
   const setSheet = useSessionStore((s) => s.setSheet);
+  const search = useCatalogStore((s) => s.search);
+  const inspect = useCatalogStore((s) => s.inspect);
+  const shopKirkland = () => {
+    closeSheet();
+    inspect(null);
+    useCatalogStore.setState({
+      q: "kirkland",
+      department: null,
+      tag: null,
+      openList: null,
+      openRecipe: null,
+      listTone: "warehouse",
+      warehouseFacets: EMPTY_WAREHOUSE_FACETS,
+      warehouseSort: "relevance",
+    });
+    void search();
+  };
   const topics = [
     {
       title: "Orders & Returns",
@@ -1282,6 +1349,21 @@ function CustomerServiceSheet() {
       copy: "Same-Day Delivery address and time windows.",
       onClick: () => setSheet("delivery", "warehouse"),
     },
+    {
+      title: "Account & Sign In",
+      copy: "Sign in or create a Costco.com account.",
+      onClick: () => setSheet("signin", "warehouse"),
+    },
+    {
+      title: "Kirkland Signature",
+      copy: "Shop member-only Kirkland Signature items.",
+      onClick: shopKirkland,
+    },
+    {
+      title: "Pricing & Fees",
+      copy: "Same-Day pricing, savings, and returns.",
+      onClick: () => setSheet("pricing", "sameday"),
+    },
   ];
 
   return (
@@ -1296,31 +1378,63 @@ function CustomerServiceSheet() {
       ]}
     >
       <div className="space-y-4">
-        <div className="rounded-[3px] border border-[#c4c4c4] bg-white px-5 py-5">
-          <p className="text-[13px] leading-relaxed text-[#555]">
-            Get help with membership, orders, and Same-Day Delivery.
-          </p>
-          <p className="mt-3 text-[18px] font-bold text-[#1a1a1a]">
-            1-800-774-2678
-          </p>
-          <p className="mt-0.5 text-[12px] text-[#72767E]">
-            Monday–Friday, 8:00am–8:00pm PT
-          </p>
-        </div>
-        <div className="grid gap-3 sm:grid-cols-2">
-          {topics.map((topic) => (
+        <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_280px]">
+          <div className="rounded-[3px] border border-[#c4c4c4] bg-white px-5 py-5">
+            <p className="text-[13px] font-bold uppercase tracking-[0.08em] text-[#555]">
+              Contact Us
+            </p>
+            <p className="mt-2 text-[13px] leading-relaxed text-[#555]">
+              Get help with membership, orders, and Same-Day Delivery.
+            </p>
+            <p className="mt-3 text-[22px] font-bold text-[#1a1a1a]">
+              1-800-774-2678
+            </p>
+            <p className="mt-0.5 text-[13px] text-[#72767E]">
+              Monday–Sunday, 8:00am–8:00pm PT
+            </p>
+            <p className="mt-3 text-[13px] font-bold text-[#1a1a1a]">
+              customerservice@costco.com
+            </p>
+            <p className="mt-0.5 text-[12px] text-[#72767E]">
+              We typically reply within one business day.
+            </p>
+          </div>
+          <div className="rounded-[3px] border border-[#c4c4c4] bg-[#f7fbfe] px-5 py-5">
+            <p className="text-[13px] font-bold uppercase tracking-[0.08em] text-[#555]">
+              Membership
+            </p>
+            <p className="mt-2 text-[13px] leading-relaxed text-[#555]">
+              Gold Star members receive warehouse pricing on Same-Day Delivery.
+              Membership is required to check out.
+            </p>
             <button
-              key={topic.title}
               type="button"
-              onClick={topic.onClick}
-              className="rounded-[3px] border border-[#c4c4c4] bg-white px-4 py-3 text-left hover:border-costco-blue hover:bg-[#f7fbfe]"
+              className="mt-3 text-[13px] font-bold text-costco-blue hover:underline"
+              onClick={() => setSheet("membership", "warehouse")}
             >
-              <p className="text-[14px] font-bold text-costco-blue">
-                {topic.title}
-              </p>
-              <p className="mt-1 text-[12px] text-[#555]">{topic.copy}</p>
+              View membership
             </button>
-          ))}
+          </div>
+        </div>
+        <div>
+          <p className="mb-2 text-[15px] font-bold text-[#1a1a1a]">
+            Popular Help Topics
+          </p>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {topics.map((topic) => (
+              <button
+                key={topic.title}
+                type="button"
+                onClick={topic.onClick}
+                className="rounded-[3px] border border-[#c4c4c4] bg-white px-4 py-3 text-left hover:border-costco-blue hover:bg-[#f7fbfe]"
+              >
+                <p className="text-[14px] font-bold text-costco-blue">
+                  {topic.title}
+                </p>
+                <p className="mt-1 text-[12px] text-[#555]">{topic.copy}</p>
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </StoreSheet>

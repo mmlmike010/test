@@ -5,7 +5,7 @@ import type { Product } from "@/lib/data/products";
 import { useCatalogStore } from "@/lib/store/catalog";
 import { useListStore } from "@/lib/store/lists";
 import { instantSavingsText } from "@/lib/ui/instantSavings";
-import { productSize, warehouseItemNumber } from "@/lib/ui/packSize";
+import { productSize, unitPriceLabel, warehouseItemNumber } from "@/lib/ui/packSize";
 import { isLimitedOffer } from "@/lib/ui/warehouseSearch";
 import AddControl from "@/components/AddControl";
 import LimitedTimeOfferBadge from "@/components/LimitedTimeOfferBadge";
@@ -189,10 +189,10 @@ export default function WarehouseResultCard({
               featured
                 ? "p-2"
                 : preview
-                  ? "p-1.5 pt-5"
+                  ? "p-1.5"
                   : catalog
-                    ? "p-2.5 pt-7"
-                    : "p-2 pt-5"
+                    ? "p-2.5"
+                    : "p-2"
             }`}
           />
           {chrome && !featured && isLimitedOffer(product) ? (
@@ -200,13 +200,7 @@ export default function WarehouseResultCard({
           ) : null}
           {chrome && onCompare ? (
             <label
-              className={`absolute left-1.5 z-10 flex items-center gap-1 rounded-[2px] bg-white/95 px-1 py-0.5 text-[11px] text-[#555] shadow-[0_1px_2px_rgba(0,0,0,0.12)] ${
-                !featured && isLimitedOffer(product)
-                  ? catalog
-                    ? "top-8"
-                    : "top-6"
-                  : "top-1.5"
-              }`}
+              className="absolute right-1.5 top-1.5 z-10 flex items-center gap-1 rounded-[2px] bg-white/95 px-1 py-0.5 text-[11px] text-[#555] shadow-[0_1px_2px_rgba(0,0,0,0.12)]"
               onClick={(e) => e.stopPropagation()}
             >
               <input
@@ -257,10 +251,15 @@ export default function WarehouseResultCard({
               />
             </span>
           ) : null}
+          {chrome && !featured && !preview ? (
+            <span className="mt-1 block text-[11px] font-bold uppercase tracking-[0.06em] text-[#555]">
+              Your Price
+            </span>
+          ) : null}
           <span className="mt-1 flex flex-wrap items-baseline gap-x-1 tabular-nums">
             <span
               className={`font-bold text-[#1a1a1a] ${
-                featured || preview ? "text-[16px]" : "text-[18px]"
+                featured || preview ? "text-[16px]" : "text-[20px]"
               }`}
             >
               ${product.price.toFixed(2)}
@@ -271,6 +270,11 @@ export default function WarehouseResultCard({
               </span>
             ) : null}
           </span>
+          {chrome && !featured && !preview && unitPriceLabel(product.id, product.price) ? (
+            <span className="mt-0.5 block text-[11px] text-[#72767E]">
+              {unitPriceLabel(product.id, product.price)}
+            </span>
+          ) : null}
           {instantSavingsText(product.savings) ? (
             <span className="mt-0.5 block text-[11px] font-semibold leading-snug text-[#188038]">
               {instantSavingsText(product.savings)}
