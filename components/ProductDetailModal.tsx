@@ -208,14 +208,14 @@ export default function ProductDetailModal({
                   <button
                     type="button"
                     onClick={() => setZoomed(true)}
-                    className="block max-w-full"
+                    className="inline-block max-w-full"
                     aria-label="Enlarge product image"
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={current.image}
                       alt={`${current.brand} ${current.name}`}
-                      className="max-h-[480px] w-auto max-w-full object-contain"
+                      className="block max-h-[480px] w-auto max-w-full object-contain"
                     />
                   </button>
                   {isLimitedOffer(current) ? <LimitedTimeOfferBadge /> : null}
