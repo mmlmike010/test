@@ -508,7 +508,11 @@ function DeliverySheet() {
   const [line1, setLine1] = useState(address.line1);
   const [city, setCity] = useState(address.city);
   const [zip, setZip] = useState(address.zip);
-  const title = warehouse ? "Shipping & Delivery" : "Delivery details";
+  const title = warehouse
+    ? priorSheet === "checkout"
+      ? "Shipping & Delivery"
+      : "Find a Warehouse"
+    : "Delivery details";
 
   return (
     <StoreSheet
@@ -523,12 +527,47 @@ function DeliverySheet() {
       <div
         className={
           warehouse
-            ? "rounded-[3px] border border-[#c4c4c4] bg-white px-5 py-5 space-y-4"
+            ? "grid gap-4 lg:grid-cols-2 lg:items-start"
             : "px-4 py-4 space-y-4"
         }
       >
+        {warehouse ? (
+          <div className="rounded-[3px] border border-[#c4c4c4] bg-white px-5 py-5">
+            <p className="text-[12px] font-bold uppercase tracking-[0.08em] text-[#555]">
+              Warehouse
+            </p>
+            <p className="mt-2 text-[18px] font-bold text-[#1a1a1a]">
+              Brooklyn
+            </p>
+            <p className="mt-1 text-[14px] text-[#1a1a1a]">
+              {line1 || address.line1}
+            </p>
+            <p className="text-[14px] text-[#555]">
+              {city || address.city} {zip || address.zip}
+            </p>
+            <p className="mt-3 text-[13px] font-semibold text-[#188038]">
+              Same-Day Delivery
+            </p>
+            <p className="mt-1 text-[13px] leading-snug text-[#555]">
+              Mon–Fri 10:00am–8:30pm · Sat 9:30am–6:00pm · Sun 10:00am–6:00pm
+            </p>
+            <p className="mt-3 text-[12px] leading-snug text-[#72767E]">
+              Membership required. This demo uses your delivery address as the
+              warehouse location.
+            </p>
+          </div>
+        ) : null}
+        <div
+          className={
+            warehouse
+              ? "rounded-[3px] border border-[#c4c4c4] bg-white px-5 py-5 space-y-4"
+              : "space-y-4"
+          }
+        >
         <div>
-          <p className="text-[12px] font-bold text-[#555] mb-2">Time window</p>
+          <p className="text-[12px] font-bold text-[#555] mb-2">
+            {warehouse ? "Same-Day Delivery Window" : "Time window"}
+          </p>
           <div className="space-y-2">
             {DELIVERY_WINDOWS.map((window) => {
               const on = picked === window.id;
@@ -608,8 +647,9 @@ function DeliverySheet() {
           }`}
           onClick={() => setDelivery(picked, { line1, city, zip })}
         >
-          Save delivery details
+          {warehouse ? "Save" : "Save delivery details"}
         </button>
+        </div>
       </div>
     </StoreSheet>
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 import {
   X,
   RefreshCw,
@@ -1498,15 +1499,18 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
       </div>
       )}
     </aside>
-    {kirkCompareOpen ? (
-      <WarehouseCompareSheet
-        items={kirkCompareItems}
-        onClose={() => setKirkCompareOpen(false)}
-        onRemove={(id) =>
-          setKirkCompareIds((ids) => ids.filter((itemId) => itemId !== id))
-        }
-      />
-    ) : null}
+    {kirkCompareOpen
+      ? createPortal(
+          <WarehouseCompareSheet
+            items={kirkCompareItems}
+            onClose={() => setKirkCompareOpen(false)}
+            onRemove={(id) =>
+              setKirkCompareIds((ids) => ids.filter((itemId) => itemId !== id))
+            }
+          />,
+          document.body
+        )
+      : null}
     {lightboxUrl && (
       <div
         className={`fixed z-[80] flex items-center justify-center bg-black/70 p-4 ${overlayClass}`}
