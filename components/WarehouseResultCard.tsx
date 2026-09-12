@@ -252,7 +252,7 @@ export default function WarehouseResultCard({
       </button>
       <div className={`px-2 ${featured ? "pb-1.5" : "pb-2"}`}>
         <AddControl product={product} variant="inline" tone="warehouse" wide />
-        {catalog && onCompare ? (
+        {(catalog || featured) && onCompare ? (
           <label
             className="mt-1.5 flex items-center gap-1.5 text-[11px] text-[#555]"
             onClick={(e) => e.stopPropagation()}

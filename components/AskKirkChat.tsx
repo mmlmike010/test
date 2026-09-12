@@ -24,6 +24,7 @@ import GoldStarMembershipCard from "@/components/GoldStarMembershipCard";
 import WarehouseShopDepartments from "@/components/WarehouseShopDepartments";
 import WarehouseAisleScroller from "@/components/WarehouseAisleScroller";
 import WarehouseFilterRail from "@/components/WarehouseFilterRail";
+import WarehouseCompareSheet from "@/components/WarehouseCompareSheet";
 import {
   deliveryWindow,
   formatAddress,
@@ -122,6 +123,8 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
     "grid"
   );
   const [kirkFiltersOpen, setKirkFiltersOpen] = useState(false);
+  const [kirkCompareIds, setKirkCompareIds] = useState<string[]>([]);
+  const [kirkCompareOpen, setKirkCompareOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const latestResultsRef = useRef<HTMLDivElement>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -196,6 +199,8 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
     setCartNotice(null);
     setKirkResultsView("grid");
     setKirkFiltersOpen(false);
+    setKirkCompareIds([]);
+    setKirkCompareOpen(false);
     const catalog = useCatalogStore.getState();
     catalog.clearFilters();
     catalog.inspect(null);
@@ -576,6 +581,9 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
   const lastUserId = [...messages]
     .reverse()
     .find((message) => message.role === "user")?.id;
+  const kirkCompareItems = kirkCompareIds
+    .map((id) => products.find((item) => item.id === id))
+    .filter((item): item is (typeof products)[number] => Boolean(item));
   const browseWarehouseDepartment = (label: string | null) => {
     if (!label) {
       setWarehouseFacets(EMPTY_WAREHOUSE_FACETS);
@@ -806,32 +814,36 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                   {message.content}
                 </p>
                 {hits.length > 0 ? (
-                  <div className="mt-1 flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
-                    <p className="text-[12px] font-bold text-[#1a1a1a]">
-                      Showing 1 – {preview.length} of {hits.length}
-                    </p>
-                    <div className="flex flex-wrap items-center gap-2">
-                      <button
-                        type="button"
-                        onClick={() => setKirkFiltersOpen((open) => !open)}
-                        className="text-[12px] font-bold text-costco-blue hover:underline"
-                      >
-                        {kirkFiltersOpen ? "Hide Filters" : "Filter Results"}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          document
-                            .querySelector("main")
-                            ?.scrollTo({ top: 0, behavior: "smooth" });
-                        }}
-                        className="text-[12px] font-bold text-costco-blue hover:underline"
-                      >
-                        View all {hits.length}
-                      </button>
-                      <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-[3px] border border-costco-blue bg-[#f7fbfe] px-1 text-[11px] font-bold text-costco-blue">
-                        1
-                      </span>
+                  <>
+                    <div className="mt-1 flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
+                      <p className="text-[12px] font-bold text-[#1a1a1a]">
+                        Showing 1 – {preview.length} of {hits.length}
+                      </p>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setKirkFiltersOpen((open) => !open)}
+                          className="text-[12px] font-bold text-costco-blue hover:underline"
+                        >
+                          {kirkFiltersOpen ? "Hide Filters" : "Filter Results"}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            document
+                              .querySelector("main")
+                              ?.scrollTo({ top: 0, behavior: "smooth" });
+                          }}
+                          className="text-[12px] font-bold text-costco-blue hover:underline"
+                        >
+                          View all {hits.length}
+                        </button>
+                        <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-[3px] border border-costco-blue bg-[#f7fbfe] px-1 text-[11px] font-bold text-costco-blue">
+                          1
+                        </span>
+                      </div>
+                    </div>
+                    <div className="mt-1.5 flex flex-wrap items-center justify-between gap-2 border-t border-[#ececec] pt-1.5">
                       <label className="inline-flex items-center gap-1 text-[11px] text-[#555]">
                         <span className="font-semibold">Sort By</span>
                         <select
@@ -853,6 +865,9 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                         role="group"
                         aria-label="View"
                       >
+                        <span className="mr-1 text-[11px] font-semibold text-[#555]">
+                          View
+                        </span>
                         <button
                           type="button"
                           aria-pressed={kirkResultsView === "grid"}
@@ -881,7 +896,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                         </button>
                       </div>
                     </div>
-                  </div>
+                  </>
                 ) : null}
                 {selectionChips.length > 0 ? (
                   <div className="mt-1.5 border-t border-[#ececec] pt-1.5">
@@ -939,6 +954,17 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                       density={
                         kirkResultsView === "grid" ? "featured" : "list"
                       }
+                      compareChecked={kirkCompareIds.includes(product.id)}
+                      onCompare={(checked) =>
+                        setKirkCompareIds((ids) => {
+                          if (checked) {
+                            return ids.includes(product.id) || ids.length >= 4
+                              ? ids
+                              : [...ids, product.id];
+                          }
+                          return ids.filter((id) => id !== product.id);
+                        })
+                      }
                     />
                   ))}
                 </div>
@@ -953,6 +979,49 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                     See all results
                   </button>
                 </p>
+              ) : null}
+              {message.id === lastUserId && kirkCompareItems.length > 0 ? (
+                <div className="mx-2 mb-2 flex flex-wrap items-center gap-2 rounded-[3px] border border-[#c4c4c4] bg-[#f7fbfe] px-2 py-1.5">
+                  <span className="text-[12px] font-bold text-[#1a1a1a]">
+                    Compare ({kirkCompareItems.length})
+                  </span>
+                  <button
+                    type="button"
+                    disabled={kirkCompareItems.length < 2}
+                    onClick={() => setKirkCompareOpen(true)}
+                    className="rounded-[3px] bg-costco-blue px-2 py-1 text-[11px] font-bold text-white hover:bg-costco-blue-hover disabled:cursor-not-allowed disabled:bg-[#c4c4c4] disabled:text-[#666]"
+                  >
+                    Compare Products
+                  </button>
+                  {kirkCompareItems.map((product) => (
+                    <button
+                      key={`compare-${product.id}`}
+                      type="button"
+                      onClick={() =>
+                        useCatalogStore.getState().inspect(product, "warehouse")
+                      }
+                      className="relative h-8 w-8 overflow-hidden rounded-[3px] border border-[#e8e8e8] bg-white"
+                      aria-label={`View ${product.brand} ${product.name}`}
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={product.image}
+                        alt=""
+                        className="absolute inset-0 h-full w-full object-contain p-0.5"
+                      />
+                    </button>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setKirkCompareIds([]);
+                      setKirkCompareOpen(false);
+                    }}
+                    className="text-[11px] font-bold text-costco-blue hover:underline"
+                  >
+                    Clear
+                  </button>
+                </div>
               ) : null}
               {message.id === lastUserId ? (
                 <div className="border-t border-[#ececec] px-3 py-2">
@@ -1195,6 +1264,15 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
         </p>
       </div>
     </aside>
+    {kirkCompareOpen ? (
+      <WarehouseCompareSheet
+        items={kirkCompareItems}
+        onClose={() => setKirkCompareOpen(false)}
+        onRemove={(id) =>
+          setKirkCompareIds((ids) => ids.filter((itemId) => itemId !== id))
+        }
+      />
+    ) : null}
     {lightboxUrl && (
       <div
         className={`fixed z-[80] flex items-center justify-center bg-black/70 p-4 ${storefrontOverlayClass(isOpen)}`}
