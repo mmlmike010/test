@@ -67,17 +67,17 @@ export default function WarehouseShopDepartments({
                 className="w-[136px] shrink-0 bg-white text-center"
               >
                 <span
-                  className={`relative mx-auto flex h-[104px] w-[104px] items-center justify-center overflow-hidden rounded-full border bg-white ${
+                  className={`relative mx-auto flex h-[120px] w-full items-center justify-center overflow-hidden bg-[#f6f7f8] ${
                     active
-                      ? "border-costco-blue ring-2 ring-costco-blue ring-offset-1"
-                      : "border-[#e5e5e5] hover:border-costco-blue"
+                      ? "ring-2 ring-costco-blue ring-offset-1"
+                      : "hover:ring-1 hover:ring-costco-blue"
                   }`}
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={tile.image}
                     alt=""
-                    className="h-[84px] w-[84px] object-contain"
+                    className="absolute inset-0 h-full w-full object-contain p-2"
                   />
                 </span>
                 <span

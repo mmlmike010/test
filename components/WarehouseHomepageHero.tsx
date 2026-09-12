@@ -46,11 +46,11 @@ function PromoTile({
         alt=""
         className="absolute inset-0 h-full w-full object-cover object-[72%_center] transition-transform duration-300 group-hover:scale-[1.02]"
       />
-      <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 via-black/35 to-transparent px-5 pb-4 pt-20">
+      <span className="absolute inset-y-0 left-0 flex w-[48%] flex-col justify-end bg-gradient-to-r from-black/70 via-black/35 to-transparent px-6 pb-6 pt-8">
         <span className="block text-[28px] font-bold leading-tight text-white">
           {title}
         </span>
-        <span className="mt-1 inline-flex items-center text-[14px] font-bold text-white">
+        <span className="mt-1.5 inline-flex items-center text-[14px] font-bold text-white">
           Shop Now <span aria-hidden="true">›</span>
         </span>
       </span>

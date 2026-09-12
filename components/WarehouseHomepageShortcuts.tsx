@@ -69,12 +69,12 @@ export default function WarehouseHomepageShortcuts({
             }
             className="w-[104px] shrink-0 bg-white text-center"
           >
-            <span className="mx-auto flex h-[88px] w-[88px] items-center justify-center overflow-hidden rounded-full border border-[#e5e5e5] bg-white hover:border-costco-blue">
+            <span className="mx-auto flex h-[88px] w-[88px] items-center justify-center overflow-hidden rounded-full bg-[#f6f7f8] hover:ring-2 hover:ring-costco-blue">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={item.image}
                 alt=""
-                className="h-[72px] w-[72px] object-contain"
+                className="h-[68px] w-[68px] object-contain"
               />
             </span>
             <span className="mt-1.5 block text-[12px] font-bold leading-tight text-costco-blue hover:underline">
