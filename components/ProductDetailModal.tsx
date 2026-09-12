@@ -198,20 +198,20 @@ export default function ProductDetailModal({
           <div
             className={
               warehouse
-                ? "lg:mx-auto lg:grid lg:max-w-[1180px] lg:grid-cols-[minmax(0,1fr)_400px] lg:items-start"
+                ? "lg:mx-auto lg:grid lg:max-w-[1180px] lg:grid-cols-[minmax(0,560px)_400px] lg:justify-center lg:items-start"
                 : "lg:grid lg:grid-cols-2 lg:items-start"
             }
           >
           <div
             className={
               warehouse
-                ? "bg-[#f6f7f8] lg:sticky lg:top-0"
+                ? "bg-white lg:sticky lg:top-0"
                 : "lg:border-r lg:border-[#eee]"
             }
           >
             {warehouse ? (
               <div className="px-6 py-5">
-                <div className="mx-auto w-fit max-w-full bg-white px-5 py-4">
+                <div className="mx-auto w-fit max-w-full">
                   <div className="relative">
                     <button
                       type="button"
