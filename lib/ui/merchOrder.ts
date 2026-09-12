@@ -1,4 +1,5 @@
 import type { Product } from "@/lib/data/products";
+import { aisleLabel } from "@/lib/ui/aisleLabels";
 
 /** Composed leftover tiles. UI merch only — never sent to Kirk. */
 export const COMPOSED_IDS = new Set(["1", "6", "7", "9", "13", "17"]);
@@ -137,6 +138,64 @@ export function storefrontQueryForKirk(query: string, hits: Product[]): string {
     .split(/[^a-z0-9]+/)
     .find((token) => token.length >= 4);
   return fallback || first.brand.toLowerCase();
+}
+
+/** costco.com search H1 — the token, not the ask sentence. UI only. */
+export function warehouseSearchTitle(query: string, hits: Product[]): string {
+  const token = storefrontQueryForKirk(query, hits);
+  if (!token) return query;
+  return token.replace(/\b[a-z]/g, (ch) => ch.toUpperCase());
+}
+
+const WEAK_RELATED_SEARCH = new Set([
+  "what's new",
+  "featured",
+  "member savings",
+  "trending",
+  "weekly savings",
+]);
+
+/** costco.com Related Searches links. UI only — never changes chip text. */
+export function relatedWarehouseSearches(
+  query: string,
+  hits: Product[],
+  n = 8
+): string[] {
+  if (!hits.length) return [];
+  const current = storefrontQueryForKirk(query, hits).toLowerCase();
+  const seen = new Set<string>([current, query.toLowerCase().trim()]);
+  const out: string[] = [];
+  const add = (label: string) => {
+    const trimmed = label.replace(/\s+/g, " ").trim();
+    const key = trimmed.toLowerCase();
+    if (!trimmed || key.length < 3 || seen.has(key) || WEAK_RELATED_SEARCH.has(key)) {
+      return;
+    }
+    seen.add(key);
+    out.push(trimmed);
+  };
+
+  if (
+    hits.some((product) => product.brand === "Kirkland Signature") &&
+    current !== "kirkland"
+  ) {
+    add("Kirkland Signature");
+  }
+
+  for (const product of hits) {
+    add(aisleLabel(product.department));
+    add(product.category);
+    const first = product.name
+      .split(/[^a-zA-Z0-9]+/)
+      .find((token) => token.length >= 4);
+    if (!first) continue;
+    add(
+      product.brand === "Kirkland Signature"
+        ? `Kirkland ${first}`
+        : `${product.brand} ${first}`
+    );
+  }
+  return out.slice(0, n);
 }
 
 /** Fill a thin Same-Day search page. UI only — never sent to Kirk. */

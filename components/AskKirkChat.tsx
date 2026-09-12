@@ -37,7 +37,9 @@ import { useKirkAskStore } from "@/lib/store/kirkAsk";
 import {
   kirklandWarehousePreview,
   kirkQueryPreview,
+  relatedWarehouseSearches,
   storefrontQueryForKirk,
+  warehouseSearchTitle,
 } from "@/lib/ui/merchOrder";
 import {
   applyWarehouseFacets,
@@ -853,6 +855,10 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
           const preview = hits.slice(0, 12);
           const facetEmpty = unfilteredHits.length > 0 && hits.length === 0;
           const selectionChips = warehouseSelectionChips(warehouseFacets);
+          const relatedTerms = relatedWarehouseSearches(
+            message.content,
+            unfilteredHits
+          );
           return (
           <div key={message.id} className="space-y-2">
           {message.role === "user" ? (
@@ -894,7 +900,9 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                     kirkShopPage ? "text-[22px]" : "text-[16px]"
                   }`}
                 >
-                  {message.content}
+                  {kirkShopPage && unfilteredHits.length
+                    ? warehouseSearchTitle(message.content, unfilteredHits)
+                    : message.content}
                 </h2>
                 {hits.length > 0 ? (
                   <>
@@ -1112,25 +1120,23 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                   ) : null}
                 </div>
               ) : null}
-              {message.id === lastUserId ? (
+              {message.id === lastUserId && relatedTerms.length > 0 ? (
                 <div className="border border-[#c4c4c4] bg-white px-3 py-2.5">
                   <p className="text-[13px] font-bold text-[#1a1a1a]">
                     Related Searches
                   </p>
                   <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-1">
-                    {suggestionChips
-                      .filter((chip) => chip !== message.content)
-                      .map((chip) => (
-                        <button
-                          key={`${message.id}-${chip}`}
-                          type="button"
-                          onClick={() => void sendMessage(chip)}
-                          disabled={isLoading}
-                          className="text-left text-[12px] font-bold leading-tight text-costco-blue hover:underline disabled:opacity-50"
-                        >
-                          {chip}
-                        </button>
-                      ))}
+                    {relatedTerms.map((term) => (
+                      <button
+                        key={`${message.id}-${term}`}
+                        type="button"
+                        onClick={() => void sendMessage(term)}
+                        disabled={isLoading}
+                        className="text-left text-[12px] font-bold leading-tight text-costco-blue hover:underline disabled:opacity-50"
+                      >
+                        {term}
+                      </button>
+                    ))}
                   </div>
                 </div>
               ) : null}

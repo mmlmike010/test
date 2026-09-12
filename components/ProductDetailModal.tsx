@@ -10,7 +10,10 @@ import ProductCard from "@/components/ProductCard";
 import WarehouseResultCard from "@/components/WarehouseResultCard";
 import WarehouseQtySelect from "@/components/WarehouseQtySelect";
 import GoldStarMark from "@/components/GoldStarMark";
-import { hideComposedLeftovers, officialPacksFirst } from "@/lib/ui/merchOrder";
+import {
+  officialPacksFirst,
+  relatedSearchItems,
+} from "@/lib/ui/merchOrder";
 import { useWarehouseChrome } from "@/lib/store/warehouseChrome";
 import { instantSavingsText } from "@/lib/ui/instantSavings";
 import { productSize, unitPriceLabel, warehouseItemNumber } from "@/lib/ui/packSize";
@@ -106,15 +109,8 @@ export default function ProductDetailModal({
   };
 
   const related = officialPacksFirst(
-    hideComposedLeftovers(
-      products.filter(
-        (p) =>
-          p.id !== current.id &&
-          (p.department === current.department ||
-            p.category === current.category)
-      )
-    )
-  ).slice(0, 4);
+    relatedSearchItems([current], products, 8)
+  );
 
   const onAdd = () => {
     addItem(current, warehouse ? buyQty : 1);
@@ -477,11 +473,13 @@ export default function ProductDetailModal({
               {warehouse ? "Related Products" : "Related products"}
             </h3>
             {warehouse ? (
-              <div className="flex flex-wrap gap-2">
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4">
                 {related.map((item) => (
-                  <div key={item.id} className="w-[168px] shrink-0">
-                    <WarehouseResultCard product={item} />
-                  </div>
+                  <WarehouseResultCard
+                    key={item.id}
+                    product={item}
+                    density="catalog"
+                  />
                 ))}
               </div>
             ) : (
