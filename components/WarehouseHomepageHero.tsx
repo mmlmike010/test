@@ -51,7 +51,7 @@ export default function WarehouseHomepageHero({
           onClick={slide.action === "offers" ? onOffers : onKirkland}
           className={`group relative flex h-[380px] w-full overflow-hidden text-left ${slide.panel}`}
         >
-          <span className="relative z-10 flex w-[42%] flex-col justify-center px-10 py-8 lg:px-14">
+          <span className="relative z-10 flex w-[44%] flex-col justify-center py-8 pl-20 pr-6 lg:pl-24">
             <span className="text-[12px] font-bold uppercase tracking-[0.16em] text-white/80">
               {slide.kicker}
             </span>
