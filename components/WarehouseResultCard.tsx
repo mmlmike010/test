@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Heart } from "lucide-react";
 import type { Product } from "@/lib/data/products";
 import { useCatalogStore } from "@/lib/store/catalog";
@@ -10,6 +11,29 @@ import { isLimitedOffer } from "@/lib/ui/warehouseSearch";
 import AddControl from "@/components/AddControl";
 import LimitedTimeOfferBadge from "@/components/LimitedTimeOfferBadge";
 import StarRating from "@/components/StarRating";
+import WarehouseQtySelect from "@/components/WarehouseQtySelect";
+
+function WarehouseAddRow({
+  product,
+  wide = false,
+}: {
+  product: Product;
+  wide?: boolean;
+}) {
+  const [qty, setQty] = useState(1);
+  return (
+    <div className="flex items-end gap-2">
+      <WarehouseQtySelect value={qty} onChange={setQty} compact labelled />
+      <AddControl
+        product={product}
+        variant="inline"
+        tone="warehouse"
+        wide={wide}
+        addQty={qty}
+      />
+    </div>
+  );
+}
 
 function AddToListLink({
   productId,
@@ -134,8 +158,8 @@ export default function WarehouseResultCard({
                 Delivery
               </span>
             </button>
-            <div className="mt-1.5 flex flex-wrap items-center gap-x-2.5 gap-y-1">
-              <AddControl product={product} variant="inline" tone="warehouse" />
+            <div className="mt-1.5 flex flex-wrap items-end gap-x-2.5 gap-y-1">
+              <WarehouseAddRow product={product} />
               {onCompare ? (
                 <label
                   className="flex items-center gap-1.5 text-[11px] text-[#555]"
@@ -285,7 +309,11 @@ export default function WarehouseResultCard({
         </span>
       </button>
       <div className={`px-2 ${featured ? "pb-1.5" : "pb-2"}`}>
-        <AddControl product={product} variant="inline" tone="warehouse" wide />
+        {preview ? (
+          <AddControl product={product} variant="inline" tone="warehouse" wide />
+        ) : (
+          <WarehouseAddRow product={product} wide />
+        )}
         {chrome ? (
           <div className="mt-1.5">
             <AddToListLink productId={product.id} productName={product.name} />

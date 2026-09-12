@@ -59,7 +59,7 @@ export default function WarehouseAddedModal() {
         role="dialog"
         aria-modal="true"
         aria-label="Item Added to Cart"
-        className="relative w-full max-w-[640px] overflow-hidden rounded-t-[3px] bg-white shadow-2xl sm:rounded-[3px]"
+        className="relative w-full max-w-[760px] overflow-hidden rounded-t-[3px] bg-white shadow-2xl sm:rounded-[3px]"
       >
         <div className="flex items-center justify-between border-b border-[#c4c4c4] bg-[#f6f7f8] px-4 py-3.5">
           <h2 className="flex items-center gap-2 text-[18px] font-bold leading-none text-[#1a1a1a]">
@@ -78,7 +78,7 @@ export default function WarehouseAddedModal() {
           </button>
         </div>
         <div className="flex gap-3 px-4 py-4">
-          <div className="relative h-[88px] w-[88px] shrink-0 overflow-hidden rounded-[3px] border border-[#eee] bg-white">
+          <div className="relative h-[140px] w-[140px] shrink-0 overflow-hidden rounded-[3px] border border-[#eee] bg-white">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={product.image}

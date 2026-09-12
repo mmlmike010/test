@@ -245,7 +245,6 @@ export default function ProductDetailModal({
                 <ZoomIn className="h-4 w-4 text-[#333]" />
               </button>
             </div>
-            {warehouse ? null : (
             <div
               className={`flex justify-start gap-2 border-b border-[#eee] bg-white px-4 py-3 ${
                   "lg:border-b-0"
@@ -268,13 +267,12 @@ export default function ProductDetailModal({
                 />
               </button>
             </div>
-            )}
           </div>
           <div className={`flex flex-col p-5 ${warehouse ? "bg-white" : ""}`}>
             <h1
               className={`font-bold leading-snug ${
                 warehouse
-                  ? "text-[24px] text-costco-blue"
+                  ? "text-[24px] text-[#1a1a1a]"
                   : "text-[22px] text-[#1a1a1a]"
               }`}
             >

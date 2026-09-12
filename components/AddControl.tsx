@@ -11,11 +11,13 @@ export default function AddControl({
   variant = "overlay",
   tone = "sameday",
   wide = false,
+  addQty = 1,
 }: {
   product: Product;
   variant?: "overlay" | "inline";
   tone?: "sameday" | "warehouse";
   wide?: boolean;
+  addQty?: number;
 }) {
   const qty = useCartStore(
     (s) => s.items.find((i) => i.product.id === product.id)?.quantity || 0
@@ -29,9 +31,9 @@ export default function AddControl({
 
   const add = (e: React.MouseEvent) => {
     e.stopPropagation();
-    addItem(product);
+    addItem(product, warehouse ? addQty : 1);
     if (warehouse) {
-      useWarehouseChrome.getState().showAdded(product, 1);
+      useWarehouseChrome.getState().showAdded(product, addQty);
     }
     setJustAdded(true);
     window.setTimeout(() => setJustAdded(false), 900);
@@ -42,8 +44,8 @@ export default function AddControl({
       <button
         type="button"
         onClick={add}
-        aria-label={`Add 1 ct ${product.name}`}
-        className={`${place} h-9 ${wide ? "w-full" : "min-w-[52px]"} px-3 rounded-[3px] bg-costco-red text-white text-[13px] font-bold hover:bg-costco-red-hover ${
+        aria-label={`Add ${addQty} ct ${product.name}`}
+        className={`${place} h-9 ${wide ? "w-full" : "min-w-[72px] flex-1"} px-3 rounded-[3px] bg-costco-red text-white text-[13px] font-bold hover:bg-costco-red-hover ${
           justAdded ? "bg-costco-red-hover" : ""
         }`}
       >
