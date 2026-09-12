@@ -5,7 +5,7 @@ import { useCatalogStore } from "@/lib/store/catalog";
 import { useStorefrontOverlayClass, useSessionStore } from "@/lib/store/session";
 import { instantSavingsText } from "@/lib/ui/instantSavings";
 import { productSize, unitPriceLabel, warehouseItemNumber } from "@/lib/ui/packSize";
-import { aisleLabel } from "@/lib/ui/aisleLabels";
+import { warehouseAisleLabel } from "@/lib/ui/aisleLabels";
 import { isLimitedOffer } from "@/lib/ui/warehouseSearch";
 import AddControl from "@/components/AddControl";
 import StarRating from "@/components/StarRating";
@@ -154,7 +154,7 @@ export default function WarehouseCompareSheet({
                     key={product.id}
                     className="border border-[#c4c4c4] px-3 py-2 text-[#72767E]"
                   >
-                    {aisleLabel(product.department)}
+                    {warehouseAisleLabel(product)}
                   </td>
                 ))}
               </tr>

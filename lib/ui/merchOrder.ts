@@ -1,5 +1,5 @@
 import type { Product } from "@/lib/data/products";
-import { aisleLabel } from "@/lib/ui/aisleLabels";
+import { warehouseAisleLabel } from "@/lib/ui/aisleLabels";
 
 /** Composed leftover tiles. UI merch only — never sent to Kirk. */
 export const COMPOSED_IDS = new Set(["1", "6", "7", "9", "13", "17"]);
@@ -207,7 +207,7 @@ export function relatedWarehouseSearches(
   }
 
   for (const product of hits) {
-    add(aisleLabel(product.department));
+    add(warehouseAisleLabel(product));
     add(product.category);
     const first = product.name
       .split(/[^a-zA-Z0-9]+/)
@@ -222,33 +222,52 @@ export function relatedWarehouseSearches(
   return out.slice(0, n);
 }
 
-/** Fill a thin Same-Day search page. UI only — never sent to Kirk. */
-/** Warehouse item-page Related Products. UI only — never sent to Kirk. */
-export function warehouseRelatedProducts(
-  current: Product,
+/** Warehouse related aisle. Pads thin categories with official packs. UI only. */
+export function warehouseRelatedAisle(
+  hits: Product[],
   catalog: Product[],
   n = 8
 ): Product[] {
-  const scored = relatedSearchItems([current], catalog, n);
+  if (!hits.length) return [];
+  const scored = relatedSearchItems(hits, catalog, n, true);
   if (scored.length >= n) return officialPacksFirst(scored);
-  const have = new Set([current.id, ...scored.map((product) => product.id)]);
+  const have = new Set([
+    ...hits.map((hit) => hit.id),
+    ...scored.map((product) => product.id),
+  ]);
   const pad = officialPacksFirst(
     hideComposedLeftovers(catalog).filter((product) => !have.has(product.id))
   ).slice(0, n - scored.length);
   return officialPacksFirst([...scored, ...pad]);
 }
 
-export function relatedSearchItems(
-  hits: Product[],
+/** Warehouse item-page Related Products. UI only — never sent to Kirk. */
+export function warehouseRelatedProducts(
+  current: Product,
   catalog: Product[],
   n = 8
 ): Product[] {
+  return warehouseRelatedAisle([current], catalog, n);
+}
+
+export function relatedSearchItems(
+  hits: Product[],
+  catalog: Product[],
+  n = 8,
+  warehouse = false
+): Product[] {
   if (!hits.length) return [];
   const hitIds = new Set(hits.map((hit) => hit.id));
-  const depts = new Set(hits.map((hit) => hit.department));
+  const depts = new Set(
+    hits.map((hit) =>
+      warehouse ? warehouseAisleLabel(hit) : hit.department
+    )
+  );
   const cats = new Set(hits.map((hit) => hit.category));
   const tags = new Set(hits.flatMap((hit) => hit.tags || []));
-  const weakDepts = new Set(["Trending", "What's New", "Weekly Savings"]);
+  const weakDepts = warehouse
+    ? new Set(["Member savings"])
+    : new Set(["Trending", "What's New", "Weekly Savings"]);
   const weakTags = new Set([
     "trending",
     "new",
@@ -261,7 +280,10 @@ export function relatedSearchItems(
     .filter((product) => !hitIds.has(product.id))
     .map((product) => {
       let score = 0;
-      if (depts.has(product.department) && !weakDepts.has(product.department)) {
+      const aisle = warehouse
+        ? warehouseAisleLabel(product)
+        : product.department;
+      if (depts.has(aisle) && !weakDepts.has(aisle)) {
         score += 3;
       }
       if (cats.has(product.category)) score += 3;

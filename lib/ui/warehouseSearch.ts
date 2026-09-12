@@ -1,5 +1,5 @@
 import type { Product } from "@/lib/data/products";
-import { aisleLabel } from "@/lib/ui/aisleLabels";
+import { warehouseAisleLabel } from "@/lib/ui/aisleLabels";
 import { COMPOSED_IDS, FLYER_DEAL_IDS } from "@/lib/ui/merchOrder";
 
 /** Advertised warehouse deals only. UI chrome — never sent to Kirk. */
@@ -35,7 +35,7 @@ export const EMPTY_WAREHOUSE_FACETS: WarehouseFacets = {
   minRating: 0,
 };
 
-/** costco.com-style department row. Labels match aisleLabel() — local UI only. */
+/** costco.com-style department row. Labels match warehouseAisleLabel() — local UI only. */
 export const WAREHOUSE_NAV = [
   "Kirkland Signature",
   "Dairy & Eggs",
@@ -120,7 +120,7 @@ export function applyWarehouseFacets(
   return items.filter((product) => {
     if (
       facets.departments.length &&
-      !facets.departments.includes(aisleLabel(product.department))
+      !facets.departments.includes(warehouseAisleLabel(product))
     ) {
       return false;
     }

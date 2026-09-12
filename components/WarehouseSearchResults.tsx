@@ -1,13 +1,15 @@
 "use client";
 
 import { LayoutGrid, List } from "lucide-react";
-import type { Product } from "@/lib/data/products";
+import { products, type Product } from "@/lib/data/products";
 import { useCatalogStore } from "@/lib/store/catalog";
 import { useSessionStore } from "@/lib/store/session";
 import {
   relatedWarehouseSearches,
+  warehouseRelatedAisle,
   warehouseSearchTitle,
 } from "@/lib/ui/merchOrder";
+import WarehouseAisleScroller from "@/components/WarehouseAisleScroller";
 import {
   applyWarehouseFacets,
   EMPTY_WAREHOUSE_FACETS,
@@ -24,6 +26,7 @@ export default function WarehouseSearchResults({
   query,
   unfilteredHits,
   title,
+  breadcrumb,
   resultKey,
   onReset,
   onRelatedSearch,
@@ -39,6 +42,7 @@ export default function WarehouseSearchResults({
   query: string;
   unfilteredHits: Product[];
   title?: string;
+  breadcrumb?: string;
   resultKey: string;
   onReset: () => void;
   onRelatedSearch?: (term: string) => void;
@@ -64,6 +68,9 @@ export default function WarehouseSearchResults({
   const facetEmpty = unfilteredHits.length > 0 && hits.length === 0;
   const selectionChips = warehouseSelectionChips(warehouseFacets);
   const relatedTerms = relatedWarehouseSearches(query, unfilteredHits);
+  const relatedMerch = kirkShopPage
+    ? warehouseRelatedAisle(hits, products, 8)
+    : [];
   const heading =
     title ||
     (unfilteredHits.length ? warehouseSearchTitle(query, unfilteredHits) : query);
@@ -94,7 +101,9 @@ export default function WarehouseSearchResults({
               <span className="font-bold text-costco-blue">Home</span>
             )}
             <span aria-hidden="true">›</span>
-            <span className="text-[#1a1a1a]">Search Results</span>
+            <span className="text-[#1a1a1a]">
+              {breadcrumb || "Search Results"}
+            </span>
           </nav>
           {kirkShopPage ? (
             <button
@@ -340,6 +349,19 @@ export default function WarehouseSearchResults({
             </section>
           ) : null}
         </div>
+      ) : null}
+      {relatedMerch.length > 0 ? (
+        <WarehouseAisleScroller
+          title="Related Products"
+          products={relatedMerch}
+          onShowAll={() => {
+            useCatalogStore.setState({
+              q: "kirkland",
+              warehouseFacets: EMPTY_WAREHOUSE_FACETS,
+              listTone: "warehouse",
+            });
+          }}
+        />
       ) : null}
       {relatedEnabled && relatedTerms.length > 0 ? (
         <div className="border-t border-[#ececec] bg-white px-1 py-5">

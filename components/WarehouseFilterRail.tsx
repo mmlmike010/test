@@ -2,9 +2,10 @@
 
 import { useState, type ReactNode } from "react";
 import type { Product } from "@/lib/data/products";
-import { aisleLabel } from "@/lib/ui/aisleLabels";
+import { warehouseAisleLabel } from "@/lib/ui/aisleLabels";
 import {
   facetCounts,
+  WAREHOUSE_NAV,
   WAREHOUSE_PRICE_BUCKETS,
   type WarehouseFacets,
 } from "@/lib/ui/warehouseSearch";
@@ -88,9 +89,13 @@ export default function WarehouseFilterRail({
   id?: string;
   compact?: boolean;
 }) {
-  const departments = facetCounts(items, (product) =>
-    aisleLabel(product.department)
+  const departmentCounts = new Map(
+    facetCounts(items, warehouseAisleLabel)
   );
+  const departments = WAREHOUSE_NAV.map((label) => [
+    label,
+    departmentCounts.get(label) || 0,
+  ] as const).filter(([, count]) => count > 0);
   const brands = facetCounts(items, (product) => product.brand);
   const prices = WAREHOUSE_PRICE_BUCKETS.map((bucket) => ({
     ...bucket,

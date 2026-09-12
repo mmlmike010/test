@@ -928,6 +928,11 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
               warehouseFacets.departments,
               browseHits
             )}
+            breadcrumb={
+              warehouseFacets.departments.length === 1
+                ? warehouseFacets.departments[0]
+                : "Search Results"
+            }
             resultKey="browse"
             onReset={handleReset}
             onRelatedSearch={(term) => {

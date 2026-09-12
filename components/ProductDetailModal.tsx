@@ -17,7 +17,7 @@ import { productSize, unitPriceLabel, warehouseItemNumber } from "@/lib/ui/packS
 import { isLimitedOffer } from "@/lib/ui/warehouseSearch";
 import LimitedTimeOfferBadge from "@/components/LimitedTimeOfferBadge";
 import WarehouseFooter from "@/components/WarehouseFooter";
-import { aisleLabel } from "@/lib/ui/aisleLabels";
+import { aisleLabel, warehouseAisleLabel } from "@/lib/ui/aisleLabels";
 import { useStorefrontOverlayClass, useSessionStore } from "@/lib/store/session";
 import { useListStore } from "@/lib/store/lists";
 import { useRef, useState, type ReactNode } from "react";
@@ -187,11 +187,7 @@ export default function ProductDetailModal({
                 Home
               </button>
               <span aria-hidden="true">›</span>
-              <span>
-                {current.brand === "Kirkland Signature"
-                  ? "Kirkland Signature"
-                  : aisleLabel(current.department)}
-              </span>
+              <span>{warehouseAisleLabel(current)}</span>
               <span aria-hidden="true">›</span>
               <span className="line-clamp-1 text-[#1a1a1a]">
                 {current.brand} {current.name}
@@ -446,7 +442,7 @@ export default function ProductDetailModal({
                         ) : null}
                         <SpecRow
                           label="Department"
-                          value={aisleLabel(current.department)}
+                          value={warehouseAisleLabel(current)}
                         />
                         <SpecRow
                           label="Availability"
