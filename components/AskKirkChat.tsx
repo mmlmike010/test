@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, type ReactNode } from "react";
 import {
   X,
   RefreshCw,
@@ -76,6 +76,26 @@ const suggestionChips = [
   "What can I cook for dinner with quinoa?",
 ];
 
+
+function KirklandHelpCard({
+  title,
+  children,
+}: {
+  title: string;
+  children: ReactNode;
+}) {
+  return (
+    <section className="overflow-hidden rounded-[3px] border border-[#c4c4c4] bg-white">
+      <div className="h-[3px] bg-gradient-to-r from-[#8c7318] via-[#f3e3a3] to-[#8c7318]" />
+      <div className="px-3.5 py-2.5">
+        <p className="text-[13px] font-bold text-[#1a1a1a]">{title}</p>
+        <div className="mt-1 text-[13px] leading-relaxed text-[#1a1a1a]">
+          {children}
+        </div>
+      </div>
+    </section>
+  );
+}
 
 function looksLikeInspireAsk(text: string) {
   const t = text.toLowerCase();
@@ -1025,10 +1045,10 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
               ) : null}
               {message.id === lastUserId ? (
                 <div className="border-t border-[#ececec] px-3 py-2">
-                  <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#666]">
+                  <p className="text-[13px] font-bold text-[#1a1a1a]">
                     Related Searches
                   </p>
-                  <div className="mt-1.5 grid grid-cols-2 gap-x-2.5 gap-y-1">
+                  <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-1">
                     {suggestionChips
                       .filter((chip) => chip !== message.content)
                       .map((chip) => (
@@ -1037,13 +1057,9 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                           type="button"
                           onClick={() => void sendMessage(chip)}
                           disabled={isLoading}
-                          className="flex items-start gap-1 text-left text-[11px] font-semibold leading-tight text-costco-blue hover:underline disabled:opacity-50"
+                          className="text-left text-[12px] font-bold leading-tight text-costco-blue hover:underline disabled:opacity-50"
                         >
-                          <Search
-                            className="mt-0.5 h-3 w-3 shrink-0 text-[#8a8a8a]"
-                            aria-hidden="true"
-                          />
-                          <span className="line-clamp-2">{chip}</span>
+                          {chip}
                         </button>
                       ))}
                   </div>
@@ -1051,41 +1067,35 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
               ) : null}
             </div>
           ) : (
-            <div className="bg-white border border-[#e8e8e8] rounded-[3px] px-3.5 py-2.5 text-[13px] leading-relaxed text-[#1a1a1a]">
-              <p className="text-[10px] font-bold tracking-[0.12em] text-costco-blue uppercase">
-                Kirkland Signature
-              </p>
-              <p className="mt-1 whitespace-pre-line">{message.content}</p>
+            <KirklandHelpCard title="Kirkland Signature shopping help">
+              <p className="whitespace-pre-line">{message.content}</p>
               {message.imageUrl && (
-                <div className="mt-2.5 overflow-hidden border border-[#e8e8e8] bg-white">
+                <div className="mt-2.5 overflow-hidden border border-[#c4c4c4] bg-white">
                   <button
                     type="button"
                     onClick={() => setLightboxUrl(message.imageUrl || null)}
-                    className="block w-full text-left group relative"
+                    className="group relative block w-full text-left"
                     title="Click to enlarge"
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={message.imageUrl}
                       alt="Recipe inspiration"
-                      className="w-full h-auto max-h-[320px] object-cover group-hover:opacity-95 transition-opacity"
+                      className="h-auto max-h-[320px] w-full object-cover group-hover:opacity-95 transition-opacity"
                     />
-                    <span className="absolute bottom-2 right-2 bg-black/60 text-white text-[10px] font-bold px-2 py-0.5">
+                    <span className="absolute bottom-2 right-2 bg-black/60 px-2 py-0.5 text-[10px] font-bold text-white">
                       Enlarge
                     </span>
                   </button>
-                  <p className="text-[10px] text-[#666] px-2.5 py-1.5 bg-[#fafafa] border-t border-[#eee] font-semibold tracking-wide uppercase">
+                  <p className="border-t border-[#eee] bg-[#fafafa] px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-wide text-[#666]">
                     Recipe inspiration · tap to enlarge
                   </p>
                 </div>
               )}
-            </div>
+            </KirklandHelpCard>
           )}
           {added.length > 0 ? (
-            <div>
-              <p className="mb-1.5 text-[10px] font-bold uppercase tracking-[0.08em] text-[#666]">
-                Added to cart
-              </p>
+            <KirklandHelpCard title="Items Added to Cart">
               <div className="space-y-1.5">
                 {added.map((product) => (
                   <ShopProductRow
@@ -1095,52 +1105,51 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                   />
                 ))}
               </div>
-            </div>
+            </KirklandHelpCard>
           ) : null}
           </div>
           );
         })}
         {isLoading && (
-          <div className="bg-white border border-[#e8e8e8] rounded-[3px] px-3.5 py-3">
-            <p className="text-[10px] font-bold tracking-[0.12em] text-costco-blue uppercase mb-2">
-              Kirkland Signature
-            </p>
-              <div className="flex gap-1.5 items-center">
-                <div className="w-1.5 h-1.5 bg-[#999] rounded-full animate-bounce" />
-                <div
-                  className="w-1.5 h-1.5 bg-[#999] rounded-full animate-bounce"
-                  style={{ animationDelay: "0.12s" }}
-                />
-                <div
-                  className="w-1.5 h-1.5 bg-[#999] rounded-full animate-bounce"
-                  style={{ animationDelay: "0.24s" }}
-                />
-              </div>
-              {pendingInspire && (
-                <div className="mt-2.5 flex items-center gap-2 border border-costco-blue/20 bg-[#eef5fb] px-2.5 py-2">
-                  <div className="relative flex h-7 w-7 items-center justify-center bg-costco-blue/10 overflow-hidden shrink-0">
-                    <Sparkles className="w-3.5 h-3.5 text-costco-blue animate-pulse" />
-                    <span className="pointer-events-none absolute inset-0 -translate-x-full animate-[shimmer_1.6s_infinite] bg-gradient-to-r from-transparent via-white/70 to-transparent" />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-[11px] font-bold text-costco-blue">
-                      Generating image…
-                    </p>
-                    <p className="text-[10px] text-[#666] truncate">
-                      Recipe inspiration
-                    </p>
-                  </div>
+          <KirklandHelpCard title="Kirkland Signature shopping help">
+            <div className="flex items-center gap-1.5">
+              <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-[#999]" />
+              <div
+                className="h-1.5 w-1.5 animate-bounce rounded-full bg-[#999]"
+                style={{ animationDelay: "0.12s" }}
+              />
+              <div
+                className="h-1.5 w-1.5 animate-bounce rounded-full bg-[#999]"
+                style={{ animationDelay: "0.24s" }}
+              />
+            </div>
+            {pendingInspire && (
+              <div className="mt-2.5 flex items-center gap-2 border border-costco-blue/20 bg-[#eef5fb] px-2.5 py-2">
+                <div className="relative flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden bg-costco-blue/10">
+                  <Sparkles className="h-3.5 w-3.5 animate-pulse text-costco-blue" />
+                  <span className="pointer-events-none absolute inset-0 -translate-x-full animate-[shimmer_1.6s_infinite] bg-gradient-to-r from-transparent via-white/70 to-transparent" />
                 </div>
-              )}
-          </div>
+                <div className="min-w-0">
+                  <p className="text-[11px] font-bold text-costco-blue">
+                    Generating image…
+                  </p>
+                  <p className="truncate text-[10px] text-[#666]">
+                    Recipe inspiration
+                  </p>
+                </div>
+              </div>
+            )}
+          </KirklandHelpCard>
         )}
         {error && (
-          <div className="bg-white border border-[#c4c4c4] border-l-[3px] border-l-costco-red rounded-[3px] px-3.5 py-2.5">
-            <p className="text-[10px] font-bold tracking-[0.12em] text-costco-red uppercase">
-              We&apos;re sorry
-            </p>
-            <p className="mt-1 text-[13px] text-[#1a1a1a]">{error}</p>
-          </div>
+          <section className="overflow-hidden rounded-[3px] border border-[#c4c4c4] bg-white">
+            <div className="border-l-[3px] border-l-costco-red px-3.5 py-2.5">
+              <p className="text-[13px] font-bold text-[#1a1a1a]">
+                We&apos;re sorry
+              </p>
+              <p className="mt-1 text-[13px] text-[#1a1a1a]">{error}</p>
+            </div>
+          </section>
         )}
         <div ref={messagesEndRef} />
       </div>
@@ -1236,23 +1245,19 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
         </div>
         {!hasUserAsk ? (
           <>
-            <p className="mt-2 text-[10px] font-bold tracking-[0.12em] text-[#666] uppercase">
+            <p className="mt-2 text-[13px] font-bold text-[#1a1a1a]">
               Popular Searches
             </p>
-            <div className="mt-1 grid grid-cols-2 gap-x-2.5 gap-y-1">
+            <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1">
               {suggestionChips.map((chip) => (
                 <button
                   key={chip}
                   type="button"
                   onClick={() => void sendMessage(chip)}
                   disabled={isLoading}
-                  className="flex items-start gap-1 text-left text-[11px] font-semibold leading-tight text-costco-blue hover:underline disabled:opacity-50"
+                  className="text-left text-[12px] font-bold leading-tight text-costco-blue hover:underline disabled:opacity-50"
                 >
-                  <Search
-                    className="mt-0.5 h-3 w-3 shrink-0 text-[#8a8a8a]"
-                    aria-hidden="true"
-                  />
-                  <span className="line-clamp-2">{chip}</span>
+                  {chip}
                 </button>
               ))}
             </div>
