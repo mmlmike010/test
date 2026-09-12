@@ -776,10 +776,6 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                     onOffers={showAllAisle}
                     onPick={browseWarehouseDepartment}
                   />
-                  <WarehouseShopDepartments
-                    selected={warehouseFacets.departments}
-                    onPick={browseWarehouseDepartment}
-                  />
                   {offerPreview.length > 0 ? (
                     <WarehouseAisleScroller
                       title="Limited-Time Offers"
@@ -788,6 +784,10 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                     />
                   ) : null}
                   <WarehouseHomepageSpotlights
+                    onPick={browseWarehouseDepartment}
+                  />
+                  <WarehouseShopDepartments
+                    selected={warehouseFacets.departments}
                     onPick={browseWarehouseDepartment}
                   />
                   {preview.length > 0 ? (

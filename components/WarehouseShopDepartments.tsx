@@ -1,7 +1,7 @@
 import { ChevronRight } from "lucide-react";
 import { WAREHOUSE_NAV_TILES } from "@/lib/ui/warehouseSearch";
 
-/** costco.com Shop by Department mosaic. Rectangular category cards, not a thumb strip. */
+/** costco.com Shop by Department mosaic. Six featured cards, not a 9-across thumb strip. */
 export default function WarehouseShopDepartments({
   selected,
   onPick,
@@ -25,7 +25,7 @@ export default function WarehouseShopDepartments({
         </button>
       </div>
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-        {WAREHOUSE_NAV_TILES.map((tile) => {
+        {WAREHOUSE_NAV_TILES.slice(0, 6).map((tile) => {
           const active = selected.includes(tile.label);
           return (
             <button
@@ -35,7 +35,7 @@ export default function WarehouseShopDepartments({
               className="bg-white text-left"
             >
               <span
-                className={`relative flex h-[280px] w-full items-center justify-center overflow-hidden border bg-[#eceef1] ${
+                className={`relative flex h-[220px] w-full items-center justify-center overflow-hidden border bg-[#eceef1] ${
                   active
                     ? "border-costco-blue ring-2 ring-costco-blue ring-offset-1"
                     : "border-[#d8d8d8] hover:border-costco-blue"

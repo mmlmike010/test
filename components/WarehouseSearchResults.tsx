@@ -11,6 +11,7 @@ import {
   warehouseRelatedAisle,
   warehouseSearchTitle,
 } from "@/lib/ui/merchOrder";
+import { instantSavingsText } from "@/lib/ui/instantSavings";
 import { productSize, warehouseItemNumber, warehousePackSrc } from "@/lib/ui/packSize";
 import CostcoLogo from "@/components/CostcoLogo";
 import WarehouseAisleScroller from "@/components/WarehouseAisleScroller";
@@ -68,6 +69,7 @@ export default function WarehouseSearchResults({
   const cartSubtotal = useCartStore((s) => s.getSubtotal());
   const openCart = useCartStore((s) => s.openCart);
   const setSheet = useSessionStore((s) => s.setSheet);
+  const inspect = useCatalogStore((s) => s.inspect);
   const hits = sortWarehouseItems(
     applyWarehouseFacets(unfilteredHits, warehouseFacets),
     warehouseSort
@@ -304,7 +306,17 @@ export default function WarehouseSearchResults({
       {cartAsk ? (
         <section className="overflow-hidden border border-[#c4c4c4] bg-white">
           <div className="border-b border-[#ececec] bg-[#f6f7f8] px-4 py-2 text-[12px] font-bold text-[#666]">
-            {cartCount} item{cartCount === 1 ? "" : "s"}
+            <p>
+              {cartCount} item{cartCount === 1 ? "" : "s"}
+            </p>
+            {cartItems.length ? (
+              <div className="mt-2 hidden grid-cols-[minmax(0,1fr)_88px_72px_80px] gap-2 sm:grid">
+                <span>Item</span>
+                <span className="text-right">Item Price</span>
+                <span className="text-center">Qty</span>
+                <span className="text-right">Total</span>
+              </div>
+            ) : null}
           </div>
           {cartItems.length === 0 ? (
             <div className="px-6 py-12 text-center">
@@ -327,35 +339,56 @@ export default function WarehouseSearchResults({
               {cartItems.map(({ product, quantity }) => (
                 <div
                   key={`cart-ask-${product.id}`}
-                  className="flex gap-3 border-b border-[#f0f0f0] px-4 py-3 last:border-b-0"
+                  className="border-b border-[#f0f0f0] px-4 py-3.5 last:border-b-0"
                 >
-                  <div className="relative h-[72px] w-[72px] shrink-0 overflow-hidden border border-[#eee] bg-white">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={warehousePackSrc(product)}
-                      alt=""
-                      className="absolute inset-0 h-full w-full object-contain p-1"
-                    />
+                  <div className="flex flex-wrap items-end justify-between gap-3 sm:grid sm:grid-cols-[minmax(0,1fr)_88px_72px_80px] sm:items-start sm:gap-2">
+                    <div className="flex w-full min-w-0 gap-3 sm:w-auto">
+                      <button
+                        type="button"
+                        onClick={() => inspect(product, "warehouse")}
+                        className="relative h-[96px] w-[96px] shrink-0 overflow-hidden border border-[#eee] bg-white"
+                        aria-label={`View ${product.brand} ${product.name}`}
+                      >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={warehousePackSrc(product)}
+                          alt=""
+                          className="absolute inset-0 h-full w-full object-contain p-1"
+                        />
+                      </button>
+                      <div className="min-w-0">
+                        <button
+                          type="button"
+                          onClick={() => inspect(product, "warehouse")}
+                          className="text-left text-[14px] font-bold leading-snug text-costco-blue line-clamp-2 hover:underline"
+                        >
+                          {product.brand} {product.name}
+                        </button>
+                        {productSize(product.id) ? (
+                          <p className="mt-0.5 text-[13px] text-[#72767E]">
+                            {productSize(product.id)}
+                          </p>
+                        ) : null}
+                        <p className="mt-0.5 text-[12px] text-[#72767E]">
+                          Item {warehouseItemNumber(product.id)}
+                        </p>
+                        {instantSavingsText(product.savings) ? (
+                          <p className="mt-1 text-[12px] font-semibold leading-snug text-[#188038]">
+                            {instantSavingsText(product.savings)}
+                          </p>
+                        ) : null}
+                      </div>
+                    </div>
+                    <p className="text-[15px] font-bold tabular-nums text-[#1a1a1a] sm:text-right">
+                      ${product.price.toFixed(2)}
+                    </p>
+                    <p className="text-[15px] font-bold tabular-nums text-[#1a1a1a] sm:text-center">
+                      {quantity}
+                    </p>
+                    <p className="text-[15px] font-bold tabular-nums text-[#1a1a1a] sm:text-right">
+                      ${(product.price * quantity).toFixed(2)}
+                    </p>
                   </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="line-clamp-2 text-[14px] font-bold leading-snug text-costco-blue">
-                      {product.brand} {product.name}
-                    </p>
-                    {productSize(product.id) ? (
-                      <p className="mt-0.5 text-[13px] text-[#72767E]">
-                        {productSize(product.id)}
-                      </p>
-                    ) : null}
-                    <p className="mt-0.5 text-[12px] text-[#72767E]">
-                      Item {warehouseItemNumber(product.id)}
-                    </p>
-                    <p className="mt-0.5 text-[13px] tabular-nums text-[#8a8a8a]">
-                      {quantity} × ${product.price.toFixed(2)}
-                    </p>
-                  </div>
-                  <p className="shrink-0 text-[15px] font-bold tabular-nums text-[#1a1a1a]">
-                    ${(product.price * quantity).toFixed(2)}
-                  </p>
                 </div>
               ))}
               <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3">
