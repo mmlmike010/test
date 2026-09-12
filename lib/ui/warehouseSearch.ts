@@ -52,18 +52,54 @@ export const WAREHOUSE_NAV = [
 export const WAREHOUSE_NAV_TILES: {
   label: (typeof WAREHOUSE_NAV)[number];
   image: string;
-  /** Eggs carton stays contained so the pack is not cropped. */
-  fit?: "contain" | "cover";
+  /** 16:10 fill crop for Shop by Department. Mega menu still uses `image`. */
+  mosaic: string;
 }[] = [
-  { label: "Kirkland Signature", image: "/products/banner-10.png?v=1", fit: "contain" },
-  { label: "Dairy & Eggs", image: "/products/banner-23.png?v=1", fit: "contain" },
-  { label: "Bakery", image: "/products/banner-15.png?v=1", fit: "cover" },
-  { label: "Coffee", image: "/products/banner-21.png?v=1", fit: "cover" },
-  { label: "Household", image: "/products/banner-19.png?v=1", fit: "cover" },
-  { label: "Baby", image: "/products/banner-14.png?v=1", fit: "cover" },
-  { label: "Clothing", image: "/products/banner-20.png?v=1", fit: "cover" },
-  { label: "Wine & spirits", image: "/products/banner-16.png?v=1", fit: "contain" },
-  { label: "Member savings", image: "/products/banner-2.png?v=1", fit: "cover" },
+  {
+    label: "Kirkland Signature",
+    image: "/products/banner-10.png?v=1",
+    mosaic: "/products/mosaic-10.png?v=1",
+  },
+  {
+    label: "Dairy & Eggs",
+    image: "/products/banner-23.png?v=1",
+    mosaic: "/products/mosaic-23.png?v=1",
+  },
+  {
+    label: "Bakery",
+    image: "/products/banner-15.png?v=1",
+    mosaic: "/products/mosaic-15.png?v=1",
+  },
+  {
+    label: "Coffee",
+    image: "/products/banner-21.png?v=1",
+    mosaic: "/products/mosaic-21.png?v=1",
+  },
+  {
+    label: "Household",
+    image: "/products/banner-19.png?v=1",
+    mosaic: "/products/mosaic-19.png?v=1",
+  },
+  {
+    label: "Baby",
+    image: "/products/banner-14.png?v=1",
+    mosaic: "/products/mosaic-14.png?v=1",
+  },
+  {
+    label: "Clothing",
+    image: "/products/banner-20.png?v=1",
+    mosaic: "/products/mosaic-20.png?v=1",
+  },
+  {
+    label: "Wine & spirits",
+    image: "/products/banner-16.png?v=1",
+    mosaic: "/products/mosaic-16.png?v=1",
+  },
+  {
+    label: "Member savings",
+    image: "/products/banner-2.png?v=1",
+    mosaic: "/products/mosaic-2.png?v=1",
+  },
 ];
 
 export function warehouseSelectionChips(facets: WarehouseFacets): {

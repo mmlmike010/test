@@ -38,7 +38,13 @@ export function warehouseItemNumber(id: string): string {
 /** Cropped pack shots for warehouse merch. Never written onto Product / Kirk. */
 const WAREHOUSE_BANNER_IDS = new Set([
   "2",
+  "3",
+  "4",
+  "5",
+  "8",
   "10",
+  "11",
+  "12",
   "14",
   "15",
   "16",

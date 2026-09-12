@@ -43,13 +43,9 @@ export default function WarehouseShopDepartments({
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={tile.image}
+                  src={tile.mosaic}
                   alt=""
-                  className={`h-full w-full ${
-                    tile.fit === "contain"
-                      ? "object-contain p-3"
-                      : "object-cover"
-                  }`}
+                  className="h-full w-full object-cover"
                 />
               </span>
               <span

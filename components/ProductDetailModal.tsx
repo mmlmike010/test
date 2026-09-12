@@ -205,45 +205,47 @@ export default function ProductDetailModal({
           >
             {warehouse ? (
               <div className="bg-white px-6 pt-2 pb-3">
-                <div className="relative w-fit max-w-full">
-                  <button
-                    type="button"
-                    onClick={() => setZoomed(true)}
-                    className="inline-block max-w-full"
-                    aria-label="Enlarge product image"
-                  >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={packSrc}
-                      alt={`${current.brand} ${current.name}`}
-                      className="block max-h-[480px] w-auto max-w-full object-contain"
-                    />
-                  </button>
-                  {isLimitedOffer(current) ? <LimitedTimeOfferBadge /> : null}
-                  <button
-                    type="button"
-                    onClick={() => setZoomed(true)}
-                    className="absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-[3px] bg-white shadow-[0_1px_4px_rgba(0,0,0,0.16)] hover:bg-[#f6f6f6]"
-                    aria-label="Zoom product image"
-                  >
-                    <ZoomIn className="h-4 w-4 text-[#333]" />
-                  </button>
-                </div>
-                <div className="mt-2 flex justify-start gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setZoomed(true)}
-                    className="relative h-14 w-14 overflow-hidden rounded-[3px] border-2 border-[#1a1a1a] bg-white"
-                    aria-label="Selected product photo"
-                    aria-current="true"
-                  >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={packSrc}
-                      alt=""
-                      className="absolute inset-0 h-full w-full object-contain p-1"
-                    />
-                  </button>
+                <div className="mx-auto w-fit max-w-full">
+                  <div className="relative">
+                    <button
+                      type="button"
+                      onClick={() => setZoomed(true)}
+                      className="inline-block max-w-full"
+                      aria-label="Enlarge product image"
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={packSrc}
+                        alt={`${current.brand} ${current.name}`}
+                        className="block max-h-[540px] w-auto max-w-full object-contain"
+                      />
+                    </button>
+                    {isLimitedOffer(current) ? <LimitedTimeOfferBadge /> : null}
+                    <button
+                      type="button"
+                      onClick={() => setZoomed(true)}
+                      className="absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-[3px] bg-white shadow-[0_1px_4px_rgba(0,0,0,0.16)] hover:bg-[#f6f6f6]"
+                      aria-label="Zoom product image"
+                    >
+                      <ZoomIn className="h-4 w-4 text-[#333]" />
+                    </button>
+                  </div>
+                  <div className="mt-2 flex justify-start gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setZoomed(true)}
+                      className="relative h-14 w-14 overflow-hidden rounded-[3px] border-2 border-[#1a1a1a] bg-white"
+                      aria-label="Selected product photo"
+                      aria-current="true"
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={packSrc}
+                        alt=""
+                        className="absolute inset-0 h-full w-full object-contain p-1"
+                      />
+                    </button>
+                  </div>
                 </div>
               </div>
             ) : (
