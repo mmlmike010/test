@@ -698,7 +698,7 @@ function CheckoutStep({
     <div className="rounded-[3px] border border-[#c4c4c4] bg-white px-4 py-3.5">
       <div className="flex items-start justify-between gap-3">
         <div className="flex min-w-0 gap-3">
-          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-[3px] bg-costco-blue text-[13px] font-bold text-white">
+          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-costco-blue text-[13px] font-bold text-white">
             {n}
           </span>
           <div className="min-w-0">
@@ -761,7 +761,7 @@ function CheckoutSheet() {
 
   return (
     <StoreSheet
-      title={orderPlaced && warehouse ? "Order Confirmation" : "Checkout"}
+      title={orderPlaced && warehouse ? "Thank You" : "Checkout"}
       onClose={() => {
         if (orderPlaced) clearOrder();
         setSheet(null);
@@ -795,10 +795,7 @@ function CheckoutSheet() {
             <div className="space-y-4 xl:grid xl:grid-cols-[minmax(0,1fr)_320px] xl:items-start xl:gap-5 xl:space-y-0">
               <div className="space-y-4">
                 <div className="rounded-[3px] border border-[#c4c4c4] bg-white px-5 py-5">
-                  <p className="text-[22px] font-extrabold text-costco-blue">
-                    Thank You
-                  </p>
-                  <p className="mt-1 text-[13px] text-[#555]">
+                  <p className="text-[13px] text-[#555]">
                     Your order has been received.
                   </p>
                   <p className="mt-3 text-[15px] font-bold text-[#1a1a1a]">

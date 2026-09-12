@@ -88,9 +88,9 @@ export default function StoreSheet({
                     <X className="h-4 w-4" />
                   </button>
                 </div>
-                <h2 className="mt-0.5 text-[22px] font-bold leading-snug text-[#1a1a1a]">
+                <h1 className="mt-0.5 text-[28px] font-bold leading-snug text-[#1a1a1a]">
                   {title}
-                </h2>
+                </h1>
                 <div className="mt-4">{children}</div>
               </div>
               <WarehouseFooter className="-mx-4 mt-8 -mb-4 lg:-mx-6" />

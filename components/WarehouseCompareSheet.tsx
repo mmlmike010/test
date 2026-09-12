@@ -56,9 +56,9 @@ export default function WarehouseCompareSheet({
               <X className="h-4 w-4" />
             </button>
           </div>
-          <h2 className="mt-0.5 text-[22px] font-bold leading-snug text-[#1a1a1a]">
+          <h1 className="mt-0.5 text-[28px] font-bold leading-snug text-[#1a1a1a]">
             Compare Products
-          </h2>
+          </h1>
           <div className="mt-4 min-w-0 overflow-x-auto">
           <table className="w-full min-w-[520px] border-collapse bg-white text-left text-[13px]">
             <thead>
