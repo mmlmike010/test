@@ -55,14 +55,14 @@ export const WAREHOUSE_NAV_TILES: {
   /** Eggs carton stays contained so the pack is not cropped. */
   fit?: "contain" | "cover";
 }[] = [
-  { label: "Kirkland Signature", image: "/products/banner-10.png?v=1", fit: "cover" },
+  { label: "Kirkland Signature", image: "/products/banner-10.png?v=1", fit: "contain" },
   { label: "Dairy & Eggs", image: "/products/banner-23.png?v=1", fit: "contain" },
   { label: "Bakery", image: "/products/banner-15.png?v=1", fit: "cover" },
   { label: "Coffee", image: "/products/banner-21.png?v=1", fit: "cover" },
   { label: "Household", image: "/products/banner-19.png?v=1", fit: "cover" },
   { label: "Baby", image: "/products/banner-14.png?v=1", fit: "cover" },
   { label: "Clothing", image: "/products/banner-20.png?v=1", fit: "cover" },
-  { label: "Wine & spirits", image: "/products/banner-16.png?v=1", fit: "cover" },
+  { label: "Wine & spirits", image: "/products/banner-16.png?v=1", fit: "contain" },
   { label: "Member savings", image: "/products/banner-2.png?v=1", fit: "cover" },
 ];
 

@@ -134,7 +134,7 @@ function MembershipSheet() {
     >
       {warehouse ? (
         <div className="grid gap-4 lg:grid-cols-2 lg:items-start">
-          <div className="max-w-[340px]">
+          <div className="flex max-w-[340px] items-center justify-center bg-[#f6f7f8] p-6">
             <GoldStarMembershipCard />
           </div>
           <div className="rounded-[3px] border border-[#c4c4c4] bg-white px-5 py-5 space-y-3">

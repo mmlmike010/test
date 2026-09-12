@@ -130,7 +130,7 @@ export default function WarehouseSearchResults({
             <div
               className={`mt-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 ${
                 kirkShopPage
-                  ? "-mx-4 border-y border-[#e5e5e5] bg-[#f6f7f8] px-4 py-2"
+                  ? "-mx-4 border-y border-[#e5e5e5] bg-[#eee] px-4 py-2"
                   : ""
               }`}
             >
