@@ -7,8 +7,10 @@ import { MobileAisles } from "@/components/DepartmentsSidebar";
 import ProductGrid from "@/components/ProductGrid";
 import AskKirkChat from "@/components/AskKirkChat";
 import CartDrawer from "@/components/CartDrawer";
+import ProductDetailModal from "@/components/ProductDetailModal";
 import WarehouseAddedModal from "@/components/WarehouseAddedModal";
 import { hydrateLists } from "@/lib/store/lists";
+import { useCatalogStore } from "@/lib/store/catalog";
 import { hydrateSession, useSessionStore } from "@/lib/store/session";
 import StoreSheets from "@/components/StoreSheets";
 
@@ -16,6 +18,8 @@ export default function Home() {
   const isKirkOpen = useSessionStore((s) => s.kirkOpen);
   const kirkShopPage = useSessionStore((s) => s.kirkShopPage);
   const setKirkOpen = useSessionStore((s) => s.setKirkOpen);
+  const inspecting = useCatalogStore((s) => s.inspecting);
+  const inspect = useCatalogStore((s) => s.inspect);
 
   useEffect(() => {
     hydrateLists();
@@ -59,6 +63,13 @@ export default function Home() {
 
       <CartDrawer />
       <WarehouseAddedModal />
+      {inspecting ? (
+        <ProductDetailModal
+          key={inspecting.id}
+          product={inspecting}
+          onClose={() => inspect(null)}
+        />
+      ) : null}
       <StoreSheets />
     </div>
   );

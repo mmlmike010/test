@@ -15,7 +15,6 @@ import ProductCard from "@/components/ProductCard";
 import WarehouseResultCard from "@/components/WarehouseResultCard";
 import WarehouseCompareSheet from "@/components/WarehouseCompareSheet";
 import WarehouseFilterRail from "@/components/WarehouseFilterRail";
-import ProductDetailModal from "@/components/ProductDetailModal";
 import CategoryScroller from "@/components/CategoryScroller";
 import InstacartMark from "@/components/InstacartMark";
 import CostcoLogo from "@/components/CostcoLogo";
@@ -148,7 +147,6 @@ export default function ProductGrid() {
   const setTag = useCatalogStore((s) => s.setTag);
   const setQuery = useCatalogStore((s) => s.setQuery);
   const clearFilters = useCatalogStore((s) => s.clearFilters);
-  const inspecting = useCatalogStore((s) => s.inspecting);
   const inspect = useCatalogStore((s) => s.inspect);
   const listTone = useCatalogStore((s) => s.listTone);
   const warehouseFacets = useCatalogStore((s) => s.warehouseFacets);
@@ -1085,13 +1083,6 @@ export default function ProductGrid() {
         />
       ) : null}
 
-      {inspecting && (
-        <ProductDetailModal
-          key={inspecting.id}
-          product={inspecting}
-          onClose={() => inspect(null)}
-        />
-      )}
     </div>
   );
 }
