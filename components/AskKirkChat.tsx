@@ -783,7 +783,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
         className={`min-h-0 flex-1 overflow-y-auto ${
           hasUserAsk
             ? kirkShopPage
-              ? "space-y-4 bg-[#e8eaed] px-4 py-4 lg:px-6"
+              ? "space-y-5 bg-white px-4 py-4 lg:px-6"
               : "space-y-3 bg-[#e8eaed] px-3.5 py-3.5"
             : "space-y-2 bg-[#f6f7f8] px-3.5 py-2.5"
         }`}
@@ -932,7 +932,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                 </div>
                 <h2
                   className={`mt-0.5 font-bold leading-snug text-[#1a1a1a] whitespace-pre-line ${
-                    kirkShopPage ? "text-[22px]" : "text-[16px]"
+                    kirkShopPage ? "text-[28px]" : "text-[16px]"
                   }`}
                 >
                   {kirkShopPage && unfilteredHits.length

@@ -2,11 +2,27 @@
 export default function CostcoLogo({
   compact = false,
   tone = "default",
+  wordmark = false,
 }: {
   compact?: boolean;
   tone?: "default" | "onRed";
+  /** Single COSTCO word — costco.com red utility bar. */
+  wordmark?: boolean;
 }) {
   const onRed = tone === "onRed";
+  if (wordmark) {
+    return (
+      <span
+        className={`inline-block font-black tracking-tight leading-none ${
+          onRed ? "text-white" : "text-[#E31837]"
+        } ${compact ? "text-[28px]" : "text-[32px]"}`}
+        style={{ fontFamily: "Arial Black, Arial, Helvetica, sans-serif" }}
+        aria-label="Costco"
+      >
+        COSTCO
+      </span>
+    );
+  }
   return (
     <span
       className="inline-flex flex-col items-center leading-none"

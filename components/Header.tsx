@@ -128,6 +128,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
               <CostcoLogo
                 compact
                 tone={warehouseSearch ? "onRed" : "default"}
+                wordmark={warehouseSearch}
               />
               {warehouseSearch ? null : (
                 <span className="hidden sm:flex flex-col pl-2.5 border-l border-[#d8d8d8]">
