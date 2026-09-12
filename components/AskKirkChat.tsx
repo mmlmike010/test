@@ -16,7 +16,7 @@ import KirkMark from "@/components/KirkMark";
 import ShopProductRow from "@/components/ShopProductRow";
 import WarehouseSearchResults from "@/components/WarehouseSearchResults";
 import CostcoLogo from "@/components/CostcoLogo";
-import GoldStarMembershipCard from "@/components/GoldStarMembershipCard";
+import WarehouseMembershipBanner from "@/components/WarehouseMembershipBanner";
 import WarehouseHomepageHero from "@/components/WarehouseHomepageHero";
 import WarehouseHomepageShortcuts from "@/components/WarehouseHomepageShortcuts";
 import WarehouseHomepageSpotlights from "@/components/WarehouseHomepageSpotlights";
@@ -803,30 +803,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                     </button>
                   </p>
                 )}
-                <section className="flex flex-wrap items-stretch overflow-hidden bg-costco-blue">
-                  <div className="min-w-[200px] flex-1 px-5 py-4">
-                    <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-white/80">
-                      Gold Star
-                    </p>
-                    <p className="mt-1 text-[22px] font-bold leading-tight text-white">
-                      Membership
-                    </p>
-                    <p className="mt-1 text-[13px] text-white/85">
-                      Member pricing on Kirkland Signature. Prices higher than
-                      warehouse.
-                    </p>
-                    <button
-                      type="button"
-                      onClick={showAllAisle}
-                      className="mt-3 inline-flex h-9 items-center bg-white px-3 text-[13px] font-bold text-costco-blue"
-                    >
-                      Shop member savings ›
-                    </button>
-                  </div>
-                  <div className="w-full max-w-[340px] bg-white p-3">
-                    <GoldStarMembershipCard />
-                  </div>
-                </section>
+                <WarehouseMembershipBanner onShop={showAllAisle} />
                 <section className="border-t border-[#ececec] pt-5">
                   <p className="text-[17px] font-bold text-[#1a1a1a]">
                     Kirkland Signature shopping help

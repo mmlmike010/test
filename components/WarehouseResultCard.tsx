@@ -159,7 +159,11 @@ export default function WarehouseResultCard({
   }
 
   return (
-    <div className="flex flex-col overflow-hidden bg-white">
+    <div
+      className={`flex flex-col overflow-hidden bg-white ${
+        featured ? "border border-[#ececec]" : ""
+      }`}
+    >
       <button
         type="button"
         onClick={openItem}

@@ -1,7 +1,7 @@
 import { ChevronRight } from "lucide-react";
 import { WAREHOUSE_NAV_TILES } from "@/lib/ui/warehouseSearch";
 
-/** costco.com Shop by Department grid — rectangular tiles, no gold foil. */
+/** costco.com Shop by Department mosaic. Rectangular category cards, not a thumb strip. */
 export default function WarehouseShopDepartments({
   selected,
   onPick,
@@ -24,7 +24,7 @@ export default function WarehouseShopDepartments({
           <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
         </button>
       </div>
-      <div className="grid grid-cols-3 gap-x-4 gap-y-5 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-9">
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
         {WAREHOUSE_NAV_TILES.map((tile) => {
           const active = selected.includes(tile.label);
           return (
@@ -32,10 +32,10 @@ export default function WarehouseShopDepartments({
               key={tile.label}
               type="button"
               onClick={() => onPick(active ? null : tile.label)}
-              className="bg-white text-center"
+              className="bg-white text-left"
             >
               <span
-                className={`relative mx-auto flex aspect-square w-full items-center justify-center overflow-hidden border bg-white ${
+                className={`relative flex h-[220px] w-full items-center justify-center overflow-hidden border bg-white ${
                   active
                     ? "border-costco-blue ring-2 ring-costco-blue ring-offset-1"
                     : "border-[#e5e5e5] hover:border-costco-blue"
@@ -45,11 +45,11 @@ export default function WarehouseShopDepartments({
                 <img
                   src={tile.image}
                   alt=""
-                  className="absolute inset-0 h-full w-full object-contain p-3"
+                  className="h-full w-full object-contain p-6"
                 />
               </span>
               <span
-                className={`mt-2 block text-[13px] font-bold leading-tight text-costco-blue ${
+                className={`mt-2 block text-[14px] font-bold leading-tight text-costco-blue ${
                   active ? "underline" : "hover:underline"
                 }`}
               >
