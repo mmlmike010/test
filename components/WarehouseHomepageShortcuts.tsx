@@ -1,5 +1,3 @@
-import { WAREHOUSE_NAV_TILES } from "@/lib/ui/warehouseSearch";
-
 const SHORTCUTS: {
   label: string;
   image: string;
@@ -7,44 +5,42 @@ const SHORTCUTS: {
 }[] = [
   {
     label: "What's New",
-    image: "/products/2.png?v=2",
+    image: "/products/banner-2.png?v=1",
     department: null,
   },
   {
     label: "Limited-Time Offers",
-    image: "/products/15.png?v=2",
+    image: "/products/banner-15.png?v=1",
     department: null,
   },
   {
     label: "Kirkland Signature",
-    image: "/products/10.png",
+    image: "/products/banner-10.png?v=1",
     department: "Kirkland Signature",
   },
   {
     label: "Grocery",
-    image: "/products/23.png",
+    image: "/products/banner-23.png?v=1",
     department: "Dairy & Eggs",
   },
   {
     label: "Household",
-    image: "/products/19.png?v=3",
+    image: "/products/banner-19.png?v=1",
     department: "Household",
   },
   {
     label: "Baby",
-    image: "/products/14.png",
+    image: "/products/banner-14.png?v=1",
     department: "Baby",
   },
   {
     label: "Bakery",
-    image: "/products/15.png?v=2",
+    image: "/products/banner-15.png?v=1",
     department: "Bakery",
   },
   {
     label: "Wine & spirits",
-    image:
-      WAREHOUSE_NAV_TILES.find((tile) => tile.label === "Wine & spirits")
-        ?.image ?? "/products/16.png",
+    image: "/products/banner-16.png?v=1",
     department: "Wine & spirits",
   },
 ];
@@ -67,14 +63,14 @@ export default function WarehouseHomepageShortcuts({
             onClick={() =>
               item.department ? onPick(item.department) : onOffers()
             }
-            className="w-[104px] shrink-0 bg-white text-center"
+            className="w-[112px] shrink-0 bg-white text-center"
           >
-            <span className="mx-auto flex h-[88px] w-[88px] items-center justify-center overflow-hidden rounded-full bg-[#f6f7f8] hover:ring-2 hover:ring-costco-blue">
+            <span className="mx-auto flex h-[96px] w-[96px] items-center justify-center overflow-hidden rounded-full bg-[#f6f7f8] hover:ring-2 hover:ring-costco-blue">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={item.image}
                 alt=""
-                className="h-[68px] w-[68px] object-contain"
+                className="h-[82px] w-[82px] object-contain"
               />
             </span>
             <span className="mt-1.5 block text-[12px] font-bold leading-tight text-costco-blue hover:underline">

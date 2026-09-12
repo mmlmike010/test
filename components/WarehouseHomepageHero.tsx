@@ -5,30 +5,30 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const SLIDES = [
   {
-    src: "/products/24.png",
+    src: "/products/banner-24.png?v=1",
     kicker: "Limited-Time Offers",
     title: "Member Only Savings",
     panel: "bg-costco-red",
     cta: "text-costco-red",
-    zoom: "scale-[2.15] group-hover:scale-[2.25]",
+    zoom: "scale-[1.14] group-hover:scale-[1.2]",
     action: "offers" as const,
   },
   {
-    src: "/products/10.png",
+    src: "/products/banner-10.png?v=1",
     kicker: "Kirkland Signature",
     title: "Member favorites",
     panel: "bg-costco-blue",
     cta: "text-costco-blue",
-    zoom: "scale-[1.7] group-hover:scale-[1.8]",
+    zoom: "scale-[1.06] group-hover:scale-[1.12]",
     action: "kirkland" as const,
   },
   {
-    src: "/products/23.png",
+    src: "/products/banner-23.png?v=1",
     kicker: "Grocery",
     title: "Dairy & Eggs",
     panel: "bg-[#1a1a1a]",
     cta: "text-[#1a1a1a]",
-    zoom: "scale-[1.9] group-hover:scale-[2]",
+    zoom: "scale-[1.22] group-hover:scale-[1.28]",
     action: "dairy" as const,
   },
 ];
@@ -65,7 +65,7 @@ export default function WarehouseHomepageHero({
         <button
           type="button"
           onClick={shop}
-          className="group relative flex h-[400px] w-full overflow-hidden text-left"
+          className="group relative flex h-[420px] w-full overflow-hidden text-left"
         >
           <span
             className={`relative z-10 flex w-[48%] flex-col justify-center py-8 pl-20 pr-8 lg:pl-24 ${slide.panel}`}
@@ -87,7 +87,7 @@ export default function WarehouseHomepageHero({
             <img
               src={slide.src}
               alt=""
-              className={`h-full w-full object-contain p-3 transition-transform duration-300 ${slide.zoom}`}
+              className={`h-full w-full object-contain px-6 py-4 transition-transform duration-300 ${slide.zoom}`}
             />
           </span>
         </button>

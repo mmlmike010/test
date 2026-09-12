@@ -64,10 +64,10 @@ export default function WarehouseShopDepartments({
                 key={tile.label}
                 type="button"
                 onClick={() => onPick(active ? null : tile.label)}
-                className="w-[136px] shrink-0 bg-white text-center"
+                className="w-[156px] shrink-0 bg-white text-center"
               >
                 <span
-                  className={`relative mx-auto flex h-[120px] w-full items-center justify-center overflow-hidden border bg-[#f6f7f8] ${
+                  className={`relative mx-auto flex h-[140px] w-full items-center justify-center overflow-hidden border bg-white ${
                     active
                       ? "border-costco-blue ring-2 ring-costco-blue ring-offset-1"
                       : "border-[#e5e5e5] hover:border-costco-blue"
@@ -77,7 +77,7 @@ export default function WarehouseShopDepartments({
                   <img
                     src={tile.image}
                     alt=""
-                    className="absolute inset-0 h-full w-full object-contain p-2"
+                    className="absolute inset-0 h-full w-full object-contain p-3"
                   />
                 </span>
                 <span

@@ -32,7 +32,7 @@ import { useCatalogStore } from "@/lib/store/catalog";
 import { useKirkAskStore } from "@/lib/store/kirkAsk";
 import {
   FLYER_DEAL_IDS,
-  hideComposedLeftovers,
+  hideWarehouseLeftovers,
   kirklandWarehousePreview,
   kirkQueryPreview,
   storefrontQueryForKirk,
@@ -724,7 +724,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
               kirklandWarehousePreview(products, 24),
               warehouseFacets
             ).slice(0, 8);
-            const offerPreview = hideComposedLeftovers(
+            const offerPreview = hideWarehouseLeftovers(
               FLYER_DEAL_IDS.map((id) =>
                 products.find((product) => product.id === id)
               ).filter((product): product is (typeof products)[number] =>

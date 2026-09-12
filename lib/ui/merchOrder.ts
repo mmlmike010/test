@@ -4,6 +4,9 @@ import { warehouseAisleLabel } from "@/lib/ui/aisleLabels";
 /** Composed leftover tiles. UI merch only — never sent to Kirk. */
 export const COMPOSED_IDS = new Set(["1", "6", "7", "9", "13", "17"]);
 
+/** Official leftover electronics. Hidden on warehouse merch only — Same-Day still shows them. */
+export const WAREHOUSE_HIDE_IDS = new Set(["18", "22"]);
+
 /** Official packs printed on the composed circular. UI merch only. */
 export const FLYER_DEAL_IDS = [
   "24",
@@ -33,12 +36,23 @@ export function hideComposedLeftovers(
   return items.filter((p) => !COMPOSED_IDS.has(p.id) || keep.has(p.id));
 }
 
+/** Warehouse grids hide leftover cameras/computers. UI only — Kirk catalog unchanged. */
+export function hideWarehouseLeftovers(
+  items: Product[],
+  allow: Iterable<string> = []
+): Product[] {
+  const keep = new Set(allow);
+  return hideComposedLeftovers(items, allow).filter(
+    (product) => keep.has(product.id) || !WAREHOUSE_HIDE_IDS.has(product.id)
+  );
+}
+
 /** Idle Kirk rail merch. UI only — never sent to Kirk. */
 export function kirklandWarehousePreview(
   items: Product[],
   n = 4
 ): Product[] {
-  return hideComposedLeftovers(
+  return hideWarehouseLeftovers(
     officialPacksFirst(
       items.filter((p) => p.brand === "Kirkland Signature")
     )
@@ -117,7 +131,7 @@ export function kirkQueryPreview(
       return left - right;
     });
 
-  return hideComposedLeftovers(scored.map((row) => row.p)).slice(0, n);
+  return hideWarehouseLeftovers(scored.map((row) => row.p)).slice(0, n);
 }
 
 /** Token Same-Day `filterProducts({ q })` can use — not the full ask sentence. */
@@ -144,6 +158,7 @@ export function storefrontQueryForKirk(query: string, hits: Product[]): string {
 export function warehouseSearchTitle(query: string, hits: Product[]): string {
   const token = storefrontQueryForKirk(query, hits);
   if (!token) return query;
+  if (token.toLowerCase() === "kirkland") return "Kirkland Signature";
   return token.replace(/\b[a-z]/g, (ch) => ch.toUpperCase());
 }
 
@@ -155,7 +170,7 @@ export function warehouseBrowsePreview(
 ): Product[] {
   const token = query.trim();
   if (departmentCount > 0 || !token) {
-    return hideComposedLeftovers(officialPacksFirst(items));
+    return hideWarehouseLeftovers(officialPacksFirst(items));
   }
   return kirkQueryPreview(items, token);
 }
@@ -236,7 +251,7 @@ export function warehouseRelatedAisle(
     ...scored.map((product) => product.id),
   ]);
   const pad = officialPacksFirst(
-    hideComposedLeftovers(catalog).filter((product) => !have.has(product.id))
+    hideWarehouseLeftovers(catalog).filter((product) => !have.has(product.id))
   ).slice(0, n - scored.length);
   return officialPacksFirst([...scored, ...pad]);
 }
@@ -276,7 +291,7 @@ export function relatedSearchItems(
     "kirkland",
     "again",
   ]);
-  return hideComposedLeftovers(catalog)
+  return (warehouse ? hideWarehouseLeftovers(catalog) : hideComposedLeftovers(catalog))
     .filter((product) => !hitIds.has(product.id))
     .map((product) => {
       let score = 0;

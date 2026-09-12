@@ -7,30 +7,30 @@ export default function WarehouseHomepageSpotlights({
   return (
     <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
       <SpotlightTile
-        src="/products/23.png"
+        src="/products/banner-23.png?v=1"
         kicker="Grocery"
         title="Dairy & Eggs"
         panel="bg-costco-blue"
         cta="text-costco-blue"
-        zoom="scale-[1.7] group-hover:scale-[1.8]"
+        zoom="scale-[1.2] group-hover:scale-[1.28]"
         onClick={() => onPick("Dairy & Eggs")}
       />
       <SpotlightTile
-        src="/products/19.png?v=3"
+        src="/products/banner-19.png?v=1"
         kicker="Household"
         title="Laundry & more"
         panel="bg-costco-red"
         cta="text-costco-red"
-        zoom="scale-[1.55] group-hover:scale-[1.65]"
+        zoom="scale-[1.08] group-hover:scale-[1.14]"
         onClick={() => onPick("Household")}
       />
       <SpotlightTile
-        src="/products/15.png?v=2"
+        src="/products/banner-15.png?v=1"
         kicker="Bakery"
         title="Fresh from the case"
         panel="bg-[#1a1a1a]"
         cta="text-[#1a1a1a]"
-        zoom="scale-[1.65] group-hover:scale-[1.75]"
+        zoom="scale-[1.18] group-hover:scale-[1.24]"
         onClick={() => onPick("Bakery")}
       />
     </div>

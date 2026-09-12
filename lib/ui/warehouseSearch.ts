@@ -53,15 +53,15 @@ export const WAREHOUSE_NAV_TILES: {
   label: (typeof WAREHOUSE_NAV)[number];
   image: string;
 }[] = [
-  { label: "Kirkland Signature", image: "/products/10.png" },
-  { label: "Dairy & Eggs", image: "/products/23.png" },
-  { label: "Bakery", image: "/products/15.png?v=2" },
-  { label: "Coffee", image: "/products/21.png" },
-  { label: "Household", image: "/products/19.png?v=3" },
-  { label: "Baby", image: "/products/14.png" },
-  { label: "Clothing", image: "/products/20.png" },
-  { label: "Wine & spirits", image: "/products/16.png" },
-  { label: "Member savings", image: "/products/2.png?v=2" },
+  { label: "Kirkland Signature", image: "/products/banner-10.png?v=1" },
+  { label: "Dairy & Eggs", image: "/products/banner-23.png?v=1" },
+  { label: "Bakery", image: "/products/banner-15.png?v=1" },
+  { label: "Coffee", image: "/products/banner-21.png?v=1" },
+  { label: "Household", image: "/products/banner-19.png?v=1" },
+  { label: "Baby", image: "/products/banner-14.png?v=1" },
+  { label: "Clothing", image: "/products/banner-20.png?v=1" },
+  { label: "Wine & spirits", image: "/products/banner-16.png?v=1" },
+  { label: "Member savings", image: "/products/banner-2.png?v=1" },
 ];
 
 export function warehouseSelectionChips(facets: WarehouseFacets): {
