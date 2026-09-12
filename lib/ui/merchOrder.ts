@@ -147,6 +147,30 @@ export function warehouseSearchTitle(query: string, hits: Product[]): string {
   return token.replace(/\b[a-z]/g, (ch) => ch.toUpperCase());
 }
 
+/** Homepage Shop Now / department listing. UI only — never sent to Kirk. */
+export function warehouseBrowsePreview(
+  items: Product[],
+  query: string,
+  departmentCount: number
+): Product[] {
+  const token = query.trim();
+  if (departmentCount > 0 || !token) {
+    return hideComposedLeftovers(officialPacksFirst(items));
+  }
+  return kirkQueryPreview(items, token);
+}
+
+/** costco.com category / search H1 for homepage browse. UI only. */
+export function warehouseBrowseTitle(
+  query: string,
+  departments: string[],
+  hits: Product[]
+): string {
+  if (departments.length === 1) return departments[0];
+  if (query.trim()) return warehouseSearchTitle(query, hits);
+  return "Search Results";
+}
+
 const WEAK_RELATED_SEARCH = new Set([
   "what's new",
   "featured",

@@ -491,6 +491,18 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
                             }
                           : EMPTY_WAREHOUSE_FACETS
                       );
+                      if (kirkOpen) {
+                        const catalog = useCatalogStore.getState();
+                        useCatalogStore.setState({
+                          listTone: "warehouse",
+                          q: label ? "" : catalog.q.trim() || "kirkland",
+                          department: null,
+                          tag: null,
+                          openList: null,
+                          openRecipe: null,
+                        });
+                        useSessionStore.getState().setKirkShopPage(true);
+                      }
                       setShopOpen(false);
                     }}
                   />
@@ -508,12 +520,26 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
                       type="button"
                       aria-current={active ? "page" : undefined}
                       className={tabClass(active)}
-                      onClick={() =>
+                      onClick={() => {
                         setWarehouseFacets({
                           ...EMPTY_WAREHOUSE_FACETS,
                           departments: active ? [] : [label],
-                        })
-                      }
+                        });
+                        if (kirkOpen) {
+                          useCatalogStore.setState({
+                            listTone: "warehouse",
+                            q: active
+                              ? useCatalogStore.getState().q.trim() ||
+                                "kirkland"
+                              : "",
+                            department: null,
+                            tag: null,
+                            openList: null,
+                            openRecipe: null,
+                          });
+                          useSessionStore.getState().setKirkShopPage(true);
+                        }
+                      }}
                     >
                       {label}
                     </button>
