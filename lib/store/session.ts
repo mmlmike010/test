@@ -266,13 +266,12 @@ export function formatAddress(address: DeliveryAddress): string {
 /** Sit below lockup + search + Shop/Flyers/Lists/Meals so titles are not under the sticky header. */
 export const HEADER_LOCKUP_OFFSET = "top-[156px]";
 
-/** Leave the Ask Kirk rail uncovered unless Kirk is the Costco shop page. */
-export function kirkDrawerOffset(open: boolean, shopPage = false) {
-  if (!open || shopPage) return "";
-  return "lg:right-[380px] xl:right-[420px]";
+/** Kirk is the full Costco page when open — overlays are full width. */
+export function kirkDrawerOffset(_open?: boolean, _shopPage = false) {
+  return "";
 }
 
-/** Storefront overlay: below the header, beside the idle rail or full-width on shop page. */
+/** Storefront overlay: below the sticky header, full width. */
 export function storefrontOverlayClass(open: boolean, shopPage = false) {
   return `inset-x-0 bottom-0 ${HEADER_LOCKUP_OFFSET} ${kirkDrawerOffset(open, shopPage)}`;
 }

@@ -41,6 +41,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
   const setWarehouseFacets = useCatalogStore((s) => s.setWarehouseFacets);
   const warehouseDepts = warehouseFacets?.departments ?? [];
   const kirkShopPage = useSessionStore((s) => s.kirkShopPage);
+  const kirkOpen = useSessionStore((s) => s.kirkOpen);
   const kirkAsk = useKirkAskStore((s) => s.ask);
   const kirkSpeak = useKirkAskStore((s) => s.speak);
   const kirkSpeaking = useKirkAskStore((s) => s.speaking);
@@ -48,7 +49,8 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
   const kirkTranscribing = useKirkAskStore((s) => s.transcribing);
   const kirkLoading = useKirkAskStore((s) => s.loading);
   const warehouseSearch = listTone === "warehouse" && Boolean(q.trim());
-  const chromeTone = warehouseSearch ? "warehouse" : "sameday";
+  const warehouseChrome = kirkOpen || warehouseSearch;
+  const chromeTone = warehouseChrome ? "warehouse" : "sameday";
   const onRecipes = tag === "recipes";
   const onFlyers = tag === "flyers";
   const onLists = tag === "lists";
@@ -82,7 +84,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const shopRef = useRef<HTMLDivElement>(null);
   const [shopOpen, setShopOpen] = useState(false);
-  if (!warehouseSearch && shopOpen) {
+  if (!warehouseChrome && shopOpen) {
     setShopOpen(false);
   }
 
@@ -111,7 +113,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
     <header className="bg-white border-b border-[#e5e5e5] sticky top-0 z-[75] shrink-0">
       <div
         className={
-          warehouseSearch ? "bg-costco-red" : "border-b border-[#ececec]"
+          warehouseChrome ? "bg-costco-red" : "border-b border-[#ececec]"
         }
       >
         <div className="max-w-[1800px] mx-auto px-3 sm:px-4 h-[52px] flex items-center justify-between gap-3">
@@ -127,10 +129,10 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
             >
               <CostcoLogo
                 compact
-                tone={warehouseSearch ? "onRed" : "default"}
-                wordmark={warehouseSearch}
+                tone={warehouseChrome ? "onRed" : "default"}
+                wordmark={warehouseChrome}
               />
-              {warehouseSearch ? null : (
+              {warehouseChrome ? null : (
                 <span className="hidden sm:flex flex-col pl-2.5 border-l border-[#d8d8d8]">
                   <span className="text-[15px] font-bold text-costco-blue leading-none">
                     Same-Day
@@ -144,7 +146,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
             </button>
           </div>
           <div className="flex items-center gap-3 shrink-0">
-            {warehouseSearch ? (
+            {warehouseChrome ? (
               <>
                 {membershipAdded ? (
                   <button
@@ -238,13 +240,13 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
         <div className="flex items-center gap-2.5">
           <form
             className={
-              warehouseSearch
+              warehouseChrome
                 ? "flex h-11 min-w-0 flex-1"
                 : "relative flex-1 min-w-0"
             }
             onSubmit={(e) => {
               e.preventDefault();
-              if (kirkShopPage) {
+              if (kirkOpen) {
                 const next = q.trim();
                 if (next) kirkAsk?.(next);
                 return;
@@ -252,7 +254,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
               void search();
             }}
           >
-            {warehouseSearch ? (
+            {warehouseChrome ? (
               <label className="relative shrink-0">
                 <span className="sr-only">Department</span>
                 <select
@@ -288,13 +290,13 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
             ) : (
               <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8a8a8a] w-[18px] h-[18px]" />
             )}
-            <div className={warehouseSearch ? "relative min-w-0 flex-1" : ""}>
+            <div className={warehouseChrome ? "relative min-w-0 flex-1" : ""}>
               <input
                 type="search"
                 value={q}
                 onChange={(e) => {
                   const next = e.target.value;
-                  if (kirkShopPage) {
+                  if (kirkOpen) {
                     setQuery(next);
                     return;
                   }
@@ -306,27 +308,27 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
                   setListTone("sameday");
                 }}
                 placeholder={
-                  kirkShopPage
+                  kirkOpen
                     ? kirkTranscribing
                       ? "Transcribing…"
                       : kirkRecording
                         ? "Listening…"
                         : "Search Costco"
-                    : warehouseSearch
+                    : warehouseChrome
                       ? "Search Costco"
                       : "Search products"
                 }
                 disabled={
-                  kirkShopPage &&
+                  kirkOpen &&
                   (kirkLoading || kirkRecording || kirkTranscribing)
                 }
                 className={
-                  warehouseSearch
+                  warehouseChrome
                     ? "h-11 w-full border border-[#c4c4c4] bg-white pl-3 pr-10 text-[15px] text-[#222] placeholder:text-[#8a8a8a] focus:border-costco-blue focus:outline-none focus:ring-2 focus:ring-costco-blue/15"
                     : "w-full h-11 pl-11 pr-10 bg-[#f6f6f6] border border-[#d8d8d8] rounded-full text-[15px] text-[#222] placeholder:text-[#8a8a8a] focus:outline-none focus:bg-white focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15"
                 }
               />
-              {kirkShopPage ? (
+              {kirkOpen ? (
                 <button
                   type="button"
                   onClick={() => kirkSpeak?.()}
@@ -362,13 +364,13 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
                   type="button"
                   aria-label="Clear search"
                   className={`absolute top-1/2 -translate-y-1/2 p-1 hover:bg-gray-100 ${
-                    warehouseSearch
+                    warehouseChrome
                       ? "right-2 rounded-[3px]"
                       : "right-3 rounded-full"
                   }`}
                   onClick={() => {
                     setQuery("");
-                    setListTone("sameday");
+                    if (!kirkOpen) setListTone("sameday");
                     void search();
                   }}
                 >
@@ -376,11 +378,11 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
                 </button>
               ) : null}
             </div>
-            {warehouseSearch ? (
+            {warehouseChrome ? (
               <button
                 type="submit"
                 disabled={
-                  kirkShopPage && (!q.trim() || kirkLoading || kirkTranscribing)
+                  kirkOpen && (!q.trim() || kirkLoading || kirkTranscribing)
                 }
                 className="h-11 shrink-0 rounded-r-[3px] bg-costco-red px-4 text-[14px] font-bold text-white hover:bg-costco-red-hover disabled:cursor-not-allowed disabled:opacity-50"
               >
@@ -393,31 +395,31 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
             type="button"
             onClick={onAskKirkClick}
             className={`hidden sm:inline-flex items-center gap-1.5 h-10 px-3 font-bold whitespace-nowrap ${
-              warehouseSearch
+              warehouseChrome
                 ? "rounded-[3px] bg-costco-red text-white hover:bg-costco-red-hover"
                 : "rounded-full border-2 border-costco-red bg-white text-costco-red hover:bg-[#fff5f6]"
             }`}
           >
-            <KirkMark size={22} tone={warehouseSearch ? "onRed" : "default"} />
+            <KirkMark size={22} tone={warehouseChrome ? "onRed" : "default"} />
             <span className="text-[13px]">Ask Kirk</span>
           </button>
           <button
             type="button"
             onClick={onAskKirkClick}
             className={`sm:hidden h-10 w-10 flex items-center justify-center ${
-              warehouseSearch
+              warehouseChrome
                 ? "rounded-[3px] bg-costco-red"
                 : "rounded-full border-2 border-costco-red"
             }`}
             aria-label="Ask Kirk"
           >
-            <KirkMark size={22} tone={warehouseSearch ? "onRed" : "default"} />
+            <KirkMark size={22} tone={warehouseChrome ? "onRed" : "default"} />
           </button>
 
           <button
             type="button"
             className={`hidden lg:flex text-left items-center gap-1.5 px-1.5 py-0.5 hover:bg-[#f6f6f6] ${
-              warehouseSearch ? "rounded-[3px]" : "rounded-md"
+              warehouseChrome ? "rounded-[3px]" : "rounded-md"
             }`}
             onClick={() => setSheet("delivery", chromeTone)}
           >
@@ -439,7 +441,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
             onClick={() => openCart(chromeTone)}
             aria-label={`View Cart. Items in cart: ${totalItems}`}
             className={`relative inline-flex items-center gap-1.5 h-10 px-3 border border-[#c4c4c4] hover:bg-[#f6f6f6] bg-white ${
-              warehouseSearch ? "rounded-[3px]" : "rounded-full"
+              warehouseChrome ? "rounded-[3px]" : "rounded-full"
             }`}
           >
             <ShoppingCart className="w-5 h-5 text-[#333]" />
@@ -448,7 +450,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
             </span>
             <span
               className={`absolute -top-1.5 -right-1 min-w-[20px] h-[20px] px-1 text-white text-[11px] font-bold flex items-center justify-center ${
-                warehouseSearch
+                warehouseChrome
                   ? "rounded-[3px] bg-costco-red"
                   : "rounded-full bg-[#0AAD0A]"
               }`}
@@ -461,7 +463,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
       </div>
 
       <div className="bg-white border-b border-[#ececec]">
-        {warehouseSearch ? (
+        {warehouseChrome ? (
           <div className="relative max-w-[1800px] mx-auto px-3 sm:px-4">
             <div className="flex h-[40px] items-center gap-5 text-[14px]">
               <div ref={shopRef} className="relative h-full shrink-0">

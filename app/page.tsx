@@ -16,7 +16,6 @@ import StoreSheets from "@/components/StoreSheets";
 
 export default function Home() {
   const isKirkOpen = useSessionStore((s) => s.kirkOpen);
-  const kirkShopPage = useSessionStore((s) => s.kirkShopPage);
   const setKirkOpen = useSessionStore((s) => s.setKirkOpen);
   const inspecting = useCatalogStore((s) => s.inspecting);
   const inspect = useCatalogStore((s) => s.inspect);
@@ -33,7 +32,7 @@ export default function Home() {
       <div className="flex flex-1 min-h-0">
         <div
           className={
-            kirkShopPage && isKirkOpen
+            isKirkOpen
               ? "hidden"
               : "flex min-w-0 flex-1 flex-col"
           }

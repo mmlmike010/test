@@ -97,7 +97,6 @@ export default function ProductDetailModal({
   const scrollerRef = useRef<HTMLDivElement>(null);
   const kirkOpen = useSessionStore((s) => s.kirkOpen);
   const overlayClass = useStorefrontOverlayClass(kirkOpen);
-  const kirkShopPage = useSessionStore((s) => s.kirkShopPage);
   const inspectTone = useCatalogStore((s) => s.inspectTone);
   const warehouse = inspectTone === "warehouse";
   const setQuery = useCatalogStore((s) => s.setQuery);
@@ -199,20 +198,12 @@ export default function ProductDetailModal({
               </span>
             </nav>
           ) : null}
+          <div className="lg:grid lg:grid-cols-2 lg:items-start">
           <div
             className={
-              kirkOpen && !kirkShopPage
-                ? "xl:grid xl:grid-cols-2 xl:items-start"
-                : "lg:grid lg:grid-cols-2 lg:items-start"
-            }
-          >
-          <div
-            className={
-              warehouse && kirkShopPage
+              warehouse
                 ? "bg-white lg:sticky lg:top-0 lg:border-r lg:border-[#eee]"
-                : kirkOpen && !kirkShopPage
-                  ? "xl:border-r xl:border-[#eee]"
-                  : "lg:border-r lg:border-[#eee]"
+                : "lg:border-r lg:border-[#eee]"
             }
           >
             <div
@@ -261,7 +252,7 @@ export default function ProductDetailModal({
             {warehouse ? null : (
             <div
               className={`flex justify-start gap-2 border-b border-[#eee] bg-white px-4 py-3 ${
-                  kirkOpen && !kirkShopPage ? "xl:border-b-0" : "lg:border-b-0"
+                  "lg:border-b-0"
               }`}
             >
               <button

@@ -4,7 +4,6 @@ import { useState, useRef, useEffect, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import {
   X,
-  RefreshCw,
   Mic,
   ShoppingCart,
   Square,
@@ -20,7 +19,6 @@ import KirkMark from "@/components/KirkMark";
 import ShopProductRow from "@/components/ShopProductRow";
 import WarehouseResultCard from "@/components/WarehouseResultCard";
 import CostcoLogo from "@/components/CostcoLogo";
-import GoldStarMark from "@/components/GoldStarMark";
 import GoldStarMembershipCard from "@/components/GoldStarMembershipCard";
 import WarehouseHomepageHero from "@/components/WarehouseHomepageHero";
 import WarehouseShopDepartments from "@/components/WarehouseShopDepartments";
@@ -29,8 +27,6 @@ import WarehouseFilterRail from "@/components/WarehouseFilterRail";
 import WarehouseCompareSheet from "@/components/WarehouseCompareSheet";
 import WarehouseFooter from "@/components/WarehouseFooter";
 import {
-  deliveryWindow,
-  formatAddress,
   useStorefrontOverlayClass,
   useSessionStore,
 } from "@/lib/store/session";
@@ -183,12 +179,6 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
   const clearCart = useCartStore((state) => state.clearCart);
   const openCart = useCartStore((state) => state.openCart);
   const getSnapshot = useCartStore((state) => state.getSnapshot);
-  const kirkCartCount = useCartStore((state) => state.getTotalItems());
-  const kirkCartSubtotal = useCartStore((state) => state.getSubtotal());
-  const kirkItems = useCartStore((state) => state.items);
-  const kirkWindow = deliveryWindow(useSessionStore((s) => s.windowId));
-  const kirkAddress = useSessionStore((s) => s.address);
-  const kirkMember = useSessionStore((s) => s.membershipAdded);
   const warehouseFacets = useCatalogStore((s) => s.warehouseFacets);
   const setWarehouseFacets = useCatalogStore((s) => s.setWarehouseFacets);
   const warehouseSort = useCatalogStore((s) => s.warehouseSort);
@@ -692,93 +682,29 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
   return (
     <>
     <aside
-      className={`fixed inset-y-0 right-0 z-40 flex h-full w-full flex-col bg-white lg:static lg:z-30 ${
-        kirkShopPage
-          ? "max-w-none min-w-0 flex-1"
-          : "max-w-[420px] shrink-0 border-l border-[#e5e5e5] lg:w-[380px] lg:max-w-none xl:w-[420px]"
-      }`}
+      className="fixed inset-y-0 right-0 z-40 flex h-full w-full min-w-0 flex-1 flex-col bg-white lg:static lg:z-30"
     >
       {kirkShopPage ? null : (
       <div className="relative shrink-0 bg-white">
-        <div className="bg-costco-red px-3.5 py-2 flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2.5 min-w-0">
-            <CostcoLogo compact tone="onRed" wordmark />
-            <span className="w-px h-8 bg-white/35 shrink-0" />
-            <KirkMark size={28} tone="onRed" className="shrink-0" />
-            <div className="min-w-0">
-              <h2 className="text-[16px] font-black tracking-tight text-white leading-none">
-                Ask Kirk
-              </h2>
-              <p className="mt-1 text-[10px] font-bold tracking-[0.16em] text-white/85 uppercase">
-                Kirkland Signature
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center gap-1 shrink-0">
-            <GoldStarMark size={18} />
-            <p className="hidden xl:block text-[9px] font-semibold tabular-nums tracking-[0.1em] text-white/90 pr-1">
-              111 847 11217
-            </p>
+        <div className="mx-auto flex max-w-[1400px] items-center justify-end gap-3 px-4 pt-3 lg:px-8">
             <button
               type="button"
               onClick={handleReset}
-              className="px-2 py-1.5 text-[12px] font-bold text-white hover:bg-white/15 rounded-[3px] transition-colors flex items-center gap-1"
+              className="text-[12px] font-bold text-costco-blue hover:underline"
               title="Reset"
             >
-              <RefreshCw className="w-3.5 h-3.5" />
               Reset
             </button>
             <button
               type="button"
               onClick={onClose}
-              className="p-1.5 text-white hover:bg-white/15 rounded-[3px] transition-colors"
+              className="text-[12px] font-bold text-costco-blue hover:underline"
               title="Close"
               aria-label="Close Ask Kirk"
             >
-              <X className="w-4 h-4" />
+              Close
             </button>
-          </div>
         </div>
-        <p className="px-3.5 py-1.5 flex items-center gap-1.5 text-[11px] text-white font-semibold bg-costco-blue">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#f3e3a3]" />
-          Delivery {kirkWindow.label} · {formatAddress(kirkAddress)} ·{" "}
-          {kirkMember ? "Gold Star" : "Membership required"}
-        </p>
-        {kirkCartCount > 0 && (
-          <button
-            type="button"
-            onClick={() => openCart("warehouse")}
-            className="mx-3.5 my-2 w-[calc(100%-1.75rem)] flex items-center justify-between rounded-[3px] bg-white border border-[#c4c4c4] px-3.5 py-2 text-left hover:border-costco-blue hover:bg-[#f7fbfe]"
-          >
-            <span className="flex items-center gap-2 min-w-0">
-              <span className="flex items-center pl-0.5">
-                {kirkItems.slice(0, 3).map(({ product }, index) => (
-                  <span
-                    key={product.id}
-                    className="relative h-9 w-9 overflow-hidden rounded-[3px] border border-[#e8e8e8] bg-white"
-                    style={{ marginLeft: index === 0 ? 0 : -8, zIndex: 3 - index }}
-                  >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={product.image}
-                      alt=""
-                      className="absolute inset-0 h-full w-full object-contain p-0.5"
-                    />
-                  </span>
-                ))}
-              </span>
-              <span className="text-[12px] font-bold text-costco-blue truncate">
-                View cart · {kirkCartCount} item{kirkCartCount === 1 ? "" : "s"}
-              </span>
-            </span>
-            <span className="flex items-center gap-1 shrink-0">
-              <span className="text-[13px] font-bold text-[#1a1a1a] tabular-nums">
-                ${kirkCartSubtotal.toFixed(2)}
-              </span>
-              <ChevronRight className="w-3.5 h-3.5 text-costco-blue" />
-            </span>
-          </button>
-        )}
       </div>
       )}
 
@@ -790,21 +716,9 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
       )}
 
       <div
-        className={`min-h-0 flex-1 overflow-y-auto ${
-          hasUserAsk
-            ? kirkShopPage
-              ? "bg-white"
-              : "space-y-3 bg-[#e8eaed] px-3.5 py-3.5"
-            : "space-y-4 bg-white px-3.5 py-3"
-        }`}
+        className="min-h-0 flex-1 overflow-y-auto bg-white"
       >
-        <div
-          className={
-            kirkShopPage && hasUserAsk
-              ? "mx-auto max-w-[1400px] space-y-5 px-4 py-4 lg:px-8"
-              : undefined
-          }
-        >
+        <div className="mx-auto max-w-[1400px] space-y-5 px-4 py-4 lg:px-8">
         {messages.map((message) => {
           const isWelcome = message.id.startsWith("welcome-");
           if (isWelcome) {
@@ -1337,7 +1251,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
         )}
         <div ref={messagesEndRef} />
         </div>
-        {kirkShopPage ? <WarehouseFooter className="mt-8" /> : null}
+        <WarehouseFooter className="mt-8" />
       </div>
 
       {(isRecording || isTranscribing || isSpeaking) && !kirkShopPage && (
@@ -1412,7 +1326,8 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
       ) : null}
 
       {kirkShopPage ? null : (
-      <div className="px-3.5 pt-2.5 pb-3 border-t border-[#e5e5e5] bg-white shrink-0">
+      <div className="border-t border-[#e5e5e5] bg-white px-4 pt-2.5 pb-3 shrink-0">
+      <div className="mx-auto max-w-[1400px]">
         <div className="flex h-11 items-stretch">
           <div className="relative min-w-0 flex-1">
             <Search
@@ -1501,6 +1416,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
           Kirkland Signature shopping help · Membership required · Prices higher
           than warehouse
         </p>
+      </div>
       </div>
       )}
     </aside>
