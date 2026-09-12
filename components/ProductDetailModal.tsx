@@ -204,24 +204,24 @@ export default function ProductDetailModal({
           >
             <div
               className={`relative ${
-                warehouse
-                  ? "h-[52vh] max-h-[520px] w-full bg-white"
-                  : "aspect-square bg-[#f3f4f5]"
+                warehouse ? "bg-white px-6 pt-2" : "aspect-square bg-[#f3f4f5]"
               }`}
             >
               <button
                 type="button"
                 onClick={() => setZoomed(true)}
-                className="absolute inset-0"
+                className={warehouse ? "relative block w-full" : "absolute inset-0"}
                 aria-label="Enlarge product image"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={current.image}
                   alt={`${current.brand} ${current.name}`}
-                  className={`absolute inset-0 h-full w-full object-contain ${
-                    warehouse ? "p-2" : "p-8"
-                  }`}
+                  className={
+                    warehouse
+                      ? "mx-auto max-h-[480px] w-auto max-w-full object-contain"
+                      : "absolute inset-0 h-full w-full object-contain p-8"
+                  }
                 />
               </button>
               {warehouse && isLimitedOffer(current) ? (
