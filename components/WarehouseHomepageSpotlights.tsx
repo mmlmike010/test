@@ -12,25 +12,25 @@ export default function WarehouseHomepageSpotlights({
         title="Dairy & Eggs"
         panel="bg-costco-blue"
         cta="text-costco-blue"
-        zoom="scale-[1.2] group-hover:scale-[1.28]"
+        cutout={false}
         onClick={() => onPick("Dairy & Eggs")}
       />
       <SpotlightTile
-        src="/products/banner-19.png?v=1"
+        src="/products/cutout-19.png?v=1"
         kicker="Household"
         title="Laundry & more"
         panel="bg-costco-red"
         cta="text-costco-red"
-        zoom="scale-[1.08] group-hover:scale-[1.14]"
+        cutout
         onClick={() => onPick("Household")}
       />
       <SpotlightTile
-        src="/products/banner-15.png?v=1"
+        src="/products/cutout-15.png?v=1"
         kicker="Bakery"
         title="Fresh from the case"
         panel="bg-[#1a1a1a]"
         cta="text-[#1a1a1a]"
-        zoom="scale-[1.18] group-hover:scale-[1.24]"
+        cutout
         onClick={() => onPick("Bakery")}
       />
     </div>
@@ -43,7 +43,7 @@ function SpotlightTile({
   title,
   panel,
   cta,
-  zoom,
+  cutout,
   onClick,
 }: {
   src: string;
@@ -51,17 +51,21 @@ function SpotlightTile({
   title: string;
   panel: string;
   cta: string;
-  zoom: string;
+  cutout: boolean;
   onClick: () => void;
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className="group flex h-[184px] overflow-hidden text-left"
+      className={`group flex h-[200px] overflow-hidden text-left ${
+        cutout ? panel : ""
+      }`}
     >
       <span
-        className={`flex w-[48%] flex-col justify-center px-4 py-4 ${panel}`}
+        className={`flex w-[46%] shrink-0 flex-col justify-center px-4 py-4 ${
+          cutout ? "" : panel
+        }`}
       >
         <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/80">
           {kicker}
@@ -75,12 +79,20 @@ function SpotlightTile({
           Shop Now <span aria-hidden="true">›</span>
         </span>
       </span>
-      <span className="flex w-[52%] items-center justify-center overflow-hidden bg-white">
+      <span
+        className={`flex min-w-0 flex-1 items-center justify-end overflow-hidden ${
+          cutout ? "pr-3" : "bg-white"
+        }`}
+      >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={src}
           alt=""
-          className={`h-full w-full object-contain p-2 transition-transform duration-300 ${zoom}`}
+          className={
+            cutout
+              ? "h-[88%] w-auto max-w-none object-contain transition-transform duration-300 group-hover:scale-[1.05]"
+              : "h-full w-full object-contain p-2 transition-transform duration-300 scale-[1.2] group-hover:scale-[1.28]"
+          }
         />
       </span>
     </button>

@@ -5,21 +5,21 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const SLIDES = [
   {
-    src: "/products/banner-24.png?v=1",
+    src: "/products/cutout-24.png?v=1",
     kicker: "Limited-Time Offers",
     title: "Member Only Savings",
     panel: "bg-costco-red",
     cta: "text-costco-red",
-    zoom: "scale-[1.14] group-hover:scale-[1.2]",
+    cutout: true,
     action: "offers" as const,
   },
   {
-    src: "/products/banner-10.png?v=1",
+    src: "/products/cutout-10.png?v=1",
     kicker: "Kirkland Signature",
     title: "Member favorites",
     panel: "bg-costco-blue",
     cta: "text-costco-blue",
-    zoom: "scale-[1.06] group-hover:scale-[1.12]",
+    cutout: true,
     action: "kirkland" as const,
   },
   {
@@ -28,7 +28,7 @@ const SLIDES = [
     title: "Dairy & Eggs",
     panel: "bg-[#1a1a1a]",
     cta: "text-[#1a1a1a]",
-    zoom: "scale-[1.22] group-hover:scale-[1.28]",
+    cutout: false,
     action: "dairy" as const,
   },
 ];
@@ -65,10 +65,14 @@ export default function WarehouseHomepageHero({
         <button
           type="button"
           onClick={shop}
-          className="group relative flex h-[420px] w-full overflow-hidden text-left"
+          className={`group relative flex h-[440px] w-full overflow-hidden text-left ${
+            slide.cutout ? slide.panel : ""
+          }`}
         >
           <span
-            className={`relative z-10 flex w-[48%] flex-col justify-center py-8 pl-20 pr-8 lg:pl-24 ${slide.panel}`}
+            className={`relative z-10 flex w-[46%] shrink-0 flex-col justify-center py-8 pl-20 pr-8 lg:pl-24 ${
+              slide.cutout ? "" : slide.panel
+            }`}
           >
             <span className="text-[12px] font-bold uppercase tracking-[0.16em] text-white/80">
               {slide.kicker}
@@ -82,12 +86,20 @@ export default function WarehouseHomepageHero({
               Shop Now <span aria-hidden="true">›</span>
             </span>
           </span>
-          <span className="relative flex w-[52%] items-center justify-center overflow-hidden bg-white">
+          <span
+            className={`relative flex min-w-0 flex-1 items-center justify-end overflow-hidden ${
+              slide.cutout ? "" : "bg-white"
+            }`}
+          >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={slide.src}
               alt=""
-              className={`h-full w-full object-contain px-6 py-4 transition-transform duration-300 ${slide.zoom}`}
+              className={
+                slide.cutout
+                  ? "h-[90%] w-auto max-w-none object-contain pr-10 transition-transform duration-300 group-hover:scale-[1.04]"
+                  : "h-full w-full object-contain px-6 py-4 transition-transform duration-300 scale-[1.22] group-hover:scale-[1.28]"
+              }
             />
           </span>
         </button>
