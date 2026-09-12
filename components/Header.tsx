@@ -122,15 +122,17 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
               title="Show all products"
             >
               <CostcoLogo compact />
-              <span className="hidden sm:flex flex-col pl-2.5 border-l border-[#d8d8d8]">
-                <span className="text-[15px] font-bold text-costco-blue leading-none">
-                  Same-Day
+              {warehouseSearch ? null : (
+                <span className="hidden sm:flex flex-col pl-2.5 border-l border-[#d8d8d8]">
+                  <span className="text-[15px] font-bold text-costco-blue leading-none">
+                    Same-Day
+                  </span>
+                  <span className="text-[10px] text-[#6b6b6b] mt-0.5 tracking-wide inline-flex items-center gap-1">
+                    <InstacartMark size={14} />
+                    Powered by Instacart
+                  </span>
                 </span>
-                <span className="text-[10px] text-[#6b6b6b] mt-0.5 tracking-wide inline-flex items-center gap-1">
-                  <InstacartMark size={14} />
-                  Powered by Instacart
-                </span>
-              </span>
+              )}
             </button>
           </div>
           <div className="flex items-center gap-3 shrink-0">
