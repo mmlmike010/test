@@ -10,7 +10,7 @@ export default function WarehouseHomepageHero({
     <div className="space-y-1.5">
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
         <PromoTile
-          src="/products/hero-weekly.jpg?v=24"
+          src="/products/24.png"
           kicker="Limited-Time Offers"
           title="Member Only Savings"
           panel="bg-costco-red"
@@ -18,7 +18,7 @@ export default function WarehouseHomepageHero({
           onClick={onOffers}
         />
         <PromoTile
-          src="/products/hero-kirkland.jpg?v=24"
+          src="/products/10.png"
           kicker="Kirkland Signature"
           title="Member favorites"
           panel="bg-costco-blue"
@@ -50,9 +50,9 @@ function PromoTile({
     <button
       type="button"
       onClick={onClick}
-      className="group grid h-[280px] grid-cols-[minmax(200px,40%)_minmax(0,1fr)] overflow-hidden text-left"
+      className={`group grid h-[280px] grid-cols-[minmax(200px,40%)_minmax(0,1fr)] overflow-hidden text-left ${panel}`}
     >
-      <span className={`flex flex-col justify-center px-6 py-6 ${panel}`}>
+      <span className="flex flex-col justify-center px-6 py-6">
         <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-white/80">
           {kicker}
         </span>
@@ -65,12 +65,12 @@ function PromoTile({
           Shop Now <span aria-hidden="true">›</span>
         </span>
       </span>
-      <span className="relative overflow-hidden bg-[#2b3a4a]">
+      <span className="relative flex items-center justify-center">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={src}
           alt=""
-          className="absolute inset-0 h-full w-full origin-right scale-[1.2] object-cover object-[78%_center] transition-transform duration-300 group-hover:scale-[1.25]"
+          className="h-[82%] w-[82%] object-contain mix-blend-darken transition-transform duration-300 group-hover:scale-[1.04]"
         />
       </span>
     </button>
