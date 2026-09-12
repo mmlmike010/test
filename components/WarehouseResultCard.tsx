@@ -213,7 +213,9 @@ export default function WarehouseResultCard({
             className={`block font-bold leading-snug text-costco-blue hover:underline ${
               preview
                 ? "text-[12px] line-clamp-2"
-                : "text-[13px] line-clamp-2"
+                : catalog
+                  ? "text-[14px] line-clamp-2"
+                  : "text-[13px] line-clamp-2"
             }`}
           >
             {product.brand} {product.name}

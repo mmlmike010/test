@@ -294,13 +294,15 @@ export default function ProductDetailModal({
             )}
           </div>
           <div className={`flex flex-col p-5 ${warehouse ? "bg-white" : ""}`}>
-            <h2
-              className={`text-[22px] font-bold leading-snug ${
-                warehouse ? "text-costco-blue" : "text-[#1a1a1a]"
+            <h1
+              className={`font-bold leading-snug ${
+                warehouse
+                  ? "text-[24px] text-costco-blue"
+                  : "text-[22px] text-[#1a1a1a]"
               }`}
             >
               {current.brand} {current.name}
-            </h2>
+            </h1>
             {size ? (
               <p className="mt-1 text-[14px] text-[#242424]">
                 {warehouse ? size : `• ${size}`}
@@ -507,16 +509,18 @@ export default function ProductDetailModal({
         {related.length > 0 && (
           <div
             className={`px-5 pb-5 ${
-              warehouse
-                ? "mx-4 mb-3 rounded-[3px] border border-[#c4c4c4] bg-white pt-4"
-                : ""
+              warehouse ? "mx-4 mb-3 bg-white pt-6" : ""
             }`}
           >
-            <h3 className="text-[15px] font-bold text-[#1a1a1a] mb-2.5">
+            <h3
+              className={`mb-2.5 font-bold text-[#1a1a1a] ${
+                warehouse ? "text-[20px]" : "text-[15px]"
+              }`}
+            >
               {warehouse ? "Related Products" : "Related products"}
             </h3>
             {warehouse ? (
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4">
+              <div className="grid grid-cols-2 gap-x-5 gap-y-7 sm:grid-cols-3 xl:grid-cols-4">
                 {related.map((item) => (
                   <WarehouseResultCard
                     key={item.id}
@@ -543,11 +547,15 @@ export default function ProductDetailModal({
         <div
           className={`px-5 pb-6 pt-4 ${
             warehouse
-              ? "mx-4 mb-4 rounded-[3px] border border-[#c4c4c4] bg-white"
+              ? "mx-4 mb-4 border-t border-[#ececec] bg-white"
               : "border-t border-[#eee]"
           }`}
         >
-          <h3 className="text-[15px] font-bold text-[#1a1a1a] mb-1">
+          <h3
+            className={`mb-1 font-bold text-[#1a1a1a] ${
+              warehouse ? "text-[20px]" : "text-[15px]"
+            }`}
+          >
             {warehouse ? "Reviews" : "Member reviews"}
           </h3>
           <p className="text-[12px] text-[#666] mb-4">

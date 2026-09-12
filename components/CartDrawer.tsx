@@ -89,9 +89,9 @@ export default function CartDrawer() {
                 <X className="h-4 w-4" />
               </button>
             </div>
-            <h2 className="mt-0.5 text-[22px] font-bold leading-snug text-[#1a1a1a]">
+            <h1 className="mt-0.5 text-[28px] font-bold leading-snug text-[#1a1a1a]">
               Shopping Cart
-            </h2>
+            </h1>
             <p className="mt-1 text-[12px] font-semibold text-[#555]">
               {totalItems} item{totalItems === 1 ? "" : "s"}
               {items.length

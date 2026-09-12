@@ -15,7 +15,7 @@ export default function WarehouseShopDepartments({
   const scrollerRef = useRef<HTMLDivElement>(null);
   const nudge = (dir: number) => {
     scrollerRef.current?.scrollBy({
-      left: dir * 128,
+      left: dir * 148,
       behavior: "smooth",
     });
   };
@@ -64,10 +64,10 @@ export default function WarehouseShopDepartments({
                 key={tile.label}
                 type="button"
                 onClick={() => onPick(active ? null : tile.label)}
-                className="w-[112px] shrink-0 bg-white text-center"
+                className="w-[136px] shrink-0 bg-white text-center"
               >
                 <span
-                  className={`relative mx-auto flex h-[104px] w-full items-center justify-center overflow-hidden bg-[#f6f6f6] ${
+                  className={`relative mx-auto flex h-[120px] w-full items-center justify-center overflow-hidden bg-white ${
                     active
                       ? "ring-2 ring-costco-blue ring-offset-1"
                       : "hover:ring-1 hover:ring-costco-blue"
