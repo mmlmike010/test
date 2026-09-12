@@ -29,22 +29,36 @@ export default function WarehouseCompareSheet({
     <div
       className={`fixed z-[78] flex min-h-0 flex-col bg-[#e8eaed] ${overlayClass}`}
     >
-      <div className="flex shrink-0 items-center justify-between border-b border-[#c4c4c4] bg-white px-4 py-3.5">
-        <h2 className="text-[18px] font-bold leading-none text-[#1a1a1a]">
-          Compare Products
-        </h2>
-        <button
-          type="button"
-          onClick={onClose}
-          className="rounded-[3px] p-2 hover:bg-[#f7fbfe]"
-          aria-label="Close"
-        >
-          <X className="h-5 w-5 text-[#555]" />
-        </button>
-      </div>
-      <div className="h-[3px] bg-gradient-to-r from-[#a3841c] via-[#f3e3a3] to-[#a3841c]" />
-      <div className="min-h-0 flex-1 overflow-auto px-4 py-4">
-        <div className="min-w-0 overflow-x-auto">
+        <div className="min-h-0 flex-1 overflow-auto px-4 py-4 lg:px-6">
+        <div className="mx-auto max-w-[1180px]">
+          <div className="flex items-start justify-between gap-2">
+            <nav
+              aria-label="Breadcrumb"
+              className="flex flex-wrap items-center gap-x-1.5 text-[11px] text-[#555]"
+            >
+              <button
+                type="button"
+                onClick={onClose}
+                className="font-bold text-costco-blue hover:underline"
+              >
+                Home
+              </button>
+              <span aria-hidden="true">›</span>
+              <span className="text-[#1a1a1a]">Compare Products</span>
+            </nav>
+            <button
+              type="button"
+              onClick={onClose}
+              className="rounded-[3px] p-1 text-[#555] hover:bg-[#f7fbfe]"
+              aria-label="Close"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+          <h2 className="mt-0.5 text-[22px] font-bold leading-snug text-[#1a1a1a]">
+            Compare Products
+          </h2>
+          <div className="mt-4 min-w-0 overflow-x-auto">
           <table className="w-full min-w-[520px] border-collapse bg-white text-left text-[13px]">
             <thead>
               <tr className="border border-[#c4c4c4] bg-[#f6f7f8]">
@@ -248,6 +262,7 @@ export default function WarehouseCompareSheet({
               </tr>
             </tbody>
           </table>
+          </div>
         </div>
       </div>
     </div>

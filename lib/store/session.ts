@@ -127,6 +127,20 @@ function persistable(state: SessionState): Persisted {
   };
 }
 
+/** Keep warehouse checkout chrome when membership / sign-in / delivery return. */
+function nestReturn(state: SessionState): {
+  sheet: StoreSheet;
+  priorSheet: StoreSheet;
+  sheetTone: SheetTone;
+} {
+  const prior = state.priorSheet;
+  return {
+    sheet: prior,
+    priorSheet: null,
+    sheetTone: prior ? state.sheetTone : "sameday",
+  };
+}
+
 export const useSessionStore = create<SessionState>((set, get) => ({
   ...fallback,
   sheet: null,
@@ -150,87 +164,77 @@ export const useSessionStore = create<SessionState>((set, get) => ({
     });
   },
   closeSheet: () => {
-    set({
-      sheet: get().priorSheet,
-      priorSheet: null,
-      sheetTone: "sameday",
-    });
+    set(nestReturn(get()));
   },
   signIn: (displayName, email) => {
+    const current = get();
     const next = {
-      ...get(),
+      ...current,
       signedIn: true,
       displayName: displayName.trim() || KIRK_NAME,
       email: email.trim() || KIRK_EMAIL,
-      sheet: get().priorSheet,
-      priorSheet: null as StoreSheet,
-      sheetTone: "sameday" as SheetTone,
+      ...nestReturn(current),
     };
     writeSession(persistable(next));
     set(next);
   },
   signOut: () => {
+    const current = get();
     const next = {
-      ...get(),
+      ...current,
       signedIn: false,
       displayName: "",
       email: "",
       orderPlaced: false,
-      sheet: get().priorSheet,
-      priorSheet: null as StoreSheet,
-      sheetTone: "sameday" as SheetTone,
+      ...nestReturn(current),
     };
     writeSession(persistable(next));
     set(next);
   },
   addMembership: (number) => {
     const cleaned = number.replace(/\s+/g, " ").trim();
+    const current = get();
     const next = {
-      ...get(),
+      ...current,
       membershipAdded: true,
       membershipNumber: cleaned || KIRK_MEMBERSHIP,
-      sheet: get().priorSheet,
-      priorSheet: null as StoreSheet,
-      sheetTone: "sameday" as SheetTone,
+      ...nestReturn(current),
     };
     writeSession(persistable(next));
     set(next);
   },
   removeMembership: () => {
+    const current = get();
     const next = {
-      ...get(),
+      ...current,
       membershipAdded: false,
       membershipNumber: "",
-      sheet: get().priorSheet,
-      priorSheet: null as StoreSheet,
-      sheetTone: "sameday" as SheetTone,
+      ...nestReturn(current),
     };
     writeSession(persistable(next));
     set(next);
   },
   setDelivery: (windowId, address) => {
+    const current = get();
     const next = {
-      ...get(),
+      ...current,
       windowId,
       address: {
         line1: address.line1.trim() || DEFAULT_ADDRESS.line1,
         city: address.city.trim() || DEFAULT_ADDRESS.city,
         zip: address.zip.trim() || DEFAULT_ADDRESS.zip,
       },
-      sheet: get().priorSheet,
-      priorSheet: null as StoreSheet,
-      sheetTone: "sameday" as SheetTone,
+      ...nestReturn(current),
     };
     writeSession(persistable(next));
     set(next);
   },
   setSpecialRequest: (note) => {
+    const current = get();
     const next = {
-      ...get(),
+      ...current,
       specialRequest: note.trim(),
-      sheet: get().priorSheet,
-      priorSheet: null as StoreSheet,
-      sheetTone: "sameday" as SheetTone,
+      ...nestReturn(current),
     };
     writeSession(persistable(next));
     set(next);

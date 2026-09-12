@@ -1222,7 +1222,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
         <div ref={messagesEndRef} />
       </div>
 
-      {(isRecording || isTranscribing || isSpeaking) && (
+      {(isRecording || isTranscribing || isSpeaking) && !kirkShopPage && (
         <div className="px-3.5 py-1.5 border-t border-[#eee] bg-[#fff8f8] text-[12px] text-[#333] flex items-center gap-2 shrink-0">
           {isSpeaking ? (
             <>

@@ -1,9 +1,12 @@
 "use client";
 
-import { Minus, Plus, ShoppingCart, Trash2, X } from "lucide-react";
+import { useState } from "react";
+import { Heart, Minus, Plus, ShoppingCart, Trash2, X } from "lucide-react";
 import { useCartStore } from "@/lib/store/cart";
 import { useCatalogStore } from "@/lib/store/catalog";
+import { useListStore } from "@/lib/store/lists";
 import WarehouseQtySelect from "@/components/WarehouseQtySelect";
+import { instantSavingsAmount, instantSavingsText } from "@/lib/ui/instantSavings";
 import { productSize, unitPriceLabel, warehouseItemNumber } from "@/lib/ui/packSize";
 import {
   deliveryWindow,
@@ -31,6 +34,12 @@ export default function CartDrawer() {
   const address = useSessionStore((s) => s.address);
   const specialRequest = useSessionStore((s) => s.specialRequest);
   const slot = deliveryWindow(windowId);
+  const toggleList = useListStore((s) => s.toggle);
+  const savedIds = useListStore(
+    (s) => s.lists.find((list) => list.id === "shopping")?.productIds ?? []
+  );
+  const [promo, setPromo] = useState("");
+  const [promoNote, setPromoNote] = useState<string | null>(null);
 
   if (!isOpen) return null;
 
@@ -44,34 +53,53 @@ export default function CartDrawer() {
   };
 
   if (warehouse) {
+    const savingsTotal = items.reduce(
+      (sum, { product, quantity }) =>
+        sum + instantSavingsAmount(product.savings, quantity),
+      0
+    );
     return (
       <div
         className={`fixed z-[72] flex min-h-0 flex-col bg-[#e8eaed] ${overlayClass}`}
       >
-        <div className="flex shrink-0 items-center justify-between border-b border-[#c4c4c4] bg-white px-4 py-3.5">
-          <div>
-            <h2 className="text-[18px] font-bold leading-none text-[#1a1a1a]">
+        <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4 lg:px-6">
+          <div className="mx-auto max-w-[1180px]">
+            <div className="flex items-start justify-between gap-2">
+              <nav
+                aria-label="Breadcrumb"
+                className="flex flex-wrap items-center gap-x-1.5 text-[11px] text-[#555]"
+              >
+                <button
+                  type="button"
+                  onClick={closeCart}
+                  className="font-bold text-costco-blue hover:underline"
+                >
+                  Home
+                </button>
+                <span aria-hidden="true">›</span>
+                <span className="text-[#1a1a1a]">Shopping Cart</span>
+              </nav>
+              <button
+                type="button"
+                onClick={closeCart}
+                className="rounded-[3px] p-1 text-[#555] hover:bg-[#f7fbfe]"
+                aria-label="Close cart"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <h2 className="mt-0.5 text-[22px] font-bold leading-snug text-[#1a1a1a]">
               Shopping Cart
             </h2>
-            <p className="mt-1.5 text-[12px] font-semibold text-[#555]">
-              {totalItems} item{totalItems === 1 ? "" : "s"} · Delivery to{" "}
-              {address.line1}, {formatAddress(address)}
+            <p className="mt-1 text-[12px] font-semibold text-[#555]">
+              {totalItems} item{totalItems === 1 ? "" : "s"}
+              {items.length
+                ? ` · Delivery to ${address.line1}, ${formatAddress(address)}`
+                : ""}
             </p>
-          </div>
-          <button
-            type="button"
-            onClick={closeCart}
-            className="rounded-[3px] p-2 hover:bg-[#f7fbfe]"
-            aria-label="Close cart"
-          >
-            <X className="h-5 w-5 text-[#555]" />
-          </button>
-        </div>
-        <div className="h-[3px] bg-gradient-to-r from-[#a3841c] via-[#f3e3a3] to-[#a3841c]" />
 
-        <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4">
           {items.length === 0 ? (
-            <div className="rounded-[3px] border border-[#c4c4c4] bg-white px-6 py-16 text-center">
+            <div className="mt-4 rounded-[3px] border border-[#c4c4c4] bg-white px-6 py-16 text-center">
               <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-[3px] border border-[#c4c4c4] bg-[#f7fbfe]">
                 <ShoppingCart className="h-7 w-7 text-[#8a8a8a]" />
               </span>
@@ -90,13 +118,33 @@ export default function CartDrawer() {
               </button>
             </div>
           ) : (
-            <div className="space-y-3 xl:grid xl:grid-cols-[minmax(0,1fr)_300px] xl:items-start xl:gap-4 xl:space-y-0">
-              <div className="space-y-3">
+            <div className="mt-4 space-y-4 xl:grid xl:grid-cols-[minmax(0,1fr)_320px] xl:items-start xl:gap-5 xl:space-y-0">
+              <div className="space-y-4">
+              <div className="rounded-[3px] border border-[#c4c4c4] bg-white px-4 py-3.5">
+                <p className="text-[12px] font-bold uppercase tracking-[0.06em] text-[#666]">
+                  Delivery Method
+                </p>
+                <p className="mt-1 text-[15px] font-bold text-[#1a1a1a]">
+                  Same-Day Delivery
+                </p>
+                <p className="mt-0.5 text-[13px] text-[#555]">
+                  {slot.when} · {slot.label}
+                </p>
+                <p className="text-[13px] text-[#555]">
+                  {address.line1}, {formatAddress(address)}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setSheet("delivery", "warehouse")}
+                  className="mt-2 text-[13px] font-bold text-costco-blue hover:underline"
+                >
+                  Change
+                </button>
+              </div>
               <div className="overflow-hidden rounded-[3px] border border-[#c4c4c4] bg-white">
                 <div className="border-b border-[#ececec] bg-[#f6f7f8] px-4 py-2 text-[12px] font-bold text-[#666]">
                   <p>
-                    {totalItems} item{totalItems === 1 ? "" : "s"} · {slot.when}{" "}
-                    {slot.label}
+                    {totalItems} item{totalItems === 1 ? "" : "s"}
                   </p>
                   <div className="mt-2 hidden grid-cols-[minmax(0,1fr)_88px_104px_80px] gap-2 sm:grid">
                     <span>Item</span>
@@ -105,7 +153,9 @@ export default function CartDrawer() {
                     <span className="text-right">Total</span>
                   </div>
                 </div>
-                {items.map(({ product, quantity }) => (
+                {items.map(({ product, quantity }) => {
+                  const saved = savedIds.includes(product.id);
+                  return (
                   <div
                     key={product.id}
                     className="border-b border-[#f0f0f0] px-4 py-3.5 last:border-b-0"
@@ -141,13 +191,31 @@ export default function CartDrawer() {
                           <p className="mt-0.5 text-[12px] text-[#72767E]">
                             Item {warehouseItemNumber(product.id)}
                           </p>
-                          <button
-                            type="button"
-                            onClick={() => removeItem(product.id)}
-                            className="mt-2 text-[13px] font-bold text-costco-blue hover:underline"
-                          >
-                            Remove
-                          </button>
+                          {instantSavingsText(product.savings) ? (
+                            <p className="mt-1 text-[12px] font-semibold leading-snug text-[#188038]">
+                              {instantSavingsText(product.savings)}
+                            </p>
+                          ) : null}
+                          <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1">
+                            <button
+                              type="button"
+                              onClick={() => removeItem(product.id)}
+                              className="text-[13px] font-bold text-costco-blue hover:underline"
+                            >
+                              Remove
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => toggleList(product.id)}
+                              className="inline-flex items-center gap-1 text-[13px] font-bold text-costco-blue hover:underline"
+                              aria-pressed={saved}
+                            >
+                              <Heart
+                                className={`h-3 w-3 ${saved ? "fill-current" : ""}`}
+                              />
+                              {saved ? "Saved to List" : "Add to List"}
+                            </button>
+                          </div>
                         </div>
                       </div>
                       <div>
@@ -157,6 +225,11 @@ export default function CartDrawer() {
                         <p className="mt-0.5 text-[15px] font-bold tabular-nums text-[#1a1a1a] sm:mt-0 sm:text-right">
                           ${product.price.toFixed(2)}
                         </p>
+                        {product.originalPrice > product.price ? (
+                          <p className="text-[12px] text-[#888] line-through sm:text-right">
+                            ${product.originalPrice.toFixed(2)}
+                          </p>
+                        ) : null}
                       </div>
                       <div className="sm:justify-self-center">
                         <WarehouseQtySelect
@@ -177,7 +250,8 @@ export default function CartDrawer() {
                       </div>
                     </div>
                   </div>
-                ))}
+                  );
+                })}
               </div>
               {specialRequest ? (
                 <p className="px-1 text-[12px] leading-snug text-[#555]">
@@ -202,7 +276,23 @@ export default function CartDrawer() {
                   </span>
                   <span className="tabular-nums">${subtotal.toFixed(2)}</span>
                 </div>
-                <div className="mt-3 flex items-end justify-between">
+                {savingsTotal > 0 ? (
+                  <div className="mt-2 flex items-center justify-between text-[13px] font-semibold text-[#188038]">
+                    <span>You Saved</span>
+                    <span className="tabular-nums">
+                      ${savingsTotal.toFixed(2)}
+                    </span>
+                  </div>
+                ) : null}
+                <div className="mt-2 flex items-center justify-between text-[13px] text-[#555]">
+                  <span>Shipping &amp; Handling</span>
+                  <span>T.B.D.</span>
+                </div>
+                <div className="mt-2 flex items-center justify-between text-[13px] text-[#555]">
+                  <span>Estimated Taxes</span>
+                  <span>T.B.D.</span>
+                </div>
+                <div className="mt-3 flex items-end justify-between border-t border-[#ececec] pt-3">
                   <span className="text-[13px] font-semibold text-[#555]">
                     Estimated Total
                   </span>
@@ -217,6 +307,41 @@ export default function CartDrawer() {
                 >
                   Checkout
                 </button>
+                <form
+                  className="mt-4 border-t border-[#ececec] pt-3"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    const code = promo.trim();
+                    setPromoNote(
+                      code
+                        ? "This promo code cannot be applied to Same-Day Delivery items."
+                        : "Enter a promo code."
+                    );
+                  }}
+                >
+                  <label className="block text-[12px] font-bold text-[#555]">
+                    Promo Code
+                    <input
+                      value={promo}
+                      onChange={(e) => {
+                        setPromo(e.target.value);
+                        setPromoNote(null);
+                      }}
+                      className="mt-1 h-10 w-full rounded-[3px] border border-[#c4c4c4] bg-white px-3 text-[14px] text-[#1a1a1a] focus:border-costco-blue focus:outline-none focus:ring-2 focus:ring-costco-blue/15"
+                    />
+                  </label>
+                  <button
+                    type="submit"
+                    className="mt-2 text-[13px] font-bold text-costco-blue hover:underline"
+                  >
+                    Apply
+                  </button>
+                  {promoNote ? (
+                    <p className="mt-1.5 text-[12px] leading-snug text-[#555]">
+                      {promoNote}
+                    </p>
+                  ) : null}
+                </form>
                 <button
                   type="button"
                   onClick={clearCart}
@@ -231,6 +356,7 @@ export default function CartDrawer() {
               </div>
             </div>
           )}
+          </div>
         </div>
       </div>
     );

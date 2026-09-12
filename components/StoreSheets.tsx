@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { Check, ChevronRight } from "lucide-react";
 import StoreSheet from "@/components/StoreSheet";
 import GoldStarMark from "@/components/GoldStarMark";
@@ -8,7 +8,7 @@ import GoldStarMembershipCard from "@/components/GoldStarMembershipCard";
 import InstacartMark from "@/components/InstacartMark";
 import { departments } from "@/lib/data/products";
 import { aisleLabel } from "@/lib/ui/aisleLabels";
-import { instantSavingsText } from "@/lib/ui/instantSavings";
+import { instantSavingsAmount, instantSavingsText } from "@/lib/ui/instantSavings";
 import { productSize, unitPriceLabel, warehouseItemNumber } from "@/lib/ui/packSize";
 import { useCatalogStore } from "@/lib/store/catalog";
 import { useCartStore } from "@/lib/store/cart";
@@ -441,10 +441,48 @@ function RequestSheet() {
   );
 }
 
+function CheckoutStep({
+  n,
+  title,
+  children,
+  onChange,
+}: {
+  n: number;
+  title: string;
+  children: ReactNode;
+  onChange?: () => void;
+}) {
+  return (
+    <div className="rounded-[3px] border border-[#c4c4c4] bg-white px-4 py-3.5">
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex min-w-0 gap-3">
+          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-[3px] bg-costco-blue text-[13px] font-bold text-white">
+            {n}
+          </span>
+          <div className="min-w-0">
+            <p className="text-[15px] font-bold text-[#1a1a1a]">{title}</p>
+            {children}
+          </div>
+        </div>
+        {onChange ? (
+          <button
+            type="button"
+            onClick={onChange}
+            className="shrink-0 text-[13px] font-bold text-costco-blue hover:underline"
+          >
+            Change
+          </button>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
 function CheckoutSheet() {
   const setSheet = useSessionStore((s) => s.setSheet);
   const signedIn = useSessionStore((s) => s.signedIn);
   const displayName = useSessionStore((s) => s.displayName);
+  const email = useSessionStore((s) => s.email);
   const membershipAdded = useSessionStore((s) => s.membershipAdded);
   const membershipNumber = useSessionStore((s) => s.membershipNumber);
   const windowId = useSessionStore((s) => s.windowId);
@@ -457,27 +495,60 @@ function CheckoutSheet() {
   const subtotal = useCartStore((s) => s.getSubtotal());
   const totalItems = useCartStore((s) => s.getTotalItems());
   const cartTone = useCartStore((s) => s.cartTone);
+  const openCart = useCartStore((s) => s.openCart);
   const sheetWarehouse = useWarehouseCheckoutSheet();
   const warehouse = cartTone === "warehouse" || sheetWarehouse;
   const slot = deliveryWindow(windowId);
   const ready = signedIn && membershipAdded && items.length > 0;
+  const savingsTotal = items.reduce(
+    (sum, { product, quantity }) =>
+      sum + instantSavingsAmount(product.savings, quantity),
+    0
+  );
   const card = warehouse
     ? "flex w-full items-center rounded-[3px] border border-[#c4c4c4] bg-white px-4 py-3.5 text-left hover:bg-[#f7fbfe]"
     : "flex w-full items-center rounded-xl border border-[#e0e0e0] bg-white px-4 py-3.5 text-left shadow-sm hover:bg-[#fafafa]";
+  const goCart = () => {
+    setSheet(null);
+    openCart("warehouse");
+  };
 
   return (
     <StoreSheet
-      title="Checkout"
-      onClose={() => setSheet(null)}
+      title={orderPlaced && warehouse ? "Order Confirmation" : "Checkout"}
+      onClose={() => {
+        if (orderPlaced) clearOrder();
+        setSheet(null);
+      }}
       page
       tone={warehouse ? "warehouse" : "sameday"}
+      crumbs={
+        warehouse
+          ? orderPlaced
+            ? [
+                {
+                  label: "Home",
+                  onClick: () => {
+                    clearOrder();
+                    setSheet(null);
+                  },
+                },
+                { label: "Order Confirmation" },
+              ]
+            : [
+                { label: "Home", onClick: () => setSheet(null) },
+                { label: "Shopping Cart", onClick: goCart },
+                { label: "Checkout" },
+              ]
+          : undefined
+      }
     >
       <div className="space-y-3">
         {orderPlaced ? (
           <div
             className={
               warehouse
-                ? "rounded-[3px] border border-[#c4c4c4] bg-white px-5 py-8 text-center"
+                ? "rounded-[3px] border border-[#c4c4c4] bg-white px-5 py-8"
                 : "rounded-xl border border-[#b7d7b0] bg-[#eef7ee] px-5 py-8 text-center"
             }
           >
@@ -491,111 +562,178 @@ function CheckoutSheet() {
               ✓
             </div>
             <p
-              className={`mt-3 text-[18px] font-extrabold ${
-                warehouse ? "text-costco-blue" : "text-[#1e5b24]"
+              className={`mt-3 text-[22px] font-extrabold ${
+                warehouse ? "text-center text-costco-blue" : "text-[#1e5b24]"
               }`}
             >
-              Order placed
+              {warehouse ? "Thank You" : "Order placed"}
             </p>
-            <p
-              className={`mt-1 text-[13px] leading-snug ${
-                warehouse ? "text-[#555]" : "text-[#1e5b24]"
-              }`}
-            >
-              Delivery {slot.label} · {formatAddress(address)} · Gold Star{" "}
-              {membershipNumber}
-            </p>
-            <button
-              type="button"
-              className="mt-4 text-[13px] font-bold text-costco-blue hover:underline"
-              onClick={() => {
-                clearOrder();
-                setSheet(null);
-              }}
-            >
-              Keep shopping
-            </button>
+            {warehouse ? (
+              <div className="mx-auto mt-3 max-w-[420px] space-y-2 text-center text-[13px] leading-snug text-[#555]">
+                <p>Your order has been received.</p>
+                <p className="text-[15px] font-bold text-[#1a1a1a]">
+                  Order Number: KS-1847111217
+                </p>
+                <p>
+                  We&apos;ll send a confirmation to{" "}
+                  <span className="font-semibold text-[#1a1a1a]">
+                    {email || KIRK_EMAIL}
+                  </span>
+                  .
+                </p>
+                <p>
+                  Same-Day Delivery {slot.when} · {slot.label} · {address.line1},{" "}
+                  {formatAddress(address)}
+                </p>
+                <p className="inline-flex items-center justify-center gap-1.5">
+                  <GoldStarMark size={16} />
+                  Gold Star {membershipNumber}
+                </p>
+              </div>
+            ) : (
+              <p className="mt-1 text-[13px] leading-snug text-[#1e5b24]">
+                Delivery {slot.label} · {formatAddress(address)} · Gold Star{" "}
+                {membershipNumber}
+              </p>
+            )}
+            <div className={warehouse ? "mt-5 text-center" : ""}>
+              <button
+                type="button"
+                className="text-[13px] font-bold text-costco-blue hover:underline"
+                onClick={() => {
+                  clearOrder();
+                  setSheet(null);
+                }}
+              >
+                {warehouse ? "Continue Shopping" : "Keep shopping"}
+              </button>
+            </div>
           </div>
         ) : (
           <div
             className={
               warehouse
-                ? "space-y-3 xl:grid xl:grid-cols-[minmax(0,1fr)_300px] xl:items-start xl:gap-4 xl:space-y-0"
+                ? "space-y-4 xl:grid xl:grid-cols-[minmax(0,1fr)_320px] xl:items-start xl:gap-5 xl:space-y-0"
                 : "space-y-3"
             }
           >
             <div className="space-y-3">
-            <button
-              type="button"
-              onClick={() => setSheet("delivery", warehouse ? "warehouse" : "sameday")}
-              className={card}
-            >
-              <div className="min-w-0 flex-1">
-                <p className="text-[12px] font-bold text-[#666]">Delivery</p>
-                <p className="mt-0.5 text-[14px] font-bold text-[#1a1a1a]">
-                  {slot.when} · {slot.label}
-                </p>
-                <p className="text-[13px] text-[#555]">
-                  {address.line1}, {formatAddress(address)}
-                </p>
-              </div>
-              <ChevronRight className="h-5 w-5 shrink-0 text-[#9aa0a6]" />
-            </button>
-            <button
-              type="button"
-              onClick={() => setSheet("membership", warehouse ? "warehouse" : "sameday")}
-              className={card}
-            >
-              <div className="min-w-0 flex-1">
-                <p className="text-[12px] font-bold text-[#666]">Membership</p>
-                <p className="mt-0.5 inline-flex items-center gap-1.5 text-[14px] font-bold text-[#1a1a1a]">
-                  <GoldStarMark size={16} />
-                  {membershipAdded
-                    ? `Gold Star · ${membershipNumber}`
-                    : "Add your Costco membership"}
-                </p>
-              </div>
-              <ChevronRight className="h-5 w-5 shrink-0 text-[#9aa0a6]" />
-            </button>
-            <button
-              type="button"
-              onClick={() => setSheet("signin", warehouse ? "warehouse" : "sameday")}
-              className={card}
-            >
-              <div className="min-w-0 flex-1">
-                <p className="text-[12px] font-bold text-[#666]">Account</p>
-                <p className="mt-0.5 text-[14px] font-bold text-[#1a1a1a]">
-                  {signedIn ? `Signed in as ${displayName}` : "Sign in to check out"}
-                </p>
-              </div>
-              <ChevronRight className="h-5 w-5 shrink-0 text-[#9aa0a6]" />
-            </button>
+            {warehouse ? (
+              <>
+                <CheckoutStep
+                  n={1}
+                  title="Shipping & Delivery"
+                  onChange={() => setSheet("delivery", "warehouse")}
+                >
+                  <p className="mt-1 text-[14px] font-bold text-[#1a1a1a]">
+                    Same-Day Delivery
+                  </p>
+                  <p className="mt-0.5 text-[13px] text-[#555]">
+                    {slot.when} · {slot.label}
+                  </p>
+                  <p className="text-[13px] text-[#555]">
+                    {address.line1}, {formatAddress(address)}
+                  </p>
+                </CheckoutStep>
+                <CheckoutStep
+                  n={2}
+                  title="Membership"
+                  onChange={() => setSheet("membership", "warehouse")}
+                >
+                  <p className="mt-1 inline-flex items-center gap-1.5 text-[14px] font-bold text-[#1a1a1a]">
+                    <GoldStarMark size={16} />
+                    {membershipAdded
+                      ? `Gold Star · ${membershipNumber}`
+                      : "Add your Costco membership"}
+                  </p>
+                </CheckoutStep>
+                <CheckoutStep
+                  n={3}
+                  title="Account"
+                  onChange={() => setSheet("signin", "warehouse")}
+                >
+                  <p className="mt-1 text-[14px] font-bold text-[#1a1a1a]">
+                    {signedIn
+                      ? `Signed in as ${displayName}`
+                      : "Sign in to check out"}
+                  </p>
+                  {signedIn && email ? (
+                    <p className="text-[13px] text-[#555]">{email}</p>
+                  ) : null}
+                </CheckoutStep>
+                <CheckoutStep n={4} title="Payment">
+                  <p className="mt-1 text-[14px] font-bold text-[#1a1a1a]">
+                    Costco Anywhere Visa ending in 1117
+                  </p>
+                  <p className="mt-0.5 text-[13px] text-[#555]">
+                    Billing address same as delivery · Item subtotal only
+                  </p>
+                </CheckoutStep>
+              </>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  onClick={() => setSheet("delivery", "sameday")}
+                  className={card}
+                >
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[12px] font-bold text-[#666]">Delivery</p>
+                    <p className="mt-0.5 text-[14px] font-bold text-[#1a1a1a]">
+                      {slot.when} · {slot.label}
+                    </p>
+                    <p className="text-[13px] text-[#555]">
+                      {address.line1}, {formatAddress(address)}
+                    </p>
+                  </div>
+                  <ChevronRight className="h-5 w-5 shrink-0 text-[#9aa0a6]" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSheet("membership", "sameday")}
+                  className={card}
+                >
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[12px] font-bold text-[#666]">Membership</p>
+                    <p className="mt-0.5 inline-flex items-center gap-1.5 text-[14px] font-bold text-[#1a1a1a]">
+                      <GoldStarMark size={16} />
+                      {membershipAdded
+                        ? `Gold Star · ${membershipNumber}`
+                        : "Add your Costco membership"}
+                    </p>
+                  </div>
+                  <ChevronRight className="h-5 w-5 shrink-0 text-[#9aa0a6]" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSheet("signin", "sameday")}
+                  className={card}
+                >
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[12px] font-bold text-[#666]">Account</p>
+                    <p className="mt-0.5 text-[14px] font-bold text-[#1a1a1a]">
+                      {signedIn
+                        ? `Signed in as ${displayName}`
+                        : "Sign in to check out"}
+                    </p>
+                  </div>
+                  <ChevronRight className="h-5 w-5 shrink-0 text-[#9aa0a6]" />
+                </button>
+                <div className="rounded-xl border border-[#e0e0e0] bg-white px-4 py-3.5 shadow-sm">
+                  <p className="text-[12px] font-bold text-[#666]">Payment</p>
+                  <p className="mt-0.5 text-[14px] font-bold text-[#1a1a1a]">
+                    Item subtotal only
+                  </p>
+                  <p className="mt-0.5 text-[13px] text-[#555]">
+                    Service, delivery, and tax are not estimated in this demo
+                  </p>
+                </div>
+              </>
+            )}
             {specialRequest && (
               <p className="px-1 text-[12px] leading-snug text-[#555]">
                 Special request: {specialRequest}
               </p>
-            )}
-            {warehouse ? (
-              <div className="rounded-[3px] border border-[#c4c4c4] bg-white px-4 py-3.5">
-                <p className="text-[12px] font-bold text-[#666]">Payment</p>
-                <p className="mt-0.5 text-[14px] font-bold text-[#1a1a1a]">
-                  Costco Anywhere Visa
-                </p>
-                <p className="mt-0.5 text-[13px] text-[#555]">
-                  Item subtotal only. Service, delivery, and tax are not
-                  estimated in this demo.
-                </p>
-              </div>
-            ) : (
-              <div className="rounded-xl border border-[#e0e0e0] bg-white px-4 py-3.5 shadow-sm">
-                <p className="text-[12px] font-bold text-[#666]">Payment</p>
-                <p className="mt-0.5 text-[14px] font-bold text-[#1a1a1a]">
-                  Item subtotal only
-                </p>
-                <p className="mt-0.5 text-[13px] text-[#555]">
-                  Service, delivery, and tax are not estimated in this demo
-                </p>
-              </div>
             )}
             {items.length > 0 && (
               <div
@@ -684,14 +822,36 @@ function CheckoutSheet() {
                 </p>
               ) : null}
               {warehouse ? (
-                <div className="mb-3 flex items-center justify-between text-[13px] text-[#555]">
-                  <span>
-                    Subtotal ({totalItems} item{totalItems === 1 ? "" : "s"})
-                  </span>
-                  <span className="tabular-nums">${subtotal.toFixed(2)}</span>
-                </div>
+                <>
+                  <div className="mb-2 flex items-center justify-between text-[13px] text-[#555]">
+                    <span>
+                      Subtotal ({totalItems} item{totalItems === 1 ? "" : "s"})
+                    </span>
+                    <span className="tabular-nums">${subtotal.toFixed(2)}</span>
+                  </div>
+                  {savingsTotal > 0 ? (
+                    <div className="mb-2 flex items-center justify-between text-[13px] font-semibold text-[#188038]">
+                      <span>You Saved</span>
+                      <span className="tabular-nums">
+                        ${savingsTotal.toFixed(2)}
+                      </span>
+                    </div>
+                  ) : null}
+                  <div className="mb-2 flex items-center justify-between text-[13px] text-[#555]">
+                    <span>Shipping &amp; Handling</span>
+                    <span>T.B.D.</span>
+                  </div>
+                  <div className="mb-3 flex items-center justify-between text-[13px] text-[#555]">
+                    <span>Estimated Taxes</span>
+                    <span>T.B.D.</span>
+                  </div>
+                </>
               ) : null}
-              <div className="flex items-end justify-between">
+              <div
+                className={`flex items-end justify-between ${
+                  warehouse ? "border-t border-[#ececec] pt-3" : ""
+                }`}
+              >
                 <span className="text-[13px] font-semibold text-[#555]">
                   {warehouse ? "Estimated Total" : "Estimated total"}
                 </span>
@@ -723,6 +883,15 @@ function CheckoutSheet() {
                       ? "Add membership to check out"
                       : "Place order"}
               </button>
+              {warehouse ? (
+                <button
+                  type="button"
+                  onClick={goCart}
+                  className="mt-3 w-full text-center text-[13px] font-bold text-costco-blue hover:underline"
+                >
+                  Return to Cart
+                </button>
+              ) : null}
               <p className="mt-3 inline-flex w-full items-center justify-center gap-1.5 text-center text-[11px] leading-snug text-[#888]">
                 {warehouse ? null : <InstacartMark size={12} />}
                 {warehouse
