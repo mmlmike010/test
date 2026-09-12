@@ -6,7 +6,7 @@ import type { Product } from "@/lib/data/products";
 import { useCatalogStore } from "@/lib/store/catalog";
 import { useListStore } from "@/lib/store/lists";
 import { instantSavingsText } from "@/lib/ui/instantSavings";
-import { productSize, unitPriceLabel, warehouseItemNumber } from "@/lib/ui/packSize";
+import { productSize, unitPriceLabel, warehouseItemNumber, warehousePackSrc } from "@/lib/ui/packSize";
 import { isLimitedOffer } from "@/lib/ui/warehouseSearch";
 import AddControl from "@/components/AddControl";
 import LimitedTimeOfferBadge from "@/components/LimitedTimeOfferBadge";
@@ -114,7 +114,7 @@ export default function WarehouseResultCard({
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={product.image}
+              src={warehousePackSrc(product)}
               alt=""
               className="absolute inset-0 h-full w-full object-contain p-1.5"
             />
@@ -206,7 +206,7 @@ export default function WarehouseResultCard({
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={product.image}
+            src={warehousePackSrc(product)}
             alt=""
             className={`absolute inset-0 h-full w-full object-contain ${
               featured

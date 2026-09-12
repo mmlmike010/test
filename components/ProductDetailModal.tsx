@@ -13,7 +13,7 @@ import GoldStarMark from "@/components/GoldStarMark";
 import { warehouseRelatedProducts } from "@/lib/ui/merchOrder";
 import { useWarehouseChrome } from "@/lib/store/warehouseChrome";
 import { instantSavingsText } from "@/lib/ui/instantSavings";
-import { productSize, unitPriceLabel, warehouseItemNumber } from "@/lib/ui/packSize";
+import { productSize, unitPriceLabel, warehouseItemNumber, warehousePackSrc } from "@/lib/ui/packSize";
 import { isLimitedOffer } from "@/lib/ui/warehouseSearch";
 import LimitedTimeOfferBadge from "@/components/LimitedTimeOfferBadge";
 import WarehouseFooter from "@/components/WarehouseFooter";
@@ -113,6 +113,7 @@ export default function ProductDetailModal({
   const toggleList = useListStore((s) => s.toggle);
   const size = productSize(current.id);
   const perUnit = unitPriceLabel(current.id, current.price);
+  const packSrc = warehouse ? warehousePackSrc(current) : current.image;
 
   const shopAllBrand = () => {
     setTag(null);
@@ -213,7 +214,7 @@ export default function ProductDetailModal({
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                      src={current.image}
+                      src={packSrc}
                       alt={`${current.brand} ${current.name}`}
                       className="block max-h-[480px] w-auto max-w-full object-contain"
                     />
@@ -238,7 +239,7 @@ export default function ProductDetailModal({
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                      src={current.image}
+                      src={packSrc}
                       alt=""
                       className="absolute inset-0 h-full w-full object-contain p-1"
                     />
@@ -724,7 +725,7 @@ export default function ProductDetailModal({
         </button>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={current.image}
+          src={packSrc}
           alt={`${current.brand} ${current.name} enlarged`}
           className="max-h-[90vh] max-w-[min(920px,96vw)] shadow-2xl object-contain bg-white"
           onClick={(e) => e.stopPropagation()}

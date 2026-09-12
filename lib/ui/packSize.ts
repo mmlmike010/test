@@ -35,6 +35,30 @@ export function warehouseItemNumber(id: string): string {
   return `18471${id.padStart(2, "0")}`;
 }
 
+/** Cropped pack shots for warehouse merch. Never written onto Product / Kirk. */
+const WAREHOUSE_BANNER_IDS = new Set([
+  "2",
+  "10",
+  "14",
+  "15",
+  "16",
+  "19",
+  "20",
+  "21",
+  "23",
+  "24",
+]);
+
+export function warehousePackSrc(product: {
+  id: string;
+  image: string;
+}): string {
+  if (WAREHOUSE_BANNER_IDS.has(product.id)) {
+    return `/products/banner-${product.id}.png?v=1`;
+  }
+  return product.image;
+}
+
 function money(price: number, qty: number): string {
   return `$${(price / qty).toFixed(2)}`;
 }

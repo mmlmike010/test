@@ -8,7 +8,7 @@ import { useListStore } from "@/lib/store/lists";
 import WarehouseQtySelect from "@/components/WarehouseQtySelect";
 import WarehouseFooter from "@/components/WarehouseFooter";
 import { instantSavingsAmount, instantSavingsText } from "@/lib/ui/instantSavings";
-import { productSize, unitPriceLabel, warehouseItemNumber } from "@/lib/ui/packSize";
+import { productSize, unitPriceLabel, warehouseItemNumber, warehousePackSrc } from "@/lib/ui/packSize";
 import {
   deliveryWindow,
   formatAddress,
@@ -161,7 +161,7 @@ export default function CartDrawer() {
                         >
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
-                            src={product.image}
+                            src={warehousePackSrc(product)}
                             alt=""
                             className="absolute inset-0 h-full w-full object-contain p-1"
                           />

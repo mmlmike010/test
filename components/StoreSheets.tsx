@@ -10,7 +10,7 @@ import InstacartMark from "@/components/InstacartMark";
 import { departments } from "@/lib/data/products";
 import { aisleLabel } from "@/lib/ui/aisleLabels";
 import { instantSavingsAmount, instantSavingsText } from "@/lib/ui/instantSavings";
-import { productSize, unitPriceLabel, warehouseItemNumber } from "@/lib/ui/packSize";
+import { productSize, unitPriceLabel, warehouseItemNumber, warehousePackSrc } from "@/lib/ui/packSize";
 import { EMPTY_WAREHOUSE_FACETS } from "@/lib/ui/warehouseSearch";
 import { useCatalogStore } from "@/lib/store/catalog";
 import { useCartStore } from "@/lib/store/cart";
@@ -923,7 +923,7 @@ function CheckoutSheet() {
                         <div className="relative h-[72px] w-[72px] shrink-0 overflow-hidden rounded-[3px] border border-[#eee] bg-white">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
-                            src={product.image}
+                            src={warehousePackSrc(product)}
                             alt=""
                             className="absolute inset-0 h-full w-full object-contain p-1"
                           />
@@ -1239,7 +1239,7 @@ function CheckoutSheet() {
                     >
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
-                        src={product.image}
+                        src={warehousePackSrc(product)}
                         alt=""
                         className="absolute inset-0 h-full w-full object-contain p-1"
                       />

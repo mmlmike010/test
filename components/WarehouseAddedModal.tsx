@@ -8,7 +8,7 @@ import { useSessionStore } from "@/lib/store/session";
 import { useWarehouseChrome } from "@/lib/store/warehouseChrome";
 import { warehouseRelatedProducts } from "@/lib/ui/merchOrder";
 import { instantSavingsText } from "@/lib/ui/instantSavings";
-import { productSize, warehouseItemNumber } from "@/lib/ui/packSize";
+import { productSize, warehouseItemNumber, warehousePackSrc } from "@/lib/ui/packSize";
 import { useStorefrontOverlayClass } from "@/lib/store/session";
 import WarehouseResultCard from "@/components/WarehouseResultCard";
 
@@ -81,7 +81,7 @@ export default function WarehouseAddedModal() {
           <div className="relative h-[140px] w-[140px] shrink-0 overflow-hidden rounded-[3px] border border-[#eee] bg-white">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={product.image}
+              src={warehousePackSrc(product)}
               alt=""
               className="absolute inset-0 h-full w-full object-contain p-1"
             />

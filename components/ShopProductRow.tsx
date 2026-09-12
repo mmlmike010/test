@@ -3,7 +3,7 @@
 import type { Product } from "@/lib/data/products";
 import { useCatalogStore } from "@/lib/store/catalog";
 import { instantSavingsText } from "@/lib/ui/instantSavings";
-import { productSize, unitPriceLabel, warehouseItemNumber } from "@/lib/ui/packSize";
+import { productSize, unitPriceLabel, warehouseItemNumber, warehousePackSrc } from "@/lib/ui/packSize";
 import AddControl from "@/components/AddControl";
 import StarRating from "@/components/StarRating";
 
@@ -31,7 +31,7 @@ export default function ShopProductRow({
           <span className="relative h-14 w-14 shrink-0 overflow-hidden border border-[#eee] bg-white rounded-[3px]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={product.image}
+              src={warehousePackSrc(product)}
               alt=""
               className="absolute inset-0 h-full w-full object-contain p-0.5"
             />
