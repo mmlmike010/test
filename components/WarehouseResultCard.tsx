@@ -64,7 +64,7 @@ export default function WarehouseResultCard({
   const preview = density === "preview";
   const catalog = density === "catalog";
   const list = density === "list";
-  const chrome = !featured;
+  const chrome = !preview;
 
   if (list) {
     return (
@@ -153,20 +153,25 @@ export default function WarehouseResultCard({
 
   return (
     <div className="flex flex-col border border-[#c4c4c4] bg-white rounded-[3px] overflow-hidden">
+      {featured && isLimitedOffer(product) ? (
+        <span className="block bg-costco-red py-0.5 text-center text-[9px] font-bold uppercase tracking-wide text-white">
+          Limited-Time Offers
+        </span>
+      ) : null}
       <button
         type="button"
         onClick={() => inspect(product, "warehouse")}
         className="flex min-w-0 flex-1 flex-col text-left hover:bg-[#f7fbfe]"
       >
         <span
-          className={`relative bg-white ${
+          className={`relative ${
             featured
-              ? "h-[88px]"
+              ? "h-[140px] bg-[#f6f6f6]"
               : preview
-                ? "h-[112px]"
+                ? "h-[112px] bg-white"
                 : catalog
-                  ? "h-[180px]"
-                  : "aspect-square"
+                  ? "h-[180px] bg-white"
+                  : "aspect-square bg-white"
           }`}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -174,40 +179,48 @@ export default function WarehouseResultCard({
             src={product.image}
             alt=""
             className={`absolute inset-0 h-full w-full object-contain ${
-              featured || preview ? "p-1.5 pt-5" : "p-2.5 pt-7"
+              featured ? "p-2" : preview ? "p-1.5 pt-5" : "p-2.5 pt-7"
             }`}
           />
-          {chrome && isLimitedOffer(product) ? (
-            <LimitedTimeOfferBadge compact={featured || preview} />
+          {chrome && !featured && isLimitedOffer(product) ? (
+            <LimitedTimeOfferBadge compact={preview} />
           ) : null}
         </span>
-        <span className={`min-w-0 px-2 ${featured ? "pb-1 pt-0.5" : "pb-2 pt-1"}`}>
+        <span className={`min-w-0 px-2 ${featured ? "pb-1 pt-1" : "pb-2 pt-1"}`}>
           <span
             className={`block font-bold leading-snug text-costco-blue hover:underline ${
-              featured
-                ? "text-[12px] line-clamp-1"
-                : preview
-                  ? "text-[12px] line-clamp-2"
-                  : "text-[13px] line-clamp-2"
+              featured || preview
+                ? "text-[12px] line-clamp-2"
+                : "text-[13px] line-clamp-2"
             }`}
           >
             {product.brand} {product.name}
           </span>
-          {size ? (
-            <span className="mt-0.5 block text-[11px] text-[#72767E]">{size}</span>
-          ) : null}
-          {chrome ? (
+          {featured ? (
             <span className="mt-0.5 block text-[11px] text-[#72767E]">
-              Item {warehouseItemNumber(product.id)}
+              {size ? `${size} · ` : ""}Item {warehouseItemNumber(product.id)}
             </span>
-          ) : null}
+          ) : (
+            <>
+              {size ? (
+                <span className="mt-0.5 block text-[11px] text-[#72767E]">
+                  {size}
+                </span>
+              ) : null}
+              {chrome ? (
+                <span className="mt-0.5 block text-[11px] text-[#72767E]">
+                  Item {warehouseItemNumber(product.id)}
+                </span>
+              ) : null}
+            </>
+          )}
           {chrome ? (
             <span className="mt-0.5 block">
               <StarRating
                 rating={product.rating}
                 reviewCount={product.reviewCount}
                 size="sm"
-                showCount={!preview}
+                showCount={!featured && !preview}
               />
             </span>
           ) : null}
@@ -253,7 +266,7 @@ export default function WarehouseResultCard({
             Compare Product
           </label>
         ) : null}
-        {catalog ? (
+        {catalog || featured ? (
           <div className="mt-1.5">
             <AddToListLink productId={product.id} productName={product.name} />
           </div>

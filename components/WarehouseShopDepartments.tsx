@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { WAREHOUSE_NAV_TILES } from "@/lib/ui/warehouseSearch";
 
-/** costco.com Shop by Department aisle. Horizontal so idle Kirk keeps merch above the fold. */
+/** costco.com Shop by Department row — image-forward tiles, no gold foil. */
 export default function WarehouseShopDepartments({
   selected,
   onPick,
@@ -15,16 +15,15 @@ export default function WarehouseShopDepartments({
   const scrollerRef = useRef<HTMLDivElement>(null);
   const nudge = (dir: number) => {
     scrollerRef.current?.scrollBy({
-      left: dir * 148,
+      left: dir * 128,
       behavior: "smooth",
     });
   };
 
   return (
-    <section className="overflow-hidden rounded-[3px] border border-[#c4c4c4] bg-white">
-      <div className="h-[3px] bg-gradient-to-r from-[#8c7318] via-[#f3e3a3] to-[#8c7318]" />
-      <div className="flex items-center justify-between gap-2 border-b border-[#ececec] px-3 py-1.5">
-        <h2 className="min-w-0 truncate text-[13px] font-bold text-[#1a1a1a]">
+    <section className="overflow-hidden bg-white">
+      <div className="flex items-center justify-between gap-2 px-1 pb-1">
+        <h2 className="min-w-0 truncate text-[15px] font-bold text-[#1a1a1a]">
           Shop by Department
         </h2>
         <div className="flex shrink-0 items-center gap-1.5">
@@ -57,7 +56,7 @@ export default function WarehouseShopDepartments({
         </div>
       </div>
       <div ref={scrollerRef} className="overflow-x-auto scrollbar-hide">
-        <div className="flex w-max gap-2 px-2 pb-2 pt-2">
+        <div className="flex w-max gap-3 px-1 pb-1 pt-1">
           {WAREHOUSE_NAV_TILES.map((tile) => {
             const active = selected.includes(tile.label);
             return (
@@ -65,21 +64,27 @@ export default function WarehouseShopDepartments({
                 key={tile.label}
                 type="button"
                 onClick={() => onPick(active ? null : tile.label)}
-                className={`w-[132px] shrink-0 rounded-[3px] border bg-white text-center ${
-                  active
-                    ? "border-costco-blue ring-1 ring-costco-blue"
-                    : "border-[#e8e8e8] hover:border-costco-blue hover:bg-[#f7fbfe]"
-                }`}
+                className="w-[112px] shrink-0 bg-white text-center"
               >
-                <span className="relative mx-auto mt-1.5 flex h-[88px] w-[88px] items-center justify-center overflow-hidden rounded-[3px] border border-[#e8e8e8] bg-[#f6f6f6]">
+                <span
+                  className={`relative mx-auto flex h-[104px] w-full items-center justify-center overflow-hidden bg-[#f6f6f6] ${
+                    active
+                      ? "ring-2 ring-costco-blue ring-offset-1"
+                      : "hover:ring-1 hover:ring-costco-blue"
+                  }`}
+                >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={tile.image}
                     alt=""
-                    className="absolute inset-0 h-full w-full object-contain p-1.5"
+                    className="absolute inset-0 h-full w-full object-contain p-2"
                   />
                 </span>
-                <span className="block min-h-[34px] px-1.5 py-1 text-[12px] font-bold leading-tight text-costco-blue">
+                <span
+                  className={`mt-1.5 block text-[12px] font-bold leading-tight text-costco-blue ${
+                    active ? "underline" : "hover:underline"
+                  }`}
+                >
                   {tile.label}
                 </span>
               </button>

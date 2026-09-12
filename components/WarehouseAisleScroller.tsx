@@ -18,7 +18,7 @@ export default function WarehouseAisleScroller({
   const scrollerRef = useRef<HTMLDivElement>(null);
   const nudge = (dir: number) => {
     scrollerRef.current?.scrollBy({
-      left: dir * 160,
+      left: dir * 180,
       behavior: "smooth",
     });
   };
@@ -66,7 +66,7 @@ export default function WarehouseAisleScroller({
       <div ref={scrollerRef} className="overflow-x-auto scrollbar-hide">
         <div className="flex w-max gap-2 px-2 pb-2 pt-2">
           {products.map((product) => (
-            <div key={`aisle-${product.id}`} className="w-[148px] shrink-0">
+            <div key={`aisle-${product.id}`} className="w-[168px] shrink-0">
               <WarehouseResultCard product={product} density="featured" />
             </div>
           ))}
