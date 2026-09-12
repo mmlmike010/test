@@ -109,7 +109,11 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
 
   return (
     <header className="bg-white border-b border-[#e5e5e5] sticky top-0 z-[75] shrink-0">
-      <div className="border-b border-[#ececec]">
+      <div
+        className={
+          warehouseSearch ? "bg-costco-red" : "border-b border-[#ececec]"
+        }
+      >
         <div className="max-w-[1800px] mx-auto px-3 sm:px-4 h-[52px] flex items-center justify-between gap-3">
           <div className="flex items-center gap-4 min-w-0">
             <button
@@ -121,7 +125,10 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
               }}
               title="Show all products"
             >
-              <CostcoLogo compact />
+              <CostcoLogo
+                compact
+                tone={warehouseSearch ? "onRed" : "default"}
+              />
               {warehouseSearch ? null : (
                 <span className="hidden sm:flex flex-col pl-2.5 border-l border-[#d8d8d8]">
                   <span className="text-[15px] font-bold text-costco-blue leading-none">
@@ -140,7 +147,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
               <>
                 <button
                   type="button"
-                  className="hidden sm:inline-flex items-center gap-1 text-[13px] font-semibold text-costco-blue hover:underline"
+                  className="hidden sm:inline-flex items-center gap-1 text-[13px] font-semibold text-white hover:underline"
                   onClick={() => setSheet("membership", chromeTone)}
                 >
                   {membershipAdded ? (
@@ -158,17 +165,17 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
                 </button>
                 <button
                   type="button"
-                  className="text-[13px] font-semibold text-costco-blue hover:underline"
+                  className="text-[13px] font-semibold text-white hover:underline"
                   onClick={() => setSheet("signin", chromeTone)}
                 >
                   {signedIn ? displayName : "Sign In / Register"}
                 </button>
-                <span className="hidden text-[#ccc] sm:inline" aria-hidden="true">
+                <span className="hidden text-white/50 sm:inline" aria-hidden="true">
                   |
                 </span>
                 <button
                   type="button"
-                  className="hidden sm:inline text-[13px] font-semibold text-costco-blue hover:underline"
+                  className="hidden sm:inline text-[13px] font-semibold text-white hover:underline"
                   onClick={() => setSheet("signin", chromeTone)}
                 >
                   Orders & Returns
