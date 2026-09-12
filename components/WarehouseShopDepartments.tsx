@@ -35,7 +35,7 @@ export default function WarehouseShopDepartments({
               className="bg-white text-left"
             >
               <span
-                className={`relative flex h-[220px] w-full items-center justify-center overflow-hidden border bg-white ${
+                className={`relative flex h-[220px] w-full items-center justify-center overflow-hidden border bg-[#f6f7f8] ${
                   active
                     ? "border-costco-blue ring-2 ring-costco-blue ring-offset-1"
                     : "border-[#e5e5e5] hover:border-costco-blue"
@@ -45,7 +45,7 @@ export default function WarehouseShopDepartments({
                 <img
                   src={tile.image}
                   alt=""
-                  className="h-full w-full object-contain p-6"
+                  className="h-full w-full object-contain p-2"
                 />
               </span>
               <span

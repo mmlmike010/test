@@ -172,7 +172,7 @@ export default function WarehouseResultCard({
         <span
           className={`relative ${
             featured
-              ? "h-[176px] bg-white"
+              ? "h-[200px] bg-white"
               : preview
                 ? "h-[112px] bg-white"
                 : catalog
@@ -186,7 +186,7 @@ export default function WarehouseResultCard({
             alt=""
             className={`absolute inset-0 h-full w-full object-contain ${
               featured
-                ? "p-2"
+                ? "p-1"
                 : preview
                   ? "p-1.5"
                   : catalog
