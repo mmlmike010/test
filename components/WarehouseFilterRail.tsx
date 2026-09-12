@@ -52,10 +52,14 @@ export default function WarehouseFilterRail({
   items,
   facets,
   onChange,
+  id = "warehouse-filter-results",
+  compact = false,
 }: {
   items: Product[];
   facets: WarehouseFacets;
   onChange: (next: WarehouseFacets) => void;
+  id?: string;
+  compact?: boolean;
 }) {
   const departments = facetCounts(items, (product) =>
     aisleLabel(product.department)
@@ -82,8 +86,12 @@ export default function WarehouseFilterRail({
 
   return (
     <aside
-      id="warehouse-filter-results"
-      className="mb-4 rounded-[3px] border border-[#c4c4c4] bg-white px-3 py-3 lg:mb-0 lg:sticky lg:top-0"
+      id={id}
+      className={
+        compact
+          ? "rounded-[3px] border border-[#c4c4c4] bg-white px-2.5 py-2"
+          : "mb-4 rounded-[3px] border border-[#c4c4c4] bg-white px-3 py-3 lg:mb-0 lg:sticky lg:top-0"
+      }
     >
       <div className="flex items-center justify-between gap-2">
         <p className="text-[14px] font-bold text-[#1a1a1a]">Filter Results</p>

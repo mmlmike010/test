@@ -10,6 +10,8 @@ import {
   Sparkles,
   ChevronRight,
   Search,
+  LayoutGrid,
+  List,
 } from "lucide-react";
 import { useCartStore } from "@/lib/store/cart";
 import { products } from "@/lib/data/products";
@@ -21,6 +23,7 @@ import GoldStarMark from "@/components/GoldStarMark";
 import GoldStarMembershipCard from "@/components/GoldStarMembershipCard";
 import WarehouseShopDepartments from "@/components/WarehouseShopDepartments";
 import WarehouseAisleScroller from "@/components/WarehouseAisleScroller";
+import WarehouseFilterRail from "@/components/WarehouseFilterRail";
 import {
   deliveryWindow,
   formatAddress,
@@ -115,6 +118,10 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [pendingInspire, setPendingInspire] = useState(false);
   const [lightboxUrl, setLightboxUrl] = useState<string | null>(null);
+  const [kirkResultsView, setKirkResultsView] = useState<"grid" | "list">(
+    "grid"
+  );
+  const [kirkFiltersOpen, setKirkFiltersOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const latestResultsRef = useRef<HTMLDivElement>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -187,6 +194,8 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
     setLightboxUrl(null);
     setError(null);
     setCartNotice(null);
+    setKirkResultsView("grid");
+    setKirkFiltersOpen(false);
     const catalog = useCatalogStore.getState();
     catalog.clearFilters();
     catalog.inspect(null);
@@ -804,17 +813,10 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                     <div className="flex flex-wrap items-center gap-2">
                       <button
                         type="button"
-                        onClick={() => {
-                          document
-                            .getElementById("warehouse-filter-results")
-                            ?.scrollIntoView({
-                              behavior: "smooth",
-                              block: "start",
-                            });
-                        }}
+                        onClick={() => setKirkFiltersOpen((open) => !open)}
                         className="text-[12px] font-bold text-costco-blue hover:underline"
                       >
-                        Filter Results
+                        {kirkFiltersOpen ? "Hide Filters" : "Filter Results"}
                       </button>
                       <button
                         type="button"
@@ -846,6 +848,38 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                           <option value="rating">Ratings (High to Low)</option>
                         </select>
                       </label>
+                      <div
+                        className="inline-flex items-center gap-0.5"
+                        role="group"
+                        aria-label="View"
+                      >
+                        <button
+                          type="button"
+                          aria-pressed={kirkResultsView === "grid"}
+                          aria-label="Grid view"
+                          onClick={() => setKirkResultsView("grid")}
+                          className={`flex h-6 w-6 items-center justify-center rounded-[3px] border ${
+                            kirkResultsView === "grid"
+                              ? "border-costco-blue bg-[#f7fbfe] text-costco-blue"
+                              : "border-[#c4c4c4] bg-white text-[#555] hover:border-costco-blue"
+                          }`}
+                        >
+                          <LayoutGrid className="h-3.5 w-3.5" />
+                        </button>
+                        <button
+                          type="button"
+                          aria-pressed={kirkResultsView === "list"}
+                          aria-label="List view"
+                          onClick={() => setKirkResultsView("list")}
+                          className={`flex h-6 w-6 items-center justify-center rounded-[3px] border ${
+                            kirkResultsView === "list"
+                              ? "border-costco-blue bg-[#f7fbfe] text-costco-blue"
+                              : "border-[#c4c4c4] bg-white text-[#555] hover:border-costco-blue"
+                          }`}
+                        >
+                          <List className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ) : null}
@@ -879,13 +913,32 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                   </div>
                 ) : null}
               </div>
+              {kirkFiltersOpen ? (
+                <div className="border-b border-[#ececec] px-2 py-2">
+                  <WarehouseFilterRail
+                    id="kirk-filter-results"
+                    compact
+                    items={unfilteredHits}
+                    facets={warehouseFacets}
+                    onChange={setWarehouseFacets}
+                  />
+                </div>
+              ) : null}
               {hits.length > 0 ? (
-                <div className="space-y-2 p-2">
+                <div
+                  className={
+                    kirkResultsView === "grid"
+                      ? "grid grid-cols-2 gap-2 p-2"
+                      : "space-y-2 p-2"
+                  }
+                >
                   {preview.map((product) => (
                     <WarehouseResultCard
                       key={`${message.id}-${product.id}`}
                       product={product}
-                      density="list"
+                      density={
+                        kirkResultsView === "grid" ? "featured" : "list"
+                      }
                     />
                   ))}
                 </div>
