@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useCartStore } from "@/lib/store/cart";
 import { useCatalogStore } from "@/lib/store/catalog";
-import { ChevronDown, Clock, Mic, Search, ShoppingCart, Square, User, X } from "lucide-react";
+import { ChevronDown, Clock, Heart, Mic, Search, ShoppingCart, Square, User, X } from "lucide-react";
 import CostcoLogo from "@/components/CostcoLogo";
 import KirkMark from "@/components/KirkMark";
 import InstacartMark from "@/components/InstacartMark";
@@ -162,6 +162,20 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
                     </span>
                   </button>
                 ) : null}
+                <button
+                  type="button"
+                  className="hidden lg:inline text-[13px] font-semibold text-white hover:underline"
+                  onClick={() =>
+                    document
+                      .getElementById("costco-email-offers")
+                      ?.scrollIntoView({ behavior: "smooth", block: "center" })
+                  }
+                >
+                  Get Email Offers
+                </button>
+                <span className="hidden text-white/50 lg:inline" aria-hidden="true">
+                  |
+                </span>
                 <button
                   type="button"
                   className="hidden sm:inline text-[13px] font-semibold text-white hover:underline"
@@ -416,32 +430,43 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
             <KirkMark size={22} tone={warehouseChrome ? "onRed" : "default"} />
           </button>
 
-          <button
-            type="button"
-            className={`hidden lg:flex text-left items-center gap-1.5 px-1.5 py-0.5 hover:bg-[#f6f6f6] ${
-              warehouseChrome ? "rounded-[3px]" : "rounded-md"
-            }`}
-            onClick={() => setSheet("delivery", chromeTone)}
-          >
-            <Clock className="w-[18px] h-[18px] text-costco-blue shrink-0" />
-            <span>
-              <span className="block text-[13px] text-[#333] leading-tight">
-                <span className="text-[#666]">Delivery </span>
-                <span className="font-bold">{slot.label}</span>
+          {warehouseChrome ? (
+            <button
+              type="button"
+              className="hidden sm:inline-flex h-10 items-center gap-1.5 rounded-[3px] px-2 hover:bg-[#f6f6f6]"
+              onClick={() => setSheet("lists", "warehouse")}
+            >
+              <Heart className="h-[18px] w-[18px] text-[#333]" />
+              <span className="text-[13px] font-bold text-[#333]">Lists</span>
+            </button>
+          ) : (
+            <button
+              type="button"
+              className="hidden lg:flex text-left items-center gap-1.5 px-1.5 py-0.5 hover:bg-[#f6f6f6] rounded-md"
+              onClick={() => setSheet("delivery", chromeTone)}
+            >
+              <Clock className="w-[18px] h-[18px] text-costco-blue shrink-0" />
+              <span>
+                <span className="block text-[13px] text-[#333] leading-tight">
+                  <span className="text-[#666]">Delivery </span>
+                  <span className="font-bold">{slot.label}</span>
+                </span>
+                <span className="block text-[12px] text-[#666] leading-tight">
+                  {formatAddress(address)}
+                </span>
               </span>
-              <span className="block text-[12px] text-[#666] leading-tight">
-                {formatAddress(address)}
-              </span>
-            </span>
-            <ChevronDown className="w-4 h-4 text-[#666] shrink-0" />
-          </button>
+              <ChevronDown className="w-4 h-4 text-[#666] shrink-0" />
+            </button>
+          )}
 
           <button
             type="button"
             onClick={() => openCart(chromeTone)}
             aria-label={`View Cart. Items in cart: ${totalItems}`}
-            className={`relative inline-flex items-center gap-1.5 h-10 px-3 border border-[#c4c4c4] hover:bg-[#f6f6f6] bg-white ${
-              warehouseChrome ? "rounded-[3px]" : "rounded-full"
+            className={`relative inline-flex items-center gap-1.5 h-10 hover:bg-[#f6f6f6] bg-white ${
+              warehouseChrome
+                ? "rounded-[3px] px-2"
+                : "rounded-full border border-[#c4c4c4] px-3"
             }`}
           >
             <ShoppingCart className="w-5 h-5 text-[#333]" />

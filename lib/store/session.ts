@@ -11,6 +11,7 @@ export type StoreSheet =
   | "request"
   | "checkout"
   | "customer"
+  | "lists"
   | null;
 
 /** UI chrome only — never sent to Kirk. Header always sameday. */

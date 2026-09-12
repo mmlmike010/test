@@ -3,6 +3,7 @@
 import { useState, type ReactNode } from "react";
 import { Check, ChevronRight } from "lucide-react";
 import StoreSheet from "@/components/StoreSheet";
+import WarehouseListsSheet from "@/components/WarehouseListsSheet";
 import WarehouseLocatorMap from "@/components/WarehouseLocatorMap";
 import GoldStarMark from "@/components/GoldStarMark";
 import GoldStarMembershipCard from "@/components/GoldStarMembershipCard";
@@ -1565,6 +1566,7 @@ export default function StoreSheets() {
       {sheet === "departments" ? <DepartmentsSheet /> : null}
       {sheet === "request" ? <RequestSheet /> : null}
       {sheet === "customer" ? <CustomerServiceSheet /> : null}
+      {sheet === "lists" ? <WarehouseListsSheet /> : null}
     </>
   );
 }
