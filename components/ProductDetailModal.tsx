@@ -203,10 +203,10 @@ export default function ProductDetailModal({
             }
           >
             <div
-              className={`relative aspect-square ${
+              className={`relative ${
                 warehouse
-                  ? "mx-auto max-h-[460px] max-w-[460px] bg-white"
-                  : "bg-[#f3f4f5]"
+                  ? "h-[52vh] max-h-[520px] w-full bg-white"
+                  : "aspect-square bg-[#f3f4f5]"
               }`}
             >
               <button
@@ -220,7 +220,7 @@ export default function ProductDetailModal({
                   src={current.image}
                   alt={`${current.brand} ${current.name}`}
                   className={`absolute inset-0 h-full w-full object-contain ${
-                    warehouse ? "p-4" : "p-8"
+                    warehouse ? "p-2" : "p-8"
                   }`}
                 />
               </button>
@@ -250,8 +250,8 @@ export default function ProductDetailModal({
               </button>
             </div>
             <div
-              className={`flex justify-start gap-2 border-b border-[#eee] bg-white px-4 py-3 ${
-                  "lg:border-b-0"
+              className={`flex justify-start gap-2 bg-white px-4 ${
+                warehouse ? "pb-3 pt-1" : "border-b border-[#eee] py-3 lg:border-b-0"
               }`}
             >
               <button
