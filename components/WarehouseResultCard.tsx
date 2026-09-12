@@ -4,6 +4,7 @@ import { Heart } from "lucide-react";
 import type { Product } from "@/lib/data/products";
 import { useCatalogStore } from "@/lib/store/catalog";
 import { useListStore } from "@/lib/store/lists";
+import { instantSavingsText } from "@/lib/ui/instantSavings";
 import { productSize, warehouseItemNumber } from "@/lib/ui/packSize";
 import { isLimitedOffer } from "@/lib/ui/warehouseSearch";
 import AddControl from "@/components/AddControl";
@@ -118,9 +119,9 @@ export default function WarehouseResultCard({
                   </span>
                 ) : null}
               </span>
-              {product.savings > 0 ? (
-                <span className="mt-0.5 block text-[11px] font-semibold text-[#188038]">
-                  Save ${product.savings.toFixed(2)}
+              {instantSavingsText(product.savings) ? (
+                <span className="mt-0.5 block text-[11px] font-semibold leading-snug text-[#188038]">
+                  {instantSavingsText(product.savings)}
                 </span>
               ) : null}
               <span className="mt-0.5 block text-[11px] font-semibold text-[#188038]">
@@ -244,9 +245,9 @@ export default function WarehouseResultCard({
               </span>
             ) : null}
           </span>
-          {product.savings > 0 ? (
-            <span className="mt-0.5 block text-[11px] font-semibold text-[#188038]">
-              Save ${product.savings.toFixed(2)}
+          {instantSavingsText(product.savings) ? (
+            <span className="mt-0.5 block text-[11px] font-semibold leading-snug text-[#188038]">
+              {instantSavingsText(product.savings)}
             </span>
           ) : null}
           {chrome && !preview ? (

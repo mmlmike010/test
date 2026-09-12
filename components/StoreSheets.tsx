@@ -8,6 +8,7 @@ import GoldStarMembershipCard from "@/components/GoldStarMembershipCard";
 import InstacartMark from "@/components/InstacartMark";
 import { departments } from "@/lib/data/products";
 import { aisleLabel } from "@/lib/ui/aisleLabels";
+import { instantSavingsText } from "@/lib/ui/instantSavings";
 import { productSize, unitPriceLabel, warehouseItemNumber } from "@/lib/ui/packSize";
 import { useCatalogStore } from "@/lib/store/catalog";
 import { useCartStore } from "@/lib/store/cart";
@@ -658,8 +659,10 @@ function CheckoutSheet() {
                         {quantity} × ${product.price.toFixed(2)} each
                       </p>
                       {product.savings > 0 ? (
-                        <p className="mt-0.5 text-[12px] font-semibold text-[#188038]">
-                          Save ${product.savings.toFixed(2)}
+                        <p className="mt-0.5 text-[12px] font-semibold leading-snug text-[#188038]">
+                          {warehouse
+                            ? instantSavingsText(product.savings)
+                            : `Save $${product.savings.toFixed(2)}`}
                         </p>
                       ) : null}
                     </div>

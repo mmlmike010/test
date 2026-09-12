@@ -35,7 +35,7 @@ function FacetCheck({
           className="accent-costco-blue"
         />
         <span
-          className={`truncate text-[12px] ${
+          className={`text-[12px] leading-tight ${
             checked ? "font-bold text-costco-blue" : "text-[#1a1a1a]"
           }`}
         >

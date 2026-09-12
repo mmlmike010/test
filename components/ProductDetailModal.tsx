@@ -12,6 +12,7 @@ import WarehouseQtySelect from "@/components/WarehouseQtySelect";
 import GoldStarMark from "@/components/GoldStarMark";
 import { hideComposedLeftovers, officialPacksFirst } from "@/lib/ui/merchOrder";
 import { useWarehouseChrome } from "@/lib/store/warehouseChrome";
+import { instantSavingsText } from "@/lib/ui/instantSavings";
 import { productSize, unitPriceLabel, warehouseItemNumber } from "@/lib/ui/packSize";
 import { isLimitedOffer } from "@/lib/ui/warehouseSearch";
 import LimitedTimeOfferBadge from "@/components/LimitedTimeOfferBadge";
@@ -322,82 +323,30 @@ export default function ProductDetailModal({
             </div>
 
             {warehouse ? (
-              <p className="mt-4 inline-flex items-center gap-1.5 text-[12px] font-bold uppercase tracking-[0.06em] text-[#555]">
-                Your Price
-                <span className="inline-flex items-center gap-1 normal-case tracking-normal text-costco-blue">
-                  <GoldStarMark size={12} />
-                  Member
-                </span>
-              </p>
-            ) : null}
-            <div
-              className={`flex items-baseline gap-2 flex-wrap ${
-                warehouse ? "mt-1" : "mt-4"
-              }`}
-            >
-              <span
-                className="text-[28px] font-bold tabular-nums leading-none text-[#1a1a1a]"
-              >
-                ${current.price.toFixed(2)}
-              </span>
-              {warehouse ? null : (
-                <span className="text-[15px] text-[#8a8a8a]">each</span>
-              )}
-              <span className="text-sm text-[#888] line-through tabular-nums">
-                ${current.originalPrice.toFixed(2)}
-              </span>
-            </div>
-            {current.savings > 0 && (
-              <p className="text-[13px] font-bold text-[#2e7d32] mt-1">
-                Save ${current.savings.toFixed(2)}
-              </p>
-            )}
-            <p
-              className={`text-[12px] mt-2 ${
-                warehouse ? "font-semibold text-[#188038]" : "text-[#188038]"
-              }`}
-            >
-              {current.inStock
-                ? warehouse
-                  ? "In Stock"
-                  : "Many in stock"
-                : "Out of stock"}
-              {warehouse ? (
-                <span className="block font-normal text-[#666]">
-                  Same-Day Delivery
-                </span>
-              ) : (
-                <span className="text-[#666]">
-                  {" "}
-                  · {aisleLabel(current.department)}
-                </span>
-              )}
-            </p>
-            {warehouse ? null : (
-              <p className="mt-0.5 text-[12px] text-[#666]">Sold by Costco</p>
-            )}
-            {warehouse ? (
-              <div className="mt-4 rounded-[3px] border-2 border-costco-blue bg-[#f7fbfe] px-3.5 py-3">
-                <p className="flex items-center gap-2 text-[13px] font-bold text-[#1a1a1a]">
-                  <span
-                    className="inline-flex h-3.5 w-3.5 items-center justify-center rounded-full border-2 border-costco-blue"
-                    aria-hidden="true"
-                  >
-                    <span className="h-1.5 w-1.5 rounded-full bg-costco-blue" />
+              <div className="mt-4 rounded-[3px] border border-[#c4c4c4] bg-white px-3.5 py-3.5">
+                <p className="inline-flex items-center gap-1.5 text-[12px] font-bold uppercase tracking-[0.06em] text-[#555]">
+                  Your Price
+                  <span className="inline-flex items-center gap-1 normal-case tracking-normal text-costco-blue">
+                    <GoldStarMark size={12} />
+                    Member
                   </span>
-                  Delivery
                 </p>
-                <p className="mt-1 text-[13px] font-semibold text-[#188038]">
-                  Same-Day Delivery · In Stock
-                </p>
-                <p className="mt-0.5 text-[12px] leading-snug text-[#666]">
-                  Membership required · Prices higher than warehouse
-                </p>
-              </div>
-            ) : null}
-            {warehouse ? (
-              <div className="mt-4">
-                <div className="flex items-end gap-2">
+                <div className="mt-1 flex flex-wrap items-baseline gap-2">
+                  <span className="text-[28px] font-bold tabular-nums leading-none text-[#1a1a1a]">
+                    ${current.price.toFixed(2)}
+                  </span>
+                  {current.originalPrice > current.price ? (
+                    <span className="text-sm text-[#888] line-through tabular-nums">
+                      ${current.originalPrice.toFixed(2)}
+                    </span>
+                  ) : null}
+                </div>
+                {instantSavingsText(current.savings) ? (
+                  <p className="mt-1 text-[13px] font-bold leading-snug text-[#188038]">
+                    {instantSavingsText(current.savings)}
+                  </p>
+                ) : null}
+                <div className="mt-3 flex items-end gap-2">
                   <WarehouseQtySelect value={buyQty} onChange={setBuyQty} />
                   <button
                     type="button"
@@ -419,8 +368,51 @@ export default function ProductDetailModal({
                     {qty} in cart · View Cart
                   </button>
                 ) : null}
+                <div className="mt-3 rounded-[3px] border-2 border-costco-blue bg-[#f7fbfe] px-3.5 py-3">
+                  <p className="flex items-center gap-2 text-[13px] font-bold text-[#1a1a1a]">
+                    <span
+                      className="inline-flex h-3.5 w-3.5 items-center justify-center rounded-full border-2 border-costco-blue"
+                      aria-hidden="true"
+                    >
+                      <span className="h-1.5 w-1.5 rounded-full bg-costco-blue" />
+                    </span>
+                    Delivery
+                  </p>
+                  <p className="mt-1 text-[13px] font-semibold text-[#188038]">
+                    Same-Day Delivery ·{" "}
+                    {current.inStock ? "In Stock" : "Out of stock"}
+                  </p>
+                  <p className="mt-0.5 text-[12px] leading-snug text-[#666]">
+                    Membership required · Prices higher than warehouse
+                  </p>
+                </div>
               </div>
-            ) : null}
+            ) : (
+              <>
+                <div className="mt-4 flex flex-wrap items-baseline gap-2">
+                  <span className="text-[28px] font-bold tabular-nums leading-none text-[#1a1a1a]">
+                    ${current.price.toFixed(2)}
+                  </span>
+                  <span className="text-[15px] text-[#8a8a8a]">each</span>
+                  <span className="text-sm text-[#888] line-through tabular-nums">
+                    ${current.originalPrice.toFixed(2)}
+                  </span>
+                </div>
+                {current.savings > 0 ? (
+                  <p className="mt-1 text-[13px] font-bold text-[#2e7d32]">
+                    Save ${current.savings.toFixed(2)}
+                  </p>
+                ) : null}
+                <p className="mt-2 text-[12px] text-[#188038]">
+                  {current.inStock ? "Many in stock" : "Out of stock"}
+                  <span className="text-[#666]">
+                    {" "}
+                    · {aisleLabel(current.department)}
+                  </span>
+                </p>
+                <p className="mt-0.5 text-[12px] text-[#666]">Sold by Costco</p>
+              </>
+            )}
             <div className="mt-5" key={current.id}>
               {warehouse ? (
                 <>

@@ -2,6 +2,7 @@
 
 import type { Product } from "@/lib/data/products";
 import { useCatalogStore } from "@/lib/store/catalog";
+import { instantSavingsText } from "@/lib/ui/instantSavings";
 import { productSize, unitPriceLabel, warehouseItemNumber } from "@/lib/ui/packSize";
 import AddControl from "@/components/AddControl";
 import StarRating from "@/components/StarRating";
@@ -62,9 +63,9 @@ export default function ShopProductRow({
                   ${product.originalPrice.toFixed(2)}
                 </span>
               ) : null}
-              {product.savings > 0 ? (
-                <span className="ml-1.5 text-[11px] font-semibold text-[#188038]">
-                  Save ${product.savings.toFixed(2)}
+              {instantSavingsText(product.savings) ? (
+                <span className="mt-0.5 block text-[11px] font-semibold leading-snug text-[#188038]">
+                  {instantSavingsText(product.savings)}
                 </span>
               ) : null}
             </span>

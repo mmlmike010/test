@@ -955,7 +955,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                 <div
                   className={
                     kirkFiltersOpen
-                      ? "grid grid-cols-[148px_minmax(0,1fr)] items-start gap-2"
+                      ? "grid grid-cols-[168px_minmax(0,1fr)] items-start gap-2"
                       : undefined
                   }
                 >

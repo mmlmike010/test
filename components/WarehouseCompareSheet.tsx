@@ -4,6 +4,7 @@ import { X } from "lucide-react";
 import type { Product } from "@/lib/data/products";
 import { useCatalogStore } from "@/lib/store/catalog";
 import { storefrontOverlayClass, useSessionStore } from "@/lib/store/session";
+import { instantSavingsText } from "@/lib/ui/instantSavings";
 import { productSize, warehouseItemNumber } from "@/lib/ui/packSize";
 import { aisleLabel } from "@/lib/ui/aisleLabels";
 import { isLimitedOffer } from "@/lib/ui/warehouseSearch";
@@ -201,9 +202,9 @@ export default function WarehouseCompareSheet({
                         ${product.originalPrice.toFixed(2)}
                       </p>
                     ) : null}
-                    {product.savings > 0 ? (
-                      <p className="text-[11px] font-semibold text-[#188038]">
-                        Save ${product.savings.toFixed(2)}
+                    {instantSavingsText(product.savings) ? (
+                      <p className="text-[11px] font-semibold leading-snug text-[#188038]">
+                        {instantSavingsText(product.savings)}
                       </p>
                     ) : null}
                   </td>
