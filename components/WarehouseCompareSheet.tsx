@@ -28,7 +28,7 @@ export default function WarehouseCompareSheet({
 
   return (
     <div
-      className={`fixed z-[78] flex min-h-0 flex-col bg-[#e8eaed] ${overlayClass}`}
+      className={`fixed z-[78] flex min-h-0 flex-col bg-white ${overlayClass}`}
     >
         <div className="min-h-0 flex-1 overflow-auto px-4 py-4 lg:px-6">
         <div className="mx-auto max-w-[1180px]">

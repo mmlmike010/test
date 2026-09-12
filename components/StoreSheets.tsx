@@ -23,6 +23,7 @@ import {
   deliveryWindow,
   formatAddress,
   useSessionStore,
+  type StoreSheet as SessionSheet,
 } from "@/lib/store/session";
 
 function useWarehouseCheckoutSheet() {
@@ -66,7 +67,7 @@ function WarehouseGoldStarCard({
 function warehouseAccountCrumbs(
   title: string,
   closeSheet: () => void,
-  priorSheet: "pricing" | "membership" | "signin" | "delivery" | "departments" | "request" | "checkout" | null
+  priorSheet: SessionSheet
 ) {
   const setSheet = useSessionStore.getState().setSheet;
   const openCart = useCartStore.getState().openCart;
@@ -992,9 +993,12 @@ function CheckoutSheet() {
                 </CheckoutStep>
                 <CheckoutStep n={4} title="Payment">
                   <div className="mt-2 flex flex-wrap items-start gap-3">
-                    <div className="flex h-[76px] w-[124px] flex-col justify-between rounded-[4px] bg-gradient-to-br from-costco-red to-[#8b1024] p-2 text-white shadow-[0_1px_3px_rgba(0,0,0,0.2)]">
-                      <p className="text-[8px] font-bold uppercase tracking-[0.08em]">
-                        Costco Anywhere
+                    <div className="flex h-[80px] w-[132px] flex-col justify-between rounded-[6px] bg-[#1a1a1a] p-2 text-white shadow-[0_1px_3px_rgba(0,0,0,0.25)]">
+                      <p className="text-[10px] font-black leading-none tracking-tight text-costco-red">
+                        COSTCO
+                      </p>
+                      <p className="text-[8px] font-bold uppercase tracking-[0.12em] text-white/80">
+                        Anywhere Visa
                       </p>
                       <p className="text-[12px] font-bold tracking-[0.16em]">
                         •••• 1117
@@ -1259,6 +1263,70 @@ function CheckoutSheet() {
   );
 }
 
+function CustomerServiceSheet() {
+  const closeSheet = useSessionStore((s) => s.closeSheet);
+  const setSheet = useSessionStore((s) => s.setSheet);
+  const topics = [
+    {
+      title: "Orders & Returns",
+      copy: "Track an order or start a return.",
+      onClick: () => setSheet("signin", "warehouse"),
+    },
+    {
+      title: "Membership",
+      copy: "Gold Star benefits and member number.",
+      onClick: () => setSheet("membership", "warehouse"),
+    },
+    {
+      title: "Find a Warehouse",
+      copy: "Same-Day Delivery address and time windows.",
+      onClick: () => setSheet("delivery", "warehouse"),
+    },
+  ];
+
+  return (
+    <StoreSheet
+      title="Customer Service"
+      onClose={closeSheet}
+      tone="warehouse"
+      page
+      crumbs={[
+        { label: "Home", onClick: closeSheet },
+        { label: "Customer Service" },
+      ]}
+    >
+      <div className="space-y-4">
+        <div className="rounded-[3px] border border-[#c4c4c4] bg-white px-5 py-5">
+          <p className="text-[13px] leading-relaxed text-[#555]">
+            Get help with membership, orders, and Same-Day Delivery.
+          </p>
+          <p className="mt-3 text-[18px] font-bold text-[#1a1a1a]">
+            1-800-774-2678
+          </p>
+          <p className="mt-0.5 text-[12px] text-[#72767E]">
+            Monday–Friday, 8:00am–8:00pm PT
+          </p>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2">
+          {topics.map((topic) => (
+            <button
+              key={topic.title}
+              type="button"
+              onClick={topic.onClick}
+              className="rounded-[3px] border border-[#c4c4c4] bg-white px-4 py-3 text-left hover:border-costco-blue hover:bg-[#f7fbfe]"
+            >
+              <p className="text-[14px] font-bold text-costco-blue">
+                {topic.title}
+              </p>
+              <p className="mt-1 text-[12px] text-[#555]">{topic.copy}</p>
+            </button>
+          ))}
+        </div>
+      </div>
+    </StoreSheet>
+  );
+}
+
 export default function StoreSheets() {
   const sheet = useSessionStore((s) => s.sheet);
   const priorSheet = useSessionStore((s) => s.priorSheet);
@@ -1273,6 +1341,7 @@ export default function StoreSheets() {
       {sheet === "delivery" ? <DeliverySheet /> : null}
       {sheet === "departments" ? <DepartmentsSheet /> : null}
       {sheet === "request" ? <RequestSheet /> : null}
+      {sheet === "customer" ? <CustomerServiceSheet /> : null}
     </>
   );
 }

@@ -145,9 +145,7 @@ export default function ProductDetailModal({
   return (
     <>
     <div
-      className={`fixed z-[74] flex min-h-0 flex-col ${
-        warehouse ? "bg-[#e8eaed]" : "bg-white"
-      } ${overlayClass}`}
+      className={`fixed z-[74] flex min-h-0 flex-col bg-white ${overlayClass}`}
     >
       <div
         role="dialog"

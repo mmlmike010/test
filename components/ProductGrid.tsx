@@ -394,7 +394,7 @@ export default function ProductGrid() {
   return (
     <div
       className={`p-4 lg:px-5 lg:py-4 ${
-        warehouseList ? "bg-[#e8eaed]" : "bg-[#f6f7f8]"
+        warehouseList ? "bg-white" : "bg-[#f6f7f8]"
       }`}
     >
       {error && (

@@ -95,18 +95,22 @@ function KirklandHelpCard({
   children: ReactNode;
   variant?: "foil" | "page";
 }) {
+  if (variant === "page") {
+    return (
+      <section className="overflow-hidden rounded-[3px] border border-[#c4c4c4] bg-white">
+        <p className="border-b border-[#c4c4c4] bg-[#f6f7f8] px-3.5 py-2 text-[13px] font-bold text-[#1a1a1a]">
+          {title}
+        </p>
+        <div className="px-3.5 py-2.5 text-[13px] leading-relaxed text-[#1a1a1a]">
+          {children}
+        </div>
+      </section>
+    );
+  }
   return (
     <section className="overflow-hidden rounded-[3px] border border-[#c4c4c4] bg-white">
-      {variant === "foil" ? (
-        <div className="h-[3px] bg-gradient-to-r from-[#8c7318] via-[#f3e3a3] to-[#8c7318]" />
-      ) : null}
-      <div
-        className={
-          variant === "page"
-            ? "border-l-[3px] border-l-costco-blue px-3.5 py-2.5"
-            : "px-3.5 py-2.5"
-        }
-      >
+      <div className="h-[3px] bg-gradient-to-r from-[#8c7318] via-[#f3e3a3] to-[#8c7318]" />
+      <div className="px-3.5 py-2.5">
         <p className="text-[13px] font-bold text-[#1a1a1a]">{title}</p>
         <div className="mt-1 text-[13px] leading-relaxed text-[#1a1a1a]">
           {children}
@@ -904,30 +908,29 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                   aria-label="Breadcrumb"
                   className="flex flex-wrap items-center gap-x-1.5 text-[11px] text-[#555]"
                 >
-                  <span className="font-bold text-costco-blue">Home</span>
+                  {kirkShopPage ? (
+                    <button
+                      type="button"
+                      onClick={handleReset}
+                      className="font-bold text-costco-blue hover:underline"
+                    >
+                      Home
+                    </button>
+                  ) : (
+                    <span className="font-bold text-costco-blue">Home</span>
+                  )}
                   <span aria-hidden="true">›</span>
                   <span className="text-[#1a1a1a]">Search Results</span>
                 </nav>
                 {kirkShopPage ? (
-                  <div className="flex shrink-0 items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={handleReset}
-                      className="text-[12px] font-bold text-costco-blue hover:underline"
-                      title="Reset"
-                    >
-                      Reset
-                    </button>
-                    <button
-                      type="button"
-                      onClick={onClose}
-                      className="rounded-[3px] p-1 text-[#555] hover:bg-[#f7fbfe]"
-                      title="Close"
-                      aria-label="Close Ask Kirk"
-                    >
-                      <X className="h-4 w-4" />
-                    </button>
-                  </div>
+                  <button
+                    type="button"
+                    onClick={handleReset}
+                    className="text-[12px] font-bold text-costco-blue hover:underline"
+                    title="Reset"
+                  >
+                    Reset
+                  </button>
                 ) : null}
                 </div>
                 <h2
@@ -943,31 +946,15 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                   <>
                     <div className="mt-1.5 flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
                       <p className="text-[12px] font-bold text-[#1a1a1a]">
-                        Showing 1 – {preview.length} of {hits.length}
+                        Showing 1 – {preview.length} of {hits.length} Results
                       </p>
-                      <div className="flex flex-wrap items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={() => setKirkFiltersOpen((open) => !open)}
-                          className="text-[12px] font-bold text-costco-blue hover:underline"
-                        >
-                          {kirkFiltersOpen ? "Hide Filters" : "Filter Results"}
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            document
-                              .querySelector("main")
-                              ?.scrollTo({ top: 0, behavior: "smooth" });
-                          }}
-                          className="text-[12px] font-bold text-costco-blue hover:underline"
-                        >
-                          View all {hits.length}
-                        </button>
-                        <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-[3px] border border-costco-blue bg-[#f7fbfe] px-1 text-[11px] font-bold text-costco-blue">
-                          1
-                        </span>
-                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setKirkFiltersOpen((open) => !open)}
+                        className="text-[12px] font-bold text-costco-blue hover:underline"
+                      >
+                        {kirkFiltersOpen ? "Hide Filters" : "Filter Results"}
+                      </button>
                     </div>
                     <div className="mt-1.5 flex flex-wrap items-center justify-between gap-2 border-t border-[#ececec] pt-1.5">
                       <label className="inline-flex items-center gap-1 text-[11px] text-[#555]">
@@ -1268,7 +1255,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
           <section
             className={
               kirkShopPage
-                ? "rounded-[3px] border border-[#c4c4c4] bg-white px-6 py-8 text-center"
+                ? "rounded-[3px] border border-[#c4c4c4] bg-white px-6 py-10 text-center"
                 : "overflow-hidden rounded-[3px] border border-[#c4c4c4] bg-white"
             }
           >
@@ -1279,9 +1266,14 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                   : "border-l-[3px] border-l-costco-red px-3.5 py-2.5"
               }
             >
+              {kirkShopPage ? (
+                <div className="flex justify-center">
+                  <CostcoLogo compact />
+                </div>
+              ) : null}
               <p
                 className={`font-bold text-[#1a1a1a] ${
-                  kirkShopPage ? "text-[22px]" : "text-[13px]"
+                  kirkShopPage ? "mt-4 text-[28px]" : "text-[13px]"
                 }`}
               >
                 We&apos;re sorry

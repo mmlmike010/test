@@ -146,30 +146,26 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
           <div className="flex items-center gap-3 shrink-0">
             {warehouseSearch ? (
               <>
+                {membershipAdded ? (
+                  <button
+                    type="button"
+                    className="hidden sm:inline-flex items-center gap-1 text-[13px] font-semibold text-white hover:underline"
+                    onClick={() => setSheet("membership", chromeTone)}
+                  >
+                    <GoldStarMark size={14} />
+                    Gold Star
+                    <span className="hidden xl:inline">
+                      {" "}
+                      · {membershipNumber}
+                    </span>
+                  </button>
+                ) : null}
                 <button
                   type="button"
-                  className="hidden sm:inline-flex items-center gap-1 text-[13px] font-semibold text-white hover:underline"
-                  onClick={() => setSheet("membership", chromeTone)}
+                  className="hidden sm:inline text-[13px] font-semibold text-white hover:underline"
+                  onClick={() => setSheet("customer", chromeTone)}
                 >
-                  {membershipAdded ? (
-                    <>
-                      <GoldStarMark size={14} />
-                      Gold Star
-                      <span className="hidden xl:inline">
-                        {" "}
-                        · {membershipNumber}
-                      </span>
-                    </>
-                  ) : (
-                    "Membership"
-                  )}
-                </button>
-                <button
-                  type="button"
-                  className="text-[13px] font-semibold text-white hover:underline"
-                  onClick={() => setSheet("signin", chromeTone)}
-                >
-                  {signedIn ? displayName : "Sign In / Register"}
+                  Customer Service
                 </button>
                 <span className="hidden text-white/50 sm:inline" aria-hidden="true">
                   |
@@ -177,9 +173,19 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
                 <button
                   type="button"
                   className="hidden sm:inline text-[13px] font-semibold text-white hover:underline"
+                  onClick={() => setSheet("delivery", chromeTone)}
+                >
+                  Find a Warehouse
+                </button>
+                <span className="hidden text-white/50 sm:inline" aria-hidden="true">
+                  |
+                </span>
+                <button
+                  type="button"
+                  className="text-[13px] font-semibold text-white hover:underline"
                   onClick={() => setSheet("signin", chromeTone)}
                 >
-                  Orders & Returns
+                  {signedIn ? displayName : "Sign In / Register"}
                 </button>
               </>
             ) : (

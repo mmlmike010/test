@@ -45,7 +45,7 @@ export default function StoreSheet({
             ];
       return (
         <div
-          className={`fixed z-[90] flex min-h-0 flex-col bg-[#e8eaed] ${overlayClass}`}
+          className={`fixed z-[90] flex min-h-0 flex-col bg-white ${overlayClass}`}
         >
           <div
             role="dialog"

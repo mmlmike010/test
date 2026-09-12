@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, type ReactNode } from "react";
 import type { Product } from "@/lib/data/products";
 import { aisleLabel } from "@/lib/ui/aisleLabels";
 import {
@@ -7,6 +8,32 @@ import {
   WAREHOUSE_PRICE_BUCKETS,
   type WarehouseFacets,
 } from "@/lib/ui/warehouseSearch";
+
+function FacetSection({
+  title,
+  children,
+}: {
+  title: string;
+  children: ReactNode;
+}) {
+  const [open, setOpen] = useState(true);
+  return (
+    <div className="mt-3 border-t border-[#e0e0e0] pt-3">
+      <button
+        type="button"
+        className="flex w-full items-center justify-between text-left"
+        aria-expanded={open}
+        onClick={() => setOpen((value) => !value)}
+      >
+        <span className="text-[13px] font-bold text-[#1a1a1a]">{title}</span>
+        <span className="text-[18px] font-bold leading-none text-[#555]" aria-hidden="true">
+          {open ? "–" : "+"}
+        </span>
+      </button>
+      {open ? <div className="mt-1">{children}</div> : null}
+    </div>
+  );
+}
 
 function toggleValue(values: string[], value: string): string[] {
   return values.includes(value)
@@ -116,24 +143,22 @@ export default function WarehouseFilterRail({
         ) : null}
       </div>
 
-      <div className="mt-3 border-t border-[#e0e0e0] pt-3">
-      <p className="text-[13px] font-bold text-[#1a1a1a]">Delivery Method</p>
-      <label className="mt-1 flex items-center gap-2 text-[12px] text-[#1a1a1a]">
-        <input
-          type="checkbox"
-          checked
-          readOnly
-          className="accent-costco-blue"
-        />
-        Same-Day Delivery
-        <span className="ml-auto text-[#72767E]">{items.length}</span>
-      </label>
-      </div>
+      <FacetSection title="Delivery Method">
+        <label className="flex items-center gap-2 text-[12px] text-[#1a1a1a]">
+          <input
+            type="checkbox"
+            checked
+            readOnly
+            className="accent-costco-blue"
+          />
+          Same-Day Delivery
+          <span className="ml-auto text-[#72767E]">{items.length}</span>
+        </label>
+      </FacetSection>
 
       {departments.length > 0 ? (
-        <div className="mt-3 border-t border-[#e0e0e0] pt-3">
-          <p className="text-[13px] font-bold text-[#1a1a1a]">Department</p>
-          <div className="mt-1 space-y-0.5">
+        <FacetSection title="Department">
+          <div className="space-y-0.5">
             {departments.map(([label, count]) => (
               <FacetCheck
                 key={label}
@@ -149,13 +174,12 @@ export default function WarehouseFilterRail({
               />
             ))}
           </div>
-        </div>
+        </FacetSection>
       ) : null}
 
       {brands.length > 0 ? (
-        <div className="mt-3 border-t border-[#e0e0e0] pt-3">
-          <p className="text-[13px] font-bold text-[#1a1a1a]">Brand</p>
-          <div className="mt-1 space-y-0.5">
+        <FacetSection title="Brand">
+          <div className="space-y-0.5">
             {brands.map(([label, count]) => (
               <FacetCheck
                 key={label}
@@ -171,13 +195,12 @@ export default function WarehouseFilterRail({
               />
             ))}
           </div>
-        </div>
+        </FacetSection>
       ) : null}
 
       {prices.length > 0 ? (
-        <div className="mt-3 border-t border-[#e0e0e0] pt-3">
-          <p className="text-[13px] font-bold text-[#1a1a1a]">Price</p>
-          <div className="mt-1 space-y-0.5">
+        <FacetSection title="Price">
+          <div className="space-y-0.5">
             {prices.map((bucket) => (
               <FacetCheck
                 key={bucket.id}
@@ -193,15 +216,12 @@ export default function WarehouseFilterRail({
               />
             ))}
           </div>
-        </div>
+        </FacetSection>
       ) : null}
 
       {ratings.length > 0 ? (
-        <div className="mt-3 border-t border-[#e0e0e0] pt-3">
-          <p className="text-[13px] font-bold text-[#1a1a1a]">
-            Customer Ratings
-          </p>
-          <div className="mt-1 space-y-0.5">
+        <FacetSection title="Customer Ratings">
+          <div className="space-y-0.5">
             {ratings.map((row) => (
               <FacetCheck
                 key={row.min}
@@ -217,7 +237,7 @@ export default function WarehouseFilterRail({
               />
             ))}
           </div>
-        </div>
+        </FacetSection>
       ) : null}
     </aside>
   );

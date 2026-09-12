@@ -10,6 +10,7 @@ export type StoreSheet =
   | "departments"
   | "request"
   | "checkout"
+  | "customer"
   | null;
 
 /** UI chrome only — never sent to Kirk. Header always sameday. */

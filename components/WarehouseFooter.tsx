@@ -57,6 +57,13 @@ export default function WarehouseFooter({
             <button
               type="button"
               className="text-[13px] text-white hover:underline"
+              onClick={() => setSheet("customer", "warehouse")}
+            >
+              Customer Service
+            </button>
+            <button
+              type="button"
+              className="text-[13px] text-white hover:underline"
               onClick={() => setSheet("membership", "warehouse")}
             >
               Membership
