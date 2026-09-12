@@ -178,7 +178,7 @@ export default function ProductDetailModal({
           {warehouse ? (
             <nav
               aria-label="Breadcrumb"
-              className="flex flex-wrap items-center gap-x-1.5 px-4 pt-4 text-[11px] text-[#555] lg:px-6"
+              className="mx-auto flex max-w-[1180px] flex-wrap items-center gap-x-1.5 px-4 pt-4 text-[11px] text-[#555] lg:px-6"
             >
               <button
                 type="button"
@@ -195,17 +195,23 @@ export default function ProductDetailModal({
               </span>
             </nav>
           ) : null}
-          <div className="lg:grid lg:grid-cols-2 lg:items-start">
           <div
             className={
               warehouse
-                ? "bg-white lg:sticky lg:top-0 lg:border-r lg:border-[#eee]"
+                ? "lg:mx-auto lg:grid lg:max-w-[1180px] lg:grid-cols-[minmax(0,1fr)_400px] lg:items-start"
+                : "lg:grid lg:grid-cols-2 lg:items-start"
+            }
+          >
+          <div
+            className={
+              warehouse
+                ? "bg-[#f6f7f8] lg:sticky lg:top-0"
                 : "lg:border-r lg:border-[#eee]"
             }
           >
             {warehouse ? (
-              <div className="bg-white px-6 pt-2 pb-3">
-                <div className="mx-auto w-fit max-w-full">
+              <div className="px-6 py-5">
+                <div className="mx-auto w-fit max-w-full bg-white px-5 py-4">
                   <div className="relative">
                     <button
                       type="button"
@@ -306,7 +312,7 @@ export default function ProductDetailModal({
             <h1
               className={`font-bold leading-snug ${
                 warehouse
-                  ? "text-[24px] text-[#1a1a1a]"
+                  ? "text-[26px] text-[#1a1a1a]"
                   : "text-[22px] text-[#1a1a1a]"
               }`}
             >
@@ -518,7 +524,7 @@ export default function ProductDetailModal({
         {related.length > 0 && (
           <div
             className={`px-5 pb-5 ${
-              warehouse ? "mx-4 mb-3 bg-white pt-6" : ""
+              warehouse ? "mx-auto mb-3 max-w-[1180px] bg-white pt-6" : ""
             }`}
           >
             <h3
@@ -556,7 +562,7 @@ export default function ProductDetailModal({
         <div
           className={`px-5 pb-6 pt-4 ${
             warehouse
-              ? "mx-4 mb-4 border-t border-[#ececec] bg-white"
+              ? "mx-auto mb-4 max-w-[1180px] border-t border-[#ececec] bg-white"
               : "border-t border-[#eee]"
           }`}
         >
