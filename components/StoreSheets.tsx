@@ -26,6 +26,33 @@ function useWarehouseCheckoutSheet() {
   return useSessionStore((s) => s.sheetTone) === "warehouse";
 }
 
+function warehouseAccountCrumbs(
+  title: string,
+  closeSheet: () => void,
+  priorSheet: "pricing" | "membership" | "signin" | "delivery" | "departments" | "request" | "checkout" | null
+) {
+  const setSheet = useSessionStore.getState().setSheet;
+  const openCart = useCartStore.getState().openCart;
+  if (priorSheet === "checkout") {
+    return [
+      { label: "Home", onClick: () => setSheet(null) },
+      {
+        label: "Shopping Cart",
+        onClick: () => {
+          setSheet(null);
+          openCart("warehouse");
+        },
+      },
+      { label: "Checkout", onClick: closeSheet },
+      { label: title },
+    ];
+  }
+  return [
+    { label: "Home", onClick: closeSheet },
+    { label: title },
+  ];
+}
+
 function PricingSheet() {
   const closeSheet = useSessionStore((s) => s.closeSheet);
   return (
@@ -88,15 +115,27 @@ function MembershipSheet() {
   const membershipAdded = useSessionStore((s) => s.membershipAdded);
   const membershipNumber = useSessionStore((s) => s.membershipNumber);
   const warehouse = useWarehouseCheckoutSheet();
+  const priorSheet = useSessionStore((s) => s.priorSheet);
   const [number, setNumber] = useState(membershipNumber || KIRK_MEMBERSHIP);
+  const title = warehouse ? "Membership" : "Add membership";
 
   return (
     <StoreSheet
-      title="Add membership"
+      title={title}
       onClose={closeSheet}
       tone={warehouse ? "warehouse" : "sameday"}
+      page={warehouse}
+      crumbs={
+        warehouse ? warehouseAccountCrumbs(title, closeSheet, priorSheet) : undefined
+      }
     >
-      <div className="px-4 py-4 space-y-3">
+      <div
+        className={
+          warehouse
+            ? "rounded-[3px] border border-[#c4c4c4] bg-white px-5 py-5 space-y-3"
+            : "px-4 py-4 space-y-3"
+        }
+      >
         <GoldStarMembershipCard />
         <p className="text-[13px] text-[#555] leading-snug">
           Add your Costco membership to unlock member pricing on Same-Day.
@@ -179,16 +218,28 @@ function SignInSheet() {
   const displayName = useSessionStore((s) => s.displayName);
   const email = useSessionStore((s) => s.email);
   const warehouse = useWarehouseCheckoutSheet();
+  const priorSheet = useSessionStore((s) => s.priorSheet);
   const [name, setName] = useState(displayName || KIRK_NAME);
   const [mail, setMail] = useState(email || KIRK_EMAIL);
+  const title = "Sign In / Register";
 
   return (
     <StoreSheet
-      title="Sign in / Register"
+      title={title}
       onClose={closeSheet}
       tone={warehouse ? "warehouse" : "sameday"}
+      page={warehouse}
+      crumbs={
+        warehouse ? warehouseAccountCrumbs(title, closeSheet, priorSheet) : undefined
+      }
     >
-      <div className="px-4 py-4 space-y-3">
+      <div
+        className={
+          warehouse
+            ? "rounded-[3px] border border-[#c4c4c4] bg-white px-5 py-5 space-y-3"
+            : "px-4 py-4 space-y-3"
+        }
+      >
         <p className="text-[13px] text-[#555] leading-snug">
           Sign in to save lists, attach a Gold Star, and check out. Demo only —
           nothing leaves this browser.
@@ -273,18 +324,30 @@ function DeliverySheet() {
   const windowId = useSessionStore((s) => s.windowId);
   const address = useSessionStore((s) => s.address);
   const warehouse = useWarehouseCheckoutSheet();
+  const priorSheet = useSessionStore((s) => s.priorSheet);
   const [picked, setPicked] = useState(windowId);
   const [line1, setLine1] = useState(address.line1);
   const [city, setCity] = useState(address.city);
   const [zip, setZip] = useState(address.zip);
+  const title = warehouse ? "Shipping & Delivery" : "Delivery details";
 
   return (
     <StoreSheet
-      title="Delivery details"
+      title={title}
       onClose={closeSheet}
       tone={warehouse ? "warehouse" : "sameday"}
+      page={warehouse}
+      crumbs={
+        warehouse ? warehouseAccountCrumbs(title, closeSheet, priorSheet) : undefined
+      }
     >
-      <div className="px-4 py-4 space-y-4">
+      <div
+        className={
+          warehouse
+            ? "rounded-[3px] border border-[#c4c4c4] bg-white px-5 py-5 space-y-4"
+            : "px-4 py-4 space-y-4"
+        }
+      >
         <div>
           <p className="text-[12px] font-bold text-[#555] mb-2">Time window</p>
           <div className="space-y-2">

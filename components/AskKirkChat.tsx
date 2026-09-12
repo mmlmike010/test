@@ -1265,9 +1265,25 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
           </KirklandHelpCard>
         )}
         {error && (
-          <section className="overflow-hidden rounded-[3px] border border-[#c4c4c4] bg-white">
-            <div className="border-l-[3px] border-l-costco-red px-3.5 py-2.5">
-              <p className="text-[13px] font-bold text-[#1a1a1a]">
+          <section
+            className={
+              kirkShopPage
+                ? "rounded-[3px] border border-[#c4c4c4] bg-white px-6 py-8 text-center"
+                : "overflow-hidden rounded-[3px] border border-[#c4c4c4] bg-white"
+            }
+          >
+            <div
+              className={
+                kirkShopPage
+                  ? undefined
+                  : "border-l-[3px] border-l-costco-red px-3.5 py-2.5"
+              }
+            >
+              <p
+                className={`font-bold text-[#1a1a1a] ${
+                  kirkShopPage ? "text-[22px]" : "text-[13px]"
+                }`}
+              >
                 We&apos;re sorry
               </p>
               <p className="mt-1 text-[13px] text-[#1a1a1a]">{error}</p>
