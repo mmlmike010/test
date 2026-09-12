@@ -172,11 +172,11 @@ export default function WarehouseResultCard({
         <span
           className={`relative ${
             featured
-              ? "h-[200px] bg-white"
+              ? "aspect-square bg-white"
               : preview
                 ? "h-[112px] bg-white"
                 : catalog
-                  ? "h-[232px] bg-white"
+                  ? "aspect-square bg-white"
                   : "h-[150px] bg-white"
           }`}
         >
@@ -190,7 +190,7 @@ export default function WarehouseResultCard({
                 : preview
                   ? "p-1.5"
                   : catalog
-                    ? "p-3"
+                    ? "p-2"
                     : "p-2"
             }`}
           />

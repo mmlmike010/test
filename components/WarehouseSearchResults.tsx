@@ -127,7 +127,13 @@ export default function WarehouseSearchResults({
         )}
         {hits.length > 0 ? (
           <>
-            <div className="mt-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+            <div
+              className={`mt-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 ${
+                kirkShopPage
+                  ? "-mx-4 border-y border-[#e5e5e5] bg-[#f6f7f8] px-4 py-2"
+                  : ""
+              }`}
+            >
               <p className="text-[13px] font-bold text-[#1a1a1a]">
                 Showing 1 - {preview.length} of {hits.length} Results
               </p>

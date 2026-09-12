@@ -45,7 +45,11 @@ export default function WarehouseShopDepartments({
                 <img
                   src={tile.image}
                   alt=""
-                  className="h-full w-full object-contain p-1"
+                  className={`h-full w-full ${
+                    tile.fit === "contain"
+                      ? "object-contain p-3"
+                      : "object-cover"
+                  }`}
                 />
               </span>
               <span

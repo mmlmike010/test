@@ -6,9 +6,6 @@ import StoreSheet from "@/components/StoreSheet";
 import WarehouseLocatorMap from "@/components/WarehouseLocatorMap";
 import GoldStarMark from "@/components/GoldStarMark";
 import GoldStarMembershipCard from "@/components/GoldStarMembershipCard";
-import KirkIdPhoto from "@/components/KirkIdPhoto";
-import MembershipBarcode from "@/components/MembershipBarcode";
-import MembershipQr from "@/components/MembershipQr";
 import InstacartMark from "@/components/InstacartMark";
 import { departments } from "@/lib/data/products";
 import { aisleLabel } from "@/lib/ui/aisleLabels";
@@ -30,40 +27,6 @@ import {
 
 function useWarehouseCheckoutSheet() {
   return useSessionStore((s) => s.sheetTone) === "warehouse";
-}
-
-function WarehouseGoldStarCard({
-  name,
-  number,
-}: {
-  name: string;
-  number: string;
-}) {
-  return (
-    <div className="overflow-hidden rounded-[3px] border border-[#c4c4c4] bg-white shadow-[0_1px_4px_rgba(0,0,0,0.08)]">
-      <div className="h-[6px] bg-costco-red" />
-      <div className="flex items-start gap-4 px-5 py-4">
-        <KirkIdPhoto className="h-[88px] w-[66px] shrink-0 rounded-[2px] border border-[#d0d0d0] shadow-[inset_0_0_0_2px_#f7f6f2]" />
-        <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-1.5">
-            <GoldStarMark size={18} />
-            <p className="text-[11px] font-extrabold uppercase tracking-[0.16em] text-costco-red">
-              Gold Star
-            </p>
-          </div>
-          <p className="mt-1 text-[22px] font-black leading-none tracking-tight text-[#1a1a1a]">
-            {name}
-          </p>
-          <p className="mt-2 text-[16px] font-bold tabular-nums tracking-[0.12em] text-costco-blue">
-            {number}
-          </p>
-          <MembershipBarcode className="mt-2 h-7 w-full max-w-[220px] text-[#1a1a1a]" />
-        </div>
-        <MembershipQr className="h-20 w-20 shrink-0 border border-[#ececec] bg-white p-1" />
-      </div>
-      <div className="h-[6px] bg-costco-blue" />
-    </div>
-  );
 }
 
 function warehouseAccountCrumbs(
@@ -171,10 +134,9 @@ function MembershipSheet() {
     >
       {warehouse ? (
         <div className="grid gap-4 lg:grid-cols-2 lg:items-start">
-          <WarehouseGoldStarCard
-            name={KIRK_NAME}
-            number={membershipNumber || number || KIRK_MEMBERSHIP}
-          />
+          <div className="max-w-[340px]">
+            <GoldStarMembershipCard />
+          </div>
           <div className="rounded-[3px] border border-[#c4c4c4] bg-white px-5 py-5 space-y-3">
             <p className="text-[15px] font-bold text-[#1a1a1a]">
               Costco membership
