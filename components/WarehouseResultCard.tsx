@@ -195,7 +195,7 @@ export default function WarehouseResultCard({
           ) : null}
           {chrome && onCompare ? (
             <label
-              className="absolute right-0 top-0 z-10 flex items-center gap-1 bg-white px-1 py-0.5 text-[11px] text-[#555]"
+              className="absolute bottom-1 left-1 z-10 flex items-center gap-1 bg-white/95 px-1 py-0.5 text-[11px] text-[#555]"
               onClick={(e) => e.stopPropagation()}
             >
               <input

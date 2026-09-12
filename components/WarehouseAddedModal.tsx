@@ -1,6 +1,6 @@
 "use client";
 
-import { X } from "lucide-react";
+import { Check, X } from "lucide-react";
 import { products } from "@/lib/data/products";
 import { useCartStore } from "@/lib/store/cart";
 import { useCatalogStore } from "@/lib/store/catalog";
@@ -62,7 +62,10 @@ export default function WarehouseAddedModal() {
         className="relative w-full max-w-[640px] overflow-hidden rounded-t-[3px] bg-white shadow-2xl sm:rounded-[3px]"
       >
         <div className="flex items-center justify-between border-b border-[#c4c4c4] bg-[#f6f7f8] px-4 py-3.5">
-          <h2 className="text-[18px] font-bold leading-none text-[#1a1a1a]">
+          <h2 className="flex items-center gap-2 text-[18px] font-bold leading-none text-[#1a1a1a]">
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#188038] text-white">
+              <Check className="h-3.5 w-3.5" strokeWidth={3} />
+            </span>
             Item Added to Cart
           </h2>
           <button

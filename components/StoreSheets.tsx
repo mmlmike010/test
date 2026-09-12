@@ -3,6 +3,7 @@
 import { useState, type ReactNode } from "react";
 import { Check, ChevronRight } from "lucide-react";
 import StoreSheet from "@/components/StoreSheet";
+import WarehouseLocatorMap from "@/components/WarehouseLocatorMap";
 import GoldStarMark from "@/components/GoldStarMark";
 import GoldStarMembershipCard from "@/components/GoldStarMembershipCard";
 import KirkIdPhoto from "@/components/KirkIdPhoto";
@@ -542,48 +543,55 @@ function DeliverySheet() {
     >
       <div
         className={
-          warehouse
-            ? "grid gap-4 lg:grid-cols-2 lg:items-start"
-            : "px-4 py-4 space-y-4"
+          warehouse ? "space-y-4" : "px-4 py-4 space-y-4"
         }
       >
-        {warehouse ? (
+        {findWarehouse ? (
           <div className="space-y-3">
-            {findWarehouse ? (
-              <form
-                className="flex flex-col gap-2 sm:flex-row sm:items-center"
-                onSubmit={(event) => {
-                  event.preventDefault();
-                  const q = locatorQ.trim().toLowerCase();
-                  const here = `${city} ${zip} ${address.city} ${address.zip} brooklyn`.toLowerCase();
-                  setLocatorNote(
-                    !q || here.includes(q) || q.includes("11217")
-                      ? "1 warehouse near you"
-                      : "Showing the nearest warehouse for this demo."
-                  );
-                }}
+            <form
+              className="flex flex-col gap-2 sm:flex-row sm:items-center"
+              onSubmit={(event) => {
+                event.preventDefault();
+                const q = locatorQ.trim().toLowerCase();
+                const here = `${city} ${zip} ${address.city} ${address.zip} brooklyn`.toLowerCase();
+                setLocatorNote(
+                  !q || here.includes(q) || q.includes("11217")
+                    ? "1 warehouse near you"
+                    : "Showing the nearest warehouse for this demo."
+                );
+              }}
+            >
+              <label className="min-w-0 flex-1">
+                <span className="sr-only">City, State or ZIP</span>
+                <input
+                  value={locatorQ}
+                  onChange={(e) => setLocatorQ(e.target.value)}
+                  placeholder="City, State or ZIP"
+                  className="h-11 w-full rounded-[3px] border border-[#c4c4c4] bg-[#f6f6f6] px-3.5 text-[15px] text-[#222] focus:border-costco-blue focus:bg-white focus:outline-none focus:ring-2 focus:ring-costco-blue/15"
+                />
+              </label>
+              <button
+                type="submit"
+                className="h-11 rounded-[3px] bg-costco-red px-5 text-[15px] font-bold text-white hover:bg-costco-red-hover sm:w-[120px]"
               >
-                <label className="min-w-0 flex-1">
-                  <span className="sr-only">City, State or ZIP</span>
-                  <input
-                    value={locatorQ}
-                    onChange={(e) => setLocatorQ(e.target.value)}
-                    placeholder="City, State or ZIP"
-                    className="h-11 w-full rounded-[3px] border border-[#c4c4c4] bg-[#f6f6f6] px-3.5 text-[15px] text-[#222] focus:border-costco-blue focus:bg-white focus:outline-none focus:ring-2 focus:ring-costco-blue/15"
-                  />
-                </label>
-                <button
-                  type="submit"
-                  className="h-11 rounded-[3px] bg-costco-red px-5 text-[15px] font-bold text-white hover:bg-costco-red-hover sm:w-[120px]"
-                >
-                  Search
-                </button>
-              </form>
-            ) : null}
+                Search
+              </button>
+            </form>
             {locatorNote ? (
               <p className="text-[13px] font-semibold text-[#555]">{locatorNote}</p>
             ) : null}
-            <div className="overflow-hidden rounded-[3px] border border-[#c4c4c4] bg-white">
+            <WarehouseLocatorMap />
+          </div>
+        ) : null}
+        <div
+          className={
+            warehouse
+              ? "grid gap-4 lg:grid-cols-2 lg:items-start"
+              : undefined
+          }
+        >
+        {warehouse ? (
+          <div className="overflow-hidden rounded-[3px] border border-[#c4c4c4] bg-white">
               <div className="border-b border-[#c4c4c4] bg-[#f6f7f8] px-5 py-3">
                 <p className="text-[18px] font-bold text-[#1a1a1a]">Brooklyn</p>
                 <p className="mt-0.5 text-[12px] text-[#72767E]">
@@ -627,7 +635,6 @@ function DeliverySheet() {
                   the warehouse location.
                 </p>
               </div>
-            </div>
           </div>
         ) : null}
         <div
@@ -722,6 +729,7 @@ function DeliverySheet() {
         >
           {warehouse ? "Save" : "Save delivery details"}
         </button>
+        </div>
         </div>
       </div>
     </StoreSheet>

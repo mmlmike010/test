@@ -47,7 +47,7 @@ export default function AddControl({
           justAdded ? "bg-costco-red-hover" : ""
         }`}
       >
-        {justAdded ? "Added" : "Add"}
+        {justAdded ? "Added" : wide ? "Add to Cart" : "Add"}
       </button>
     );
   }
