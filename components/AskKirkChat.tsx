@@ -21,6 +21,7 @@ import WarehouseResultCard from "@/components/WarehouseResultCard";
 import CostcoLogo from "@/components/CostcoLogo";
 import GoldStarMembershipCard from "@/components/GoldStarMembershipCard";
 import WarehouseHomepageHero from "@/components/WarehouseHomepageHero";
+import WarehouseHomepageShortcuts from "@/components/WarehouseHomepageShortcuts";
 import WarehouseShopDepartments from "@/components/WarehouseShopDepartments";
 import WarehouseAisleScroller from "@/components/WarehouseAisleScroller";
 import WarehouseFilterRail from "@/components/WarehouseFilterRail";
@@ -761,10 +762,11 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
               document.querySelector("main")?.scrollTo({ top: 0 });
             };
             return (
-              <div key={message.id} className="space-y-2">
-                <div className="max-w-[340px]">
-                  <GoldStarMembershipCard />
-                </div>
+              <div key={message.id} className="space-y-6">
+                <WarehouseHomepageShortcuts
+                  onOffers={showAllAisle}
+                  onPick={browseWarehouseDepartment}
+                />
                 <WarehouseHomepageHero
                   onKirkland={showAllAisle}
                   onOffers={showAllAisle}
@@ -800,6 +802,27 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                     </button>
                   </p>
                 )}
+                <section className="flex flex-wrap items-center justify-between gap-4 border border-[#c4c4c4] bg-[#f6f7f8] px-4 py-3">
+                  <div className="min-w-[200px] flex-1">
+                    <p className="text-[17px] font-bold text-[#1a1a1a]">
+                      Gold Star Membership
+                    </p>
+                    <p className="mt-0.5 text-[13px] text-[#555]">
+                      Member pricing on Kirkland Signature. Prices higher than
+                      warehouse.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={showAllAisle}
+                      className="mt-1 text-[13px] font-bold text-costco-blue hover:underline"
+                    >
+                      Shop member savings ›
+                    </button>
+                  </div>
+                  <div className="w-full max-w-[340px]">
+                    <GoldStarMembershipCard />
+                  </div>
+                </section>
                 <KirklandHelpCard
                   title="Kirkland Signature shopping help"
                   variant="page"
