@@ -816,7 +816,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
           <div key={message.id} className="space-y-2">
           {message.role === "user" ? (
             <div ref={latestResultsRef} className="space-y-2">
-              <div className="sticky top-0 z-10 border border-[#c4c4c4] bg-white px-3 py-2">
+              <div className="sticky top-0 z-10 border border-[#c4c4c4] bg-white px-3 py-1.5">
                 <nav
                   aria-label="Breadcrumb"
                   className="flex flex-wrap items-center gap-x-1.5 text-[11px] text-[#555]"
@@ -825,7 +825,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                   <span aria-hidden="true">›</span>
                   <span className="text-[#1a1a1a]">Search Results</span>
                 </nav>
-                <h2 className="mt-1 text-[18px] font-bold leading-snug text-[#1a1a1a] whitespace-pre-line">
+                <h2 className="mt-0.5 text-[16px] font-bold leading-snug text-[#1a1a1a] whitespace-pre-line">
                   {message.content}
                 </h2>
                 {hits.length > 0 ? (
@@ -951,117 +951,89 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                   </div>
                 </div>
               ) : null}
-              {kirkFiltersOpen ? (
-                <WarehouseFilterRail
-                  id="kirk-filter-results"
-                  compact
-                  items={unfilteredHits}
-                  facets={warehouseFacets}
-                  onChange={setWarehouseFacets}
-                />
-              ) : null}
-              {hits.length > 0 ? (
-                <>
-                  <div
-                    className={
-                      kirkResultsView === "grid"
-                        ? "grid grid-cols-2 gap-2"
-                        : "space-y-2"
-                    }
-                  >
-                    {preview.map((product) => (
-                      <WarehouseResultCard
-                        key={`${message.id}-${product.id}`}
-                        product={product}
-                        density={
-                          kirkResultsView === "grid" ? "search" : "list"
+              {kirkFiltersOpen || hits.length > 0 || facetEmpty ? (
+                <div
+                  className={
+                    kirkFiltersOpen
+                      ? "grid grid-cols-[148px_minmax(0,1fr)] items-start gap-2"
+                      : undefined
+                  }
+                >
+                  {kirkFiltersOpen ? (
+                    <WarehouseFilterRail
+                      id="kirk-filter-results"
+                      compact
+                      items={unfilteredHits}
+                      facets={warehouseFacets}
+                      onChange={setWarehouseFacets}
+                    />
+                  ) : null}
+                  {hits.length > 0 ? (
+                    <div className="min-w-0 space-y-2">
+                      <div
+                        className={
+                          kirkResultsView === "grid"
+                            ? kirkFiltersOpen
+                              ? "grid grid-cols-1 gap-2"
+                              : "grid grid-cols-2 gap-2"
+                            : "space-y-2"
                         }
-                        compareChecked={kirkCompareIds.includes(product.id)}
-                        onCompare={(checked) =>
-                          setKirkCompareIds((ids) => {
-                            if (checked) {
-                              return ids.includes(product.id) || ids.length >= 4
-                                ? ids
-                                : [...ids, product.id];
+                      >
+                        {preview.map((product) => (
+                          <WarehouseResultCard
+                            key={`${message.id}-${product.id}`}
+                            product={product}
+                            density={
+                              kirkResultsView === "grid" ? "search" : "list"
                             }
-                            return ids.filter((id) => id !== product.id);
-                          })
-                        }
-                      />
-                    ))}
-                  </div>
-                  <nav
-                    aria-label="Pagination"
-                    className="flex flex-wrap items-center justify-between gap-2 border border-[#c4c4c4] bg-white px-3 py-2"
-                  >
-                    <p className="text-[11px] font-semibold text-[#555]">
-                      Page 1 of 1
-                    </p>
-                    <div className="flex items-center gap-1">
-                      <span className="inline-flex h-7 min-w-7 items-center justify-center rounded-[3px] border border-costco-blue bg-[#f7fbfe] px-1.5 text-[12px] font-bold text-costco-blue">
-                        1
-                      </span>
+                            compareChecked={kirkCompareIds.includes(product.id)}
+                            onCompare={(checked) =>
+                              setKirkCompareIds((ids) => {
+                                if (checked) {
+                                  return ids.includes(product.id) ||
+                                    ids.length >= 4
+                                    ? ids
+                                    : [...ids, product.id];
+                                }
+                                return ids.filter((id) => id !== product.id);
+                              })
+                            }
+                          />
+                        ))}
+                      </div>
+                      <nav
+                        aria-label="Pagination"
+                        className="flex flex-wrap items-center justify-between gap-2 border border-[#c4c4c4] bg-white px-3 py-2"
+                      >
+                        <p className="text-[11px] font-semibold text-[#555]">
+                          Page 1 of 1
+                        </p>
+                        <div className="flex items-center gap-1">
+                          <span className="inline-flex h-7 min-w-7 items-center justify-center rounded-[3px] border border-costco-blue bg-[#f7fbfe] px-1.5 text-[12px] font-bold text-costco-blue">
+                            1
+                          </span>
+                        </div>
+                      </nav>
                     </div>
-                  </nav>
-                </>
-              ) : facetEmpty ? (
-                <section className="border border-[#c4c4c4] bg-white px-3 py-8 text-center">
-                  <p className="text-[16px] font-bold text-[#1a1a1a]">
-                    We&apos;re sorry
-                  </p>
-                  <p className="mt-1 text-[13px] text-[#555]">
-                    No items match these filters.
-                  </p>
-                  <button
-                    type="button"
-                    className="mt-3 text-[13px] font-bold text-costco-blue hover:underline"
-                    onClick={() => setWarehouseFacets(EMPTY_WAREHOUSE_FACETS)}
-                  >
-                    See all results
-                  </button>
-                </section>
-              ) : null}
-              {message.id === lastUserId && kirkCompareItems.length > 0 ? (
-                <div className="flex flex-wrap items-center gap-2 border border-[#c4c4c4] bg-white px-3 py-2">
-                  <span className="text-[12px] font-bold text-[#1a1a1a]">
-                    Compare ({kirkCompareItems.length})
-                  </span>
-                  <button
-                    type="button"
-                    disabled={kirkCompareItems.length < 2}
-                    onClick={() => setKirkCompareOpen(true)}
-                    className="rounded-[3px] bg-costco-blue px-2 py-1 text-[11px] font-bold text-white hover:bg-costco-blue-hover disabled:cursor-not-allowed disabled:bg-[#c4c4c4] disabled:text-[#666]"
-                  >
-                    Compare Products
-                  </button>
-                  {kirkCompareItems.map((product) => (
-                    <button
-                      key={`compare-${product.id}`}
-                      type="button"
-                      onClick={() =>
-                        useCatalogStore.getState().inspect(product, "warehouse")
-                      }
-                      className="relative h-8 w-8 overflow-hidden rounded-[3px] border border-[#e8e8e8] bg-white"
-                      aria-label={`View ${product.brand} ${product.name}`}
-                    >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={product.image}
-                        alt=""
-                        className="absolute inset-0 h-full w-full object-contain p-0.5"
-                      />
-                    </button>
-                  ))}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setKirkCompareIds([]);
-                      setKirkCompareOpen(false);
-                    }}
-                    className="text-[11px] font-bold text-costco-blue hover:underline"
-                  >
-                    Clear
-                  </button>
+                  ) : facetEmpty ? (
+                    <section className="border border-[#c4c4c4] bg-white px-3 py-8 text-center">
+                      <p className="text-[16px] font-bold text-[#1a1a1a]">
+                        We&apos;re sorry
+                      </p>
+                      <p className="mt-1 text-[13px] text-[#555]">
+                        No items match these filters.
+                      </p>
+                      <button
+                        type="button"
+                        className="mt-3 text-[13px] font-bold text-costco-blue hover:underline"
+                        onClick={() =>
+                          setWarehouseFacets(EMPTY_WAREHOUSE_FACETS)
+                        }
+                      >
+                        See all results
+                      </button>
+                    </section>
+                  ) : null}
                 </div>
               ) : null}
               {message.id === lastUserId ? (
@@ -1198,6 +1170,50 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
           )}
         </div>
       )}
+
+      {kirkCompareItems.length > 0 ? (
+        <div className="flex shrink-0 flex-wrap items-center gap-2 border-t border-[#c4c4c4] bg-white px-3 py-2">
+          <span className="text-[12px] font-bold text-[#1a1a1a]">
+            Compare ({kirkCompareItems.length})
+          </span>
+          <button
+            type="button"
+            disabled={kirkCompareItems.length < 2}
+            onClick={() => setKirkCompareOpen(true)}
+            className="rounded-[3px] bg-costco-blue px-2 py-1 text-[11px] font-bold text-white hover:bg-costco-blue-hover disabled:cursor-not-allowed disabled:bg-[#c4c4c4] disabled:text-[#666]"
+          >
+            Compare Products
+          </button>
+          {kirkCompareItems.map((product) => (
+            <button
+              key={`compare-bar-${product.id}`}
+              type="button"
+              onClick={() =>
+                useCatalogStore.getState().inspect(product, "warehouse")
+              }
+              className="relative h-8 w-8 overflow-hidden rounded-[3px] border border-[#e8e8e8] bg-white"
+              aria-label={`View ${product.brand} ${product.name}`}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={product.image}
+                alt=""
+                className="absolute inset-0 h-full w-full object-contain p-0.5"
+              />
+            </button>
+          ))}
+          <button
+            type="button"
+            onClick={() => {
+              setKirkCompareIds([]);
+              setKirkCompareOpen(false);
+            }}
+            className="text-[11px] font-bold text-costco-blue hover:underline"
+          >
+            Clear
+          </button>
+        </div>
+      ) : null}
 
       <div className="px-3.5 pt-2.5 pb-3 border-t border-[#e5e5e5] bg-white shrink-0">
         <div className="flex h-11 items-stretch">

@@ -171,7 +171,7 @@ export default function WarehouseResultCard({
                 ? "h-[112px] bg-white"
                 : catalog
                   ? "h-[180px] bg-white"
-                  : "aspect-square bg-white"
+                  : "h-[150px] bg-white"
           }`}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -179,11 +179,17 @@ export default function WarehouseResultCard({
             src={product.image}
             alt=""
             className={`absolute inset-0 h-full w-full object-contain ${
-              featured ? "p-2" : preview ? "p-1.5 pt-5" : "p-2.5 pt-7"
+              featured
+                ? "p-2"
+                : preview
+                  ? "p-1.5 pt-5"
+                  : catalog
+                    ? "p-2.5 pt-7"
+                    : "p-2 pt-5"
             }`}
           />
           {chrome && !featured && isLimitedOffer(product) ? (
-            <LimitedTimeOfferBadge compact={preview} />
+            <LimitedTimeOfferBadge compact={preview || !catalog} />
           ) : null}
         </span>
         <span className={`min-w-0 px-2 ${featured ? "pb-1 pt-1" : "pb-2 pt-1"}`}>
