@@ -12,7 +12,7 @@ export default function WarehouseHomepageSpotlights({
         title="Dairy & Eggs"
         panel="bg-costco-blue"
         cta="text-costco-blue"
-        zoom="scale-[1.45] group-hover:scale-[1.55]"
+        zoom="scale-[1.7] group-hover:scale-[1.8]"
         onClick={() => onPick("Dairy & Eggs")}
       />
       <SpotlightTile
@@ -21,7 +21,7 @@ export default function WarehouseHomepageSpotlights({
         title="Laundry & more"
         panel="bg-costco-red"
         cta="text-costco-red"
-        zoom="scale-[1.3] group-hover:scale-[1.4]"
+        zoom="scale-[1.55] group-hover:scale-[1.65]"
         onClick={() => onPick("Household")}
       />
       <SpotlightTile
@@ -30,7 +30,7 @@ export default function WarehouseHomepageSpotlights({
         title="Fresh from the case"
         panel="bg-[#1a1a1a]"
         cta="text-[#1a1a1a]"
-        zoom="scale-[1.4] group-hover:scale-[1.5]"
+        zoom="scale-[1.65] group-hover:scale-[1.75]"
         onClick={() => onPick("Bakery")}
       />
     </div>
@@ -80,7 +80,7 @@ function SpotlightTile({
         <img
           src={src}
           alt=""
-          className={`h-[88%] w-[80%] object-contain transition-transform duration-300 ${zoom}`}
+          className={`h-full w-full object-contain p-2 transition-transform duration-300 ${zoom}`}
         />
       </span>
     </button>

@@ -10,7 +10,7 @@ const SLIDES = [
     title: "Member Only Savings",
     panel: "bg-costco-red",
     cta: "text-costco-red",
-    zoom: "scale-[1.7] group-hover:scale-[1.8]",
+    zoom: "scale-[2.15] group-hover:scale-[2.25]",
     action: "offers" as const,
   },
   {
@@ -19,7 +19,7 @@ const SLIDES = [
     title: "Member favorites",
     panel: "bg-costco-blue",
     cta: "text-costco-blue",
-    zoom: "scale-[1.35] group-hover:scale-[1.45]",
+    zoom: "scale-[1.7] group-hover:scale-[1.8]",
     action: "kirkland" as const,
   },
   {
@@ -28,7 +28,7 @@ const SLIDES = [
     title: "Dairy & Eggs",
     panel: "bg-[#1a1a1a]",
     cta: "text-[#1a1a1a]",
-    zoom: "scale-[1.55] group-hover:scale-[1.65]",
+    zoom: "scale-[1.9] group-hover:scale-[2]",
     action: "dairy" as const,
   },
 ];
@@ -87,7 +87,7 @@ export default function WarehouseHomepageHero({
             <img
               src={slide.src}
               alt=""
-              className={`h-[92%] w-[78%] object-contain transition-transform duration-300 ${slide.zoom}`}
+              className={`h-full w-full object-contain p-3 transition-transform duration-300 ${slide.zoom}`}
             />
           </span>
         </button>
