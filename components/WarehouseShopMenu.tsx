@@ -8,7 +8,6 @@ export default function WarehouseShopMenu({
 }) {
   return (
     <div className="absolute left-0 top-full z-[80] w-[min(860px,96vw)] overflow-hidden border border-[#c4c4c4] bg-white shadow-[0_8px_24px_rgba(0,0,0,0.12)]">
-      <div className="h-[5px] bg-gradient-to-r from-[#8c7318] via-[#f3e3a3] to-[#8c7318]" />
       <div className="flex items-center justify-between border-b border-[#ececec] px-3.5 py-2">
         <p className="text-[13px] font-bold text-[#1a1a1a]">Shop</p>
         <button

@@ -22,6 +22,8 @@ export default function WarehouseAddedModal() {
   const inspect = useCatalogStore((s) => s.inspect);
   const openCart = useCartStore((s) => s.openCart);
   const closeCart = useCartStore((s) => s.closeCart);
+  const cartCount = useCartStore((s) => s.getTotalItems());
+  const cartSubtotal = useCartStore((s) => s.getSubtotal());
 
   if (!added) return null;
 
@@ -59,7 +61,7 @@ export default function WarehouseAddedModal() {
         aria-label="Item Added to Cart"
         className="relative w-full max-w-[640px] overflow-hidden rounded-t-[3px] bg-white shadow-2xl sm:rounded-[3px]"
       >
-        <div className="flex items-center justify-between border-b border-[#c4c4c4] px-4 py-3.5">
+        <div className="flex items-center justify-between border-b border-[#c4c4c4] bg-[#f6f7f8] px-4 py-3.5">
           <h2 className="text-[18px] font-bold leading-none text-[#1a1a1a]">
             Item Added to Cart
           </h2>
@@ -93,12 +95,13 @@ export default function WarehouseAddedModal() {
             <p className="mt-0.5 text-[12px] text-[#72767E]">
               Item {warehouseItemNumber(product.id)}
             </p>
-            <p className="mt-1 text-[13px] text-[#555]">
-              Qty {quantity} ·{" "}
-              <span className="font-bold tabular-nums text-[#1a1a1a]">
-                ${line.toFixed(2)}
-              </span>
+            <p className="mt-1 text-[11px] font-bold uppercase tracking-[0.06em] text-[#555]">
+              Your Price
             </p>
+            <p className="text-[18px] font-bold tabular-nums text-[#1a1a1a]">
+              ${line.toFixed(2)}
+            </p>
+            <p className="mt-0.5 text-[13px] text-[#555]">Qty {quantity}</p>
             {instantSavingsText(product.savings) ? (
               <p className="mt-0.5 text-[12px] font-semibold text-[#188038]">
                 {instantSavingsText(product.savings)}
@@ -106,29 +109,37 @@ export default function WarehouseAddedModal() {
             ) : null}
           </div>
         </div>
-        <div className="space-y-2 px-4 pb-4">
+        <div className="mx-4 mb-3 flex items-center justify-between border border-[#c4c4c4] bg-[#f6f7f8] px-3 py-2">
+          <p className="text-[13px] font-semibold text-[#555]">
+            Cart Subtotal ({cartCount} item{cartCount === 1 ? "" : "s"})
+          </p>
+          <p className="text-[16px] font-bold tabular-nums text-[#1a1a1a]">
+            ${cartSubtotal.toFixed(2)}
+          </p>
+        </div>
+        <div className="grid grid-cols-2 gap-2 px-4">
           <button
             type="button"
             onClick={viewCart}
-            className="w-full rounded-[3px] border border-[#c4c4c4] bg-white py-2.5 text-[14px] font-bold text-costco-blue hover:bg-[#f7fbfe]"
+            className="rounded-[3px] border border-[#c4c4c4] bg-white py-2.5 text-[14px] font-bold text-costco-blue hover:bg-[#f7fbfe]"
           >
             View Cart
           </button>
           <button
             type="button"
             onClick={checkout}
-            className="w-full rounded-[3px] bg-costco-red py-2.5 text-[14px] font-bold text-white hover:bg-costco-red-hover"
+            className="rounded-[3px] bg-costco-red py-2.5 text-[14px] font-bold text-white hover:bg-costco-red-hover"
           >
             Checkout
           </button>
-          <button
-            type="button"
-            onClick={clearAdded}
-            className="w-full text-center text-[13px] font-bold text-costco-blue hover:underline"
-          >
-            Continue Shopping
-          </button>
         </div>
+        <button
+          type="button"
+          onClick={clearAdded}
+          className="mt-2 mb-4 w-full text-center text-[13px] font-bold text-costco-blue hover:underline"
+        >
+          Continue Shopping
+        </button>
         {related.length > 0 ? (
           <div className="border-t border-[#ececec] px-4 py-3">
             <p className="text-[13px] font-bold text-[#1a1a1a]">

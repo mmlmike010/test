@@ -787,11 +787,18 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
         className={`min-h-0 flex-1 overflow-y-auto ${
           hasUserAsk
             ? kirkShopPage
-              ? "space-y-5 bg-white px-4 py-4 lg:px-6"
+              ? "bg-white"
               : "space-y-3 bg-[#e8eaed] px-3.5 py-3.5"
             : "space-y-2 bg-[#f6f7f8] px-3.5 py-2.5"
         }`}
       >
+        <div
+          className={
+            kirkShopPage && hasUserAsk
+              ? "mx-auto max-w-[1400px] space-y-5 px-4 py-4 lg:px-8"
+              : undefined
+          }
+        >
         {messages.map((message) => {
           const isWelcome = message.id.startsWith("welcome-");
           if (isWelcome) {
@@ -1143,8 +1150,8 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                 </div>
               ) : null}
               {message.id === lastUserId && relatedTerms.length > 0 ? (
-                <div className="border border-[#c4c4c4] bg-white px-3 py-2.5">
-                  <p className="text-[13px] font-bold text-[#1a1a1a]">
+                <div className="border-t border-[#ececec] bg-white px-1 py-4">
+                  <p className="text-[15px] font-bold text-[#1a1a1a]">
                     Related Searches
                   </p>
                   <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-1">
@@ -1291,9 +1298,8 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
           </section>
         )}
         <div ref={messagesEndRef} />
-        {kirkShopPage ? (
-          <WarehouseFooter className="-mx-4 -mb-4 mt-8 lg:-mx-6" />
-        ) : null}
+        </div>
+        {kirkShopPage ? <WarehouseFooter className="mt-8" /> : null}
       </div>
 
       {(isRecording || isTranscribing || isSpeaking) && !kirkShopPage && (
@@ -1321,18 +1327,10 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
       )}
 
       {kirkCompareItems.length > 0 ? (
-        <div className="flex shrink-0 flex-wrap items-center gap-2 border-t border-[#c4c4c4] bg-white px-3 py-2">
-          <span className="text-[12px] font-bold text-[#1a1a1a]">
-            Compare ({kirkCompareItems.length})
+        <div className="flex shrink-0 flex-wrap items-center gap-3 border-t border-[#c4c4c4] bg-[#f6f7f8] px-4 py-2.5">
+          <span className="text-[13px] font-bold text-[#1a1a1a]">
+            Compare Products ({kirkCompareItems.length} of 4)
           </span>
-          <button
-            type="button"
-            disabled={kirkCompareItems.length < 2}
-            onClick={() => setKirkCompareOpen(true)}
-            className="rounded-[3px] bg-costco-blue px-2 py-1 text-[11px] font-bold text-white hover:bg-costco-blue-hover disabled:cursor-not-allowed disabled:bg-[#c4c4c4] disabled:text-[#666]"
-          >
-            Compare Products
-          </button>
           {kirkCompareItems.map((product) => (
             <button
               key={`compare-bar-${product.id}`}
@@ -1340,26 +1338,37 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
               onClick={() =>
                 useCatalogStore.getState().inspect(product, "warehouse")
               }
-              className="relative h-8 w-8 overflow-hidden rounded-[3px] border border-[#e8e8e8] bg-white"
+              className="flex items-center gap-1.5 rounded-[3px] border border-[#c4c4c4] bg-white px-1.5 py-1"
               aria-label={`View ${product.brand} ${product.name}`}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={product.image}
                 alt=""
-                className="absolute inset-0 h-full w-full object-contain p-0.5"
+                className="h-10 w-10 object-contain"
               />
+              <span className="hidden max-w-[88px] truncate text-[11px] font-semibold text-[#1a1a1a] sm:inline">
+                {product.name}
+              </span>
             </button>
           ))}
+          <button
+            type="button"
+            disabled={kirkCompareItems.length < 2}
+            onClick={() => setKirkCompareOpen(true)}
+            className="rounded-[3px] bg-costco-blue px-3 py-1.5 text-[12px] font-bold text-white hover:bg-costco-blue-hover disabled:cursor-not-allowed disabled:bg-[#c4c4c4] disabled:text-[#666]"
+          >
+            Compare
+          </button>
           <button
             type="button"
             onClick={() => {
               setKirkCompareIds([]);
               setKirkCompareOpen(false);
             }}
-            className="text-[11px] font-bold text-costco-blue hover:underline"
+            className="text-[12px] font-bold text-costco-blue hover:underline"
           >
-            Clear
+            Clear All
           </button>
         </div>
       ) : null}

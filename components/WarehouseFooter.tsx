@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import CostcoLogo from "@/components/CostcoLogo";
 import { useCartStore } from "@/lib/store/cart";
 import { useCatalogStore } from "@/lib/store/catalog";
@@ -20,6 +21,8 @@ export default function WarehouseFooter({
   const inspect = useCatalogStore((s) => s.inspect);
   const search = useCatalogStore((s) => s.search);
   const closeCart = useCartStore((s) => s.closeCart);
+  const [email, setEmail] = useState("");
+  const [emailNote, setEmailNote] = useState<string | null>(null);
 
   const shopKirkland = () => {
     inspect(null);
@@ -41,7 +44,7 @@ export default function WarehouseFooter({
 
   return (
     <footer className={`overflow-hidden bg-[#333] text-white ${className}`}>
-      <div className="mx-auto grid max-w-[1180px] gap-6 px-4 py-6 sm:grid-cols-4 lg:px-6">
+      <div className="mx-auto grid max-w-[1180px] gap-6 px-4 py-6 sm:grid-cols-2 lg:grid-cols-5 lg:px-6">
         <div>
           <CostcoLogo compact tone="onRed" />
           <p className="mt-3 text-[12px] leading-relaxed text-white/75">
@@ -120,6 +123,49 @@ export default function WarehouseFooter({
             Same-Day Delivery to {formatAddress(address)}. Gold Star membership
             required for member pricing.
           </p>
+        </div>
+        <div>
+          <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#f3e3a3]">
+            Get Email Offers
+          </p>
+          <p className="mt-2 text-[12px] leading-relaxed text-white/80">
+            Sign up for Costco emails. This demo does not send mail.
+          </p>
+          <form
+            className="mt-2 flex"
+            onSubmit={(event) => {
+              event.preventDefault();
+              setEmailNote(
+                email.trim()
+                  ? "You’re signed up for member offers."
+                  : "Enter an email address."
+              );
+            }}
+          >
+            <label className="sr-only" htmlFor="costco-email-offers">
+              Email address
+            </label>
+            <input
+              id="costco-email-offers"
+              type="email"
+              value={email}
+              onChange={(event) => {
+                setEmail(event.target.value);
+                setEmailNote(null);
+              }}
+              placeholder="Email address"
+              className="h-9 min-w-0 flex-1 rounded-l-[3px] border-0 px-2.5 text-[13px] text-[#1a1a1a] placeholder:text-[#8a8a8a] focus:outline-none focus:ring-2 focus:ring-white/40"
+            />
+            <button
+              type="submit"
+              className="h-9 shrink-0 rounded-r-[3px] bg-costco-red px-3 text-[12px] font-bold text-white hover:bg-costco-red-hover"
+            >
+              Go
+            </button>
+          </form>
+          {emailNote ? (
+            <p className="mt-1.5 text-[11px] text-white/80">{emailNote}</p>
+          ) : null}
         </div>
       </div>
       <div className="border-t border-white/15">
