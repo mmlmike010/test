@@ -762,7 +762,9 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             };
             return (
               <div key={message.id} className="space-y-2">
-                <GoldStarMembershipCard />
+                <div className="max-w-[340px]">
+                  <GoldStarMembershipCard />
+                </div>
                 <WarehouseHomepageHero
                   onKirkland={showAllAisle}
                   onOffers={showAllAisle}
