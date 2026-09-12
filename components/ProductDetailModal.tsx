@@ -10,10 +10,7 @@ import ProductCard from "@/components/ProductCard";
 import WarehouseResultCard from "@/components/WarehouseResultCard";
 import WarehouseQtySelect from "@/components/WarehouseQtySelect";
 import GoldStarMark from "@/components/GoldStarMark";
-import {
-  officialPacksFirst,
-  relatedSearchItems,
-} from "@/lib/ui/merchOrder";
+import { warehouseRelatedProducts } from "@/lib/ui/merchOrder";
 import { useWarehouseChrome } from "@/lib/store/warehouseChrome";
 import { instantSavingsText } from "@/lib/ui/instantSavings";
 import { productSize, unitPriceLabel, warehouseItemNumber } from "@/lib/ui/packSize";
@@ -108,9 +105,7 @@ export default function ProductDetailModal({
     onClose();
   };
 
-  const related = officialPacksFirst(
-    relatedSearchItems([current], products, 8)
-  );
+  const related = warehouseRelatedProducts(current, products, 8);
 
   const onAdd = () => {
     addItem(current, warehouse ? buyQty : 1);

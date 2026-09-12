@@ -199,6 +199,21 @@ export function relatedWarehouseSearches(
 }
 
 /** Fill a thin Same-Day search page. UI only — never sent to Kirk. */
+/** Warehouse item-page Related Products. UI only — never sent to Kirk. */
+export function warehouseRelatedProducts(
+  current: Product,
+  catalog: Product[],
+  n = 8
+): Product[] {
+  const scored = relatedSearchItems([current], catalog, n);
+  if (scored.length >= n) return officialPacksFirst(scored);
+  const have = new Set([current.id, ...scored.map((product) => product.id)]);
+  const pad = officialPacksFirst(
+    hideComposedLeftovers(catalog).filter((product) => !have.has(product.id))
+  ).slice(0, n - scored.length);
+  return officialPacksFirst([...scored, ...pad]);
+}
+
 export function relatedSearchItems(
   hits: Product[],
   catalog: Product[],
