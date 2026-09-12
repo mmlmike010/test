@@ -267,6 +267,32 @@ export default function WarehouseCompareSheet({
               </tr>
               <tr>
                 <th className="border border-[#c4c4c4] bg-[#f6f7f8] px-2 py-2 font-bold text-[#555]">
+                  Sold By
+                </th>
+                {items.map((product) => (
+                  <td
+                    key={product.id}
+                    className="border border-[#c4c4c4] px-3 py-2 text-[#72767E]"
+                  >
+                    Costco
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <th className="border border-[#c4c4c4] bg-[#f6f7f8] px-2 py-2 font-bold text-[#555]">
+                  Membership
+                </th>
+                {items.map((product) => (
+                  <td
+                    key={product.id}
+                    className="border border-[#c4c4c4] px-3 py-2 text-[#72767E]"
+                  >
+                    Required
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <th className="border border-[#c4c4c4] bg-[#f6f7f8] px-2 py-2 font-bold text-[#555]">
                   Delivery
                 </th>
                 {items.map((product) => (

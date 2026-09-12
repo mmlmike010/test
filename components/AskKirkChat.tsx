@@ -87,14 +87,24 @@ const suggestionChips = [
 function KirklandHelpCard({
   title,
   children,
+  variant = "foil",
 }: {
   title: string;
   children: ReactNode;
+  variant?: "foil" | "page";
 }) {
   return (
     <section className="overflow-hidden rounded-[3px] border border-[#c4c4c4] bg-white">
-      <div className="h-[3px] bg-gradient-to-r from-[#8c7318] via-[#f3e3a3] to-[#8c7318]" />
-      <div className="px-3.5 py-2.5">
+      {variant === "foil" ? (
+        <div className="h-[3px] bg-gradient-to-r from-[#8c7318] via-[#f3e3a3] to-[#8c7318]" />
+      ) : null}
+      <div
+        className={
+          variant === "page"
+            ? "border-l-[3px] border-l-costco-blue px-3.5 py-2.5"
+            : "px-3.5 py-2.5"
+        }
+      >
         <p className="text-[13px] font-bold text-[#1a1a1a]">{title}</p>
         <div className="mt-1 text-[13px] leading-relaxed text-[#1a1a1a]">
           {children}
@@ -865,7 +875,13 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
           <div key={message.id} className="space-y-2">
           {message.role === "user" ? (
             <div ref={latestResultsRef} className="space-y-2">
-              <div className="sticky top-0 z-10 border border-[#c4c4c4] bg-white px-3 py-1.5">
+              <div
+                className={
+                  kirkShopPage
+                    ? "bg-white px-4 py-3"
+                    : "sticky top-0 z-10 border border-[#c4c4c4] bg-white px-3 py-1.5"
+                }
+              >
                 <div className="flex items-start justify-between gap-2">
                 <nav
                   aria-label="Breadcrumb"
@@ -1148,7 +1164,10 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             message.content === GROK_FALLBACK &&
             !added.length &&
             !message.imageUrl ? null : (
-            <KirklandHelpCard title="Kirkland Signature shopping help">
+            <KirklandHelpCard
+              title="Kirkland Signature shopping help"
+              variant={kirkShopPage ? "page" : "foil"}
+            >
               <p className="whitespace-pre-line">{message.content}</p>
               {message.imageUrl && (
                 <div className="mt-2.5 overflow-hidden border border-[#c4c4c4] bg-white">
@@ -1176,7 +1195,10 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             </KirklandHelpCard>
           )}
           {added.length > 0 ? (
-            <KirklandHelpCard title="Items Added to Cart">
+            <KirklandHelpCard
+              title="Items Added to Cart"
+              variant={kirkShopPage ? "page" : "foil"}
+            >
               <div className="space-y-1.5">
                 {added.map((product) => (
                   <ShopProductRow
@@ -1192,7 +1214,10 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
           );
         })}
         {isLoading && (
-          <KirklandHelpCard title="Kirkland Signature shopping help">
+          <KirklandHelpCard
+            title="Kirkland Signature shopping help"
+            variant={kirkShopPage ? "page" : "foil"}
+          >
             <div className="flex items-center gap-1.5">
               <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-[#999]" />
               <div

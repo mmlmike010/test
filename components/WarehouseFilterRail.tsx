@@ -117,7 +117,7 @@ export default function WarehouseFilterRail({
       </div>
 
       <div className="mt-3 border-t border-[#e0e0e0] pt-3">
-      <p className="text-[13px] font-bold text-[#1a1a1a]">Delivery</p>
+      <p className="text-[13px] font-bold text-[#1a1a1a]">Delivery Method</p>
       <label className="mt-1 flex items-center gap-2 text-[12px] text-[#1a1a1a]">
         <input
           type="checkbox"

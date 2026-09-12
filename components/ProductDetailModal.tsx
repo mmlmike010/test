@@ -22,6 +22,26 @@ import { useStorefrontOverlayClass, useSessionStore } from "@/lib/store/session"
 import { useListStore } from "@/lib/store/lists";
 import { useRef, useState, type ReactNode } from "react";
 
+/** Visual Costco rating mix from the catalog average. UI only. */
+function ratingBarPercents(avg: number): number[] {
+  const weights = [1, 2, 3, 4, 5].map((star) =>
+    Math.max(0.03, 1.15 - Math.abs(star - avg) * 0.58)
+  );
+  const sum = weights.reduce((a, b) => a + b, 0);
+  return weights.map((w) => (w / sum) * 100);
+}
+
+function SpecRow({ label, value }: { label: string; value: string }) {
+  return (
+    <tr>
+      <th className="w-[42%] border border-[#c4c4c4] bg-[#f6f7f8] px-3 py-2 text-left font-bold text-[#555]">
+        {label}
+      </th>
+      <td className="border border-[#c4c4c4] px-3 py-2 text-[#1a1a1a]">{value}</td>
+    </tr>
+  );
+}
+
 function ItemAccordion({
   title,
   defaultOpen = false,
@@ -291,6 +311,7 @@ export default function ProductDetailModal({
             {warehouse ? (
               <p className="mt-0.5 text-[13px] text-[#72767E]">
                 Item {warehouseItemNumber(current.id)}
+                {perUnit ? ` · ${perUnit}` : ""}
               </p>
             ) : null}
             {perUnit && !warehouse ? (
@@ -427,12 +448,37 @@ export default function ProductDetailModal({
                       ) : null}
                     </ul>
                   </ItemAccordion>
-                  <ItemAccordion title="Specifications">
-                    <ul className="space-y-1">
-                      <li>Item {warehouseItemNumber(current.id)}</li>
-                      {size ? <li>{size}</li> : null}
-                      {perUnit ? <li>{perUnit}</li> : null}
-                    </ul>
+                  <ItemAccordion title="Specifications" defaultOpen>
+                    <table className="w-full border-collapse text-[13px]">
+                      <tbody>
+                        <SpecRow label="Brand" value={current.brand} />
+                        <SpecRow
+                          label="Item Number"
+                          value={warehouseItemNumber(current.id)}
+                        />
+                        {size ? <SpecRow label="Size" value={size} /> : null}
+                        {perUnit ? (
+                          <SpecRow label="Unit Price" value={perUnit} />
+                        ) : null}
+                        {current.category ? (
+                          <SpecRow label="Category" value={current.category} />
+                        ) : null}
+                        <SpecRow
+                          label="Department"
+                          value={aisleLabel(current.department)}
+                        />
+                        <SpecRow
+                          label="Availability"
+                          value={current.inStock ? "In Stock" : "Out of stock"}
+                        />
+                        <SpecRow
+                          label="Delivery"
+                          value="Same-Day Delivery"
+                        />
+                        <SpecRow label="Sold By" value="Costco" />
+                        <SpecRow label="Membership" value="Required" />
+                      </tbody>
+                    </table>
                   </ItemAccordion>
                 </>
               ) : (
@@ -509,6 +555,48 @@ export default function ProductDetailModal({
           <p className="text-[12px] text-[#666] mb-4">
             Based on {current.reviewCount.toLocaleString()} ratings
           </p>
+          {warehouse ? (
+            <div className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-start">
+              <div className="shrink-0">
+                <p className="text-[32px] font-bold leading-none tabular-nums text-[#1a1a1a]">
+                  {current.rating.toFixed(1)}
+                </p>
+                <div className="mt-1">
+                  <StarRating
+                    rating={current.rating}
+                    reviewCount={current.reviewCount}
+                    size="md"
+                    showCount={false}
+                  />
+                </div>
+                <p className="mt-1 text-[12px] text-[#666]">
+                  {current.reviewCount.toLocaleString()} ratings
+                </p>
+              </div>
+              <ul className="min-w-0 flex-1 space-y-1">
+                {ratingBarPercents(current.rating)
+                  .map((pct, idx) => ({ star: idx + 1, pct }))
+                  .reverse()
+                  .map(({ star, pct }) => (
+                    <li
+                      key={star}
+                      className="grid grid-cols-[52px_minmax(0,1fr)_40px] items-center gap-2 text-[12px] text-[#555]"
+                    >
+                      <span>{star} star{star === 1 ? "" : "s"}</span>
+                      <span className="h-2.5 overflow-hidden rounded-[2px] bg-[#e8eaed]">
+                        <span
+                          className="block h-full bg-[#F6C344]"
+                          style={{ width: `${Math.max(2, pct)}%` }}
+                        />
+                      </span>
+                      <span className="tabular-nums text-right text-[#72767E]">
+                        {Math.round((pct / 100) * current.reviewCount)}
+                      </span>
+                    </li>
+                  ))}
+              </ul>
+            </div>
+          ) : null}
           <ul className="space-y-3">
             {current.reviews.map((r, idx) => (
               <li

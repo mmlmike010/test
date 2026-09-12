@@ -192,6 +192,26 @@ export default function WarehouseResultCard({
           {chrome && !featured && isLimitedOffer(product) ? (
             <LimitedTimeOfferBadge compact={preview || !catalog} />
           ) : null}
+          {chrome && onCompare ? (
+            <label
+              className={`absolute left-1.5 z-10 flex items-center gap-1 rounded-[2px] bg-white/95 px-1 py-0.5 text-[11px] text-[#555] shadow-[0_1px_2px_rgba(0,0,0,0.12)] ${
+                !featured && isLimitedOffer(product)
+                  ? catalog
+                    ? "top-8"
+                    : "top-6"
+                  : "top-1.5"
+              }`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <input
+                type="checkbox"
+                checked={compareChecked}
+                onChange={(e) => onCompare(e.target.checked)}
+                className="accent-costco-blue"
+              />
+              Compare Product
+            </label>
+          ) : null}
         </span>
         <span className={`min-w-0 px-2 ${featured ? "pb-1 pt-1" : "pb-2 pt-1"}`}>
           <span
@@ -259,20 +279,6 @@ export default function WarehouseResultCard({
       </button>
       <div className={`px-2 ${featured ? "pb-1.5" : "pb-2"}`}>
         <AddControl product={product} variant="inline" tone="warehouse" wide />
-        {chrome && onCompare ? (
-          <label
-            className="mt-1.5 flex items-center gap-1.5 text-[11px] text-[#555]"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <input
-              type="checkbox"
-              checked={compareChecked}
-              onChange={(e) => onCompare(e.target.checked)}
-              className="accent-costco-blue"
-            />
-            Compare Product
-          </label>
-        ) : null}
         {chrome ? (
           <div className="mt-1.5">
             <AddToListLink productId={product.id} productName={product.name} />
