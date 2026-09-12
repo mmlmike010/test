@@ -751,12 +751,30 @@ function CheckoutSheet() {
                   ) : null}
                 </CheckoutStep>
                 <CheckoutStep n={4} title="Payment">
-                  <p className="mt-1 text-[14px] font-bold text-[#1a1a1a]">
-                    Costco Anywhere Visa ending in 1117
-                  </p>
-                  <p className="mt-0.5 text-[13px] text-[#555]">
-                    Billing address same as delivery · Item subtotal only
-                  </p>
+                  <div className="mt-2 flex flex-wrap items-start gap-3">
+                    <div className="flex h-[76px] w-[124px] flex-col justify-between rounded-[4px] bg-gradient-to-br from-costco-red to-[#8b1024] p-2 text-white shadow-[0_1px_3px_rgba(0,0,0,0.2)]">
+                      <p className="text-[8px] font-bold uppercase tracking-[0.08em]">
+                        Costco Anywhere
+                      </p>
+                      <p className="text-[12px] font-bold tracking-[0.16em]">
+                        •••• 1117
+                      </p>
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-[14px] font-bold text-[#1a1a1a]">
+                        Costco Anywhere Visa ending in 1117
+                      </p>
+                      <label className="mt-1 flex items-center gap-2 text-[13px] text-[#555]">
+                        <input
+                          type="checkbox"
+                          checked
+                          readOnly
+                          className="accent-costco-blue"
+                        />
+                        Billing address same as delivery
+                      </label>
+                    </div>
+                  </div>
                 </CheckoutStep>
               </>
             ) : (
@@ -950,8 +968,14 @@ function CheckoutSheet() {
               </div>
               {warehouse ? (
                 <p className="mt-2 text-[12px] leading-snug text-[#555]">
-                  Item subtotal only. Service, delivery, and tax are not
-                  estimated in this demo.
+                  Item subtotal only. Shipping &amp; Handling and Estimated
+                  Taxes are T.B.D.
+                </p>
+              ) : null}
+              {warehouse ? (
+                <p className="mt-3 text-[11px] leading-snug text-[#666]">
+                  By placing your order, you agree to Costco.com terms and
+                  conditions. Membership required.
                 </p>
               ) : null}
               <button
@@ -984,7 +1008,7 @@ function CheckoutSheet() {
               <p className="mt-3 inline-flex w-full items-center justify-center gap-1.5 text-center text-[11px] leading-snug text-[#888]">
                 {warehouse ? null : <InstacartMark size={12} />}
                 {warehouse
-                  ? "Kirkland Signature shopping help · Membership required · Prices higher than warehouse"
+                  ? "Membership required · Prices higher than warehouse"
                   : "Same-Day Delivery powered by Instacart · Membership required"}
               </p>
             </div>

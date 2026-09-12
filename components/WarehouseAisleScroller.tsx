@@ -10,10 +10,12 @@ export default function WarehouseAisleScroller({
   title,
   products,
   onShowAll,
+  accent = "plain",
 }: {
   title: string;
   products: Product[];
   onShowAll: () => void;
+  accent?: "plain" | "offer";
 }) {
   const scrollerRef = useRef<HTMLDivElement>(null);
   const nudge = (dir: number) => {
@@ -27,7 +29,11 @@ export default function WarehouseAisleScroller({
 
   return (
     <div className="rounded-[3px] border border-[#c4c4c4] bg-white">
-      <div className="h-[3px] bg-gradient-to-r from-[#8c7318] via-[#f3e3a3] to-[#8c7318]" />
+      {accent === "offer" ? (
+        <div className="bg-costco-red px-3 py-1 text-center text-[11px] font-bold uppercase tracking-wide text-white">
+          Limited-Time Offers
+        </div>
+      ) : null}
       <div className="flex items-center justify-between gap-2 border-b border-[#ececec] px-3 py-1.5">
         <p className="min-w-0 truncate text-[13px] font-bold text-[#1a1a1a]">
           {title}

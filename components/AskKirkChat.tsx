@@ -35,6 +35,8 @@ import {
 import { useCatalogStore } from "@/lib/store/catalog";
 import { useKirkAskStore } from "@/lib/store/kirkAsk";
 import {
+  FLYER_DEAL_IDS,
+  hideComposedLeftovers,
   kirklandWarehousePreview,
   kirkQueryPreview,
   relatedWarehouseSearches,
@@ -795,6 +797,13 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
               kirklandWarehousePreview(products, 24),
               warehouseFacets
             ).slice(0, 8);
+            const offerPreview = hideComposedLeftovers(
+              FLYER_DEAL_IDS.map((id) =>
+                products.find((product) => product.id === id)
+              ).filter((product): product is (typeof products)[number] =>
+                Boolean(product)
+              )
+            ).slice(0, 8);
             const aisleTitle =
               warehouseFacets.departments.length === 1
                 ? warehouseFacets.departments[0]
@@ -827,6 +836,14 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                   selected={warehouseFacets.departments}
                   onPick={browseWarehouseDepartment}
                 />
+                {offerPreview.length > 0 ? (
+                  <WarehouseAisleScroller
+                    title="Featured Instant Savings"
+                    products={offerPreview}
+                    onShowAll={showAllAisle}
+                    accent="offer"
+                  />
+                ) : null}
                 {preview.length > 0 ? (
                   <WarehouseAisleScroller
                     title={aisleTitle}

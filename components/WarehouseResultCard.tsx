@@ -53,13 +53,19 @@ export default function WarehouseResultCard({
   density = "search",
   compareChecked = false,
   onCompare,
+  onOpen,
 }: {
   product: Product;
   density?: "search" | "featured" | "preview" | "catalog" | "list";
   compareChecked?: boolean;
   onCompare?: (checked: boolean) => void;
+  onOpen?: () => void;
 }) {
   const inspect = useCatalogStore((s) => s.inspect);
+  const openItem = () => {
+    if (onOpen) onOpen();
+    else inspect(product, "warehouse");
+  };
   const size = productSize(product.id);
   const featured = density === "featured";
   const preview = density === "preview";
@@ -78,7 +84,7 @@ export default function WarehouseResultCard({
         <div className="flex gap-2.5 px-2 py-2">
           <button
             type="button"
-            onClick={() => inspect(product, "warehouse")}
+            onClick={openItem}
             className="relative h-24 w-24 shrink-0 overflow-hidden rounded-[3px] border border-[#eee] bg-[#f6f6f6] hover:bg-[#f7fbfe]"
             aria-label={`View ${product.brand} ${product.name}`}
           >
@@ -92,7 +98,7 @@ export default function WarehouseResultCard({
           <div className="min-w-0 flex-1">
             <button
               type="button"
-              onClick={() => inspect(product, "warehouse")}
+              onClick={openItem}
               className="block w-full text-left"
             >
               <span className="block text-[13px] font-bold leading-snug text-costco-blue line-clamp-2 hover:underline">
@@ -161,7 +167,7 @@ export default function WarehouseResultCard({
       ) : null}
       <button
         type="button"
-        onClick={() => inspect(product, "warehouse")}
+        onClick={openItem}
         className="flex min-w-0 flex-1 flex-col text-left hover:bg-[#f7fbfe]"
       >
         <span

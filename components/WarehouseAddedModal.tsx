@@ -1,12 +1,16 @@
 "use client";
 
 import { X } from "lucide-react";
+import { products } from "@/lib/data/products";
 import { useCartStore } from "@/lib/store/cart";
 import { useCatalogStore } from "@/lib/store/catalog";
 import { useSessionStore } from "@/lib/store/session";
 import { useWarehouseChrome } from "@/lib/store/warehouseChrome";
+import { warehouseRelatedProducts } from "@/lib/ui/merchOrder";
+import { instantSavingsText } from "@/lib/ui/instantSavings";
 import { productSize, warehouseItemNumber } from "@/lib/ui/packSize";
 import { useStorefrontOverlayClass } from "@/lib/store/session";
+import WarehouseResultCard from "@/components/WarehouseResultCard";
 
 /** costco.com “Item Added to Cart” confirm. UI only. */
 export default function WarehouseAddedModal() {
@@ -23,6 +27,7 @@ export default function WarehouseAddedModal() {
 
   const { product, quantity } = added;
   const line = product.price * quantity;
+  const related = warehouseRelatedProducts(product, products, 4);
 
   const viewCart = () => {
     clearAdded();
@@ -52,7 +57,7 @@ export default function WarehouseAddedModal() {
         role="dialog"
         aria-modal="true"
         aria-label="Item Added to Cart"
-        className="relative w-full max-w-[440px] overflow-hidden rounded-t-[3px] bg-white shadow-2xl sm:rounded-[3px]"
+        className="relative w-full max-w-[640px] overflow-hidden rounded-t-[3px] bg-white shadow-2xl sm:rounded-[3px]"
       >
         <div className="flex items-center justify-between border-b border-[#c4c4c4] px-4 py-3.5">
           <h2 className="text-[18px] font-bold leading-none text-[#1a1a1a]">
@@ -67,7 +72,6 @@ export default function WarehouseAddedModal() {
             <X className="h-5 w-5 text-[#555]" />
           </button>
         </div>
-        <div className="h-[3px] bg-gradient-to-r from-[#a3841c] via-[#f3e3a3] to-[#a3841c]" />
         <div className="flex gap-3 px-4 py-4">
           <div className="relative h-[88px] w-[88px] shrink-0 overflow-hidden rounded-[3px] border border-[#eee] bg-white">
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -95,6 +99,11 @@ export default function WarehouseAddedModal() {
                 ${line.toFixed(2)}
               </span>
             </p>
+            {instantSavingsText(product.savings) ? (
+              <p className="mt-0.5 text-[12px] font-semibold text-[#188038]">
+                {instantSavingsText(product.savings)}
+              </p>
+            ) : null}
           </div>
         </div>
         <div className="space-y-2 px-4 pb-4">
@@ -120,6 +129,26 @@ export default function WarehouseAddedModal() {
             Continue Shopping
           </button>
         </div>
+        {related.length > 0 ? (
+          <div className="border-t border-[#ececec] px-4 py-3">
+            <p className="text-[13px] font-bold text-[#1a1a1a]">
+              Related Products
+            </p>
+            <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-4">
+              {related.map((item) => (
+                <WarehouseResultCard
+                  key={item.id}
+                  product={item}
+                  density="preview"
+                  onOpen={() => {
+                    clearAdded();
+                    inspect(item, "warehouse");
+                  }}
+                />
+              ))}
+            </div>
+          </div>
+        ) : null}
       </div>
     </div>
   );
