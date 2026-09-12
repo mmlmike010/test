@@ -168,7 +168,7 @@ export default function WarehouseResultCard({
         <span
           className={`relative ${
             featured
-              ? "h-[140px] bg-white"
+              ? "h-[176px] bg-white"
               : preview
                 ? "h-[112px] bg-white"
                 : catalog
@@ -211,18 +211,14 @@ export default function WarehouseResultCard({
         <span className={`min-w-0 px-2 ${featured ? "pb-1 pt-1" : "pb-2 pt-1"}`}>
           <span
             className={`block font-bold leading-snug text-costco-blue hover:underline ${
-              featured || preview
+              preview
                 ? "text-[12px] line-clamp-2"
                 : "text-[13px] line-clamp-2"
             }`}
           >
             {product.brand} {product.name}
           </span>
-          {featured ? (
-            <span className="mt-0.5 block text-[11px] text-[#72767E]">
-              {size ? `${size} · ` : ""}Item {warehouseItemNumber(product.id)}
-            </span>
-          ) : (
+          {featured ? null : (
             <>
               {size ? (
                 <span className="mt-0.5 block text-[11px] text-[#72767E]">
@@ -246,7 +242,7 @@ export default function WarehouseResultCard({
               />
             </span>
           ) : null}
-          {chrome && !preview ? (
+          {chrome && !preview && !featured ? (
             <span className="mt-1 block text-[11px] font-bold uppercase tracking-[0.06em] text-[#555]">
               Your Price
             </span>
@@ -254,7 +250,7 @@ export default function WarehouseResultCard({
           <span className="mt-1 flex flex-wrap items-baseline gap-x-1 tabular-nums">
             <span
               className={`font-bold text-[#1a1a1a] ${
-                featured || preview ? "text-[16px]" : "text-[20px]"
+                preview ? "text-[16px]" : featured ? "text-[18px]" : "text-[20px]"
               }`}
             >
               ${product.price.toFixed(2)}
@@ -275,7 +271,7 @@ export default function WarehouseResultCard({
               {instantSavingsText(product.savings)}
             </span>
           ) : null}
-          {chrome && !preview ? (
+          {chrome && !preview && !featured ? (
             <span className="mt-0.5 block text-[11px] font-semibold text-[#188038]">
               Delivery
             </span>

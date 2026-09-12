@@ -10,17 +10,15 @@ export default function WarehouseAisleScroller({
   title,
   products,
   onShowAll,
-  accent = "plain",
 }: {
   title: string;
   products: Product[];
   onShowAll: () => void;
-  accent?: "plain" | "offer";
 }) {
   const scrollerRef = useRef<HTMLDivElement>(null);
   const nudge = (dir: number) => {
     scrollerRef.current?.scrollBy({
-      left: dir * 180,
+      left: dir * 248,
       behavior: "smooth",
     });
   };
@@ -29,12 +27,8 @@ export default function WarehouseAisleScroller({
 
   return (
     <div className="bg-white">
-      <div className="flex items-center justify-between gap-2 px-1 py-1.5">
-        <p
-          className={`min-w-0 truncate text-[15px] font-bold ${
-            accent === "offer" ? "text-costco-red" : "text-[#1a1a1a]"
-          }`}
-        >
+      <div className="flex items-center justify-between gap-2 px-1 py-2">
+        <p className="min-w-0 truncate text-[17px] font-bold text-[#1a1a1a]">
           {title}
         </p>
         <div className="flex shrink-0 items-center gap-1.5">
@@ -69,9 +63,9 @@ export default function WarehouseAisleScroller({
         </div>
       </div>
       <div ref={scrollerRef} className="overflow-x-auto scrollbar-hide">
-        <div className="flex w-max gap-2 px-1 pb-1 pt-1">
+        <div className="flex w-max gap-3 px-1 pb-1 pt-1">
           {products.map((product) => (
-            <div key={`aisle-${product.id}`} className="w-[176px] shrink-0">
+            <div key={`aisle-${product.id}`} className="w-[232px] shrink-0">
               <WarehouseResultCard product={product} density="featured" />
             </div>
           ))}

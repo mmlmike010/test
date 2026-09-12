@@ -23,7 +23,7 @@ export default function WarehouseShopDepartments({
   return (
     <section className="overflow-hidden bg-white">
       <div className="flex items-center justify-between gap-2 px-1 pb-1">
-        <h2 className="min-w-0 truncate text-[15px] font-bold text-[#1a1a1a]">
+        <h2 className="min-w-0 truncate text-[17px] font-bold text-[#1a1a1a]">
           Shop by Department
         </h2>
         <div className="flex shrink-0 items-center gap-1.5">

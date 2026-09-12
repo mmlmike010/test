@@ -793,7 +793,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             ? kirkShopPage
               ? "bg-white"
               : "space-y-3 bg-[#e8eaed] px-3.5 py-3.5"
-            : "space-y-2 bg-[#f6f7f8] px-3.5 py-2.5"
+            : "space-y-4 bg-white px-3.5 py-3"
         }`}
       >
         <div
@@ -822,7 +822,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             const aisleTitle =
               warehouseFacets.departments.length === 1
                 ? warehouseFacets.departments[0]
-                : "Kirkland Signature";
+                : "Shop Kirkland Signature";
             const showAllAisle = () => {
               const label = warehouseFacets.departments[0] ?? null;
               if (label) {
@@ -853,10 +853,9 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                 />
                 {offerPreview.length > 0 ? (
                   <WarehouseAisleScroller
-                    title="Featured Instant Savings"
+                    title="Limited-Time Offers"
                     products={offerPreview}
                     onShowAll={showAllAisle}
-                    accent="offer"
                   />
                 ) : null}
                 {preview.length > 0 ? (
