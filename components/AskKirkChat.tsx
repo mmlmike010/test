@@ -702,6 +702,31 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
               kirklandWarehousePreview(products, 24),
               warehouseFacets
             ).slice(0, 4);
+            const aisleTitle =
+              warehouseFacets.departments.length === 1
+                ? warehouseFacets.departments[0]
+                : "Kirkland Signature";
+            const showAllAisle = () => {
+              const label = warehouseFacets.departments[0] ?? null;
+              if (label) {
+                browseWarehouseDepartment(label);
+                return;
+              }
+              const catalog = useCatalogStore.getState();
+              catalog.inspect(null);
+              useCatalogStore.setState({
+                q: "kirkland",
+                department: null,
+                tag: null,
+                openList: null,
+                openRecipe: null,
+                listTone: "warehouse",
+                warehouseFacets: EMPTY_WAREHOUSE_FACETS,
+                warehouseSort: "relevance",
+              });
+              void catalog.search();
+              document.querySelector("main")?.scrollTo({ top: 0 });
+            };
             return (
               <div key={message.id} className="space-y-2">
                 <GoldStarMembershipCard />
@@ -709,23 +734,24 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                   selected={warehouseFacets.departments}
                   onPick={browseWarehouseDepartment}
                 />
-                <div className="rounded-[3px] border border-[#e8e8e8] bg-white px-3 py-1.5">
-                  <p className="text-[12px] leading-relaxed text-[#1a1a1a] whitespace-pre-line">
-                    {message.content}
-                  </p>
-                </div>
                 {preview.length > 0 ? (
                   <div className="overflow-hidden rounded-[3px] border border-[#c4c4c4] bg-white">
-                    <div className="flex items-end justify-between gap-2 border-b border-[#ececec] px-3 py-2">
+                    <div className="h-[3px] bg-gradient-to-r from-[#8c7318] via-[#f3e3a3] to-[#8c7318]" />
+                    <div className="flex items-end justify-between gap-2 border-b border-[#ececec] px-3 py-1.5">
                       <p className="text-[13px] font-bold text-[#1a1a1a]">
-                        {warehouseFacets.departments.length === 1
-                          ? warehouseFacets.departments[0]
-                          : "Kirkland Signature"}
+                        {aisleTitle}
                       </p>
-                      <p className="text-[11px] font-semibold text-[#666] tabular-nums">
-                        {preview.length} item
-                        {preview.length === 1 ? "" : "s"}
-                      </p>
+                      <button
+                        type="button"
+                        className="inline-flex items-center gap-0.5 text-[12px] font-bold text-costco-blue hover:underline"
+                        onClick={showAllAisle}
+                      >
+                        Show all
+                        <ChevronRight
+                          className="h-3.5 w-3.5"
+                          aria-hidden="true"
+                        />
+                      </button>
                     </div>
                     <div className="grid grid-cols-2 gap-2 p-2">
                       {preview.map((product) => (
@@ -751,6 +777,11 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                     </button>
                   </p>
                 )}
+                <div className="rounded-[3px] border border-[#e8e8e8] bg-white px-3 py-1.5">
+                  <p className="text-[12px] leading-relaxed text-[#1a1a1a] whitespace-pre-line">
+                    {message.content}
+                  </p>
+                </div>
               </div>
             );
           }
