@@ -7,9 +7,9 @@ export default function WarehouseMembershipBanner({
   onShop: () => void;
 }) {
   return (
-    <section className="overflow-hidden bg-costco-blue">
-      <div className="grid items-stretch lg:grid-cols-[minmax(0,1fr)_340px]">
-        <div className="px-8 py-8">
+    <section className="overflow-hidden">
+      <div className="grid items-stretch md:grid-cols-[minmax(0,1fr)_340px]">
+        <div className="bg-costco-blue px-8 py-10">
           <p className="text-[12px] font-bold uppercase tracking-[0.16em] text-white/80">
             Gold Star
           </p>
@@ -27,7 +27,7 @@ export default function WarehouseMembershipBanner({
             Shop member savings ›
           </button>
         </div>
-        <div className="flex items-center justify-center bg-white px-5 py-6">
+        <div className="flex items-center justify-center bg-white px-6 py-8">
           <GoldStarMembershipCard />
         </div>
       </div>
