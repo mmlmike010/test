@@ -90,7 +90,7 @@ function SpotlightTile({
           alt=""
           className={
             cutout
-              ? "h-[88%] w-auto max-w-none object-contain transition-transform duration-300 group-hover:scale-[1.05]"
+              ? "h-[96%] w-auto max-w-none object-contain transition-transform duration-300 group-hover:scale-[1.05]"
               : "h-full w-full object-contain p-2 transition-transform duration-300 scale-[1.2] group-hover:scale-[1.28]"
           }
         />

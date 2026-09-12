@@ -11,6 +11,7 @@ const SLIDES = [
     panel: "bg-costco-red",
     cta: "text-costco-red",
     cutout: true,
+    pack: "-right-6 h-[128%]",
     action: "offers" as const,
   },
   {
@@ -20,6 +21,7 @@ const SLIDES = [
     panel: "bg-costco-blue",
     cta: "text-costco-blue",
     cutout: true,
+    pack: "right-6 h-[98%]",
     action: "kirkland" as const,
   },
   {
@@ -29,6 +31,7 @@ const SLIDES = [
     panel: "bg-[#1a1a1a]",
     cta: "text-[#1a1a1a]",
     cutout: false,
+    pack: "",
     action: "dairy" as const,
   },
 ];
@@ -69,39 +72,55 @@ export default function WarehouseHomepageHero({
             slide.cutout ? slide.panel : ""
           }`}
         >
-          <span
-            className={`relative z-10 flex w-[46%] shrink-0 flex-col justify-center py-8 pl-20 pr-8 lg:pl-24 ${
-              slide.cutout ? "" : slide.panel
-            }`}
-          >
-            <span className="text-[12px] font-bold uppercase tracking-[0.16em] text-white/80">
-              {slide.kicker}
-            </span>
-            <span className="mt-3 block text-[44px] font-bold leading-[1.02] text-white">
-              {slide.title}
-            </span>
-            <span
-              className={`mt-6 inline-flex h-10 w-fit items-center bg-white px-4 text-[14px] font-bold ${slide.cta}`}
-            >
-              Shop Now <span aria-hidden="true">›</span>
-            </span>
-          </span>
-          <span
-            className={`relative flex min-w-0 flex-1 items-center justify-end overflow-hidden ${
-              slide.cutout ? "" : "bg-white"
-            }`}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={slide.src}
-              alt=""
-              className={
-                slide.cutout
-                  ? "h-[90%] w-auto max-w-none object-contain pr-10 transition-transform duration-300 group-hover:scale-[1.04]"
-                  : "h-full w-full object-contain px-6 py-4 transition-transform duration-300 scale-[1.22] group-hover:scale-[1.28]"
-              }
-            />
-          </span>
+          {slide.cutout ? (
+            <>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={slide.src}
+                alt=""
+                className={`pointer-events-none absolute top-1/2 w-auto max-w-none -translate-y-1/2 object-contain transition-transform duration-300 group-hover:scale-[1.03] ${slide.pack}`}
+              />
+              <span className="relative z-10 flex w-[46%] shrink-0 flex-col justify-center py-8 pl-20 pr-8 lg:pl-24">
+                <span className="text-[12px] font-bold uppercase tracking-[0.16em] text-white/80">
+                  {slide.kicker}
+                </span>
+                <span className="mt-3 block text-[52px] font-bold leading-[1.02] text-white">
+                  {slide.title}
+                </span>
+                <span
+                  className={`mt-6 inline-flex h-10 w-fit items-center bg-white px-4 text-[14px] font-bold ${slide.cta}`}
+                >
+                  Shop Now <span aria-hidden="true">›</span>
+                </span>
+              </span>
+            </>
+          ) : (
+            <>
+              <span
+                className={`relative z-10 flex w-[46%] shrink-0 flex-col justify-center py-8 pl-20 pr-8 lg:pl-24 ${slide.panel}`}
+              >
+                <span className="text-[12px] font-bold uppercase tracking-[0.16em] text-white/80">
+                  {slide.kicker}
+                </span>
+                <span className="mt-3 block text-[52px] font-bold leading-[1.02] text-white">
+                  {slide.title}
+                </span>
+                <span
+                  className={`mt-6 inline-flex h-10 w-fit items-center bg-white px-4 text-[14px] font-bold ${slide.cta}`}
+                >
+                  Shop Now <span aria-hidden="true">›</span>
+                </span>
+              </span>
+              <span className="relative flex min-w-0 flex-1 items-center justify-center overflow-hidden bg-white">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={slide.src}
+                  alt=""
+                  className="h-full w-full object-contain px-6 py-4 transition-transform duration-300 scale-[1.22] group-hover:scale-[1.28]"
+                />
+              </span>
+            </>
+          )}
         </button>
         <button
           type="button"

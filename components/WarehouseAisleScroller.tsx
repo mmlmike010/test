@@ -28,7 +28,7 @@ export default function WarehouseAisleScroller({
   return (
     <div className="bg-white">
       <div className="flex items-center justify-between gap-2 px-1 py-2">
-        <p className="min-w-0 truncate text-[17px] font-bold text-[#1a1a1a]">
+        <p className="min-w-0 truncate text-[20px] font-bold text-[#1a1a1a]">
           {title}
         </p>
         <div className="flex shrink-0 items-center gap-1.5">
