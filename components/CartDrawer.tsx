@@ -6,6 +6,7 @@ import { useCartStore } from "@/lib/store/cart";
 import { useCatalogStore } from "@/lib/store/catalog";
 import { useListStore } from "@/lib/store/lists";
 import WarehouseQtySelect from "@/components/WarehouseQtySelect";
+import WarehouseFooter from "@/components/WarehouseFooter";
 import { instantSavingsAmount, instantSavingsText } from "@/lib/ui/instantSavings";
 import { productSize, unitPriceLabel, warehouseItemNumber } from "@/lib/ui/packSize";
 import {
@@ -357,6 +358,7 @@ export default function CartDrawer() {
             </div>
           )}
           </div>
+          <WarehouseFooter className="-mx-4 mt-8 -mb-4 lg:-mx-6" />
         </div>
       </div>
     );

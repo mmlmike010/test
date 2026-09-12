@@ -5,11 +5,12 @@ import type { Product } from "@/lib/data/products";
 import { useCatalogStore } from "@/lib/store/catalog";
 import { useStorefrontOverlayClass, useSessionStore } from "@/lib/store/session";
 import { instantSavingsText } from "@/lib/ui/instantSavings";
-import { productSize, warehouseItemNumber } from "@/lib/ui/packSize";
+import { productSize, unitPriceLabel, warehouseItemNumber } from "@/lib/ui/packSize";
 import { aisleLabel } from "@/lib/ui/aisleLabels";
 import { isLimitedOffer } from "@/lib/ui/warehouseSearch";
 import AddControl from "@/components/AddControl";
 import StarRating from "@/components/StarRating";
+import WarehouseFooter from "@/components/WarehouseFooter";
 
 /** costco.com Compare Products table. UI only — never sent to Kirk. */
 export default function WarehouseCompareSheet({
@@ -227,6 +228,45 @@ export default function WarehouseCompareSheet({
               </tr>
               <tr>
                 <th className="border border-[#c4c4c4] bg-[#f6f7f8] px-2 py-2 font-bold text-[#555]">
+                  Category
+                </th>
+                {items.map((product) => (
+                  <td
+                    key={product.id}
+                    className="border border-[#c4c4c4] px-3 py-2 text-[#72767E]"
+                  >
+                    {product.category || "—"}
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <th className="border border-[#c4c4c4] bg-[#f6f7f8] px-2 py-2 font-bold text-[#555]">
+                  Unit Price
+                </th>
+                {items.map((product) => (
+                  <td
+                    key={product.id}
+                    className="border border-[#c4c4c4] px-3 py-2 text-[#72767E]"
+                  >
+                    {unitPriceLabel(product.id, product.price) || "—"}
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <th className="border border-[#c4c4c4] bg-[#f6f7f8] px-2 py-2 font-bold text-[#555]">
+                  Availability
+                </th>
+                {items.map((product) => (
+                  <td
+                    key={product.id}
+                    className="border border-[#c4c4c4] px-3 py-2 font-semibold text-[#188038]"
+                  >
+                    {product.inStock ? "In Stock" : "Out of stock"}
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <th className="border border-[#c4c4c4] bg-[#f6f7f8] px-2 py-2 font-bold text-[#555]">
                   Delivery
                 </th>
                 {items.map((product) => (
@@ -264,6 +304,7 @@ export default function WarehouseCompareSheet({
           </table>
           </div>
         </div>
+        <WarehouseFooter className="-mx-4 mt-8 -mb-4 lg:-mx-6" />
       </div>
     </div>
   );

@@ -16,6 +16,7 @@ import { instantSavingsText } from "@/lib/ui/instantSavings";
 import { productSize, unitPriceLabel, warehouseItemNumber } from "@/lib/ui/packSize";
 import { isLimitedOffer } from "@/lib/ui/warehouseSearch";
 import LimitedTimeOfferBadge from "@/components/LimitedTimeOfferBadge";
+import WarehouseFooter from "@/components/WarehouseFooter";
 import { aisleLabel } from "@/lib/ui/aisleLabels";
 import { useStorefrontOverlayClass, useSessionStore } from "@/lib/store/session";
 import { useListStore } from "@/lib/store/lists";
@@ -143,32 +144,21 @@ export default function ProductDetailModal({
         aria-label={`${current.brand} ${current.name}`}
         className="flex h-full min-h-0 flex-col"
       >
-        <div
-          className={`flex shrink-0 items-center justify-between px-4 py-3 ${
-            warehouse
-              ? "border-b border-[#c4c4c4] bg-white"
-              : "border-b border-[#ececec] bg-white"
-          }`}
-        >
+        {warehouse ? null : (
+        <div className="flex shrink-0 items-center justify-between border-b border-[#ececec] bg-white px-4 py-3">
           <p className="truncate pr-3 text-[13px] font-bold text-[#1a1a1a]">
             {current.brand} {current.name}
           </p>
           <button
             type="button"
             onClick={onClose}
-            className={`shrink-0 p-2 ${
-              warehouse
-                ? "rounded-[3px] hover:bg-[#f7fbfe]"
-                : "rounded-full hover:bg-[#f6f6f6]"
-            }`}
+            className="shrink-0 rounded-full p-2 hover:bg-[#f6f6f6]"
             aria-label="Close"
           >
             <X className="h-5 w-5 text-[#555]" />
           </button>
         </div>
-        {warehouse ? (
-          <div className="h-[3px] bg-gradient-to-r from-[#a3841c] via-[#f3e3a3] to-[#a3841c]" />
-        ) : null}
+        )}
 
         <div
           ref={scrollerRef}
@@ -176,6 +166,40 @@ export default function ProductDetailModal({
             warehouse ? "pb-8" : ""
           }`}
         >
+          {warehouse ? (
+            <div className="flex items-start justify-between gap-2 px-4 pt-4 lg:px-6">
+              <nav
+                aria-label="Breadcrumb"
+                className="flex flex-wrap items-center gap-x-1.5 text-[11px] text-[#555]"
+              >
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="font-bold text-costco-blue hover:underline"
+                >
+                  Home
+                </button>
+                <span aria-hidden="true">›</span>
+                <span>
+                  {current.brand === "Kirkland Signature"
+                    ? "Kirkland Signature"
+                    : aisleLabel(current.department)}
+                </span>
+                <span aria-hidden="true">›</span>
+                <span className="line-clamp-1 text-[#1a1a1a]">
+                  {current.brand} {current.name}
+                </span>
+              </nav>
+              <button
+                type="button"
+                onClick={onClose}
+                className="rounded-[3px] p-1 text-[#555] hover:bg-[#f7fbfe]"
+                aria-label="Close"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+          ) : null}
           <div
             className={
               kirkOpen && !kirkShopPage
@@ -257,30 +281,6 @@ export default function ProductDetailModal({
             </div>
           </div>
           <div className={`flex flex-col p-5 ${warehouse ? "bg-white" : ""}`}>
-            {warehouse ? (
-              <nav
-                aria-label="Breadcrumb"
-                className="mb-3 flex flex-wrap items-center gap-x-1.5 text-[12px] text-[#555]"
-              >
-                <button
-                  type="button"
-                  onClick={onClose}
-                  className="font-bold text-costco-blue hover:underline"
-                >
-                  Home
-                </button>
-                <span aria-hidden="true">›</span>
-                <span>
-                  {current.brand === "Kirkland Signature"
-                    ? "Kirkland Signature"
-                    : aisleLabel(current.department)}
-                </span>
-                <span aria-hidden="true">›</span>
-                <span className="line-clamp-1 text-[#1a1a1a]">
-                  {current.brand} {current.name}
-                </span>
-              </nav>
-            ) : null}
             <h2
               className={`text-[22px] font-bold leading-snug ${
                 warehouse ? "text-costco-blue" : "text-[#1a1a1a]"
@@ -542,6 +542,7 @@ export default function ProductDetailModal({
             ))}
           </ul>
         </div>
+        {warehouse ? <WarehouseFooter className="mt-8" /> : null}
         </div>
 
         <div

@@ -25,6 +25,7 @@ import WarehouseShopDepartments from "@/components/WarehouseShopDepartments";
 import WarehouseAisleScroller from "@/components/WarehouseAisleScroller";
 import WarehouseFilterRail from "@/components/WarehouseFilterRail";
 import WarehouseCompareSheet from "@/components/WarehouseCompareSheet";
+import WarehouseFooter from "@/components/WarehouseFooter";
 import {
   deliveryWindow,
   formatAddress,
@@ -1220,6 +1221,9 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
           </section>
         )}
         <div ref={messagesEndRef} />
+        {kirkShopPage ? (
+          <WarehouseFooter className="-mx-4 -mb-4 mt-8 lg:-mx-6" />
+        ) : null}
       </div>
 
       {(isRecording || isTranscribing || isSpeaking) && !kirkShopPage && (

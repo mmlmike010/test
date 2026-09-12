@@ -15,6 +15,7 @@ import ProductCard from "@/components/ProductCard";
 import WarehouseResultCard from "@/components/WarehouseResultCard";
 import WarehouseCompareSheet from "@/components/WarehouseCompareSheet";
 import WarehouseFilterRail from "@/components/WarehouseFilterRail";
+import WarehouseFooter from "@/components/WarehouseFooter";
 import CategoryScroller from "@/components/CategoryScroller";
 import InstacartMark from "@/components/InstacartMark";
 import CostcoLogo from "@/components/CostcoLogo";
@@ -880,75 +881,7 @@ export default function ProductGrid() {
             </div>
             </div>
             {warehouseList ? (
-              <footer className="mt-8 -mx-4 overflow-hidden bg-[#333] text-white lg:-mx-5">
-                <div className="grid gap-6 px-4 py-5 sm:grid-cols-3 lg:px-5">
-                  <div>
-                    <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#f3e3a3]">
-                      Customer Service
-                    </p>
-                    <div className="mt-2 flex flex-col items-start gap-1.5">
-                      <button
-                        type="button"
-                        className="text-[13px] text-white hover:underline"
-                        onClick={() => setSheet("membership", "sameday")}
-                      >
-                        Membership
-                      </button>
-                      <button
-                        type="button"
-                        className="text-[13px] text-white hover:underline"
-                        onClick={() => setSheet("pricing", "sameday")}
-                      >
-                        Pricing & fees
-                      </button>
-                      <button
-                        type="button"
-                        className="text-[13px] text-white hover:underline"
-                        onClick={() => setSheet("delivery", "sameday")}
-                      >
-                        Delivery windows
-                      </button>
-                    </div>
-                  </div>
-                  <div>
-                    <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#f3e3a3]">
-                      Get to Know Costco
-                    </p>
-                    <div className="mt-2 flex flex-col items-start gap-1.5">
-                      <button
-                        type="button"
-                        className="text-[13px] text-white hover:underline"
-                        onClick={() => setSheet("departments", "sameday")}
-                      >
-                        Departments
-                      </button>
-                      <button
-                        type="button"
-                        className="text-[13px] text-white hover:underline"
-                        onClick={() => {
-                          clearFilters();
-                          void search();
-                          document.querySelector("main")?.scrollTo({ top: 0 });
-                        }}
-                      >
-                        Same-Day Shop
-                      </button>
-                    </div>
-                  </div>
-                  <div>
-                    <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#f3e3a3]">
-                      Locations & Delivery
-                    </p>
-                    <p className="mt-2 text-[12px] leading-relaxed text-white/80">
-                      Delivery to {formatAddress(address)}. Membership required.
-                      Prices higher than warehouse.
-                    </p>
-                  </div>
-                </div>
-                <div className="border-t border-white/15 px-4 py-2.5 text-[11px] text-white/65 lg:px-5">
-                  © 2026 Costco Wholesale Corporation
-                </div>
-              </footer>
+              <WarehouseFooter className="mt-8 -mx-4 lg:-mx-5" />
             ) : null}
             </>
           )}

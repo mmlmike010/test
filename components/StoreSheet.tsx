@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { X } from "lucide-react";
 import { useStorefrontOverlayClass, useSessionStore } from "@/lib/store/session";
+import WarehouseFooter from "@/components/WarehouseFooter";
 
 export default function StoreSheet({
   title,
@@ -92,6 +93,7 @@ export default function StoreSheet({
                 </h2>
                 <div className="mt-4">{children}</div>
               </div>
+              <WarehouseFooter className="-mx-4 mt-8 -mb-4 lg:-mx-6" />
             </div>
           </div>
         </div>
