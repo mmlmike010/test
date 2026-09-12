@@ -43,6 +43,7 @@ import {
   applyWarehouseFacets,
   EMPTY_WAREHOUSE_FACETS,
 } from "@/lib/ui/warehouseSearch";
+import { warehousePackSrc } from "@/lib/ui/packSize";
 
 interface Message {
   id: string;
@@ -963,17 +964,20 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
         {error && (
           <section
             className={
-              kirkShopPage && !shopHasHits
-                ? "rounded-[3px] border border-[#c4c4c4] bg-white px-6 py-10 text-center"
-                : "overflow-hidden rounded-[3px] border border-[#c4c4c4] bg-white"
+              shopHasHits
+                ? "overflow-hidden border border-[#c4c4c4] bg-white"
+                : "border border-[#c4c4c4] bg-white px-6 py-10 text-center"
             }
           >
-            {kirkShopPage && shopHasHits ? (
+            {shopHasHits ? (
               <>
-                <p className="border-b border-[#c4c4c4] bg-[#f6f7f8] px-3.5 py-2 text-[13px] font-bold text-[#1a1a1a]">
+                <p className="border-b border-[#c4c4c4] bg-[#f6f7f8] px-4 py-2.5 text-[15px] font-bold text-[#1a1a1a]">
                   We&apos;re sorry
                 </p>
-                <div className="px-3.5 py-2.5">
+                <div className="px-4 py-3">
+                  <div className="mb-2">
+                    <CostcoLogo compact />
+                  </div>
                   <p className="text-[13px] text-[#1a1a1a]">{error}</p>
                   {messages.some(
                     (message) =>
@@ -987,28 +991,15 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                 </div>
               </>
             ) : (
-            <div
-              className={
-                kirkShopPage
-                  ? undefined
-                  : "border-l-[3px] border-l-costco-red px-3.5 py-2.5"
-              }
-            >
-              {kirkShopPage ? (
-                <div className="flex justify-center">
-                  <CostcoLogo compact />
-                </div>
-              ) : null}
-              <p
-                className={`font-bold text-[#1a1a1a] ${
-                  kirkShopPage ? "mt-4 text-[28px]" : "text-[13px]"
-                }`}
-              >
+            <div>
+              <div className="flex justify-center">
+                <CostcoLogo compact />
+              </div>
+              <p className="mt-4 text-[28px] font-bold text-[#1a1a1a]">
                 We&apos;re sorry
               </p>
               <p className="mt-1 text-[13px] text-[#1a1a1a]">{error}</p>
-              {kirkShopPage &&
-              messages.some(
+              {messages.some(
                 (message) =>
                   message.role === "assistant" &&
                   message.content === GROK_FALLBACK
@@ -1178,7 +1169,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={product.image}
+                src={warehousePackSrc(product)}
                 alt=""
                 className="h-10 w-10 object-contain"
               />

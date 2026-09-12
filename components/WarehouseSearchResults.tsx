@@ -2,13 +2,17 @@
 
 import { LayoutGrid, List } from "lucide-react";
 import { products, type Product } from "@/lib/data/products";
+import { useCartStore } from "@/lib/store/cart";
 import { useCatalogStore } from "@/lib/store/catalog";
 import { useSessionStore } from "@/lib/store/session";
 import {
+  kirklandWarehousePreview,
   relatedWarehouseSearches,
   warehouseRelatedAisle,
   warehouseSearchTitle,
 } from "@/lib/ui/merchOrder";
+import { productSize, warehouseItemNumber, warehousePackSrc } from "@/lib/ui/packSize";
+import CostcoLogo from "@/components/CostcoLogo";
 import WarehouseAisleScroller from "@/components/WarehouseAisleScroller";
 import {
   applyWarehouseFacets,
@@ -55,11 +59,15 @@ export default function WarehouseSearchResults({
   kirkCompareIds: string[];
   setKirkCompareIds: (ids: string[] | ((value: string[]) => string[])) => void;
 }) {
-  const kirkShopPage = useSessionStore((s) => s.kirkShopPage);
   const warehouseFacets = useCatalogStore((s) => s.warehouseFacets);
   const setWarehouseFacets = useCatalogStore((s) => s.setWarehouseFacets);
   const warehouseSort = useCatalogStore((s) => s.warehouseSort);
   const setWarehouseSort = useCatalogStore((s) => s.setWarehouseSort);
+  const cartItems = useCartStore((s) => s.items);
+  const cartCount = useCartStore((s) => s.getTotalItems());
+  const cartSubtotal = useCartStore((s) => s.getSubtotal());
+  const openCart = useCartStore((s) => s.openCart);
+  const setSheet = useSessionStore((s) => s.setSheet);
   const hits = sortWarehouseItems(
     applyWarehouseFacets(unfilteredHits, warehouseFacets),
     warehouseSort
@@ -68,72 +76,53 @@ export default function WarehouseSearchResults({
   const facetEmpty = unfilteredHits.length > 0 && hits.length === 0;
   const selectionChips = warehouseSelectionChips(warehouseFacets);
   const relatedTerms = relatedWarehouseSearches(query, unfilteredHits);
-  const relatedMerch = kirkShopPage
+  const relatedMerch = hits.length
     ? warehouseRelatedAisle(hits, products, 8)
-    : [];
-  const heading =
-    title ||
-    (unfilteredHits.length ? warehouseSearchTitle(query, unfilteredHits) : query);
+    : kirklandWarehousePreview(products, 8);
+  const cartAsk = query.trim() === "What's in my cart?";
+  const heading = cartAsk
+    ? "Shopping Cart"
+    : title ||
+      (unfilteredHits.length
+        ? warehouseSearchTitle(query, unfilteredHits)
+        : "Search Results");
+  const crumb = cartAsk
+    ? "Shopping Cart"
+    : breadcrumb || "Search Results";
 
   return (
     <div className="space-y-2">
-      <div
-        className={
-          kirkShopPage
-            ? "bg-white px-4 py-3"
-            : "sticky top-0 z-10 border border-[#c4c4c4] bg-white px-3 py-1.5"
-        }
-      >
+      <div className="bg-white px-4 py-3">
         <div className="flex items-start justify-between gap-2">
           <nav
             aria-label="Breadcrumb"
             className="flex flex-wrap items-center gap-x-1.5 text-[11px] text-[#555]"
           >
-            {kirkShopPage ? (
-              <button
-                type="button"
-                onClick={onReset}
-                className="font-bold text-costco-blue hover:underline"
-              >
-                Home
-              </button>
-            ) : (
-              <span className="font-bold text-costco-blue">Home</span>
-            )}
-            <span aria-hidden="true">›</span>
-            <span className="text-[#1a1a1a]">
-              {breadcrumb || "Search Results"}
-            </span>
-          </nav>
-          {kirkShopPage ? (
             <button
               type="button"
               onClick={onReset}
-              className="text-[12px] font-bold text-costco-blue hover:underline"
-              title="Reset"
+              className="font-bold text-costco-blue hover:underline"
             >
-              Reset
+              Home
             </button>
-          ) : null}
+            <span aria-hidden="true">›</span>
+            <span className="text-[#1a1a1a]">{crumb}</span>
+          </nav>
+          <button
+            type="button"
+            onClick={onReset}
+            className="text-[12px] font-bold text-costco-blue hover:underline"
+            title="Reset"
+          >
+            Reset
+          </button>
         </div>
-        {kirkShopPage && unfilteredHits.length ? (
-          <h1 className="mt-0.5 text-[28px] font-bold leading-snug text-[#1a1a1a]">
-            {heading}
-          </h1>
-        ) : (
-          <h2 className="mt-0.5 text-[16px] font-bold leading-snug text-[#1a1a1a] whitespace-pre-line">
-            {query}
-          </h2>
-        )}
+        <h1 className="mt-0.5 text-[28px] font-bold leading-snug text-[#1a1a1a]">
+          {heading}
+        </h1>
         {hits.length > 0 ? (
           <>
-            <div
-              className={`mt-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 ${
-                kirkShopPage
-                  ? "-mx-4 border-y border-[#e5e5e5] bg-[#eee] px-4 py-2"
-                  : ""
-              }`}
-            >
+            <div className="mt-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 -mx-4 border-y border-[#e5e5e5] bg-[#eee] px-4 py-2">
               <p className="text-[13px] font-bold text-[#1a1a1a]">
                 Showing 1 - {preview.length} of {hits.length} Results
               </p>
@@ -189,48 +178,29 @@ export default function WarehouseSearchResults({
                     <List className="h-3.5 w-3.5" />
                   </button>
                 </div>
-                {kirkShopPage ? (
-                  <span className="inline-flex items-center gap-1.5 text-[13px] text-[#555]">
-                    <span className="font-semibold">Show</span>
-                    <span className="inline-flex h-8 items-center rounded-[3px] border border-[#c4c4c4] bg-white px-2 text-[13px] font-bold text-[#1a1a1a]">
-                      24
-                    </span>
+                <span className="inline-flex items-center gap-1.5 text-[13px] text-[#555]">
+                  <span className="font-semibold">Show</span>
+                  <span className="inline-flex h-8 items-center rounded-[3px] border border-[#c4c4c4] bg-white px-2 text-[13px] font-bold text-[#1a1a1a]">
+                    24
                   </span>
-                ) : null}
+                </span>
                 <button
                   type="button"
                   onClick={() => setKirkFiltersOpen((open) => !open)}
-                  className={`text-[13px] font-bold text-costco-blue hover:underline ${
-                    kirkShopPage ? "lg:hidden" : ""
-                  }`}
+                  className="text-[13px] font-bold text-costco-blue hover:underline lg:hidden"
                 >
                   {kirkFiltersOpen ? "Hide Filters" : "Filter Results"}
                 </button>
               </div>
             </div>
             <div className="mt-2.5">
-              {kirkShopPage ? (
-                <WarehouseFulfillmentChips count={hits.length} />
-              ) : (
-                <span className="inline-flex items-center rounded-[3px] border-2 border-costco-blue bg-[#f7fbfe] px-2 py-0.5 text-[11px] font-bold text-costco-blue">
-                  Same-Day Delivery
-                  <span className="ml-1.5 font-semibold text-[#72767E]">
-                    {hits.length}
-                  </span>
-                </span>
-              )}
+              <WarehouseFulfillmentChips count={hits.length} />
             </div>
           </>
         ) : null}
       </div>
       {selectionChips.length > 0 ? (
-        <div
-          className={
-            kirkShopPage
-              ? "bg-white py-2"
-              : "border border-[#c4c4c4] bg-white px-3 py-2"
-          }
-        >
+        <div className="bg-white py-2">
           <p className="text-[12px] font-bold text-[#1a1a1a]">Your Selections</p>
           <div className="mt-1.5 flex flex-wrap items-center gap-1">
             {selectionChips.map((chip) => (
@@ -255,40 +225,21 @@ export default function WarehouseSearchResults({
         </div>
       ) : null}
       {kirkFiltersOpen || hits.length > 0 || facetEmpty ? (
-        <div
-          className={
-            kirkShopPage
-              ? "lg:grid lg:grid-cols-[240px_minmax(0,1fr)] lg:items-start lg:gap-6"
-              : kirkFiltersOpen
-                ? "grid grid-cols-[168px_minmax(0,1fr)] items-start gap-2"
-                : undefined
-          }
-        >
-          {kirkFiltersOpen || kirkShopPage ? (
-            <div
-              className={
-                kirkShopPage && !kirkFiltersOpen ? "hidden lg:block" : undefined
-              }
-            >
+        <div className="lg:grid lg:grid-cols-[240px_minmax(0,1fr)] lg:items-start lg:gap-6">
+          <div className={kirkFiltersOpen ? undefined : "hidden lg:block"}>
               <WarehouseFilterRail
                 id="kirk-filter-results"
-                compact={!kirkShopPage}
                 items={unfilteredHits}
                 facets={warehouseFacets}
                 onChange={setWarehouseFacets}
               />
-            </div>
-          ) : null}
+          </div>
           {hits.length > 0 ? (
             <div className="min-w-0 space-y-2">
               <div
                 className={
                   kirkResultsView === "grid"
-                    ? kirkShopPage
-                      ? "grid grid-cols-2 gap-x-5 gap-y-7 lg:grid-cols-3 xl:grid-cols-4"
-                      : kirkFiltersOpen
-                        ? "grid grid-cols-1 gap-2"
-                        : "grid grid-cols-2 gap-2"
+                    ? "grid grid-cols-2 gap-x-5 gap-y-7 lg:grid-cols-3 xl:grid-cols-4"
                     : "space-y-2"
                 }
               >
@@ -296,13 +247,7 @@ export default function WarehouseSearchResults({
                   <WarehouseResultCard
                     key={`${resultKey}-${product.id}`}
                     product={product}
-                    density={
-                      kirkResultsView === "grid"
-                        ? kirkShopPage
-                          ? "catalog"
-                          : "search"
-                        : "list"
-                    }
+                    density={kirkResultsView === "grid" ? "catalog" : "list"}
                     compareChecked={kirkCompareIds.includes(product.id)}
                     onCompare={(checked) =>
                       setKirkCompareIds((ids) => {
@@ -356,11 +301,117 @@ export default function WarehouseSearchResults({
           ) : null}
         </div>
       ) : null}
+      {cartAsk ? (
+        <section className="overflow-hidden border border-[#c4c4c4] bg-white">
+          <div className="border-b border-[#ececec] bg-[#f6f7f8] px-4 py-2 text-[12px] font-bold text-[#666]">
+            {cartCount} item{cartCount === 1 ? "" : "s"}
+          </div>
+          {cartItems.length === 0 ? (
+            <div className="px-6 py-12 text-center">
+              <p className="text-[17px] font-bold text-[#1a1a1a]">
+                Your shopping cart is empty
+              </p>
+              <p className="mt-1.5 text-[13px] text-[#555]">
+                Add items to get started, or ask Kirk to build a cart.
+              </p>
+              <button
+                type="button"
+                onClick={onReset}
+                className="mt-4 text-[13px] font-bold text-costco-blue hover:underline"
+              >
+                Continue Shopping
+              </button>
+            </div>
+          ) : (
+            <>
+              {cartItems.map(({ product, quantity }) => (
+                <div
+                  key={`cart-ask-${product.id}`}
+                  className="flex gap-3 border-b border-[#f0f0f0] px-4 py-3 last:border-b-0"
+                >
+                  <div className="relative h-[72px] w-[72px] shrink-0 overflow-hidden border border-[#eee] bg-white">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={warehousePackSrc(product)}
+                      alt=""
+                      className="absolute inset-0 h-full w-full object-contain p-1"
+                    />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="line-clamp-2 text-[14px] font-bold leading-snug text-costco-blue">
+                      {product.brand} {product.name}
+                    </p>
+                    {productSize(product.id) ? (
+                      <p className="mt-0.5 text-[13px] text-[#72767E]">
+                        {productSize(product.id)}
+                      </p>
+                    ) : null}
+                    <p className="mt-0.5 text-[12px] text-[#72767E]">
+                      Item {warehouseItemNumber(product.id)}
+                    </p>
+                    <p className="mt-0.5 text-[13px] tabular-nums text-[#8a8a8a]">
+                      {quantity} × ${product.price.toFixed(2)}
+                    </p>
+                  </div>
+                  <p className="shrink-0 text-[15px] font-bold tabular-nums text-[#1a1a1a]">
+                    ${(product.price * quantity).toFixed(2)}
+                  </p>
+                </div>
+              ))}
+              <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3">
+                <p className="text-[13px] font-semibold text-[#555]">
+                  Subtotal ({cartCount} item{cartCount === 1 ? "" : "s"}){" "}
+                  <span className="font-bold tabular-nums text-[#1a1a1a]">
+                    ${cartSubtotal.toFixed(2)}
+                  </span>
+                </p>
+                <div className="flex flex-wrap items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => openCart("warehouse")}
+                    className="text-[13px] font-bold text-costco-blue hover:underline"
+                  >
+                    View Cart
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setSheet("checkout", "warehouse")}
+                    className="rounded-[3px] bg-costco-red px-4 py-2 text-[13px] font-bold text-white hover:bg-costco-red-hover"
+                  >
+                    Checkout
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
+        </section>
+      ) : null}
+      {!unfilteredHits.length && !cartAsk ? (
+        <section className="border border-[#c4c4c4] bg-white px-6 py-10 text-center">
+          <div className="flex justify-center">
+            <CostcoLogo compact />
+          </div>
+          <p className="mt-4 text-[28px] font-bold text-[#1a1a1a]">
+            We&apos;re sorry
+          </p>
+          <p className="mt-1 text-[13px] text-[#555]">
+            We were unable to find a match.
+          </p>
+          <button
+            type="button"
+            onClick={onReset}
+            className="mt-4 text-[13px] font-bold text-costco-blue hover:underline"
+          >
+            Continue Shopping
+          </button>
+        </section>
+      ) : null}
       {relatedMerch.length > 0 ? (
         <WarehouseAisleScroller
           title="Related Products"
           products={relatedMerch}
           onShowAll={() => {
+            useSessionStore.getState().setKirkShopPage(true);
             useCatalogStore.setState({
               q: "kirkland",
               warehouseFacets: EMPTY_WAREHOUSE_FACETS,
