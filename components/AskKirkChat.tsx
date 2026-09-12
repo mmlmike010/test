@@ -703,17 +703,17 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
               warehouseFacets
             ).slice(0, 4);
             return (
-              <div key={message.id} className="space-y-2.5">
+              <div key={message.id} className="space-y-2">
                 <GoldStarMembershipCard />
-                <div className="bg-white border border-[#e8e8e8] rounded-[3px] px-3 py-2">
-                  <p className="text-[12px] leading-relaxed text-[#1a1a1a] whitespace-pre-line">
-                    {message.content}
-                  </p>
-                </div>
                 <WarehouseShopDepartments
                   selected={warehouseFacets.departments}
                   onPick={browseWarehouseDepartment}
                 />
+                <div className="rounded-[3px] border border-[#e8e8e8] bg-white px-3 py-1.5">
+                  <p className="text-[12px] leading-relaxed text-[#1a1a1a] whitespace-pre-line">
+                    {message.content}
+                  </p>
+                </div>
                 {preview.length > 0 ? (
                   <div className="overflow-hidden rounded-[3px] border border-[#c4c4c4] bg-white">
                     <div className="flex items-end justify-between gap-2 border-b border-[#ececec] px-3 py-2">

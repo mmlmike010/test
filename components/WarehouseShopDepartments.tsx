@@ -10,7 +10,8 @@ export default function WarehouseShopDepartments({
 }) {
   return (
     <div className="overflow-hidden rounded-[3px] border border-[#c4c4c4] bg-white">
-      <div className="flex items-center justify-between border-b border-[#ececec] px-3 py-2">
+      <div className="h-[3px] bg-gradient-to-r from-[#8c7318] via-[#f3e3a3] to-[#8c7318]" />
+      <div className="flex items-center justify-between border-b border-[#ececec] px-3 py-1.5">
         <p className="text-[13px] font-bold text-[#1a1a1a]">
           Shop by Department
         </p>
@@ -22,7 +23,7 @@ export default function WarehouseShopDepartments({
           Shop All
         </button>
       </div>
-      <div className="grid grid-cols-3 gap-1 p-2">
+      <div className="grid grid-cols-3 gap-0.5 p-1.5">
         {WAREHOUSE_NAV_TILES.map(({ label, image }) => {
           const active = selected.includes(label);
           return (
@@ -35,7 +36,7 @@ export default function WarehouseShopDepartments({
               }`}
               onClick={() => onPick(active ? null : label)}
             >
-              <span className="relative h-14 w-14 overflow-hidden rounded-[3px] border border-[#e8e8e8] bg-[#f6f6f6]">
+              <span className="relative h-16 w-16 overflow-hidden rounded-[3px] border border-[#e8e8e8] bg-[#f6f6f6]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={image}
