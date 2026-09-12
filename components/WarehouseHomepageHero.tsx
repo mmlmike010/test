@@ -50,9 +50,9 @@ function PromoTile({
     <button
       type="button"
       onClick={onClick}
-      className={`group grid h-[280px] grid-cols-[minmax(200px,40%)_minmax(0,1fr)] overflow-hidden text-left ${panel}`}
+      className={`group relative h-[280px] overflow-hidden text-left ${panel}`}
     >
-      <span className="flex flex-col justify-center px-6 py-6">
+      <span className="absolute inset-y-0 left-0 z-10 flex w-[48%] flex-col justify-center px-6 py-6">
         <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-white/80">
           {kicker}
         </span>
@@ -65,13 +65,13 @@ function PromoTile({
           Shop Now <span aria-hidden="true">›</span>
         </span>
       </span>
-      <span className="flex items-center justify-center px-5 py-5">
-        <span className="flex h-full w-full items-center justify-center bg-white">
+      <span className="absolute inset-y-8 right-6 flex w-[44%] items-center justify-center">
+        <span className="flex h-full w-full max-w-[220px] items-center justify-center bg-white">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={src}
             alt=""
-            className="h-[88%] w-[88%] object-contain transition-transform duration-300 group-hover:scale-[1.04]"
+            className="h-[86%] w-[86%] object-contain transition-transform duration-300 group-hover:scale-[1.04]"
           />
         </span>
       </span>
