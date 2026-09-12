@@ -276,9 +276,11 @@ export default function ProductGrid() {
   if (compareOpen && compareItems.length < 2) {
     setCompareOpen(false);
   }
-  const searchGridClass = kirkOpen
-    ? "grid grid-cols-2 xl:grid-cols-3 gap-3"
-    : "grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3";
+  const searchGridClass = warehouseList
+    ? "grid grid-cols-2 gap-x-5 gap-y-7 sm:grid-cols-3 xl:grid-cols-4"
+    : kirkOpen
+      ? "grid grid-cols-2 xl:grid-cols-3 gap-3"
+      : "grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3";
 
   const showAisle = (next: { department?: string; tag?: string }) => {
     setQuery("");

@@ -947,20 +947,20 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                   </button>
                 ) : null}
                 </div>
-                <h2
-                  className={`mt-0.5 font-bold leading-snug text-[#1a1a1a] whitespace-pre-line ${
-                    kirkShopPage ? "text-[28px]" : "text-[16px]"
-                  }`}
-                >
-                  {kirkShopPage && unfilteredHits.length
-                    ? warehouseSearchTitle(message.content, unfilteredHits)
-                    : message.content}
-                </h2>
+                {kirkShopPage && unfilteredHits.length ? (
+                  <h1 className="mt-0.5 text-[28px] font-bold leading-snug text-[#1a1a1a]">
+                    {warehouseSearchTitle(message.content, unfilteredHits)}
+                  </h1>
+                ) : (
+                  <h2 className="mt-0.5 text-[16px] font-bold leading-snug text-[#1a1a1a] whitespace-pre-line">
+                    {message.content}
+                  </h2>
+                )}
                 {hits.length > 0 ? (
                   <>
                     <div className="mt-1.5 flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
                       <p className="text-[12px] font-bold text-[#1a1a1a]">
-                        Showing 1 – {preview.length} of {hits.length} Results
+                        Showing 1 - {preview.length} of {hits.length} Results
                       </p>
                       <button
                         type="button"
@@ -1035,7 +1035,13 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                 ) : null}
               </div>
               {selectionChips.length > 0 ? (
-                <div className="border border-[#c4c4c4] bg-white px-3 py-2">
+                <div
+                  className={
+                    kirkShopPage
+                      ? "bg-white py-2"
+                      : "border border-[#c4c4c4] bg-white px-3 py-2"
+                  }
+                >
                   <p className="text-[12px] font-bold text-[#1a1a1a]">
                     Your Selections
                   </p>
@@ -1088,7 +1094,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                         className={
                           kirkResultsView === "grid"
                             ? kirkShopPage
-                              ? "grid grid-cols-2 gap-3 lg:grid-cols-3 xl:grid-cols-4"
+                              ? "grid grid-cols-2 gap-x-5 gap-y-7 lg:grid-cols-3 xl:grid-cols-4"
                               : kirkFiltersOpen
                                 ? "grid grid-cols-1 gap-2"
                                 : "grid grid-cols-2 gap-2"
@@ -1123,7 +1129,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                       </div>
                       <nav
                         aria-label="Pagination"
-                        className="flex flex-wrap items-center justify-between gap-2 border border-[#c4c4c4] bg-white px-3 py-2"
+                        className="flex flex-wrap items-center justify-end gap-2 bg-white py-3"
                       >
                         <p className="text-[11px] font-semibold text-[#555]">
                           Page 1 of 1

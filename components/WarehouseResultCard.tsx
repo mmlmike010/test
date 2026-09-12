@@ -159,7 +159,7 @@ export default function WarehouseResultCard({
   }
 
   return (
-    <div className="flex flex-col border border-[#c4c4c4] bg-white rounded-[3px] overflow-hidden">
+    <div className="flex flex-col overflow-hidden bg-white">
       <button
         type="button"
         onClick={openItem}
@@ -168,11 +168,11 @@ export default function WarehouseResultCard({
         <span
           className={`relative ${
             featured
-              ? "h-[140px] bg-[#f6f6f6]"
+              ? "h-[140px] bg-white"
               : preview
                 ? "h-[112px] bg-white"
                 : catalog
-                  ? "h-[180px] bg-white"
+                  ? "h-[200px] bg-white"
                   : "h-[150px] bg-white"
           }`}
         >
@@ -186,16 +186,16 @@ export default function WarehouseResultCard({
                 : preview
                   ? "p-1.5"
                   : catalog
-                    ? "p-2.5"
+                    ? "p-3"
                     : "p-2"
             }`}
           />
           {chrome && isLimitedOffer(product) ? (
-            <LimitedTimeOfferBadge compact={preview || featured || !catalog} />
+            <LimitedTimeOfferBadge compact />
           ) : null}
           {chrome && onCompare ? (
             <label
-              className="absolute right-1.5 top-1.5 z-10 flex items-center gap-1 rounded-[2px] bg-white/95 px-1 py-0.5 text-[11px] text-[#555] shadow-[0_1px_2px_rgba(0,0,0,0.12)]"
+              className="absolute right-0 top-0 z-10 flex items-center gap-1 bg-white px-1 py-0.5 text-[11px] text-[#555]"
               onClick={(e) => e.stopPropagation()}
             >
               <input

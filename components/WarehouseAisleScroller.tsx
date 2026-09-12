@@ -29,13 +29,12 @@ export default function WarehouseAisleScroller({
 
   return (
     <div className="bg-white">
-      {accent === "offer" ? (
-        <div className="bg-costco-red px-3 py-1 text-center text-[11px] font-bold uppercase tracking-wide text-white">
-          Limited-Time Offers
-        </div>
-      ) : null}
       <div className="flex items-center justify-between gap-2 px-1 py-1.5">
-        <p className="min-w-0 truncate text-[15px] font-bold text-[#1a1a1a]">
+        <p
+          className={`min-w-0 truncate text-[15px] font-bold ${
+            accent === "offer" ? "text-costco-red" : "text-[#1a1a1a]"
+          }`}
+        >
           {title}
         </p>
         <div className="flex shrink-0 items-center gap-1.5">
@@ -64,7 +63,7 @@ export default function WarehouseAisleScroller({
             className="inline-flex items-center gap-0.5 text-[12px] font-bold text-costco-blue hover:underline"
             onClick={onShowAll}
           >
-            Show all
+            Shop All
             <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
           </button>
         </div>
