@@ -701,7 +701,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             const preview = applyWarehouseFacets(
               kirklandWarehousePreview(products, 24),
               warehouseFacets
-            ).slice(0, 2);
+            ).slice(0, 8);
             const aisleTitle =
               warehouseFacets.departments.length === 1
                 ? warehouseFacets.departments[0]
@@ -735,7 +735,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                   onPick={browseWarehouseDepartment}
                 />
                 {preview.length > 0 ? (
-                  <div className="overflow-hidden rounded-[3px] border border-[#c4c4c4] bg-white">
+                  <div className="rounded-[3px] border border-[#c4c4c4] bg-white">
                     <div className="h-[3px] bg-gradient-to-r from-[#8c7318] via-[#f3e3a3] to-[#8c7318]" />
                     <div className="flex items-end justify-between gap-2 border-b border-[#ececec] px-3 py-1.5">
                       <p className="text-[13px] font-bold text-[#1a1a1a]">
@@ -753,14 +753,20 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                         />
                       </button>
                     </div>
-                    <div className="grid grid-cols-2 gap-2 p-2">
-                      {preview.map((product) => (
-                        <WarehouseResultCard
-                          key={`preview-${product.id}`}
-                          product={product}
-                          density="featured"
-                        />
-                      ))}
+                    <div className="overflow-x-auto scrollbar-hide">
+                      <div className="flex w-max gap-2 px-2 pb-2 pt-2">
+                        {preview.map((product) => (
+                          <div
+                            key={`preview-${product.id}`}
+                            className="w-[148px] shrink-0"
+                          >
+                            <WarehouseResultCard
+                              product={product}
+                              density="featured"
+                            />
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 ) : (
