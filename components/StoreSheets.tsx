@@ -5,6 +5,9 @@ import { Check, ChevronRight } from "lucide-react";
 import StoreSheet from "@/components/StoreSheet";
 import GoldStarMark from "@/components/GoldStarMark";
 import GoldStarMembershipCard from "@/components/GoldStarMembershipCard";
+import KirkIdPhoto from "@/components/KirkIdPhoto";
+import MembershipBarcode from "@/components/MembershipBarcode";
+import MembershipQr from "@/components/MembershipQr";
 import InstacartMark from "@/components/InstacartMark";
 import { departments } from "@/lib/data/products";
 import { aisleLabel } from "@/lib/ui/aisleLabels";
@@ -24,6 +27,40 @@ import {
 
 function useWarehouseCheckoutSheet() {
   return useSessionStore((s) => s.sheetTone) === "warehouse";
+}
+
+function WarehouseGoldStarCard({
+  name,
+  number,
+}: {
+  name: string;
+  number: string;
+}) {
+  return (
+    <div className="overflow-hidden rounded-[3px] border border-[#c4c4c4] bg-white shadow-[0_1px_4px_rgba(0,0,0,0.08)]">
+      <div className="h-[6px] bg-costco-red" />
+      <div className="flex items-start gap-4 px-5 py-4">
+        <KirkIdPhoto className="h-[88px] w-[66px] shrink-0 rounded-[2px] border border-[#d0d0d0] shadow-[inset_0_0_0_2px_#f7f6f2]" />
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-1.5">
+            <GoldStarMark size={18} />
+            <p className="text-[11px] font-extrabold uppercase tracking-[0.16em] text-costco-red">
+              Gold Star
+            </p>
+          </div>
+          <p className="mt-1 text-[22px] font-black leading-none tracking-tight text-[#1a1a1a]">
+            {name}
+          </p>
+          <p className="mt-2 text-[16px] font-bold tabular-nums tracking-[0.12em] text-costco-blue">
+            {number}
+          </p>
+          <MembershipBarcode className="mt-2 h-7 w-full max-w-[220px] text-[#1a1a1a]" />
+        </div>
+        <MembershipQr className="h-20 w-20 shrink-0 border border-[#ececec] bg-white p-1" />
+      </div>
+      <div className="h-[6px] bg-costco-blue" />
+    </div>
+  );
 }
 
 function warehouseAccountCrumbs(
@@ -129,31 +166,92 @@ function MembershipSheet() {
         warehouse ? warehouseAccountCrumbs(title, closeSheet, priorSheet) : undefined
       }
     >
-      <div
-        className={
-          warehouse
-            ? "rounded-[3px] border border-[#c4c4c4] bg-white px-5 py-5 space-y-3"
-            : "px-4 py-4 space-y-3"
-        }
-      >
+      {warehouse ? (
+        <div className="grid gap-4 lg:grid-cols-2 lg:items-start">
+          <WarehouseGoldStarCard
+            name={KIRK_NAME}
+            number={membershipNumber || number || KIRK_MEMBERSHIP}
+          />
+          <div className="rounded-[3px] border border-[#c4c4c4] bg-white px-5 py-5 space-y-3">
+            <p className="text-[15px] font-bold text-[#1a1a1a]">
+              Costco membership
+            </p>
+            <p className="text-[13px] leading-snug text-[#555]">
+              Add your Costco membership to unlock member pricing on Same-Day.
+              Kirk&apos;s Gold Star is ready for this demo.
+            </p>
+            <ul className="list-disc space-y-1 pl-5 text-[13px] text-[#555]">
+              <li>Instant Savings on warehouse items</li>
+              <li>Same-Day Delivery with membership</li>
+              <li>100% Satisfaction Guarantee</li>
+            </ul>
+            {membershipAdded ? (
+              <div className="rounded-[3px] border border-[#c4c4c4] bg-[#f7fbfe] px-3.5 py-3">
+                <p className="inline-flex items-center gap-1.5 text-[13px] font-bold text-costco-blue">
+                  <GoldStarMark size={16} />
+                  Gold Star added · {membershipNumber}
+                </p>
+                <button
+                  type="button"
+                  className="mt-2 block text-[13px] font-bold text-costco-blue hover:underline"
+                  onClick={removeMembership}
+                >
+                  Remove membership
+                </button>
+              </div>
+            ) : (
+              <>
+                <label className="block">
+                  <span className="block text-[12px] font-bold text-[#555] mb-1">
+                    Membership number
+                  </span>
+                  <input
+                    value={number}
+                    onChange={(e) => setNumber(e.target.value)}
+                    inputMode="numeric"
+                    className="h-11 w-full rounded-[3px] border border-[#c4c4c4] bg-[#f6f6f6] px-3.5 text-[15px] text-[#222] focus:border-costco-blue focus:bg-white focus:outline-none focus:ring-2 focus:ring-costco-blue/15"
+                  />
+                </label>
+                <button
+                  type="button"
+                  className="w-full rounded-[3px] bg-costco-red py-3 text-[15px] font-bold text-white hover:bg-costco-red-hover"
+                  onClick={() => addMembership(number)}
+                >
+                  Add membership
+                </button>
+                <button
+                  type="button"
+                  className="w-full text-[13px] font-bold text-costco-blue hover:underline"
+                  onClick={() => {
+                    setNumber(KIRK_MEMBERSHIP);
+                    addMembership(KIRK_MEMBERSHIP);
+                  }}
+                >
+                  Use Kirk&apos;s Gold Star · {KIRK_MEMBERSHIP}
+                </button>
+              </>
+            )}
+            {priorSheet === "checkout" ? (
+              <button
+                type="button"
+                className="text-[13px] font-bold text-costco-blue hover:underline"
+                onClick={closeSheet}
+              >
+                Return to Checkout
+              </button>
+            ) : null}
+          </div>
+        </div>
+      ) : (
+      <div className="px-4 py-4 space-y-3">
         <GoldStarMembershipCard />
         <p className="text-[13px] text-[#555] leading-snug">
           Add your Costco membership to unlock member pricing on Same-Day.
           Kirk&apos;s Gold Star is ready for this demo.
         </p>
         {membershipAdded ? (
-          <div
-            className={
-              warehouse
-                ? "rounded-[3px] border border-[#c4c4c4] bg-[#f7fbfe] px-3.5 py-3"
-                : "rounded-[12px] border border-[#b7d7b0] bg-[#eef7ee] px-3.5 py-3"
-            }
-          >
-            <p
-              className={`inline-flex items-center gap-1.5 text-[13px] font-bold ${
-                warehouse ? "text-costco-blue" : "text-[#1e5b24]"
-              }`}
-            >
+          <div className="rounded-[12px] border border-[#b7d7b0] bg-[#eef7ee] px-3.5 py-3">
+            <p className="inline-flex items-center gap-1.5 text-[13px] font-bold text-[#1e5b24]">
               <GoldStarMark size={16} />
               Gold Star added · {membershipNumber}
             </p>
@@ -175,20 +273,12 @@ function MembershipSheet() {
                 value={number}
                 onChange={(e) => setNumber(e.target.value)}
                 inputMode="numeric"
-                className={`w-full h-11 px-3.5 bg-[#f6f6f6] border text-[15px] text-[#222] focus:outline-none focus:bg-white focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15 ${
-                  warehouse
-                    ? "rounded-[3px] border-[#c4c4c4]"
-                    : "rounded-[8px] border-[#d8d8d8]"
-                }`}
+                className="h-11 w-full rounded-[8px] border border-[#d8d8d8] bg-[#f6f6f6] px-3.5 text-[15px] text-[#222] focus:border-costco-blue focus:bg-white focus:outline-none focus:ring-2 focus:ring-costco-blue/15"
               />
             </label>
             <button
               type="button"
-              className={`w-full py-3 text-[15px] font-bold text-white ${
-                warehouse
-                  ? "rounded-[3px] bg-costco-red hover:bg-costco-red-hover"
-                  : "rounded-full bg-[#0AAD0A] hover:bg-[#099809]"
-              }`}
+              className="w-full rounded-full bg-[#0AAD0A] py-3 text-[15px] font-bold text-white hover:bg-[#099809]"
               onClick={() => addMembership(number)}
             >
               Add membership
@@ -206,6 +296,7 @@ function MembershipSheet() {
           </>
         )}
       </div>
+      )}
     </StoreSheet>
   );
 }
@@ -221,6 +312,8 @@ function SignInSheet() {
   const priorSheet = useSessionStore((s) => s.priorSheet);
   const [name, setName] = useState(displayName || KIRK_NAME);
   const [mail, setMail] = useState(email || KIRK_EMAIL);
+  const [password, setPassword] = useState("");
+  const [resetNote, setResetNote] = useState<string | null>(null);
   const title = "Sign In / Register";
 
   return (
@@ -233,25 +326,120 @@ function SignInSheet() {
         warehouse ? warehouseAccountCrumbs(title, closeSheet, priorSheet) : undefined
       }
     >
-      <div
-        className={
-          warehouse
-            ? "rounded-[3px] border border-[#c4c4c4] bg-white px-5 py-5 space-y-3"
-            : "px-4 py-4 space-y-3"
-        }
-      >
+      {warehouse ? (
+        <div className="grid gap-4 lg:grid-cols-2 lg:items-start">
+          <div className="rounded-[3px] border border-[#c4c4c4] bg-white px-5 py-5 space-y-3">
+            <p className="text-[15px] font-bold text-[#1a1a1a]">Sign In</p>
+            {signedIn ? (
+              <div className="rounded-[3px] border border-[#c4c4c4] bg-[#f7fbfe] px-3.5 py-3">
+                <p className="text-[15px] font-bold text-[#1a1a1a]">
+                  {displayName}
+                </p>
+                <p className="text-[13px] text-[#555]">{email}</p>
+                <button
+                  type="button"
+                  className="mt-2 text-[13px] font-bold text-costco-blue hover:underline"
+                  onClick={signOut}
+                >
+                  Sign out
+                </button>
+              </div>
+            ) : (
+              <>
+                <label className="block">
+                  <span className="block text-[12px] font-bold text-[#555] mb-1">
+                    Email Address
+                  </span>
+                  <input
+                    type="email"
+                    value={mail}
+                    onChange={(e) => setMail(e.target.value)}
+                    autoComplete="username"
+                    className="h-11 w-full rounded-[3px] border border-[#c4c4c4] bg-[#f6f6f6] px-3.5 text-[15px] text-[#222] focus:border-costco-blue focus:bg-white focus:outline-none focus:ring-2 focus:ring-costco-blue/15"
+                  />
+                </label>
+                <label className="block">
+                  <span className="block text-[12px] font-bold text-[#555] mb-1">
+                    Password
+                  </span>
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    autoComplete="current-password"
+                    className="h-11 w-full rounded-[3px] border border-[#c4c4c4] bg-[#f6f6f6] px-3.5 text-[15px] text-[#222] focus:border-costco-blue focus:bg-white focus:outline-none focus:ring-2 focus:ring-costco-blue/15"
+                  />
+                </label>
+                <button
+                  type="button"
+                  className="w-full rounded-[3px] bg-costco-red py-3 text-[15px] font-bold text-white hover:bg-costco-red-hover"
+                  onClick={() => signIn(name || KIRK_NAME, mail)}
+                >
+                  Sign In
+                </button>
+                <button
+                  type="button"
+                  className="text-[13px] font-bold text-costco-blue hover:underline"
+                  onClick={() =>
+                    setResetNote(
+                      "If this were a live Costco account, a reset link would be sent. Demo only — nothing leaves this browser."
+                    )
+                  }
+                >
+                  Forgot Password?
+                </button>
+                {resetNote ? (
+                  <p className="text-[12px] leading-snug text-[#555]">{resetNote}</p>
+                ) : null}
+                <button
+                  type="button"
+                  className="block text-[13px] font-bold text-costco-blue hover:underline"
+                  onClick={() => signIn(KIRK_NAME, KIRK_EMAIL)}
+                >
+                  Continue as Kirk
+                </button>
+              </>
+            )}
+            {priorSheet === "checkout" ? (
+              <button
+                type="button"
+                className="text-[13px] font-bold text-costco-blue hover:underline"
+                onClick={closeSheet}
+              >
+                Return to Checkout
+              </button>
+            ) : null}
+          </div>
+          <div className="rounded-[3px] border border-[#c4c4c4] bg-white px-5 py-5">
+            <p className="text-[15px] font-bold text-[#1a1a1a]">
+              New to Costco?
+            </p>
+            <p className="mt-1 text-[13px] leading-snug text-[#555]">
+              Create an account to save lists, attach a Gold Star, and check
+              out. A Costco membership is required for member pricing.
+            </p>
+            <ul className="mt-3 list-disc space-y-1 pl-5 text-[13px] text-[#555]">
+              <li>Track Same-Day Delivery orders</li>
+              <li>Save warehouse items to lists</li>
+              <li>Checkout with Gold Star pricing</li>
+            </ul>
+            <button
+              type="button"
+              className="mt-4 w-full rounded-[3px] border border-costco-red bg-white py-3 text-[15px] font-bold text-costco-red hover:bg-[#fff5f6]"
+              onClick={() => signIn(name || KIRK_NAME, mail || KIRK_EMAIL)}
+            >
+              Create Account
+            </button>
+          </div>
+        </div>
+      ) : (
+      <div className="px-4 py-4 space-y-3">
         <p className="text-[13px] text-[#555] leading-snug">
           Sign in to save lists, attach a Gold Star, and check out. Demo only —
           nothing leaves this browser.
         </p>
         {signedIn ? (
-          <div
-            className={
-              warehouse
-                ? "rounded-[3px] border border-[#c4c4c4] bg-[#f7fbfe] px-3.5 py-3"
-                : "rounded-[12px] border border-[#c5d8ea] bg-[#e8f2fa] px-3.5 py-3"
-            }
-          >
+          <div className="rounded-[12px] border border-[#c5d8ea] bg-[#e8f2fa] px-3.5 py-3">
             <p className="text-[15px] font-bold text-[#1a1a1a]">{displayName}</p>
             <p className="text-[13px] text-[#555]">{email}</p>
             <button
@@ -271,11 +459,7 @@ function SignInSheet() {
               <input
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className={`w-full h-11 px-3.5 bg-[#f6f6f6] border text-[15px] text-[#222] focus:outline-none focus:bg-white focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15 ${
-                  warehouse
-                    ? "rounded-[3px] border-[#c4c4c4]"
-                    : "rounded-[8px] border-[#d8d8d8]"
-                }`}
+                className="h-11 w-full rounded-[8px] border border-[#d8d8d8] bg-[#f6f6f6] px-3.5 text-[15px] text-[#222] focus:border-costco-blue focus:bg-white focus:outline-none focus:ring-2 focus:ring-costco-blue/15"
               />
             </label>
             <label className="block">
@@ -286,20 +470,12 @@ function SignInSheet() {
                 type="email"
                 value={mail}
                 onChange={(e) => setMail(e.target.value)}
-                className={`w-full h-11 px-3.5 bg-[#f6f6f6] border text-[15px] text-[#222] focus:outline-none focus:bg-white focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15 ${
-                  warehouse
-                    ? "rounded-[3px] border-[#c4c4c4]"
-                    : "rounded-[8px] border-[#d8d8d8]"
-                }`}
+                className="h-11 w-full rounded-[8px] border border-[#d8d8d8] bg-[#f6f6f6] px-3.5 text-[15px] text-[#222] focus:border-costco-blue focus:bg-white focus:outline-none focus:ring-2 focus:ring-costco-blue/15"
               />
             </label>
             <button
               type="button"
-              className={`w-full py-3 text-[15px] font-bold text-white ${
-                warehouse
-                  ? "rounded-[3px] bg-costco-red hover:bg-costco-red-hover"
-                  : "rounded-full bg-[#0AAD0A] hover:bg-[#099809]"
-              }`}
+              className="w-full rounded-full bg-[#0AAD0A] py-3 text-[15px] font-bold text-white hover:bg-[#099809]"
               onClick={() => signIn(name, mail)}
             >
               Continue
@@ -314,6 +490,7 @@ function SignInSheet() {
           </>
         )}
       </div>
+      )}
     </StoreSheet>
   );
 }
