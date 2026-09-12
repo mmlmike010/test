@@ -70,6 +70,9 @@ type KirkAction =
   | { tool: "remove_from_cart"; productIds: string[] }
   | { tool: "clear_cart" };
 
+const GROK_FALLBACK =
+  "I couldn't reach Grok just now. Check that XAI_API_KEY is set and try again.";
+
 const suggestionChips = [
   "What's in my cart?",
   "Add Kirkland hummus and quinoa to my cart",
@@ -435,8 +438,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
         {
           id: (Date.now() + 1).toString(),
           role: "assistant",
-          content:
-            "I couldn't reach Grok just now. Check that XAI_API_KEY is set and try again.",
+          content: GROK_FALLBACK,
           timestamp: new Date(),
         },
       ]);
@@ -1141,7 +1143,11 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                 </div>
               ) : null}
             </div>
-          ) : (
+          ) : kirkShopPage &&
+            error &&
+            message.content === GROK_FALLBACK &&
+            !added.length &&
+            !message.imageUrl ? null : (
             <KirklandHelpCard title="Kirkland Signature shopping help">
               <p className="whitespace-pre-line">{message.content}</p>
               {message.imageUrl && (
@@ -1223,6 +1229,14 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                 We&apos;re sorry
               </p>
               <p className="mt-1 text-[13px] text-[#1a1a1a]">{error}</p>
+              {kirkShopPage &&
+              messages.some(
+                (message) =>
+                  message.role === "assistant" &&
+                  message.content === GROK_FALLBACK
+              ) ? (
+                <p className="mt-1 text-[13px] text-[#1a1a1a]">{GROK_FALLBACK}</p>
+              ) : null}
             </div>
           </section>
         )}

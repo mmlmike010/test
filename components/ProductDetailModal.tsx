@@ -200,9 +200,11 @@ export default function ProductDetailModal({
           >
           <div
             className={
-              kirkOpen && !kirkShopPage
-                ? "xl:border-r xl:border-[#eee]"
-                : "lg:border-r lg:border-[#eee]"
+              warehouse && kirkShopPage
+                ? "bg-white lg:sticky lg:top-0 lg:border-r lg:border-[#eee]"
+                : kirkOpen && !kirkShopPage
+                  ? "xl:border-r xl:border-[#eee]"
+                  : "lg:border-r lg:border-[#eee]"
             }
           >
             <div
