@@ -172,7 +172,7 @@ export default function WarehouseResultCard({
               : preview
                 ? "h-[112px] bg-white"
                 : catalog
-                  ? "h-[200px] bg-white"
+                  ? "h-[232px] bg-white"
                   : "h-[150px] bg-white"
           }`}
         >

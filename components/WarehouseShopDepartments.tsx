@@ -67,10 +67,10 @@ export default function WarehouseShopDepartments({
                 className="w-[136px] shrink-0 bg-white text-center"
               >
                 <span
-                  className={`relative mx-auto flex h-[120px] w-full items-center justify-center overflow-hidden bg-[#f6f7f8] ${
+                  className={`relative mx-auto flex h-[120px] w-full items-center justify-center overflow-hidden border bg-[#f6f7f8] ${
                     active
-                      ? "ring-2 ring-costco-blue ring-offset-1"
-                      : "hover:ring-1 hover:ring-costco-blue"
+                      ? "border-costco-blue ring-2 ring-costco-blue ring-offset-1"
+                      : "border-[#e5e5e5] hover:border-costco-blue"
                   }`}
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}

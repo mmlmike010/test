@@ -25,6 +25,7 @@ import WarehouseHomepageShortcuts from "@/components/WarehouseHomepageShortcuts"
 import WarehouseHomepageSpotlights from "@/components/WarehouseHomepageSpotlights";
 import WarehouseShopDepartments from "@/components/WarehouseShopDepartments";
 import WarehouseAisleScroller from "@/components/WarehouseAisleScroller";
+import WarehouseFulfillmentChips from "@/components/WarehouseFulfillmentChips";
 import WarehouseFilterRail from "@/components/WarehouseFilterRail";
 import WarehouseCompareSheet from "@/components/WarehouseCompareSheet";
 import WarehouseFooter from "@/components/WarehouseFooter";
@@ -911,20 +912,12 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                 )}
                 {hits.length > 0 ? (
                   <>
-                    <div className="mt-1.5 flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
-                      <p className="text-[12px] font-bold text-[#1a1a1a]">
+                    <div className="mt-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+                      <p className="text-[13px] font-bold text-[#1a1a1a]">
                         Showing 1 - {preview.length} of {hits.length} Results
                       </p>
-                      <button
-                        type="button"
-                        onClick={() => setKirkFiltersOpen((open) => !open)}
-                        className="text-[12px] font-bold text-costco-blue hover:underline"
-                      >
-                        {kirkFiltersOpen ? "Hide Filters" : "Filter Results"}
-                      </button>
-                    </div>
-                    <div className="mt-1.5 flex flex-wrap items-center justify-between gap-2 border-t border-[#ececec] pt-1.5">
-                      <label className="inline-flex items-center gap-1 text-[11px] text-[#555]">
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+                      <label className="inline-flex items-center gap-1.5 text-[13px] text-[#555]">
                         <span className="font-semibold">Sort By</span>
                         <select
                           aria-label="Sort items"
@@ -932,7 +925,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                           onChange={(e) =>
                             setWarehouseSort(e.target.value as WarehouseSort)
                           }
-                          className="h-7 rounded-[3px] border border-[#c4c4c4] bg-white px-1 text-[11px] font-bold text-[#1a1a1a] focus:border-costco-blue focus:outline-none"
+                          className="h-8 rounded-[3px] border border-[#c4c4c4] bg-white px-1.5 text-[13px] font-bold text-[#1a1a1a] focus:border-costco-blue focus:outline-none"
                         >
                           <option value="relevance">Best Match</option>
                           <option value="price">Price (Low to High)</option>
@@ -945,7 +938,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                         role="group"
                         aria-label="View"
                       >
-                        <span className="mr-1 text-[11px] font-semibold text-[#555]">
+                        <span className="mr-1 text-[13px] font-semibold text-[#555]">
                           View
                         </span>
                         <button
@@ -953,7 +946,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                           aria-pressed={kirkResultsView === "grid"}
                           aria-label="Grid view"
                           onClick={() => setKirkResultsView("grid")}
-                          className={`flex h-7 w-7 items-center justify-center rounded-[3px] border ${
+                          className={`flex h-8 w-8 items-center justify-center rounded-[3px] border ${
                             kirkResultsView === "grid"
                               ? "border-costco-blue bg-[#f7fbfe] text-costco-blue"
                               : "border-[#c4c4c4] bg-white text-[#555] hover:border-costco-blue"
@@ -966,7 +959,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                           aria-pressed={kirkResultsView === "list"}
                           aria-label="List view"
                           onClick={() => setKirkResultsView("list")}
-                          className={`flex h-7 w-7 items-center justify-center rounded-[3px] border ${
+                          className={`flex h-8 w-8 items-center justify-center rounded-[3px] border ${
                             kirkResultsView === "list"
                               ? "border-costco-blue bg-[#f7fbfe] text-costco-blue"
                               : "border-[#c4c4c4] bg-white text-[#555] hover:border-costco-blue"
@@ -975,14 +968,36 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                           <List className="h-3.5 w-3.5" />
                         </button>
                       </div>
-                    </div>
-                    <div className="mt-1.5 flex flex-wrap gap-1.5 border-t border-[#ececec] pt-1.5">
-                      <span className="inline-flex items-center rounded-[3px] border-2 border-costco-blue bg-[#f7fbfe] px-2 py-0.5 text-[11px] font-bold text-costco-blue">
-                        Same-Day Delivery
-                        <span className="ml-1.5 font-semibold text-[#72767E]">
-                          {hits.length}
+                      {kirkShopPage ? (
+                        <span className="inline-flex items-center gap-1.5 text-[13px] text-[#555]">
+                          <span className="font-semibold">Show</span>
+                          <span className="inline-flex h-8 items-center rounded-[3px] border border-[#c4c4c4] bg-white px-2 text-[13px] font-bold text-[#1a1a1a]">
+                            24
+                          </span>
                         </span>
-                      </span>
+                      ) : null}
+                      <button
+                        type="button"
+                        onClick={() => setKirkFiltersOpen((open) => !open)}
+                        className={`text-[13px] font-bold text-costco-blue hover:underline ${
+                          kirkShopPage ? "lg:hidden" : ""
+                        }`}
+                      >
+                        {kirkFiltersOpen ? "Hide Filters" : "Filter Results"}
+                      </button>
+                      </div>
+                    </div>
+                    <div className="mt-2.5">
+                      {kirkShopPage ? (
+                        <WarehouseFulfillmentChips count={hits.length} />
+                      ) : (
+                        <span className="inline-flex items-center rounded-[3px] border-2 border-costco-blue bg-[#f7fbfe] px-2 py-0.5 text-[11px] font-bold text-costco-blue">
+                          Same-Day Delivery
+                          <span className="ml-1.5 font-semibold text-[#72767E]">
+                            {hits.length}
+                          </span>
+                        </span>
+                      )}
                     </div>
                   </>
                 ) : null}
@@ -1025,14 +1040,21 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
               {kirkFiltersOpen || hits.length > 0 || facetEmpty ? (
                 <div
                   className={
-                    kirkFiltersOpen
-                      ? kirkShopPage
-                        ? "lg:grid lg:grid-cols-[220px_minmax(0,1fr)] lg:items-start lg:gap-4"
-                        : "grid grid-cols-[168px_minmax(0,1fr)] items-start gap-2"
-                      : undefined
+                    kirkShopPage
+                      ? "lg:grid lg:grid-cols-[240px_minmax(0,1fr)] lg:items-start lg:gap-6"
+                      : kirkFiltersOpen
+                        ? "grid grid-cols-[168px_minmax(0,1fr)] items-start gap-2"
+                        : undefined
                   }
                 >
-                  {kirkFiltersOpen ? (
+                  {kirkFiltersOpen || kirkShopPage ? (
+                    <div
+                      className={
+                        kirkShopPage && !kirkFiltersOpen
+                          ? "hidden lg:block"
+                          : undefined
+                      }
+                    >
                     <WarehouseFilterRail
                       id="kirk-filter-results"
                       compact={!kirkShopPage}
@@ -1040,6 +1062,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                       facets={warehouseFacets}
                       onChange={setWarehouseFacets}
                     />
+                    </div>
                   ) : null}
                   {hits.length > 0 ? (
                     <div className="min-w-0 space-y-2">
@@ -1082,14 +1105,20 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                       </div>
                       <nav
                         aria-label="Pagination"
-                        className="flex flex-wrap items-center justify-end gap-2 bg-white py-3"
+                        className="flex flex-wrap items-center justify-end gap-3 border-t border-[#ececec] bg-white py-4"
                       >
-                        <p className="text-[11px] font-semibold text-[#555]">
+                        <p className="text-[13px] font-semibold text-[#555]">
                           Page 1 of 1
                         </p>
-                        <div className="flex items-center gap-1">
-                          <span className="inline-flex h-7 min-w-7 items-center justify-center rounded-[3px] border border-costco-blue bg-[#f7fbfe] px-1.5 text-[12px] font-bold text-costco-blue">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[13px] font-bold text-[#c4c4c4]">
+                            Previous
+                          </span>
+                          <span className="inline-flex h-8 min-w-8 items-center justify-center rounded-[3px] border border-costco-blue bg-[#f7fbfe] px-2 text-[13px] font-bold text-costco-blue">
                             1
+                          </span>
+                          <span className="text-[13px] font-bold text-[#c4c4c4]">
+                            Next
                           </span>
                         </div>
                       </nav>
@@ -1116,11 +1145,11 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                 </div>
               ) : null}
               {message.id === lastUserId && relatedTerms.length > 0 ? (
-                <div className="border-t border-[#ececec] bg-white px-1 py-4">
-                  <p className="text-[15px] font-bold text-[#1a1a1a]">
+                <div className="border-t border-[#ececec] bg-white px-1 py-5">
+                  <p className="text-[17px] font-bold text-[#1a1a1a]">
                     Related Searches
                   </p>
-                  <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-1">
+                  <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1.5">
                     {relatedTerms.map((term) => (
                       <button
                         key={`${message.id}-${term}`}
