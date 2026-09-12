@@ -408,13 +408,13 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
           <button
             type="button"
             onClick={onAskKirkClick}
-            className={`hidden sm:inline-flex items-center gap-1.5 h-10 px-3 font-bold whitespace-nowrap ${
+            className={`hidden sm:inline-flex items-center gap-1.5 h-10 font-bold whitespace-nowrap ${
               warehouseChrome
-                ? "rounded-[3px] bg-costco-red text-white hover:bg-costco-red-hover"
-                : "rounded-full border-2 border-costco-red bg-white text-costco-red hover:bg-[#fff5f6]"
+                ? "rounded-[3px] px-2 text-[#333] hover:bg-[#f6f6f6]"
+                : "rounded-full border-2 border-costco-red bg-white px-3 text-costco-red hover:bg-[#fff5f6]"
             }`}
           >
-            <KirkMark size={22} tone={warehouseChrome ? "onRed" : "default"} />
+            <KirkMark size={22} />
             <span className="text-[13px]">Ask Kirk</span>
           </button>
           <button
@@ -422,12 +422,12 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
             onClick={onAskKirkClick}
             className={`sm:hidden h-10 w-10 flex items-center justify-center ${
               warehouseChrome
-                ? "rounded-[3px] bg-costco-red"
+                ? "rounded-[3px] hover:bg-[#f6f6f6]"
                 : "rounded-full border-2 border-costco-red"
             }`}
             aria-label="Ask Kirk"
           >
-            <KirkMark size={22} tone={warehouseChrome ? "onRed" : "default"} />
+            <KirkMark size={22} />
           </button>
 
           {warehouseChrome ? (

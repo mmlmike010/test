@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const SLIDES = [
@@ -41,10 +41,12 @@ export default function WarehouseHomepageHero({
   onKirkland,
   onOffers,
   onPick,
+  utilities,
 }: {
   onKirkland: () => void;
   onOffers: () => void;
   onPick: (label: string) => void;
+  utilities?: ReactNode;
 }) {
   const [index, setIndex] = useState(0);
   const slide = SLIDES[index];
@@ -153,9 +155,12 @@ export default function WarehouseHomepageHero({
           ))}
         </div>
       </div>
-      <p className="px-4 pt-1.5 text-[11px] text-[#72767E] lg:px-8">
-        While supplies last
-      </p>
+      <div className="flex items-center justify-between gap-3 px-4 pt-1.5 lg:px-8">
+        <p className="text-[11px] text-[#72767E]">While supplies last</p>
+        {utilities ? (
+          <div className="flex items-center gap-3">{utilities}</div>
+        ) : null}
+      </div>
     </div>
   );
 }

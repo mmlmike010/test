@@ -691,29 +691,6 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
       <div
         className="relative min-h-0 flex-1 overflow-y-auto bg-white"
       >
-        {kirkShopPage ? null : (
-          <div className="pointer-events-none absolute right-4 top-3 z-20 flex gap-3 lg:right-8">
-            <div className="pointer-events-auto flex items-center gap-3 bg-white/95 px-2 py-0.5">
-              <button
-                type="button"
-                onClick={handleReset}
-                className="text-[12px] font-bold text-costco-blue hover:underline"
-                title="Reset"
-              >
-                Reset
-              </button>
-              <button
-                type="button"
-                onClick={onClose}
-                className="text-[12px] font-bold text-costco-blue hover:underline"
-                title="Close"
-                aria-label="Close Ask Kirk"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        )}
         <div className="mx-auto max-w-[1400px] space-y-5 px-4 py-4 lg:px-8">
         {messages.map((message) => {
           const isWelcome = message.id.startsWith("welcome-");
@@ -764,6 +741,27 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                   onKirkland={showAllAisle}
                   onOffers={showAllAisle}
                   onPick={browseWarehouseDepartment}
+                  utilities={
+                    <>
+                      <button
+                        type="button"
+                        onClick={handleReset}
+                        className="text-[12px] font-bold text-costco-blue hover:underline"
+                        title="Reset"
+                      >
+                        Reset
+                      </button>
+                      <button
+                        type="button"
+                        onClick={onClose}
+                        className="text-[12px] font-bold text-costco-blue hover:underline"
+                        title="Close"
+                        aria-label="Close Ask Kirk"
+                      >
+                        Close
+                      </button>
+                    </>
+                  }
                 />
                 <WarehouseHomepageShortcuts
                   onOffers={showAllAisle}
