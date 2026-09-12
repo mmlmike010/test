@@ -65,13 +65,15 @@ function PromoTile({
           Shop Now <span aria-hidden="true">›</span>
         </span>
       </span>
-      <span className="relative flex items-center justify-center">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={src}
-          alt=""
-          className="h-[82%] w-[82%] object-contain mix-blend-darken transition-transform duration-300 group-hover:scale-[1.04]"
-        />
+      <span className="flex items-center justify-center px-5 py-5">
+        <span className="flex h-full w-full items-center justify-center bg-white">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={src}
+            alt=""
+            className="h-[88%] w-[88%] object-contain transition-transform duration-300 group-hover:scale-[1.04]"
+          />
+        </span>
       </span>
     </button>
   );
