@@ -20,6 +20,7 @@ import CostcoLogo from "@/components/CostcoLogo";
 import GoldStarMark from "@/components/GoldStarMark";
 import GoldStarMembershipCard from "@/components/GoldStarMembershipCard";
 import WarehouseShopDepartments from "@/components/WarehouseShopDepartments";
+import WarehouseAisleScroller from "@/components/WarehouseAisleScroller";
 import {
   deliveryWindow,
   formatAddress,
@@ -753,21 +754,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                         />
                       </button>
                     </div>
-                    <div className="overflow-x-auto scrollbar-hide">
-                      <div className="flex w-max gap-2 px-2 pb-2 pt-2">
-                        {preview.map((product) => (
-                          <div
-                            key={`preview-${product.id}`}
-                            className="w-[148px] shrink-0"
-                          >
-                            <WarehouseResultCard
-                              product={product}
-                              density="featured"
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    </div>
+                    <WarehouseAisleScroller products={preview} />
                   </div>
                 ) : (
                   <p className="rounded-[3px] border border-[#c4c4c4] bg-white px-3 py-5 text-center text-[13px] text-[#555]">
