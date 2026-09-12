@@ -36,7 +36,7 @@ export default function WarehouseShopDepartments({
               }`}
               onClick={() => onPick(active ? null : label)}
             >
-              <span className="relative h-16 w-16 overflow-hidden rounded-[3px] border border-[#e8e8e8] bg-[#f6f6f6]">
+              <span className="relative h-14 w-14 overflow-hidden rounded-[3px] border border-[#e8e8e8] bg-[#f6f6f6]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={image}

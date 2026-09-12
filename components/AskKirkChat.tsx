@@ -701,7 +701,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             const preview = applyWarehouseFacets(
               kirklandWarehousePreview(products, 24),
               warehouseFacets
-            ).slice(0, 4);
+            ).slice(0, 2);
             const aisleTitle =
               warehouseFacets.departments.length === 1
                 ? warehouseFacets.departments[0]
@@ -758,7 +758,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                         <WarehouseResultCard
                           key={`preview-${product.id}`}
                           product={product}
-                          density="preview"
+                          density="featured"
                         />
                       ))}
                     </div>
