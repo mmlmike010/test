@@ -723,7 +723,8 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                           : "Kirkland Signature"}
                       </p>
                       <p className="text-[11px] font-semibold text-[#666] tabular-nums">
-                        {preview.length} items
+                        {preview.length} item
+                        {preview.length === 1 ? "" : "s"}
                       </p>
                     </div>
                     <div className="grid grid-cols-2 gap-2 p-2">

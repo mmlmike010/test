@@ -258,7 +258,6 @@ export default function ProductGrid() {
   const [prevFilterKey, setPrevFilterKey] = useState(filterKey);
   if (prevFilterKey !== filterKey) {
     setPrevFilterKey(filterKey);
-    setWarehouseFacets(EMPTY_WAREHOUSE_FACETS);
     setWarehouseSort("relevance");
     setSort("relevance");
     setCompareIds([]);
