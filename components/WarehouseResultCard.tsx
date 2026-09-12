@@ -190,7 +190,7 @@ export default function WarehouseResultCard({
                     : "p-2"
             }`}
           />
-          {chrome && isLimitedOffer(product) ? (
+          {chrome && !featured && isLimitedOffer(product) ? (
             <LimitedTimeOfferBadge compact />
           ) : null}
           {chrome && onCompare ? (
