@@ -842,8 +842,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                 setKirkCompareIds={setKirkCompareIds}
               />
             </div>
-          ) : kirkShopPage &&
-            error &&
+          ) : error &&
             message.content === GROK_FALLBACK &&
             !added.length &&
             !message.imageUrl ? null : (
