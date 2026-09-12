@@ -687,30 +687,6 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
     <aside
       className="fixed inset-y-0 right-0 z-40 flex h-full w-full min-w-0 flex-1 flex-col bg-white lg:static lg:z-30"
     >
-      {kirkShopPage ? null : (
-      <div className="relative shrink-0 bg-white">
-        <div className="mx-auto flex max-w-[1400px] items-center justify-end gap-3 px-4 pt-3 lg:px-8">
-            <button
-              type="button"
-              onClick={handleReset}
-              className="text-[12px] font-bold text-costco-blue hover:underline"
-              title="Reset"
-            >
-              Reset
-            </button>
-            <button
-              type="button"
-              onClick={onClose}
-              className="text-[12px] font-bold text-costco-blue hover:underline"
-              title="Close"
-              aria-label="Close Ask Kirk"
-            >
-              Close
-            </button>
-        </div>
-      </div>
-      )}
-
       {cartNotice && (
         <div className="mx-4 mt-3 flex items-center gap-2 border border-[#c4c4c4] bg-[#f7fbfe] px-3 py-2 text-[12px] font-semibold text-costco-blue shrink-0">
           <ShoppingCart className="w-3.5 h-3.5" />
@@ -719,8 +695,31 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
       )}
 
       <div
-        className="min-h-0 flex-1 overflow-y-auto bg-white"
+        className="relative min-h-0 flex-1 overflow-y-auto bg-white"
       >
+        {kirkShopPage ? null : (
+          <div className="pointer-events-none absolute right-4 top-3 z-20 flex gap-3 lg:right-8">
+            <div className="pointer-events-auto flex items-center gap-3 bg-white/95 px-2 py-0.5">
+              <button
+                type="button"
+                onClick={handleReset}
+                className="text-[12px] font-bold text-costco-blue hover:underline"
+                title="Reset"
+              >
+                Reset
+              </button>
+              <button
+                type="button"
+                onClick={onClose}
+                className="text-[12px] font-bold text-costco-blue hover:underline"
+                title="Close"
+                aria-label="Close Ask Kirk"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
         <div className="mx-auto max-w-[1400px] space-y-5 px-4 py-4 lg:px-8">
         {messages.map((message) => {
           const isWelcome = message.id.startsWith("welcome-");
@@ -765,13 +764,13 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             };
             return (
               <div key={message.id} className="space-y-6">
-                <WarehouseHomepageShortcuts
-                  onOffers={showAllAisle}
-                  onPick={browseWarehouseDepartment}
-                />
                 <WarehouseHomepageHero
                   onKirkland={showAllAisle}
                   onOffers={showAllAisle}
+                />
+                <WarehouseHomepageShortcuts
+                  onOffers={showAllAisle}
+                  onPick={browseWarehouseDepartment}
                 />
                 <WarehouseShopDepartments
                   selected={warehouseFacets.departments}
