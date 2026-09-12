@@ -879,7 +879,10 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                     </button>
                   </p>
                 )}
-                <KirklandHelpCard title="Kirkland Signature shopping help">
+                <KirklandHelpCard
+                  title="Kirkland Signature shopping help"
+                  variant="page"
+                >
                   <p className="whitespace-pre-line">{message.content}</p>
                 </KirklandHelpCard>
               </div>

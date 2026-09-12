@@ -117,7 +117,7 @@ export default function WarehouseFilterRail({
       className={
         compact
           ? "rounded-[3px] border border-[#c4c4c4] bg-white px-2.5 py-2"
-          : "mb-4 rounded-[3px] border border-[#c4c4c4] bg-white px-3 py-3 lg:mb-0 lg:sticky lg:top-0"
+          : "mb-4 bg-white pr-2 lg:mb-0 lg:sticky lg:top-0"
       }
     >
       <div className="flex items-center justify-between gap-2">

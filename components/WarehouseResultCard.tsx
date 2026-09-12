@@ -160,11 +160,6 @@ export default function WarehouseResultCard({
 
   return (
     <div className="flex flex-col border border-[#c4c4c4] bg-white rounded-[3px] overflow-hidden">
-      {featured && isLimitedOffer(product) ? (
-        <span className="block bg-costco-red py-0.5 text-center text-[9px] font-bold uppercase tracking-wide text-white">
-          Limited-Time Offers
-        </span>
-      ) : null}
       <button
         type="button"
         onClick={openItem}
@@ -195,8 +190,8 @@ export default function WarehouseResultCard({
                     : "p-2"
             }`}
           />
-          {chrome && !featured && isLimitedOffer(product) ? (
-            <LimitedTimeOfferBadge compact={preview || !catalog} />
+          {chrome && isLimitedOffer(product) ? (
+            <LimitedTimeOfferBadge compact={preview || featured || !catalog} />
           ) : null}
           {chrome && onCompare ? (
             <label

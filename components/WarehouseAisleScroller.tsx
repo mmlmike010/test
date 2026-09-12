@@ -28,14 +28,14 @@ export default function WarehouseAisleScroller({
   if (!products.length) return null;
 
   return (
-    <div className="rounded-[3px] border border-[#c4c4c4] bg-white">
+    <div className="bg-white">
       {accent === "offer" ? (
         <div className="bg-costco-red px-3 py-1 text-center text-[11px] font-bold uppercase tracking-wide text-white">
           Limited-Time Offers
         </div>
       ) : null}
-      <div className="flex items-center justify-between gap-2 border-b border-[#ececec] px-3 py-1.5">
-        <p className="min-w-0 truncate text-[13px] font-bold text-[#1a1a1a]">
+      <div className="flex items-center justify-between gap-2 px-1 py-1.5">
+        <p className="min-w-0 truncate text-[15px] font-bold text-[#1a1a1a]">
           {title}
         </p>
         <div className="flex shrink-0 items-center gap-1.5">
@@ -70,9 +70,9 @@ export default function WarehouseAisleScroller({
         </div>
       </div>
       <div ref={scrollerRef} className="overflow-x-auto scrollbar-hide">
-        <div className="flex w-max gap-2 px-2 pb-2 pt-2">
+        <div className="flex w-max gap-2 px-1 pb-1 pt-1">
           {products.map((product) => (
-            <div key={`aisle-${product.id}`} className="w-[168px] shrink-0">
+            <div key={`aisle-${product.id}`} className="w-[176px] shrink-0">
               <WarehouseResultCard product={product} density="featured" />
             </div>
           ))}
