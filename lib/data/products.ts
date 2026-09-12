@@ -34,9 +34,9 @@ export const products: Product[] = [
     price: 5.29,
     originalPrice: 6.83,
     savings: 1.54,
-    image: "/products/1.png",
+    image: "/products/1.png?v=8",
     inStock: true,
-    tags: ["weekly", "trending"],
+    tags: ["weekly"],
     rating: 4.2,
     reviewCount: 433,
     reviews: [
@@ -74,7 +74,7 @@ export const products: Product[] = [
     savings: 1.33,
     image: "/products/2.png?v=2",
     inStock: true,
-    tags: ["weekly", "treasure"],
+    tags: ["weekly", "treasure", "snacks", "trending"],
     rating: 4.9,
     reviewCount: 412,
     reviews: [
@@ -105,7 +105,7 @@ export const products: Product[] = [
     savings: 1.02,
     image: "/products/3.png",
     inStock: true,
-    tags: ["weekly"],
+    tags: ["weekly", "pantry"],
     rating: 4.0,
     reviewCount: 316,
     reviews: [
@@ -136,7 +136,7 @@ export const products: Product[] = [
     savings: 1.75,
     image: "/products/4.png",
     inStock: true,
-    tags: ["trending"],
+    tags: ["trending", "pantry"],
     rating: 4.7,
     reviewCount: 142,
     reviews: [
@@ -167,7 +167,7 @@ export const products: Product[] = [
     savings: 1.45,
     image: "/products/5.png",
     inStock: true,
-    tags: ["trending", "catering", "again"],
+    tags: ["trending", "catering", "again", "snacks"],
     rating: 4.3,
     reviewCount: 423,
     reviews: [
@@ -203,9 +203,9 @@ export const products: Product[] = [
     price: 4.53,
     originalPrice: 6.2,
     savings: 1.67,
-    image: "/products/6.png?v=2",
+    image: "/products/6.png?v=7",
     inStock: true,
-    tags: ["new"],
+    tags: ["new", "pantry"],
     rating: 4.9,
     reviewCount: 204,
     reviews: [
@@ -241,9 +241,9 @@ export const products: Product[] = [
     price: 3.17,
     originalPrice: 4.5,
     savings: 1.33,
-    image: "/products/7.png?v=2",
+    image: "/products/7.png?v=7",
     inStock: true,
-    tags: ["weekly"],
+    tags: ["weekly", "pantry"],
     rating: 4.7,
     reviewCount: 337,
     reviews: [
@@ -274,7 +274,7 @@ export const products: Product[] = [
     savings: 1.61,
     image: "/products/8.png",
     inStock: true,
-    tags: ["dairy", "again"],
+    tags: ["dairy", "again", "new"],
     rating: 3.9,
     reviewCount: 406,
     reviews: [
@@ -303,7 +303,7 @@ export const products: Product[] = [
     price: 2.71,
     originalPrice: 4.0,
     savings: 1.29,
-    image: "/products/9.png?v=22",
+    image: "/products/9.png?v=31",
     inStock: true,
     tags: ["bakery"],
     rating: 3.9,
@@ -343,7 +343,7 @@ export const products: Product[] = [
     savings: 6.0,
     image: "/products/10.png",
     inStock: true,
-    tags: ["kirkland", "treasure", "again"],
+    tags: ["kirkland", "treasure", "again", "pantry"],
     rating: 4.9,
     reviewCount: 1842,
     reviews: [
@@ -381,7 +381,7 @@ export const products: Product[] = [
     savings: 4.0,
     image: "/products/11.png",
     inStock: true,
-    tags: ["kirkland"],
+    tags: ["kirkland", "pantry"],
     rating: 4.9,
     reviewCount: 102,
     reviews: [
@@ -481,7 +481,7 @@ export const products: Product[] = [
     savings: 5.0,
     image: "/products/14.png",
     inStock: true,
-    tags: ["babies", "kirkland", "treasure"],
+    tags: ["babies", "kirkland", "treasure", "new"],
     rating: 4.7,
     reviewCount: 236,
     reviews: [
@@ -510,9 +510,9 @@ export const products: Product[] = [
     price: 8.99,
     originalPrice: 11.99,
     savings: 3.0,
-    image: "/products/15.png",
+    image: "/products/15.png?v=2",
     inStock: true,
-    tags: ["bakery", "kirkland"],
+    tags: ["bakery", "kirkland", "new"],
     rating: 3.9,
     reviewCount: 155,
     reviews: [
@@ -605,7 +605,7 @@ export const products: Product[] = [
     savings: 50.0,
     image: "/products/18.png",
     inStock: true,
-    tags: ["cameras"],
+    tags: ["cameras", "new"],
     rating: 4.4,
     reviewCount: 156,
     reviews: [
@@ -634,7 +634,7 @@ export const products: Product[] = [
     price: 17.99,
     originalPrice: 22.99,
     savings: 5.0,
-    image: "/products/19.png?v=2",
+    image: "/products/19.png?v=3",
     inStock: true,
     tags: ["cleaning", "kirkland", "treasure"],
     rating: 3.8,
@@ -667,7 +667,7 @@ export const products: Product[] = [
     savings: 5.0,
     image: "/products/20.png",
     inStock: true,
-    tags: ["clothing", "kirkland"],
+    tags: ["clothing", "kirkland", "new"],
     rating: 4.7,
     reviewCount: 157,
     reviews: [
@@ -698,7 +698,7 @@ export const products: Product[] = [
     savings: 4.5,
     image: "/products/21.png",
     inStock: true,
-    tags: ["coffee", "kirkland", "treasure"],
+    tags: ["coffee", "kirkland", "treasure", "new"],
     rating: 4.0,
     reviewCount: 365,
     reviews: [
@@ -875,8 +875,20 @@ export const categories: ShopCategory[] = [
   {
     id: "bakery",
     name: "Bakery",
-    image: "/products/cat-bakery.jpg?v=1",
+    image: "/products/cat-bakery.jpg?v=2",
     department: "Bakery & Desserts",
+  },
+  {
+    id: "pantry",
+    name: "Pantry",
+    image: "/products/cat-pantry.jpg?v=1",
+    tag: "pantry",
+  },
+  {
+    id: "snacks",
+    name: "Snacks",
+    image: "/products/cat-snacks.jpg?v=1",
+    tag: "snacks",
   },
   {
     id: "prepared",
@@ -899,7 +911,7 @@ export const categories: ShopCategory[] = [
   {
     id: "household",
     name: "Household",
-    image: "/products/cat-household.jpg?v=1",
+    image: "/products/cat-household.jpg?v=2",
     department: "Cleaning",
   },
   {
@@ -969,8 +981,11 @@ export function filterProducts(filters: ProductFilters = {}): Product[] {
           tags.includes("kirkland")
         );
       if (tag === "recipes")
-        return ["pasta sauce", "cooking oil", "grains", "canned tomatoes"].includes(
-          p.category
+        return (
+          tags.includes("recipes") ||
+          ["pasta sauce", "cooking oil", "grains", "canned tomatoes"].includes(
+            p.category
+          )
         );
       if (tag === "catering")
         return (

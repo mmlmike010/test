@@ -12,7 +12,7 @@ const aisleThumbs: Record<string, string> = {
   "Kirkland Signature": "/products/cat-kirkland.jpg?v=2",
   "Auto Accessories": "/products/13.png",
   Babies: "/products/14.png",
-  "Bakery & Desserts": "/products/15.png",
+  "Bakery & Desserts": "/products/15.png?v=2",
   "Beer, Wine & Spirits": "/products/16.png",
   Books: "/products/17.png",
   "Cameras & Camcorders": "/products/18.png",
@@ -26,16 +26,46 @@ const aisleThumbs: Record<string, string> = {
 
 export function MobileAisles() {
   const selected = useCatalogStore((s) => s.department);
+  const tag = useCatalogStore((s) => s.tag);
+  const q = useCatalogStore((s) => s.q);
+  const listTone = useCatalogStore((s) => s.listTone);
   const setDepartment = useCatalogStore((s) => s.setDepartment);
+  const setTag = useCatalogStore((s) => s.setTag);
   const setQuery = useCatalogStore((s) => s.setQuery);
   const search = useCatalogStore((s) => s.search);
-
+  if (listTone === "warehouse" && q.trim()) return null;
   return (
     <div className="md:hidden bg-white border-b border-[#ececec] px-3 py-2">
       <p className="text-[12px] font-bold text-[#1a1a1a] mb-1.5 px-0.5">
         Browse aisles
       </p>
       <div className="flex gap-1.5 overflow-x-auto scrollbar-hide">
+        {(
+          [
+            ["pantry", "Pantry"],
+            ["snacks", "Snacks"],
+          ] as const
+        ).map(([value, label]) => {
+          const active = tag === value;
+          return (
+            <button
+              key={value}
+              type="button"
+              onClick={() => {
+                setQuery("");
+                setTag(active ? null : value);
+                void search();
+              }}
+              className={`shrink-0 px-2.5 py-1 rounded-full text-[12px] border ${
+                active
+                  ? "bg-[#e8f2fa] border-costco-blue text-costco-blue font-bold"
+                  : "bg-white border-[#d0d0d0] text-[#333]"
+              }`}
+            >
+              {label}
+            </button>
+          );
+        })}
         {departments.map((dept) => {
           const active = selected === dept;
           return (

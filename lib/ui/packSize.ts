@@ -29,3 +29,75 @@ export const PRODUCT_SIZES: Record<string, string> = {
 export function productSize(id: string): string | undefined {
   return PRODUCT_SIZES[id];
 }
+
+/** costco.com search-tile item #. UI only — never sent to Kirk. */
+export function warehouseItemNumber(id: string): string {
+  return `18471${id.padStart(2, "0")}`;
+}
+
+/** Cropped pack shots for warehouse merch. Never written onto Product / Kirk. */
+const WAREHOUSE_BANNER_IDS = new Set([
+  "2",
+  "3",
+  "4",
+  "5",
+  "8",
+  "10",
+  "11",
+  "12",
+  "14",
+  "15",
+  "16",
+  "19",
+  "20",
+  "21",
+  "23",
+  "24",
+]);
+
+export function warehousePackSrc(product: {
+  id: string;
+  image: string;
+}): string {
+  if (WAREHOUSE_BANNER_IDS.has(product.id)) {
+    return `/products/banner-${product.id}.png?v=1`;
+  }
+  return product.image;
+}
+
+function money(price: number, qty: number): string {
+  return `$${(price / qty).toFixed(2)}`;
+}
+
+/** Same-Day item-page unit price. UI only — never sent to Kirk. */
+export function unitPriceLabel(
+  id: string,
+  price: number
+): string | undefined {
+  const size = PRODUCT_SIZES[id];
+  if (!size || !(price > 0)) return undefined;
+
+  const multi = size.match(/^(\d+)\s*x\s*(\d+(?:\.\d+)?)\s*(oz|lb)$/i);
+  if (multi) {
+    const qty = Number(multi[1]) * Number(multi[2]);
+    return `${money(price, qty)} / ${multi[3].toLowerCase()}`;
+  }
+
+  const simple = size.match(/^(\d+(?:\.\d+)?)\s*(oz|lb|L|ct)$/i);
+  if (simple) {
+    const qty = Number(simple[1]);
+    const raw = simple[2];
+    const unit = raw.toLowerCase() === "l" ? "L" : raw.toLowerCase();
+    if (unit === "ct" && qty <= 1) return undefined;
+    if (unit === "ct") return `${money(price, qty)} each`;
+    return `${money(price, qty)} / ${unit}`;
+  }
+
+  const loads = size.match(/^(\d+)\s*loads$/i);
+  if (loads) return `${money(price, Number(loads[1]))} / load`;
+
+  const pairs = size.match(/^(\d+)\s*pairs$/i);
+  if (pairs) return `${money(price, Number(pairs[1]))} / pair`;
+
+  return undefined;
+}

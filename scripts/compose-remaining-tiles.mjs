@@ -6,6 +6,8 @@ const dir = join(process.cwd(), "public", "products");
 mkdirSync(dir, { recursive: true });
 
 const CF = "https://d2lnr5mha7bycj.cloudfront.net/product-image/file";
+const PAPER =
+  "https://raw.githubusercontent.com/prabhasp/ali-khasro/master/lokta/paper2.jpg";
 
 async function download(url) {
   const res = await fetch(url);
@@ -38,20 +40,53 @@ function xml(text) {
     .replaceAll(">", "&gt;");
 }
 
-function kirkLabel({ w, h, title, line2 = "", size = "", fill = "#005DAA" }) {
-  const titleSize = title.length > 12 ? Math.round(w * 0.092) : Math.round(w * 0.11);
-  const line2Size = Math.round(w * 0.088);
+async function paperize(base, w, h, blend = "multiply") {
+  const paper = await download(PAPER);
+  const grain = await sharp(paper)
+    .resize(w, h, { fit: "cover", position: "centre" })
+    .modulate({ brightness: 1.42, saturation: 0.18 })
+    .toBuffer();
+  return sharp(base)
+    .composite([{ input: grain, blend }])
+    .png()
+    .toBuffer();
+}
+
+function kirkLabel({ w, h, title, line2 = "", size = "", layout = "jar" }) {
+  const mark = Math.round(h * (layout === "tub" ? 0.28 : 0.18));
+  const titleSize =
+    title.length > 12 ? Math.round(w * 0.072) : Math.round(w * 0.1);
+  const line2Size = Math.round(w * 0.07);
+  const copyX = layout === "tub" ? w * 0.62 : w / 2;
+  const kirkSize = Math.round(layout === "tub" ? w * 0.044 : w * 0.07);
+  const sigSize = Math.round(layout === "tub" ? w * 0.034 : w * 0.048);
   return Buffer.from(`<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
-  <rect width="${w}" height="${h}" fill="#ffffff"/>
-  <rect x="0.75" y="0.75" width="${w - 1.5}" height="${h - 1.5}" fill="none" stroke="#d8d8d8" stroke-width="1.5"/>
-  <rect width="${w}" height="${Math.round(h * 0.34)}" fill="${fill}"/>
-  <text x="${w / 2}" y="${h * 0.16}" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="${Math.round(w * 0.12)}" font-weight="800">KIRKLAND</text>
-  <text x="${w / 2}" y="${h * 0.275}" text-anchor="middle" fill="#d6e6f4" font-family="Arial, Helvetica, sans-serif" font-size="${Math.round(w * 0.055)}" letter-spacing="2.4" font-weight="700">SIGNATURE</text>
-  <text x="${w / 2}" y="${h * 0.54}" text-anchor="middle" fill="#1a1a1a" font-family="Arial, Helvetica, sans-serif" font-size="${titleSize}" font-weight="800">${xml(title)}</text>
-  ${line2 ? `<text x="${w / 2}" y="${h * 0.7}" text-anchor="middle" fill="#1a1a1a" font-family="Arial, Helvetica, sans-serif" font-size="${line2Size}" font-weight="800">${xml(line2)}</text>` : ""}
-  ${size ? `<text x="${w / 2}" y="${h * 0.88}" text-anchor="middle" fill="#555555" font-family="Arial, Helvetica, sans-serif" font-size="${Math.round(w * 0.058)}" font-weight="700">${xml(size)}</text>` : ""}
+  <rect width="${w}" height="${h}" fill="#FFFFFF"/>
+  <rect x="0.75" y="0.75" width="${w - 1.5}" height="${h - 1.5}" fill="none" stroke="#E8E8E8" stroke-width="1"/>
+  <text x="${copyX}" y="${mark * 0.58}" text-anchor="middle" fill="#1A1A1A" font-family="Arial, Helvetica, sans-serif" font-size="${kirkSize}" font-weight="900" letter-spacing="0.5">KIRKLAND</text>
+  <text x="${copyX}" y="${mark * 0.98}" text-anchor="middle" fill="#E31837" font-family="Georgia, Times New Roman, serif" font-size="${sigSize}" font-style="italic" font-weight="700">Signature</text>
+  <text x="${copyX}" y="${layout === "tub" ? h * 0.52 : h * 0.72}" text-anchor="middle" fill="#1A1A1A" font-family="Arial, Helvetica, sans-serif" font-size="${titleSize}" font-weight="800">${xml(title)}</text>
+  ${line2 ? `<text x="${copyX}" y="${layout === "tub" ? h * 0.68 : h * 0.82}" text-anchor="middle" fill="#1A1A1A" font-family="Arial, Helvetica, sans-serif" font-size="${line2Size}" font-weight="800">${xml(line2)}</text>` : ""}
+  ${size ? `<text x="${copyX}" y="${layout === "tub" ? h * 0.88 : h * 0.94}" text-anchor="middle" fill="#666666" font-family="Arial, Helvetica, sans-serif" font-size="${Math.round(w * (layout === "tub" ? 0.032 : 0.048))}" font-weight="700">${xml(size)}</text>` : ""}
 </svg>`);
+}
+
+async function foodWindow(src, extract, w, h, rx = 6) {
+  const crop = await sharp(src)
+    .extract(extract)
+    .resize(w, h, { fit: "cover", position: "centre" })
+    .png()
+    .toBuffer();
+  const mask = await sharp(
+    svg(w, h, `<rect width="${w}" height="${h}" rx="${rx}" fill="#fff"/>`)
+  )
+    .png()
+    .toBuffer();
+  return sharp(crop)
+    .composite([{ input: mask, blend: "dest-in" }])
+    .png()
+    .toBuffer();
 }
 
 async function composeJars() {
@@ -62,43 +97,76 @@ async function composeJars() {
     `${CF}/large_66764c9d-6caa-47b9-a1c0-a1735bcdc630.jpeg`
   );
 
-  const beanLabel = await sharp(
+  const beanFood = await foodWindow(
+    paisley,
+    { left: 48, top: 448, width: 210, height: 128 },
+    196,
+    108,
+    5
+  );
+  const beanFace = await sharp(
     kirkLabel({
-      w: 268,
-      h: 292,
+      w: 236,
+      h: 268,
       title: "FIVE BEAN",
       line2: "SALAD",
-      size: "2 × 35.5 OZ",
-      fill: "#1B5E20",
+      size: "15 OZ",
     })
   )
+    .png()
+    .toBuffer();
+  const beanLabel = await sharp(beanFace)
+    .composite([{ input: beanFood, left: 20, top: 62 }])
+    .png()
+    .toBuffer();
+
+  const burstCover = await sharp({
+    create: {
+      width: 18,
+      height: 24,
+      channels: 3,
+      background: { r: 255, g: 255, b: 255 },
+    },
+  })
     .png()
     .toBuffer();
 
   const fiveBean = await sharp(paisley)
     .composite([
-      { input: beanLabel, left: 28, top: 150 },
-      { input: beanLabel, left: 304, top: 150 },
+      { input: burstCover, left: 28, top: 246 },
+      { input: beanLabel, left: 36, top: 166 },
+      { input: beanLabel, left: 328, top: 166 },
     ])
     .jpeg({ quality: 92 })
     .toBuffer();
   await toTile(fiveBean, join(dir, "7.png"));
 
-  const lentilLabel = await sharp(
+  const lentilFood = await foodWindow(
+    salad,
+    { left: 95, top: 310, width: 155, height: 80 },
+    168,
+    88,
+    6
+  );
+  const lentilFace = await sharp(
     kirkLabel({
-      w: 424,
-      h: 248,
+      w: 476,
+      h: 198,
       title: "COOKED LENTILS",
       line2: "& CHICKPEAS",
-      size: "READY TO EAT",
-      fill: "#5D4037",
+      size: "17 OZ · READY TO EAT",
+      layout: "tub",
     })
   )
     .png()
     .toBuffer();
+  const lentilLabel = await sharp(lentilFace)
+    .composite([{ input: lentilFood, left: 14, top: 18 }])
+    .png()
+    .toBuffer();
 
   const lentils = await sharp(salad)
-    .composite([{ input: lentilLabel, left: 88, top: 186 }])
+    .composite([{ input: lentilLabel, left: 62, top: 214 }])
     .jpeg({ quality: 92 })
     .toBuffer();
   await toTile(lentils, join(dir, "6.png"));
@@ -148,49 +216,39 @@ ${inner}
 }
 
 async function composeJasons() {
-  // Official Recipe No 11 is a rectangular paper bakery bag (Tesco pack),
-  // dusty mauve, large loaf window. Colorize photographed paper fiber.
-  // Never dest-in or blur-recolor a competing brand's RGB.
-  const PAPER =
-    "https://raw.githubusercontent.com/prabhasp/ali-khasro/master/lokta/paper2.jpg";
+  // Recipe No 11: flat printed plastic ciabattin sleeve, not a standing pouch.
+  // Crumb window is seeded sourdough only — never dest-in a competing bag.
   const crumbShot = await download(
     "https://user-images.githubusercontent.com/15069517/151712105-4d4076e5-3871-4c6b-89a0-40c0bdf22248.jpg"
   );
-  const paperBytes = await download(PAPER);
 
-  const pw = 420;
-  const ph = 560;
-  const bagMask = await sharp(
-    svg(
-      pw,
-      ph,
-      `<rect x="36" y="28" width="348" height="504" rx="18" ry="18" fill="#fff"/>`
-    )
-  )
-    .png()
-    .toBuffer();
-
-  const paperGrey = await sharp(paperBytes)
-    .resize(pw, ph, { fit: "cover", position: "centre" })
-    .greyscale()
-    .modulate({ brightness: 1.18, saturation: 0.4 })
-    .sharpen(1.4)
-    .removeAlpha()
-    .toBuffer();
-  const mauveWash = await sharp({
+  const pw = 680;
+  const ph = 392;
+  const plastic = await sharp({
     create: {
       width: pw,
       height: ph,
       channels: 3,
-      background: { r: 156, g: 92, b: 118 },
+      background: { r: 118, g: 58, b: 74 },
     },
   })
     .jpeg()
     .toBuffer();
-  const paper = await sharp(paperGrey)
-    .composite([{ input: mauveWash, blend: "multiply" }])
-    .modulate({ brightness: 1.08 })
-    .removeAlpha()
+
+  const bagD = `M28,36
+    C24,22 38,12 58,12
+    L622,12
+    C642,12 656,22 652,36
+    L668,88
+    C676,150 676,250 668,312
+    C664,348 648,376 608,380
+    L72,380
+    C32,376 16,348 12,312
+    C4,250 4,150 12,88
+    Z`;
+
+  const bagMask = await sharp(svg(pw, ph, `<path fill="#fff" d="${bagD}"/>`))
+    .png()
     .toBuffer();
 
   const lighting = svg(
@@ -199,34 +257,40 @@ async function composeJasons() {
     `
   <defs>
     <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#ffffff" stop-opacity="0.22"/>
-      <stop offset="0.45" stop-color="#ffffff" stop-opacity="0"/>
-      <stop offset="1" stop-color="#4a2040" stop-opacity="0.12"/>
+      <stop offset="0" stop-color="#2a1020" stop-opacity="0.3"/>
+      <stop offset="0.18" stop-color="#fff6ea" stop-opacity="0.2"/>
+      <stop offset="0.48" stop-color="#fff6ea" stop-opacity="0"/>
+      <stop offset="1" stop-color="#2a1020" stop-opacity="0.28"/>
+    </linearGradient>
+    <linearGradient id="vert" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff6ea" stop-opacity="0.1"/>
+      <stop offset="1" stop-color="#2a1020" stop-opacity="0.18"/>
     </linearGradient>
   </defs>
   <rect width="${pw}" height="${ph}" fill="url(#sheen)"/>
-  <rect x="36" y="28" width="348" height="22" fill="#4a2040" fill-opacity="0.12"/>
+  <rect width="${pw}" height="${ph}" fill="url(#vert)"/>
+  <rect x="48" y="12" width="584" height="20" fill="#C9A227"/>
 `
   );
 
-  const body = await sharp(paper)
+  const body = await sharp(plastic)
     .composite([{ input: lighting, blend: "over" }])
     .removeAlpha()
     .toBuffer();
   const bagAlpha = await sharp(bagMask).extractChannel("alpha").toBuffer();
   const film = await sharp(body).joinChannel(bagAlpha).png().toBuffer();
 
-  const winW = 248;
-  const winH = 210;
-  const winX = Math.round((pw - winW) / 2);
-  const winY = 148;
+  const winW = 368;
+  const winH = 248;
+  const winX = 268;
+  const winY = 78;
   const loaf = await sharp(crumbShot)
-    .extract({ left: 1180, top: 420, width: 1880, height: 1320 })
+    .extract({ left: 1120, top: 480, width: 2240, height: 1500 })
     .resize(winW, winH, { fit: "cover", position: "centre" })
     .png()
     .toBuffer();
   const windowMask = await sharp(
-    svg(winW, winH, `<rect width="${winW}" height="${winH}" rx="10" ry="10" fill="#fff"/>`)
+    svg(winW, winH, `<rect width="${winW}" height="${winH}" rx="8" ry="8" fill="#fff"/>`)
   )
     .png()
     .toBuffer();
@@ -241,12 +305,12 @@ async function composeJasons() {
       `
     <defs>
       <linearGradient id="film" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0" stop-color="#ffffff" stop-opacity="0.24"/>
-        <stop offset="0.5" stop-color="#ffffff" stop-opacity="0"/>
-        <stop offset="1" stop-color="#4a2040" stop-opacity="0.08"/>
+        <stop offset="0" stop-color="#ffffff" stop-opacity="0.22"/>
+        <stop offset="0.45" stop-color="#ffffff" stop-opacity="0"/>
+        <stop offset="1" stop-color="#3a1830" stop-opacity="0.12"/>
       </linearGradient>
     </defs>
-    <rect width="${winW}" height="${winH}" rx="10" fill="url(#film)"/>
+    <rect width="${winW}" height="${winH}" rx="8" fill="url(#film)"/>
   `
     )
   )
@@ -258,14 +322,15 @@ async function composeJasons() {
       pw,
       ph,
       `
-  <rect x="${winX - 7}" y="${winY - 7}" width="${winW + 14}" height="${winH + 14}" rx="12" ry="12" fill="#5a2a48"/>
-  <text x="${pw / 2}" y="88" text-anchor="middle" fill="#f7ead2" font-family="Georgia, Times New Roman, serif" font-size="42" font-weight="700">Jason's</text>
-  <text x="${pw / 2}" y="112" text-anchor="middle" fill="#f0d8c8" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="800" letter-spacing="5">SOURDOUGH</text>
-  <text x="${pw / 2}" y="396" text-anchor="middle" fill="#f7ead2" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="800" letter-spacing="1.6">GRAINS &amp; SEEDS</text>
-  <text x="${pw / 2}" y="418" text-anchor="middle" fill="#f0d8c8" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="800" letter-spacing="2.4">CIABATTIN</text>
-  <rect x="${pw / 2 - 82}" y="430" width="164" height="28" rx="2" fill="#C9A227"/>
-  <text x="${pw / 2}" y="450" text-anchor="middle" fill="#3a1830" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="800" letter-spacing="1.4">RECIPE NO 11</text>
-  <text x="${pw / 2}" y="484" text-anchor="middle" fill="#f0d8c8" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" letter-spacing="1.8">24 OZ</text>
+  <text x="148" y="28" text-anchor="middle" fill="#3a1830" font-family="Arial, Helvetica, sans-serif" font-size="9" font-weight="800" letter-spacing="1.6">RESEAL TO KEEP FRESH</text>
+  <rect x="${winX - 6}" y="${winY - 6}" width="${winW + 12}" height="${winH + 12}" rx="10" fill="#4a2434"/>
+  <text x="148" y="118" text-anchor="middle" fill="#f7ead2" font-family="Georgia, Times New Roman, serif" font-size="44" font-style="italic" font-weight="700">Jason's</text>
+  <text x="148" y="146" text-anchor="middle" fill="#f0d8c8" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="800" letter-spacing="4.8">SOURDOUGH</text>
+  <text x="148" y="196" text-anchor="middle" fill="#f7ead2" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="800" letter-spacing="1.4">GRAINS &amp; SEEDS</text>
+  <text x="148" y="220" text-anchor="middle" fill="#f0d8c8" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="800" letter-spacing="2">CIABATTIN</text>
+  <rect x="66" y="240" width="164" height="28" rx="2" fill="#C9A227"/>
+  <text x="148" y="259" text-anchor="middle" fill="#3a1830" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="800" letter-spacing="1.2">RECIPE NO 11</text>
+  <text x="148" y="304" text-anchor="middle" fill="#f0d8c8" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" letter-spacing="2">24 OZ</text>
 `
     )
   )
@@ -282,18 +347,19 @@ async function composeJasons() {
     .toBuffer();
 
   const rotated = await sharp(bag)
-    .rotate(-2, { background: { r: 0, g: 0, b: 0, alpha: 0 } })
+    .rotate(-2.2, { background: { r: 0, g: 0, b: 0, alpha: 0 } })
+    .resize({ width: 780 })
     .png()
     .toBuffer();
   const rotMeta = await sharp(rotated).metadata();
   const shadow = await sharp(
     svg(
       rotMeta.width,
-      56,
-      `<ellipse cx="${rotMeta.width / 2}" cy="28" rx="${rotMeta.width * 0.32}" ry="11" fill="#000" fill-opacity="0.14"/>`
+      72,
+      `<ellipse cx="${rotMeta.width / 2}" cy="38" rx="${rotMeta.width * 0.34}" ry="11" fill="#000" fill-opacity="0.16"/>`
     )
   )
-    .blur(10)
+    .blur(14)
     .png()
     .toBuffer();
 
@@ -308,7 +374,7 @@ async function composeJasons() {
     },
   })
     .composite([
-      { input: shadow, left, top: top + rotMeta.height - 26 },
+      { input: shadow, left, top: top + rotMeta.height - 36 },
       { input: rotated, left, top },
     ])
     .png({ compressionLevel: 8 })
@@ -380,7 +446,7 @@ if (only === "all" || only === "jars") {
 
 if (only === "all" || only === "jasons") {
   await composeJasons();
-  console.log("composed 9 from mauve bakery bag + photographic seeded crumb window");
+  console.log("composed 9 as a printed plastic ciabattin bag + seeded crumb window");
 }
 
 if (only === "all" || only === "books") {

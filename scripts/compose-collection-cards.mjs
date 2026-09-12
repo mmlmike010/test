@@ -2,27 +2,13 @@ import { join } from "node:path";
 import sharp from "sharp";
 
 const dir = join(process.cwd(), "public", "products");
-const W = 1400;
-const H = 788;
+const W = 1600;
+const H = 520;
 
 async function download(url) {
   const res = await fetch(url);
   if (!res.ok) throw new Error(`${res.status} ${url}`);
   return Buffer.from(await res.arrayBuffer());
-}
-
-// Instacart collection cards are the lifestyle photo plus the title overlay
-// in the page — no floating packs, wood bars, or kitchen-plane composites.
-async function lifestyleCard(url, outName, position = "attention") {
-  const bytes = await download(url);
-  await sharp(bytes)
-    .rotate()
-    .resize(W, H, { fit: "cover", position })
-    .sharpen({ sigma: 0.6 })
-    .modulate({ brightness: 1.03, saturation: 1.04 })
-    .jpeg({ quality: 90 })
-    .toFile(join(dir, outName));
-  process.stdout.write(`wrote ${outName}\n`);
 }
 
 const CF = "https://d2lnr5mha7bycj.cloudfront.net/product-image/file";
@@ -69,88 +55,114 @@ async function knockoutWhite(buf, cutoff = 242) {
     .toBuffer();
 }
 
-/** Costco.com-style household banner: photographic studio sweep + the
- *  Kirkland detergent jug. Not a kitchen-plane collage. */
-async function householdMerch() {
-  const jugSrc = await download(
-    `${CF}/large_fc09f4a9-8ad0-4983-9451-bdbe70fcf0d9.jpeg`
-  );
+/** Costco.com-style collection banner: studio sweep + one exact pack. */
+async function merchHero({
+  file,
+  wash,
+  outName,
+  scale = 0.92,
+  nudgeX = 80,
+  nudgeY = 0,
+}) {
+  const src = await download(`${CF}/${file}`);
   const sweepSrc = await download(
     "https://raw.githubusercontent.com/bx5974/bullet3/master/data/kitchens/fatihrmutfak/Concrete.jpg"
   );
 
   const sweep = await sharp(sweepSrc)
     .resize(W, H, { fit: "cover", position: "centre" })
-    .modulate({ brightness: 0.55, saturation: 0.45 })
+    .modulate({ brightness: 0.62, saturation: 0.4 })
     .toBuffer();
 
-  const wash = await sharp({
+  const tint = await sharp({
     create: {
       width: W,
       height: H,
       channels: 4,
-      background: { r: 168, g: 48, b: 32, alpha: 0.42 },
+      background: wash,
     },
   })
     .png()
     .toBuffer();
 
-  const cut = await knockoutWhite(jugSrc);
-  const jug = await sharp(cut)
+  const cut = await knockoutWhite(src);
+  const pack = await sharp(cut)
     .trim()
-    .resize(Math.round(H * 1.12), Math.round(H * 0.9), { fit: "inside" })
+    .resize(Math.round(H * scale * 1.35), Math.round(H * scale), { fit: "inside" })
     .png()
     .toBuffer();
-  const jugMeta = await sharp(jug).metadata();
-  const left = Math.round((W - jugMeta.width) / 2) + 70;
-  const top = Math.round((H - jugMeta.height) / 2) + 18;
+  const meta = await sharp(pack).metadata();
+  const left = Math.min(
+    W - (meta.width || 0) - 48,
+    Math.round((W - meta.width) / 2) + nudgeX
+  );
+  const top = Math.max(
+    12,
+    Math.round((H - meta.height) / 2) + Math.round(nudgeY)
+  );
   const shadow = await sharp(
     Buffer.from(
-      `<svg xmlns="http://www.w3.org/2000/svg" width="${jugMeta.width}" height="110"><ellipse cx="${jugMeta.width / 2}" cy="58" rx="${jugMeta.width * 0.36}" ry="18" fill="black" fill-opacity="0.38"/></svg>`
+      `<svg xmlns="http://www.w3.org/2000/svg" width="${meta.width}" height="110"><ellipse cx="${meta.width / 2}" cy="58" rx="${meta.width * 0.34}" ry="16" fill="black" fill-opacity="0.32"/></svg>`
     )
   )
-    .blur(18)
+    .blur(16)
     .png()
     .toBuffer();
 
   await sharp(sweep)
     .composite([
-      { input: wash, blend: "over" },
-      { input: shadow, left, top: top + jugMeta.height - 52 },
-      { input: jug, left, top },
+      { input: tint, blend: "over" },
+      { input: shadow, left, top: top + meta.height - 48 },
+      { input: pack, left, top },
     ])
     .sharpen({ sigma: 0.55 })
     .jpeg({ quality: 90 })
-    .toFile(join(dir, "hero-treasure.jpg"));
-  process.stdout.write("wrote hero-treasure.jpg (household merch)\n");
+    .toFile(join(dir, outName));
+  process.stdout.write(`wrote ${outName}\n`);
 }
 
 const only = process.argv[2] || "all";
 
 if (only === "all" || only === "weekly") {
-  await lifestyleCard(
-    "https://raw.githubusercontent.com/kchenturtles/PassionfruitKitchen/main/public/tomato-pasta/tomato-penne-plated.jpeg",
-    "hero-weekly.jpg",
-    "centre"
-  );
+  await merchHero({
+    file: "large_e5d1efe6-fead-4b09-a7ca-7c7e0b11ea6f.jpg",
+    wash: { r: 180, g: 42, b: 48, alpha: 0.38 },
+    outName: "hero-weekly.jpg",
+    scale: 0.56,
+    nudgeX: 380,
+    nudgeY: -12,
+  });
 }
 
 if (only === "all" || only === "kirkland") {
-  await lifestyleCard(
-    "https://raw.githubusercontent.com/kchenturtles/PassionfruitKitchen/main/public/cheeseboard/cheeseboard.jpeg",
-    "hero-kirkland.jpg",
-    "centre"
-  );
+  await merchHero({
+    file: "large_83cdd023-627e-4ee5-8d7e-6d23e8a79fba.jpeg",
+    wash: { r: 0, g: 70, b: 140, alpha: 0.36 },
+    outName: "hero-kirkland.jpg",
+    scale: 0.72,
+    nudgeX: 320,
+    nudgeY: -18,
+  });
 }
 
 if (only === "all" || only === "featured") {
-  await lifestyleCard(
-    "https://raw.githubusercontent.com/kchenturtles/PassionfruitKitchen/main/public/smoothie-bowl/smoothie-bowl-aerial.jpg",
-    "hero-new.jpg",
-    "centre"
-  );
+  await merchHero({
+    file: "large_a3b82731-4651-476a-a0c3-01c97a17c2c6.png",
+    wash: { r: 210, g: 150, b: 40, alpha: 0.28 },
+    outName: "hero-new.jpg",
+    scale: 0.58,
+    nudgeX: 370,
+    nudgeY: -10,
+  });
 }
 
 if (only === "all" || only === "household") {
-  await householdMerch();
+  await merchHero({
+    file: "large_2bacbaac-2b3d-4412-baad-d7bdb17b6080.jpeg",
+    wash: { r: 90, g: 42, b: 28, alpha: 0.4 },
+    outName: "hero-treasure.jpg",
+    scale: 0.88,
+    nudgeX: 290,
+    nudgeY: -24,
+  });
 }

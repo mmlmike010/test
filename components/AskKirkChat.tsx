@@ -1,22 +1,49 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 import {
   X,
-  RefreshCw,
-  Send,
   Mic,
   ShoppingCart,
   Square,
   Sparkles,
-  ChevronRight,
+  Search,
 } from "lucide-react";
 import { useCartStore } from "@/lib/store/cart";
 import { products } from "@/lib/data/products";
 import KirkMark from "@/components/KirkMark";
+import ShopProductRow from "@/components/ShopProductRow";
+import WarehouseSearchResults from "@/components/WarehouseSearchResults";
 import CostcoLogo from "@/components/CostcoLogo";
-import GoldStarMark from "@/components/GoldStarMark";
-import GoldStarMembershipCard from "@/components/GoldStarMembershipCard";
+import WarehouseMembershipBanner from "@/components/WarehouseMembershipBanner";
+import WarehouseHomepageHero from "@/components/WarehouseHomepageHero";
+import WarehouseHomepageShortcuts from "@/components/WarehouseHomepageShortcuts";
+import WarehouseHomepageSpotlights from "@/components/WarehouseHomepageSpotlights";
+import WarehouseShopDepartments from "@/components/WarehouseShopDepartments";
+import WarehouseAisleScroller from "@/components/WarehouseAisleScroller";
+import WarehouseCompareSheet from "@/components/WarehouseCompareSheet";
+import WarehouseFooter from "@/components/WarehouseFooter";
+import {
+  useStorefrontOverlayClass,
+  useSessionStore,
+} from "@/lib/store/session";
+import { useCatalogStore } from "@/lib/store/catalog";
+import { useKirkAskStore } from "@/lib/store/kirkAsk";
+import {
+  FLYER_DEAL_IDS,
+  hideWarehouseLeftovers,
+  kirklandWarehousePreview,
+  kirkQueryPreview,
+  storefrontQueryForKirk,
+  warehouseBrowsePreview,
+  warehouseBrowseTitle,
+} from "@/lib/ui/merchOrder";
+import {
+  applyWarehouseFacets,
+  EMPTY_WAREHOUSE_FACETS,
+} from "@/lib/ui/warehouseSearch";
+import { warehousePackSrc } from "@/lib/ui/packSize";
 
 interface Message {
   id: string;
@@ -24,6 +51,7 @@ interface Message {
   content: string;
   timestamp: Date;
   imageUrl?: string | null;
+  productIds?: string[];
 }
 
 interface AskKirkChatProps {
@@ -38,6 +66,9 @@ type KirkAction =
   | { tool: "remove_from_cart"; productIds: string[] }
   | { tool: "clear_cart" };
 
+const GROK_FALLBACK =
+  "I couldn't reach Grok just now. Check that XAI_API_KEY is set and try again.";
+
 const suggestionChips = [
   "What's in my cart?",
   "Add Kirkland hummus and quinoa to my cart",
@@ -48,6 +79,40 @@ const suggestionChips = [
   "What can I cook for dinner with quinoa?",
 ];
 
+
+function KirklandHelpCard({
+  title,
+  children,
+  variant = "page",
+}: {
+  title: string;
+  children: ReactNode;
+  variant?: "foil" | "page";
+}) {
+  if (variant === "page") {
+    return (
+      <section className="overflow-hidden border border-[#c4c4c4] bg-white">
+        <p className="border-b border-[#c4c4c4] bg-[#f6f7f8] px-4 py-2.5 text-[15px] font-bold text-[#1a1a1a]">
+          {title}
+        </p>
+        <div className="px-4 py-3 text-[13px] leading-relaxed text-[#1a1a1a]">
+          {children}
+        </div>
+      </section>
+    );
+  }
+  return (
+    <section className="overflow-hidden rounded-[3px] border border-[#c4c4c4] bg-white">
+      <div className="h-[3px] bg-gradient-to-r from-[#8c7318] via-[#f3e3a3] to-[#8c7318]" />
+      <div className="px-3.5 py-2.5">
+        <p className="text-[13px] font-bold text-[#1a1a1a]">{title}</p>
+        <div className="mt-1 text-[13px] leading-relaxed text-[#1a1a1a]">
+          {children}
+        </div>
+      </div>
+    </section>
+  );
+}
 
 function looksLikeInspireAsk(text: string) {
   const t = text.toLowerCase();
@@ -91,7 +156,14 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [pendingInspire, setPendingInspire] = useState(false);
   const [lightboxUrl, setLightboxUrl] = useState<string | null>(null);
+  const [kirkResultsView, setKirkResultsView] = useState<"grid" | "list">(
+    "grid"
+  );
+  const [kirkFiltersOpen, setKirkFiltersOpen] = useState(false);
+  const [kirkCompareIds, setKirkCompareIds] = useState<string[]>([]);
+  const [kirkCompareOpen, setKirkCompareOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const latestResultsRef = useRef<HTMLDivElement>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -103,10 +175,23 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
   const clearCart = useCartStore((state) => state.clearCart);
   const openCart = useCartStore((state) => state.openCart);
   const getSnapshot = useCartStore((state) => state.getSnapshot);
-  const kirkCartCount = useCartStore((state) => state.getTotalItems());
-  const kirkCartSubtotal = useCartStore((state) => state.getSubtotal());
+  const q = useCatalogStore((s) => s.q);
+  const warehouseFacets = useCatalogStore((s) => s.warehouseFacets);
+  const setWarehouseFacets = useCatalogStore((s) => s.setWarehouseFacets);
+  const kirkShopPage = useSessionStore((s) => s.kirkShopPage);
+  const overlayClass = useStorefrontOverlayClass(isOpen);
 
   useEffect(() => {
+    const onlyWelcome =
+      messages.length === 1 && messages[0]?.id.startsWith("welcome-");
+    if (onlyWelcome && !isLoading) return;
+    if (latestResultsRef.current) {
+      latestResultsRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+      return;
+    }
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isLoading]);
 
@@ -144,10 +229,21 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
     setLightboxUrl(null);
     setError(null);
     setCartNotice(null);
+    setKirkResultsView("grid");
+    setKirkFiltersOpen(false);
+    setKirkCompareIds([]);
+    setKirkCompareOpen(false);
+    useSessionStore.getState().setKirkShopPage(false);
+    const catalog = useCatalogStore.getState();
+    catalog.clearFilters();
+    catalog.inspect(null);
+    void catalog.search();
+    document.querySelector("main")?.scrollTo({ top: 0 });
   };
 
   const applyActions = (actions: KirkAction[]) => {
-    if (!actions?.length) return;
+    const addedIds: string[] = [];
+    if (!actions?.length) return addedIds;
     const notices: string[] = [];
     let shouldOpen = false;
 
@@ -171,6 +267,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
           if (product) {
             addItem(product, qty);
             added += 1;
+            addedIds.push(id);
           }
         }
         if (added) {
@@ -186,11 +283,12 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
       }
     }
 
-    if (shouldOpen) openCart();
+    if (shouldOpen) openCart("warehouse");
     if (notices.length) {
       setCartNotice(notices[0]);
       window.setTimeout(() => setCartNotice(null), 3500);
     }
+    return addedIds;
   };
 
   const speakText = async (text: string) => {
@@ -244,6 +342,27 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
     setPendingInspire(looksLikeInspireAsk(trimmed));
     setError(null);
 
+    const hits = kirkQueryPreview(products, trimmed);
+    if (hits.length) {
+      const storefrontQ = storefrontQueryForKirk(trimmed, hits);
+      const catalog = useCatalogStore.getState();
+      catalog.inspect(null);
+      useSessionStore.getState().setKirkShopPage(true);
+      setKirkFiltersOpen(true);
+      useCatalogStore.setState({
+        q: storefrontQ,
+        department: null,
+        tag: null,
+        openList: null,
+        openRecipe: null,
+        listTone: "warehouse",
+        warehouseFacets: EMPTY_WAREHOUSE_FACETS,
+        warehouseSort: "relevance",
+      });
+      void catalog.search();
+      document.querySelector("main")?.scrollTo({ top: 0 });
+    }
+
     try {
       const res = await fetch("/api/kirk", {
         method: "POST",
@@ -290,17 +409,17 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
       const actions = Array.isArray(data.actions)
         ? (data.actions as KirkAction[])
         : [];
-      if (actions.length) {
-        applyActions(actions);
-      } else if (Array.isArray(data.productIds) && data.productIds.length) {
-        applyActions([
-          {
-            tool: "add_to_cart",
-            productIds: data.productIds as string[],
-            quantity: 1,
-          },
-        ]);
-      }
+      const addedIds = actions.length
+        ? applyActions(actions)
+        : Array.isArray(data.productIds) && data.productIds.length
+          ? applyActions([
+              {
+                tool: "add_to_cart",
+                productIds: data.productIds as string[],
+                quantity: 1,
+              },
+            ])
+          : [];
 
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
@@ -309,6 +428,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
         timestamp: new Date(),
         imageUrl:
           typeof data.imageUrl === "string" ? data.imageUrl : null,
+        productIds: addedIds,
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
@@ -321,8 +441,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
         {
           id: (Date.now() + 1).toString(),
           role: "assistant",
-          content:
-            "I couldn't reach Grok just now. Check that XAI_API_KEY is set and try again.",
+          content: GROK_FALLBACK,
           timestamp: new Date(),
         },
       ]);
@@ -492,193 +611,506 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
 
   if (!isOpen) return null;
 
+  useEffect(() => {
+    useKirkAskStore.getState().registerAsk((text) => {
+      void sendMessage(text);
+    });
+    useKirkAskStore.getState().registerSpeak(() => {
+      if (isSpeaking) {
+        stopSpeaking();
+        return;
+      }
+      if (isRecording) stopRecording();
+      else void startRecording();
+    });
+    useKirkAskStore.getState().setVoice({
+      speaking: isSpeaking,
+      recording: isRecording,
+      transcribing: isTranscribing,
+      loading: isLoading,
+    });
+    return () => {
+      useKirkAskStore.getState().registerAsk(null);
+      useKirkAskStore.getState().registerSpeak(null);
+    };
+  });
+
+  const hasUserAsk = messages.some((m) => m.role === "user");
+  const shopHasHits = messages.some(
+    (message) =>
+      message.role === "user" &&
+      kirkQueryPreview(products, message.content).length > 0
+  );
+  const lastUserId = [...messages]
+    .reverse()
+    .find((message) => message.role === "user")?.id;
+  const kirkCompareItems = kirkCompareIds
+    .map((id) => products.find((item) => item.id === id))
+    .filter((item): item is (typeof products)[number] => Boolean(item));
+  const idleHomepage = !hasUserAsk && !kirkShopPage;
+  const browseHits = warehouseBrowsePreview(
+    products,
+    q,
+    warehouseFacets.departments.length
+  );
+  const browseWarehouseDepartment = (label: string | null) => {
+    const catalog = useCatalogStore.getState();
+    catalog.inspect(null);
+    useCatalogStore.setState({
+      q: label
+        ? ""
+        : catalog.listTone === "warehouse" && catalog.q.trim()
+          ? catalog.q
+          : "kirkland",
+      department: null,
+      tag: null,
+      openList: null,
+      openRecipe: null,
+      listTone: "warehouse",
+      warehouseFacets: label
+        ? { ...EMPTY_WAREHOUSE_FACETS, departments: [label] }
+        : EMPTY_WAREHOUSE_FACETS,
+      warehouseSort: "relevance",
+    });
+    useSessionStore.getState().setKirkShopPage(true);
+    setKirkFiltersOpen(true);
+    void catalog.search();
+    document.querySelector("main")?.scrollTo({ top: 0 });
+  };
+
   return (
     <>
-    <aside className="fixed inset-y-0 right-0 z-40 w-full max-w-[420px] lg:static lg:z-30 lg:w-[380px] xl:w-[420px] lg:max-w-none shrink-0 bg-white border-l border-[#e5e5e5] h-full flex flex-col">
-      <div className="relative shrink-0 border-b border-[#e5e5e5] bg-[#f7f1de] overflow-hidden">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/kirk/card-stock.jpg?v=2"
-          alt=""
-          className="absolute inset-0 h-full w-full object-cover"
-        />
-        <div className="relative h-[6px] bg-costco-red" />
-        <div className="relative h-[3px] bg-gradient-to-r from-[#a3841c] via-[#f3e3a3] to-[#a3841c]" />
-        <div className="relative px-3.5 py-2 flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2.5 min-w-0">
-            <CostcoLogo compact />
-            <span className="w-px h-8 bg-[#d4c194] shrink-0" />
-            <KirkMark size={28} className="shrink-0" />
-            <div className="min-w-0">
-              <h2 className="text-[16px] font-black tracking-tight text-[#1a1a1a] leading-none">
-                Ask Kirk
-              </h2>
-              <p className="mt-1 text-[10px] font-bold tracking-[0.16em] text-costco-blue uppercase">
-                Kirkland Signature
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center gap-1 shrink-0">
-            <GoldStarMark size={18} />
-            <p className="hidden xl:block text-[9px] font-semibold tabular-nums tracking-[0.1em] text-[#666] pr-1">
-              111 847 11217
-            </p>
-            <button
-              type="button"
-              onClick={handleReset}
-              className="px-2 py-1.5 text-[12px] font-bold text-[#555] hover:bg-[#f3f3f3] rounded-[3px] transition-colors flex items-center gap-1"
-              title="Reset"
-            >
-              <RefreshCw className="w-3.5 h-3.5" />
-              Reset
-            </button>
-            <button
-              type="button"
-              onClick={onClose}
-              className="p-1.5 text-[#555] hover:bg-[#f3f3f3] rounded-full transition-colors"
-              title="Close"
-              aria-label="Close Ask Kirk"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-        <div className="relative h-2 bg-costco-blue" />
-        <p className="relative px-3.5 py-1.5 flex items-center gap-1.5 text-[11px] text-[#188038] font-semibold bg-[#f3f3f3] border-b border-[#ececec]">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#0AAD0A]" />
-          Delivery 8:48–9:18pm · 11217 Brooklyn · Membership required
-        </p>
-        {kirkCartCount > 0 && (
-          <button
-            type="button"
-            onClick={openCart}
-            className="relative mx-3.5 my-2 w-[calc(100%-1.75rem)] flex items-center justify-between rounded-full bg-[#e8f2fa] border border-[#c5d8ea] px-3.5 py-2 text-left hover:bg-[#dceaf6]"
-          >
-            <span className="flex items-center gap-2 min-w-0">
-              <ShoppingCart className="w-3.5 h-3.5 text-costco-blue shrink-0" />
-              <span className="text-[12px] font-bold text-costco-blue truncate">
-                View cart · {kirkCartCount} item{kirkCartCount === 1 ? "" : "s"}
-              </span>
-            </span>
-            <span className="flex items-center gap-1 shrink-0">
-              <span className="text-[13px] font-bold text-[#1a1a1a] tabular-nums">
-                ${kirkCartSubtotal.toFixed(2)}
-              </span>
-              <ChevronRight className="w-3.5 h-3.5 text-costco-blue" />
-            </span>
-          </button>
-        )}
-      </div>
-
+    <aside
+      className="fixed inset-y-0 right-0 z-40 flex h-full w-full min-w-0 flex-1 flex-col bg-white lg:static lg:z-30"
+    >
       {cartNotice && (
-        <div className="mx-4 mt-3 flex items-center gap-2 bg-[#eef7ee] border border-[#b7d7b0] text-[#1e5b24] px-3 py-2 text-[12px] font-semibold shrink-0">
+        <div className="mx-4 mt-3 flex items-center gap-2 border border-[#c4c4c4] bg-[#f7fbfe] px-3 py-2 text-[12px] font-semibold text-costco-blue shrink-0">
           <ShoppingCart className="w-3.5 h-3.5" />
           {cartNotice}
         </div>
       )}
 
-      <div className="flex-1 overflow-y-auto px-3.5 py-3.5 space-y-3 bg-[#f6f7f8] min-h-0">
+      <div
+        className="relative min-h-0 flex-1 overflow-y-auto bg-white"
+      >
+        <div
+          className={
+            idleHomepage
+              ? undefined
+              : "mx-auto max-w-[1400px] space-y-5 px-4 py-4 lg:px-8"
+          }
+        >
         {messages.map((message) => {
           const isWelcome = message.id.startsWith("welcome-");
           if (isWelcome) {
+            const asked = messages.some((m) => m.role === "user");
+            if (asked || kirkShopPage) return null;
+            const preview = applyWarehouseFacets(
+              kirklandWarehousePreview(products, 24),
+              warehouseFacets
+            ).slice(0, 8);
+            const offerPreview = hideWarehouseLeftovers(
+              FLYER_DEAL_IDS.map((id) =>
+                products.find((product) => product.id === id)
+              ).filter((product): product is (typeof products)[number] =>
+                Boolean(product)
+              )
+            ).slice(0, 8);
+            const aisleTitle =
+              warehouseFacets.departments.length === 1
+                ? warehouseFacets.departments[0]
+                : "Shop Kirkland Signature";
+            const showAllAisle = () => {
+              const label = warehouseFacets.departments[0] ?? null;
+              if (label) {
+                browseWarehouseDepartment(label);
+                return;
+              }
+              const catalog = useCatalogStore.getState();
+              catalog.inspect(null);
+              useCatalogStore.setState({
+                q: "kirkland",
+                department: null,
+                tag: null,
+                openList: null,
+                openRecipe: null,
+                listTone: "warehouse",
+                warehouseFacets: EMPTY_WAREHOUSE_FACETS,
+                warehouseSort: "relevance",
+              });
+              useSessionStore.getState().setKirkShopPage(true);
+              setKirkFiltersOpen(true);
+              void catalog.search();
+              document.querySelector("main")?.scrollTo({ top: 0 });
+            };
             return (
-              <div key={message.id} className="space-y-2.5">
-                <GoldStarMembershipCard />
-                <div className="flex gap-2 justify-start">
-                  <KirkMark size={28} className="mt-0.5 shrink-0" />
-                  <div className="max-w-[82%] px-3.5 py-2.5 text-[13px] leading-relaxed rounded-2xl rounded-bl-md bg-white text-[#1a1a1a] border border-[#e8e8e8] shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
-                    <p className="whitespace-pre-line">{message.content}</p>
-                  </div>
+              <div key={message.id}>
+                <WarehouseHomepageHero
+                  onKirkland={showAllAisle}
+                  onOffers={showAllAisle}
+                  onPick={browseWarehouseDepartment}
+                  utilities={
+                    <>
+                      <button
+                        type="button"
+                        onClick={handleReset}
+                        className="text-[12px] font-bold text-costco-blue hover:underline"
+                        title="Reset"
+                      >
+                        Reset
+                      </button>
+                      <button
+                        type="button"
+                        onClick={onClose}
+                        className="text-[12px] font-bold text-costco-blue hover:underline"
+                        title="Close"
+                        aria-label="Close Ask Kirk"
+                      >
+                        Close
+                      </button>
+                    </>
+                  }
+                />
+                <div className="mx-auto max-w-[1400px] space-y-6 px-4 py-6 lg:px-8">
+                  <WarehouseHomepageShortcuts
+                    onOffers={showAllAisle}
+                    onPick={browseWarehouseDepartment}
+                  />
+                  {offerPreview.length > 0 ? (
+                    <WarehouseAisleScroller
+                      title="Limited-Time Offers"
+                      products={offerPreview}
+                      onShowAll={showAllAisle}
+                    />
+                  ) : null}
+                  <WarehouseHomepageSpotlights
+                    onPick={browseWarehouseDepartment}
+                  />
+                  <WarehouseShopDepartments
+                    selected={warehouseFacets.departments}
+                    onPick={browseWarehouseDepartment}
+                  />
+                  {preview.length > 0 ? (
+                    <WarehouseAisleScroller
+                      title={aisleTitle}
+                      products={preview}
+                      onShowAll={showAllAisle}
+                    />
+                  ) : (
+                    <p className="border border-[#c4c4c4] bg-white px-3 py-5 text-center text-[13px] text-[#555]">
+                      No items match these filters.{" "}
+                      <button
+                        type="button"
+                        className="font-bold text-costco-blue hover:underline"
+                        onClick={() =>
+                          setWarehouseFacets(EMPTY_WAREHOUSE_FACETS)
+                        }
+                      >
+                        Shop All
+                      </button>
+                    </p>
+                  )}
                 </div>
+                <WarehouseMembershipBanner onShop={showAllAisle} />
               </div>
             );
           }
+          const added = (message.productIds || [])
+            .map((id) => products.find((p) => p.id === id))
+            .filter((p): p is (typeof products)[number] => Boolean(p));
+          const unfilteredHits =
+            message.role === "user"
+              ? kirkQueryPreview(products, message.content)
+              : [];
           return (
-          <div
-            key={message.id}
-            className={`flex gap-2 ${
-              message.role === "user" ? "justify-end" : "justify-start"
-            }`}
-          >
-            {message.role === "assistant" && (
-              <KirkMark size={28} className="mt-0.5 shrink-0" />
-            )}
-            <div
-              className={`max-w-[82%] px-3.5 py-2.5 text-[13px] leading-relaxed rounded-2xl ${
-                message.role === "user"
-                  ? "bg-costco-blue text-white rounded-br-md"
-                  : "bg-white text-[#1a1a1a] border border-[#e8e8e8] rounded-bl-md shadow-[0_1px_2px_rgba(0,0,0,0.04)]"
-              }`}
+          <div key={message.id} className="space-y-2">
+          {message.role === "user" ? (
+            <div ref={latestResultsRef}>
+              <WarehouseSearchResults
+                query={message.content}
+                unfilteredHits={unfilteredHits}
+                resultKey={message.id}
+                onReset={handleReset}
+                onRelatedSearch={(term) => void sendMessage(term)}
+                relatedEnabled={message.id === lastUserId}
+                relatedLoading={isLoading}
+                kirkFiltersOpen={kirkFiltersOpen}
+                setKirkFiltersOpen={setKirkFiltersOpen}
+                kirkResultsView={kirkResultsView}
+                setKirkResultsView={setKirkResultsView}
+                kirkCompareIds={kirkCompareIds}
+                setKirkCompareIds={setKirkCompareIds}
+              />
+            </div>
+          ) : error &&
+            message.content === GROK_FALLBACK &&
+            !added.length &&
+            !message.imageUrl ? null : (
+            <KirklandHelpCard
+              title="Kirkland Signature shopping help"
+              variant="page"
             >
               <p className="whitespace-pre-line">{message.content}</p>
               {message.imageUrl && (
-                <div className="mt-2.5 overflow-hidden border border-[#e8e8e8] bg-white">
+                <div className="mt-2.5 overflow-hidden border border-[#c4c4c4] bg-white">
                   <button
                     type="button"
                     onClick={() => setLightboxUrl(message.imageUrl || null)}
-                    className="block w-full text-left group relative"
+                    className="group relative block w-full text-left"
                     title="Click to enlarge"
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={message.imageUrl}
                       alt="Recipe inspiration"
-                      className="w-full h-auto max-h-[320px] object-cover group-hover:opacity-95 transition-opacity"
+                      className="h-auto max-h-[320px] w-full object-cover group-hover:opacity-95 transition-opacity"
                     />
-                    <span className="absolute bottom-2 right-2 bg-black/60 text-white text-[10px] font-bold px-2 py-0.5">
+                    <span className="absolute bottom-2 right-2 bg-black/60 px-2 py-0.5 text-[10px] font-bold text-white">
                       Enlarge
                     </span>
                   </button>
-                  <p className="text-[10px] text-[#666] px-2.5 py-1.5 bg-[#fafafa] border-t border-[#eee] font-semibold tracking-wide uppercase">
+                  <p className="border-t border-[#eee] bg-[#fafafa] px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-wide text-[#666]">
                     Recipe inspiration · tap to enlarge
                   </p>
                 </div>
               )}
-            </div>
+            </KirklandHelpCard>
+          )}
+          {added.length > 0 ? (
+            <KirklandHelpCard
+              title="Items Added to Cart"
+              variant="page"
+            >
+              <div className="space-y-1.5">
+                {added.map((product) => (
+                  <ShopProductRow
+                    key={`${message.id}-${product.id}`}
+                    product={product}
+                    tone="warehouse"
+                  />
+                ))}
+              </div>
+            </KirklandHelpCard>
+          ) : null}
           </div>
           );
         })}
+        {kirkShopPage && !hasUserAsk ? (
+          <WarehouseSearchResults
+            query={q.trim() || "kirkland"}
+            unfilteredHits={browseHits}
+            title={warehouseBrowseTitle(
+              q,
+              warehouseFacets.departments,
+              browseHits
+            )}
+            breadcrumb={
+              warehouseFacets.departments.length === 1
+                ? warehouseFacets.departments[0]
+                : "Search Results"
+            }
+            resultKey="browse"
+            onReset={handleReset}
+            onRelatedSearch={(term) => {
+              useCatalogStore.setState({
+                q: term,
+                warehouseFacets: EMPTY_WAREHOUSE_FACETS,
+                listTone: "warehouse",
+              });
+            }}
+            kirkFiltersOpen={kirkFiltersOpen}
+            setKirkFiltersOpen={setKirkFiltersOpen}
+            kirkResultsView={kirkResultsView}
+            setKirkResultsView={setKirkResultsView}
+            kirkCompareIds={kirkCompareIds}
+            setKirkCompareIds={setKirkCompareIds}
+          />
+        ) : null}
         {isLoading && (
-          <div className="flex justify-start gap-2">
-            <KirkMark size={28} className="mt-0.5 shrink-0" />
-            <div className="bg-white border border-[#ededed] rounded-2xl rounded-bl-md px-3.5 py-3 max-w-[82%]">
-              <div className="flex gap-1.5 items-center">
-                <span className="text-[11px] text-[#666] mr-1 font-semibold">Kirk</span>
-                <div className="w-1.5 h-1.5 bg-[#999] rounded-full animate-bounce" />
-                <div
-                  className="w-1.5 h-1.5 bg-[#999] rounded-full animate-bounce"
-                  style={{ animationDelay: "0.12s" }}
-                />
-                <div
-                  className="w-1.5 h-1.5 bg-[#999] rounded-full animate-bounce"
-                  style={{ animationDelay: "0.24s" }}
-                />
-              </div>
-              {pendingInspire && (
-                <div className="mt-2.5 flex items-center gap-2 border border-costco-blue/20 bg-[#eef5fb] px-2.5 py-2">
-                  <div className="relative flex h-7 w-7 items-center justify-center bg-costco-blue/10 overflow-hidden shrink-0">
-                    <Sparkles className="w-3.5 h-3.5 text-costco-blue animate-pulse" />
-                    <span className="pointer-events-none absolute inset-0 -translate-x-full animate-[shimmer_1.6s_infinite] bg-gradient-to-r from-transparent via-white/70 to-transparent" />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-[11px] font-bold text-costco-blue">
-                      Generating image…
-                    </p>
-                    <p className="text-[10px] text-[#666] truncate">
-                      Recipe inspiration
-                    </p>
-                  </div>
+          <KirklandHelpCard
+            title="Kirkland Signature shopping help"
+            variant="page"
+          >
+            <div className="flex items-center gap-1.5">
+              <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-[#999]" />
+              <div
+                className="h-1.5 w-1.5 animate-bounce rounded-full bg-[#999]"
+                style={{ animationDelay: "0.12s" }}
+              />
+              <div
+                className="h-1.5 w-1.5 animate-bounce rounded-full bg-[#999]"
+                style={{ animationDelay: "0.24s" }}
+              />
+            </div>
+            {pendingInspire && (
+              <div className="mt-2.5 flex items-center gap-2 border border-costco-blue/20 bg-[#eef5fb] px-2.5 py-2">
+                <div className="relative flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden bg-costco-blue/10">
+                  <Sparkles className="h-3.5 w-3.5 animate-pulse text-costco-blue" />
+                  <span className="pointer-events-none absolute inset-0 -translate-x-full animate-[shimmer_1.6s_infinite] bg-gradient-to-r from-transparent via-white/70 to-transparent" />
                 </div>
-              )}
+                <div className="min-w-0">
+                  <p className="text-[11px] font-bold text-costco-blue">
+                    Generating image…
+                  </p>
+                  <p className="truncate text-[10px] text-[#666]">
+                    Recipe inspiration
+                  </p>
+                </div>
+              </div>
+            )}
+          </KirklandHelpCard>
+        )}
+        {error && (
+          <section
+            className={
+              shopHasHits
+                ? "overflow-hidden border border-[#c4c4c4] bg-white"
+                : "border border-[#c4c4c4] bg-white px-6 py-10 text-center"
+            }
+          >
+            {shopHasHits ? (
+              <>
+                <p className="border-b border-[#c4c4c4] bg-[#f6f7f8] px-4 py-2.5 text-[15px] font-bold text-[#1a1a1a]">
+                  We&apos;re sorry
+                </p>
+                <div className="px-4 py-3">
+                  <div className="mb-2">
+                    <CostcoLogo compact />
+                  </div>
+                  <p className="text-[13px] text-[#1a1a1a]">{error}</p>
+                  {messages.some(
+                    (message) =>
+                      message.role === "assistant" &&
+                      message.content === GROK_FALLBACK
+                  ) ? (
+                    <p className="mt-1 text-[13px] text-[#1a1a1a]">
+                      {GROK_FALLBACK}
+                    </p>
+                  ) : null}
+                </div>
+              </>
+            ) : (
+            <div>
+              <div className="flex justify-center">
+                <CostcoLogo compact />
+              </div>
+              <p className="mt-4 text-[28px] font-bold text-[#1a1a1a]">
+                We&apos;re sorry
+              </p>
+              <p className="mt-1 text-[13px] text-[#1a1a1a]">{error}</p>
+              {messages.some(
+                (message) =>
+                  message.role === "assistant" &&
+                  message.content === GROK_FALLBACK
+              ) ? (
+                <p className="mt-1 text-[13px] text-[#1a1a1a]">{GROK_FALLBACK}</p>
+              ) : null}
+            </div>
+            )}
+          </section>
+        )}
+        <div ref={messagesEndRef} />
+        {kirkShopPage || hasUserAsk ? null : (
+          <div className="border-t border-[#d8d8d8] bg-[#f6f7f8] px-4 py-10 lg:px-8">
+            <div className="mx-auto max-w-[1400px]">
+            <p className="text-[20px] font-bold text-[#1a1a1a]">
+              Kirkland Signature shopping help
+            </p>
+            <p className="mt-1.5 whitespace-pre-line text-[13px] leading-relaxed text-[#1a1a1a]">
+              {messages.find((entry) => entry.id.startsWith("welcome-"))
+                ?.content}
+            </p>
+            <div className="mt-5 flex h-11 items-stretch">
+              <div className="relative min-w-0 flex-1">
+                <Search
+                  className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-[#8a8a8a]"
+                  aria-hidden="true"
+                />
+                <input
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder={
+                    isTranscribing
+                      ? "Transcribing…"
+                      : isRecording
+                        ? "Listening…"
+                        : "Ask Kirk for a cart"
+                  }
+                  className="h-11 w-full rounded-l-[3px] border border-r-0 border-[#c4c4c4] bg-white pl-10 pr-10 text-[14px] text-[#1a1a1a] placeholder:text-[#8a8a8a] focus:border-costco-blue focus:outline-none focus:ring-2 focus:ring-costco-blue/15"
+                  disabled={isLoading || isRecording || isTranscribing}
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (isSpeaking) {
+                      stopSpeaking();
+                      return;
+                    }
+                    if (isRecording) stopRecording();
+                    else void startRecording();
+                  }}
+                  disabled={isLoading || isTranscribing}
+                  className={`absolute right-1 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-[3px] ${
+                    isRecording || isSpeaking
+                      ? "bg-costco-red text-white kirk-listening"
+                      : "text-[#555] hover:bg-[#f6f6f6]"
+                  }`}
+                  title={
+                    isSpeaking
+                      ? "Stop speaking"
+                      : isRecording
+                        ? "Stop"
+                        : "Speak — stops when you pause; I'll read the reply aloud"
+                  }
+                  aria-label={
+                    isSpeaking ? "Stop speaking" : isRecording ? "Stop" : "Speak"
+                  }
+                >
+                  {isRecording || isSpeaking ? (
+                    <Square className="h-4 w-4" />
+                  ) : (
+                    <Mic className="h-4 w-4" />
+                  )}
+                </button>
+              </div>
+              <button
+                type="button"
+                onClick={() => void sendMessage(input)}
+                disabled={!input.trim() || isLoading}
+                className="h-11 shrink-0 rounded-r-[3px] bg-costco-red px-4 text-[14px] font-bold text-white hover:bg-costco-red-hover disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Search
+              </button>
+            </div>
+            <p className="mt-3 text-[15px] font-bold text-[#1a1a1a]">
+              Popular Searches
+            </p>
+            <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1">
+              {suggestionChips.map((chip) => (
+                <button
+                  key={chip}
+                  type="button"
+                  onClick={() => void sendMessage(chip)}
+                  disabled={isLoading}
+                  className="text-left text-[12px] font-bold leading-tight text-costco-blue hover:underline disabled:opacity-50"
+                >
+                  {chip}
+                </button>
+              ))}
+            </div>
+            <p className="mt-2 text-center text-[10px] leading-snug text-[#888]">
+              Kirkland Signature shopping help · Membership required · Prices
+              higher than warehouse
+            </p>
             </div>
           </div>
         )}
-        {error && (
-          <p className="text-[12px] text-costco-red bg-[#fff5f6] border border-[#f3c5cb] px-3 py-2">
-            {error}
-          </p>
-        )}
-        <div ref={messagesEndRef} />
+        </div>
+        <WarehouseFooter
+          className={kirkShopPage || hasUserAsk ? "mt-8" : ""}
+        />
       </div>
 
       {(isRecording || isTranscribing || isSpeaking) && (
@@ -705,95 +1137,68 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
         </div>
       )}
 
-      <div className="px-3.5 pt-2.5 pb-3 border-t border-[#e5e5e5] bg-white shrink-0">
-        <p className="text-[11px] font-bold text-[#666] mb-1.5">
-          Members often ask
-        </p>
-        <div className="flex flex-wrap gap-1.5 mb-2.5 content-start">
-          {suggestionChips.map((chip) => (
+      {kirkCompareItems.length > 0 ? (
+        <div className="flex shrink-0 flex-wrap items-center gap-3 border-t border-[#c4c4c4] bg-[#f6f7f8] px-4 py-2.5">
+          <span className="text-[13px] font-bold text-[#1a1a1a]">
+            Compare Products ({kirkCompareItems.length} of 4)
+          </span>
+          {kirkCompareItems.map((product) => (
             <button
-              key={chip}
+              key={`compare-bar-${product.id}`}
               type="button"
-              onClick={() => void sendMessage(chip)}
-              disabled={isLoading}
-              className="px-2.5 py-1 bg-white hover:bg-[#e8f2fa] hover:border-costco-blue hover:text-costco-blue disabled:opacity-50 text-[#333] text-[11px] leading-snug rounded-full transition-colors border border-[#d0d0d0] max-w-full"
+              onClick={() =>
+                useCatalogStore.getState().inspect(product, "warehouse")
+              }
+              className="flex items-center gap-1.5 rounded-[3px] border border-[#c4c4c4] bg-white px-1.5 py-1"
+              aria-label={`View ${product.brand} ${product.name}`}
             >
-              {chip}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={warehousePackSrc(product)}
+                alt=""
+                className="h-10 w-10 object-contain"
+              />
+              <span className="hidden max-w-[88px] truncate text-[11px] font-semibold text-[#1a1a1a] sm:inline">
+                {product.name}
+              </span>
             </button>
           ))}
-        </div>
-        <div className="flex gap-1.5 items-stretch">
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder={
-              isTranscribing
-                ? "Transcribing…"
-                : isRecording
-                  ? "Listening…"
-                  : "Ask Kirk for a cart"
-            }
-            className="flex-1 min-w-0 h-10 px-3.5 bg-[#f6f6f6] border border-[#d8d8d8] rounded-full text-[14px] text-[#1a1a1a] placeholder:text-[#8a8a8a] focus:outline-none focus:bg-white focus:border-costco-blue focus:ring-2 focus:ring-costco-blue/15"
-            disabled={isLoading || isRecording || isTranscribing}
-          />
+          <button
+            type="button"
+            disabled={kirkCompareItems.length < 2}
+            onClick={() => setKirkCompareOpen(true)}
+            className="rounded-[3px] bg-costco-blue px-3 py-1.5 text-[12px] font-bold text-white hover:bg-costco-blue-hover disabled:cursor-not-allowed disabled:bg-[#c4c4c4] disabled:text-[#666]"
+          >
+            Compare
+          </button>
           <button
             type="button"
             onClick={() => {
-              if (isSpeaking) {
-                stopSpeaking();
-                return;
-              }
-              if (isRecording) stopRecording();
-              else void startRecording();
+              setKirkCompareIds([]);
+              setKirkCompareOpen(false);
             }}
-            disabled={isLoading || isTranscribing}
-            className={`h-10 px-2 border transition-colors text-[10px] font-bold flex flex-col items-center justify-center gap-0.5 min-w-[52px] rounded-full ${
-              isRecording || isSpeaking
-                ? "bg-costco-red text-white border-costco-red kirk-listening"
-                : "border-[#c4c4c4] hover:bg-[#f6f6f6] text-[#333]"
-            }`}
-            title={
-              isSpeaking
-                ? "Stop speaking"
-                : isRecording
-                  ? "Stop"
-                  : "Speak — stops when you pause; I'll read the reply aloud"
-            }
+            className="text-[12px] font-bold text-costco-blue hover:underline"
           >
-            {isRecording || isSpeaking ? (
-              <Square className="w-4 h-4" />
-            ) : (
-              <Mic className="w-4 h-4" />
-            )}
-            {isSpeaking
-              ? "Stop"
-              : isRecording
-                ? "Stop"
-                : isTranscribing
-                  ? "…"
-                  : "Speak"}
-          </button>
-          <button
-            type="button"
-            onClick={() => void sendMessage(input)}
-            disabled={!input.trim() || isLoading}
-            className="h-10 px-3 bg-costco-blue text-white rounded-full font-bold hover:bg-costco-blue-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1 text-[13px] min-w-[68px] justify-center"
-          >
-            <Send className="w-3.5 h-3.5" />
-            Send
+            Clear All
           </button>
         </div>
-        <p className="mt-2 text-[10px] text-[#888] text-center leading-snug">
-          Kirkland Signature shopping help · Membership required · Prices higher
-          than warehouse
-        </p>
-      </div>
+      ) : null}
     </aside>
+    {kirkCompareOpen
+      ? createPortal(
+          <WarehouseCompareSheet
+            items={kirkCompareItems}
+            onClose={() => setKirkCompareOpen(false)}
+            onRemove={(id) =>
+              setKirkCompareIds((ids) => ids.filter((itemId) => itemId !== id))
+            }
+          />,
+          document.body
+        )
+      : null}
     {lightboxUrl && (
       <div
-        className="fixed inset-0 z-[80] flex items-center justify-center bg-black/70 p-4"
+        className={`fixed z-[80] flex items-center justify-center bg-black/70 p-4 ${overlayClass}`}
         onClick={() => setLightboxUrl(null)}
         role="dialog"
         aria-modal="true"
