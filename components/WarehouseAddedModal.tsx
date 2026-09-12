@@ -34,7 +34,7 @@ export default function WarehouseAddedModal() {
     inspect(null);
     openCart("warehouse");
     closeCart();
-    setSheet("checkout");
+    setSheet("checkout", "warehouse");
   };
 
   return (

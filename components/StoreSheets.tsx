@@ -456,7 +456,8 @@ function CheckoutSheet() {
   const subtotal = useCartStore((s) => s.getSubtotal());
   const totalItems = useCartStore((s) => s.getTotalItems());
   const cartTone = useCartStore((s) => s.cartTone);
-  const warehouse = cartTone === "warehouse";
+  const sheetWarehouse = useWarehouseCheckoutSheet();
+  const warehouse = cartTone === "warehouse" || sheetWarehouse;
   const slot = deliveryWindow(windowId);
   const ready = signedIn && membershipAdded && items.length > 0;
   const card = warehouse
@@ -468,7 +469,7 @@ function CheckoutSheet() {
       title="Checkout"
       onClose={() => setSheet(null)}
       page
-      tone={cartTone}
+      tone={warehouse ? "warehouse" : "sameday"}
     >
       <div className="space-y-3">
         {orderPlaced ? (
@@ -525,7 +526,7 @@ function CheckoutSheet() {
             <div className="space-y-3">
             <button
               type="button"
-              onClick={() => setSheet("delivery", cartTone)}
+              onClick={() => setSheet("delivery", warehouse ? "warehouse" : "sameday")}
               className={card}
             >
               <div className="min-w-0 flex-1">
@@ -541,7 +542,7 @@ function CheckoutSheet() {
             </button>
             <button
               type="button"
-              onClick={() => setSheet("membership", cartTone)}
+              onClick={() => setSheet("membership", warehouse ? "warehouse" : "sameday")}
               className={card}
             >
               <div className="min-w-0 flex-1">
@@ -557,7 +558,7 @@ function CheckoutSheet() {
             </button>
             <button
               type="button"
-              onClick={() => setSheet("signin", cartTone)}
+              onClick={() => setSheet("signin", warehouse ? "warehouse" : "sameday")}
               className={card}
             >
               <div className="min-w-0 flex-1">
@@ -573,7 +574,18 @@ function CheckoutSheet() {
                 Special request: {specialRequest}
               </p>
             )}
-            {warehouse ? null : (
+            {warehouse ? (
+              <div className="rounded-[3px] border border-[#c4c4c4] bg-white px-4 py-3.5">
+                <p className="text-[12px] font-bold text-[#666]">Payment</p>
+                <p className="mt-0.5 text-[14px] font-bold text-[#1a1a1a]">
+                  Costco Anywhere Visa
+                </p>
+                <p className="mt-0.5 text-[13px] text-[#555]">
+                  Item subtotal only. Service, delivery, and tax are not
+                  estimated in this demo.
+                </p>
+              </div>
+            ) : (
               <div className="rounded-xl border border-[#e0e0e0] bg-white px-4 py-3.5 shadow-sm">
                 <p className="text-[12px] font-bold text-[#666]">Payment</p>
                 <p className="mt-0.5 text-[14px] font-bold text-[#1a1a1a]">

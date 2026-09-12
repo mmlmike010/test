@@ -39,7 +39,7 @@ export default function CartDrawer() {
       return;
     }
     closeCart();
-    setSheet("checkout");
+    setSheet("checkout", warehouse ? "warehouse" : "sameday");
   };
 
   if (warehouse) {
