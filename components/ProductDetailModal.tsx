@@ -204,7 +204,9 @@ export default function ProductDetailModal({
           >
             <div
               className={`relative aspect-square ${
-                warehouse ? "bg-white" : "bg-[#f3f4f5]"
+                warehouse
+                  ? "mx-auto max-h-[460px] max-w-[460px] bg-white"
+                  : "bg-[#f3f4f5]"
               }`}
             >
               <button
@@ -217,7 +219,9 @@ export default function ProductDetailModal({
                 <img
                   src={current.image}
                   alt={`${current.brand} ${current.name}`}
-                  className="absolute inset-0 h-full w-full object-contain p-8"
+                  className={`absolute inset-0 h-full w-full object-contain ${
+                    warehouse ? "p-4" : "p-8"
+                  }`}
                 />
               </button>
               {warehouse && isLimitedOffer(current) ? (
