@@ -176,38 +176,28 @@ export default function ProductDetailModal({
           }`}
         >
           {warehouse ? (
-            <div className="flex items-start justify-between gap-2 px-4 pt-4 lg:px-6">
-              <nav
-                aria-label="Breadcrumb"
-                className="flex flex-wrap items-center gap-x-1.5 text-[11px] text-[#555]"
-              >
-                <button
-                  type="button"
-                  onClick={onClose}
-                  className="font-bold text-costco-blue hover:underline"
-                >
-                  Home
-                </button>
-                <span aria-hidden="true">›</span>
-                <span>
-                  {current.brand === "Kirkland Signature"
-                    ? "Kirkland Signature"
-                    : aisleLabel(current.department)}
-                </span>
-                <span aria-hidden="true">›</span>
-                <span className="line-clamp-1 text-[#1a1a1a]">
-                  {current.brand} {current.name}
-                </span>
-              </nav>
+            <nav
+              aria-label="Breadcrumb"
+              className="flex flex-wrap items-center gap-x-1.5 px-4 pt-4 text-[11px] text-[#555] lg:px-6"
+            >
               <button
                 type="button"
                 onClick={onClose}
-                className="rounded-[3px] p-1 text-[#555] hover:bg-[#f7fbfe]"
-                aria-label="Close"
+                className="font-bold text-costco-blue hover:underline"
               >
-                <X className="h-4 w-4" />
+                Home
               </button>
-            </div>
+              <span aria-hidden="true">›</span>
+              <span>
+                {current.brand === "Kirkland Signature"
+                  ? "Kirkland Signature"
+                  : aisleLabel(current.department)}
+              </span>
+              <span aria-hidden="true">›</span>
+              <span className="line-clamp-1 text-[#1a1a1a]">
+                {current.brand} {current.name}
+              </span>
+            </nav>
           ) : null}
           <div
             className={

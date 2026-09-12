@@ -55,39 +55,29 @@ export default function StoreSheet({
           >
             <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4 lg:px-6">
               <div className="mx-auto max-w-[1180px]">
-                <div className="flex items-start justify-between gap-2">
-                  <nav
-                    aria-label="Breadcrumb"
-                    className="flex flex-wrap items-center gap-x-1.5 text-[11px] text-[#555]"
-                  >
-                    {trail.map((crumb, index) => (
-                      <span key={`${crumb.label}-${index}`} className="contents">
-                        {index > 0 ? (
-                          <span aria-hidden="true">›</span>
-                        ) : null}
-                        {crumb.onClick ? (
-                          <button
-                            type="button"
-                            onClick={crumb.onClick}
-                            className="font-bold text-costco-blue hover:underline"
-                          >
-                            {crumb.label}
-                          </button>
-                        ) : (
-                          <span className="text-[#1a1a1a]">{crumb.label}</span>
-                        )}
-                      </span>
-                    ))}
-                  </nav>
-                  <button
-                    type="button"
-                    onClick={onClose}
-                    className="rounded-[3px] p-1 text-[#555] hover:bg-[#f7fbfe]"
-                    aria-label="Close"
-                  >
-                    <X className="h-4 w-4" />
-                  </button>
-                </div>
+                <nav
+                  aria-label="Breadcrumb"
+                  className="flex flex-wrap items-center gap-x-1.5 text-[11px] text-[#555]"
+                >
+                  {trail.map((crumb, index) => (
+                    <span key={`${crumb.label}-${index}`} className="contents">
+                      {index > 0 ? (
+                        <span aria-hidden="true">›</span>
+                      ) : null}
+                      {crumb.onClick ? (
+                        <button
+                          type="button"
+                          onClick={crumb.onClick}
+                          className="font-bold text-costco-blue hover:underline"
+                        >
+                          {crumb.label}
+                        </button>
+                      ) : (
+                        <span className="text-[#1a1a1a]">{crumb.label}</span>
+                      )}
+                    </span>
+                  ))}
+                </nav>
                 <h1 className="mt-0.5 text-[28px] font-bold leading-snug text-[#1a1a1a]">
                   {title}
                 </h1>

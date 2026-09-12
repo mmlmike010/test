@@ -90,7 +90,7 @@ const suggestionChips = [
 function KirklandHelpCard({
   title,
   children,
-  variant = "foil",
+  variant = "page",
 }: {
   title: string;
   children: ReactNode;
@@ -1190,7 +1190,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             !message.imageUrl ? null : (
             <KirklandHelpCard
               title="Kirkland Signature shopping help"
-              variant={kirkShopPage ? "page" : "foil"}
+              variant="page"
             >
               <p className="whitespace-pre-line">{message.content}</p>
               {message.imageUrl && (
@@ -1221,7 +1221,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
           {added.length > 0 ? (
             <KirklandHelpCard
               title="Items Added to Cart"
-              variant={kirkShopPage ? "page" : "foil"}
+              variant="page"
             >
               <div className="space-y-1.5">
                 {added.map((product) => (
@@ -1240,7 +1240,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
         {isLoading && (
           <KirklandHelpCard
             title="Kirkland Signature shopping help"
-            variant={kirkShopPage ? "page" : "foil"}
+            variant="page"
           >
             <div className="flex items-center gap-1.5">
               <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-[#999]" />

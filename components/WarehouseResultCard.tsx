@@ -147,7 +147,7 @@ export default function WarehouseResultCard({
                     onChange={(e) => onCompare(e.target.checked)}
                     className="accent-costco-blue"
                   />
-                  Compare Product
+                  Compare
                 </label>
               ) : null}
               <AddToListLink productId={product.id} productName={product.name} />
@@ -204,7 +204,7 @@ export default function WarehouseResultCard({
                 onChange={(e) => onCompare(e.target.checked)}
                 className="accent-costco-blue"
               />
-              Compare Product
+              Compare
             </label>
           ) : null}
         </span>

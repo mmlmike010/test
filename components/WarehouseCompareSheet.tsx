@@ -1,6 +1,5 @@
 "use client";
 
-import { X } from "lucide-react";
 import type { Product } from "@/lib/data/products";
 import { useCatalogStore } from "@/lib/store/catalog";
 import { useStorefrontOverlayClass, useSessionStore } from "@/lib/store/session";
@@ -32,30 +31,20 @@ export default function WarehouseCompareSheet({
     >
         <div className="min-h-0 flex-1 overflow-auto px-4 py-4 lg:px-6">
         <div className="mx-auto max-w-[1180px]">
-          <div className="flex items-start justify-between gap-2">
-            <nav
-              aria-label="Breadcrumb"
-              className="flex flex-wrap items-center gap-x-1.5 text-[11px] text-[#555]"
-            >
-              <button
-                type="button"
-                onClick={onClose}
-                className="font-bold text-costco-blue hover:underline"
-              >
-                Home
-              </button>
-              <span aria-hidden="true">›</span>
-              <span className="text-[#1a1a1a]">Compare Products</span>
-            </nav>
+          <nav
+            aria-label="Breadcrumb"
+            className="flex flex-wrap items-center gap-x-1.5 text-[11px] text-[#555]"
+          >
             <button
               type="button"
               onClick={onClose}
-              className="rounded-[3px] p-1 text-[#555] hover:bg-[#f7fbfe]"
-              aria-label="Close"
+              className="font-bold text-costco-blue hover:underline"
             >
-              <X className="h-4 w-4" />
+              Home
             </button>
-          </div>
+            <span aria-hidden="true">›</span>
+            <span className="text-[#1a1a1a]">Compare Products</span>
+          </nav>
           <h1 className="mt-0.5 text-[28px] font-bold leading-snug text-[#1a1a1a]">
             Compare Products
           </h1>

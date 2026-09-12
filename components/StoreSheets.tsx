@@ -508,11 +508,27 @@ function DeliverySheet() {
   const [line1, setLine1] = useState(address.line1);
   const [city, setCity] = useState(address.city);
   const [zip, setZip] = useState(address.zip);
+  const [locatorQ, setLocatorQ] = useState(address.zip);
+  const [locatorNote, setLocatorNote] = useState<string | null>(null);
   const title = warehouse
     ? priorSheet === "checkout"
       ? "Shipping & Delivery"
       : "Find a Warehouse"
     : "Delivery details";
+  const findWarehouse = warehouse && priorSheet !== "checkout";
+  const warehouseHours = [
+    { day: "Mon–Fri", hours: "10:00am–8:30pm" },
+    { day: "Saturday", hours: "9:30am–6:00pm" },
+    { day: "Sunday", hours: "10:00am–6:00pm" },
+  ];
+  const warehouseServices = [
+    "Same-Day Delivery",
+    "Gas Station",
+    "Food Court",
+    "Pharmacy",
+    "Optical",
+    "Hearing Aids",
+  ];
 
   return (
     <StoreSheet
@@ -532,29 +548,86 @@ function DeliverySheet() {
         }
       >
         {warehouse ? (
-          <div className="rounded-[3px] border border-[#c4c4c4] bg-white px-5 py-5">
-            <p className="text-[12px] font-bold uppercase tracking-[0.08em] text-[#555]">
-              Warehouse
-            </p>
-            <p className="mt-2 text-[18px] font-bold text-[#1a1a1a]">
-              Brooklyn
-            </p>
-            <p className="mt-1 text-[14px] text-[#1a1a1a]">
-              {line1 || address.line1}
-            </p>
-            <p className="text-[14px] text-[#555]">
-              {city || address.city} {zip || address.zip}
-            </p>
-            <p className="mt-3 text-[13px] font-semibold text-[#188038]">
-              Same-Day Delivery
-            </p>
-            <p className="mt-1 text-[13px] leading-snug text-[#555]">
-              Mon–Fri 10:00am–8:30pm · Sat 9:30am–6:00pm · Sun 10:00am–6:00pm
-            </p>
-            <p className="mt-3 text-[12px] leading-snug text-[#72767E]">
-              Membership required. This demo uses your delivery address as the
-              warehouse location.
-            </p>
+          <div className="space-y-3">
+            {findWarehouse ? (
+              <form
+                className="flex flex-col gap-2 sm:flex-row sm:items-center"
+                onSubmit={(event) => {
+                  event.preventDefault();
+                  const q = locatorQ.trim().toLowerCase();
+                  const here = `${city} ${zip} ${address.city} ${address.zip} brooklyn`.toLowerCase();
+                  setLocatorNote(
+                    !q || here.includes(q) || q.includes("11217")
+                      ? "1 warehouse near you"
+                      : "Showing the nearest warehouse for this demo."
+                  );
+                }}
+              >
+                <label className="min-w-0 flex-1">
+                  <span className="sr-only">City, State or ZIP</span>
+                  <input
+                    value={locatorQ}
+                    onChange={(e) => setLocatorQ(e.target.value)}
+                    placeholder="City, State or ZIP"
+                    className="h-11 w-full rounded-[3px] border border-[#c4c4c4] bg-[#f6f6f6] px-3.5 text-[15px] text-[#222] focus:border-costco-blue focus:bg-white focus:outline-none focus:ring-2 focus:ring-costco-blue/15"
+                  />
+                </label>
+                <button
+                  type="submit"
+                  className="h-11 rounded-[3px] bg-costco-red px-5 text-[15px] font-bold text-white hover:bg-costco-red-hover sm:w-[120px]"
+                >
+                  Search
+                </button>
+              </form>
+            ) : null}
+            {locatorNote ? (
+              <p className="text-[13px] font-semibold text-[#555]">{locatorNote}</p>
+            ) : null}
+            <div className="overflow-hidden rounded-[3px] border border-[#c4c4c4] bg-white">
+              <div className="border-b border-[#c4c4c4] bg-[#f6f7f8] px-5 py-3">
+                <p className="text-[18px] font-bold text-[#1a1a1a]">Brooklyn</p>
+                <p className="mt-0.5 text-[12px] text-[#72767E]">
+                  Warehouse #1847 · 2.4 mi
+                </p>
+              </div>
+              <div className="px-5 py-4">
+                <p className="text-[14px] text-[#1a1a1a]">
+                  {line1 || address.line1}
+                </p>
+                <p className="text-[14px] text-[#555]">
+                  {city || address.city} {zip || address.zip}
+                </p>
+                <table className="mt-3 w-full text-[13px]">
+                  <tbody>
+                    {warehouseHours.map((row) => (
+                      <tr key={row.day}>
+                        <td className="py-0.5 text-[#555]">{row.day}</td>
+                        <td className="py-0.5 text-right font-semibold text-[#1a1a1a]">
+                          {row.hours}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                <div className="mt-3 flex flex-wrap gap-1.5">
+                  {warehouseServices.map((service) => (
+                    <span
+                      key={service}
+                      className="rounded-[3px] border border-[#c4c4c4] bg-[#f6f7f8] px-2 py-0.5 text-[11px] font-semibold text-[#1a1a1a]"
+                    >
+                      {service}
+                    </span>
+                  ))}
+                </div>
+                <p className="mt-3 text-[13px] font-semibold text-[#188038]">
+                  Same-Day Delivery
+                </p>
+                <p className="mt-3 text-[12px] leading-snug text-[#72767E]">
+                  Membership required. This demo uses your delivery address as
+                  the warehouse location.
+                </p>
+              </div>
+            </div>
           </div>
         ) : null}
         <div

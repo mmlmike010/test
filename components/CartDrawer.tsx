@@ -65,30 +65,20 @@ export default function CartDrawer() {
       >
         <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4 lg:px-6">
           <div className="mx-auto max-w-[1180px]">
-            <div className="flex items-start justify-between gap-2">
-              <nav
-                aria-label="Breadcrumb"
-                className="flex flex-wrap items-center gap-x-1.5 text-[11px] text-[#555]"
-              >
-                <button
-                  type="button"
-                  onClick={closeCart}
-                  className="font-bold text-costco-blue hover:underline"
-                >
-                  Home
-                </button>
-                <span aria-hidden="true">›</span>
-                <span className="text-[#1a1a1a]">Shopping Cart</span>
-              </nav>
+            <nav
+              aria-label="Breadcrumb"
+              className="flex flex-wrap items-center gap-x-1.5 text-[11px] text-[#555]"
+            >
               <button
                 type="button"
                 onClick={closeCart}
-                className="rounded-[3px] p-1 text-[#555] hover:bg-[#f7fbfe]"
-                aria-label="Close cart"
+                className="font-bold text-costco-blue hover:underline"
               >
-                <X className="h-4 w-4" />
+                Home
               </button>
-            </div>
+              <span aria-hidden="true">›</span>
+              <span className="text-[#1a1a1a]">Shopping Cart</span>
+            </nav>
             <h1 className="mt-0.5 text-[28px] font-bold leading-snug text-[#1a1a1a]">
               Shopping Cart
             </h1>
