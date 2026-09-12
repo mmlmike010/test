@@ -77,14 +77,14 @@ export default function WarehouseCompareSheet({
                         onClose();
                         inspect(product, "warehouse");
                       }}
-                      className="relative mx-auto mb-2 block h-[96px] w-[96px] overflow-hidden rounded-[3px] border border-[#eee] bg-white"
+                      className="relative mx-auto mb-2 block h-[140px] w-[140px] overflow-hidden bg-white"
                       aria-label={`View ${product.brand} ${product.name}`}
                     >
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={product.image}
                         alt=""
-                        className="absolute inset-0 h-full w-full object-contain p-1"
+                        className="absolute inset-0 h-full w-full object-contain p-1.5"
                       />
                     </button>
                     <button
@@ -93,9 +93,24 @@ export default function WarehouseCompareSheet({
                         onClose();
                         inspect(product, "warehouse");
                       }}
-                      className="text-left text-[13px] font-bold leading-snug text-costco-blue hover:underline"
+                      className="text-left text-[14px] font-bold leading-snug text-costco-blue hover:underline"
                     >
                       {product.brand} {product.name}
+                    </button>
+                    <div className="mt-3">
+                      <AddControl
+                        product={product}
+                        variant="inline"
+                        tone="warehouse"
+                        wide
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => onRemove(product.id)}
+                      className="mt-2 text-[12px] font-bold text-costco-blue hover:underline"
+                    >
+                      Remove
                     </button>
                   </th>
                 ))}
@@ -301,28 +316,6 @@ export default function WarehouseCompareSheet({
                     className="border border-[#c4c4c4] px-3 py-2 font-semibold text-[#188038]"
                   >
                     Same-Day Delivery
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <th className="border border-[#c4c4c4] bg-[#f6f7f8] px-2 py-2 font-bold text-[#555]">
-                  Cart
-                </th>
-                {items.map((product) => (
-                  <td key={product.id} className="border border-[#c4c4c4] px-3 py-2">
-                    <AddControl
-                      product={product}
-                      variant="inline"
-                      tone="warehouse"
-                      wide
-                    />
-                    <button
-                      type="button"
-                      onClick={() => onRemove(product.id)}
-                      className="mt-2 block text-[12px] font-bold text-costco-blue hover:underline"
-                    >
-                      Remove
-                    </button>
                   </td>
                 ))}
               </tr>

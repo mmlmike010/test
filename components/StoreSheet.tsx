@@ -171,9 +171,6 @@ export default function StoreSheet({
             <X className="h-5 w-5 text-[#555]" />
           </button>
         </div>
-        {warehouse ? (
-          <div className="h-[3px] bg-gradient-to-r from-[#a3841c] via-[#f3e3a3] to-[#a3841c]" />
-        ) : null}
         <div className="min-h-0 flex-1 overflow-y-auto">{children}</div>
       </div>
     </div>

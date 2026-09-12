@@ -1330,6 +1330,7 @@ function CustomerServiceSheet() {
     });
     void search();
   };
+  const [helpQ, setHelpQ] = useState("");
   const topics = [
     {
       title: "Orders & Returns",
@@ -1362,6 +1363,14 @@ function CustomerServiceSheet() {
       onClick: () => setSheet("pricing", "sameday"),
     },
   ];
+  const visibleTopics = topics.filter((topic) => {
+    const q = helpQ.trim().toLowerCase();
+    if (!q) return true;
+    return (
+      topic.title.toLowerCase().includes(q) ||
+      topic.copy.toLowerCase().includes(q)
+    );
+  });
 
   return (
     <StoreSheet
@@ -1417,21 +1426,41 @@ function CustomerServiceSheet() {
           <p className="mb-2 text-[15px] font-bold text-[#1a1a1a]">
             Popular Help Topics
           </p>
+          <label className="mb-3 block max-w-[420px]">
+            <span className="sr-only">Search help topics</span>
+            <input
+              type="search"
+              value={helpQ}
+              onChange={(e) => setHelpQ(e.target.value)}
+              placeholder="Search by Keyword"
+              className="h-11 w-full rounded-[3px] border border-[#c4c4c4] bg-white px-3.5 text-[14px] text-[#1a1a1a] placeholder:text-[#8a8a8a] focus:border-costco-blue focus:outline-none focus:ring-2 focus:ring-costco-blue/15"
+            />
+          </label>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {topics.map((topic) => (
+            {visibleTopics.map((topic) => (
               <button
                 key={topic.title}
                 type="button"
                 onClick={topic.onClick}
-                className="rounded-[3px] border border-[#c4c4c4] bg-white px-4 py-3 text-left hover:border-costco-blue hover:bg-[#f7fbfe]"
+                className="flex items-start justify-between gap-3 rounded-[3px] border border-[#c4c4c4] bg-white px-4 py-3 text-left hover:border-costco-blue hover:bg-[#f7fbfe]"
               >
-                <p className="text-[14px] font-bold text-costco-blue">
-                  {topic.title}
-                </p>
-                <p className="mt-1 text-[12px] text-[#555]">{topic.copy}</p>
+                <span>
+                  <span className="block text-[14px] font-bold text-costco-blue">
+                    {topic.title}
+                  </span>
+                  <span className="mt-1 block text-[12px] text-[#555]">
+                    {topic.copy}
+                  </span>
+                </span>
+                <ChevronRight className="mt-0.5 h-4 w-4 shrink-0 text-costco-blue" />
               </button>
             ))}
           </div>
+          {visibleTopics.length === 0 ? (
+            <p className="mt-3 text-[13px] text-[#555]">
+              No help topics match that search.
+            </p>
+          ) : null}
         </div>
       </div>
     </StoreSheet>
