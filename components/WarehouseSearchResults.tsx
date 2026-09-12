@@ -370,8 +370,8 @@ export default function WarehouseSearchResults({
         />
       ) : null}
       {relatedEnabled && relatedTerms.length > 0 ? (
-        <div className="border-t border-[#ececec] bg-white px-1 py-5">
-          <p className="text-[17px] font-bold text-[#1a1a1a]">Related Searches</p>
+        <div className="border-t border-[#ececec] bg-white px-1 py-6">
+          <p className="text-[20px] font-bold text-[#1a1a1a]">Related Searches</p>
           <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1.5">
             {relatedTerms.map((term) => (
               <button

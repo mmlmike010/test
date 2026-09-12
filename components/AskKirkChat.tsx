@@ -90,11 +90,11 @@ function KirklandHelpCard({
 }) {
   if (variant === "page") {
     return (
-      <section className="overflow-hidden rounded-[3px] border border-[#c4c4c4] bg-white">
-        <p className="border-b border-[#c4c4c4] bg-[#f6f7f8] px-3.5 py-2 text-[13px] font-bold text-[#1a1a1a]">
+      <section className="overflow-hidden border border-[#c4c4c4] bg-white">
+        <p className="border-b border-[#c4c4c4] bg-[#f6f7f8] px-4 py-2.5 text-[15px] font-bold text-[#1a1a1a]">
           {title}
         </p>
-        <div className="px-3.5 py-2.5 text-[13px] leading-relaxed text-[#1a1a1a]">
+        <div className="px-4 py-3 text-[13px] leading-relaxed text-[#1a1a1a]">
           {children}
         </div>
       </section>
@@ -646,6 +646,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
   const kirkCompareItems = kirkCompareIds
     .map((id) => products.find((item) => item.id === id))
     .filter((item): item is (typeof products)[number] => Boolean(item));
+  const idleHomepage = !hasUserAsk && !kirkShopPage;
   const browseHits = warehouseBrowsePreview(
     products,
     q,
@@ -691,7 +692,13 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
       <div
         className="relative min-h-0 flex-1 overflow-y-auto bg-white"
       >
-        <div className="mx-auto max-w-[1400px] space-y-5 px-4 py-4 lg:px-8">
+        <div
+          className={
+            idleHomepage
+              ? undefined
+              : "mx-auto max-w-[1400px] space-y-5 px-4 py-4 lg:px-8"
+          }
+        >
         {messages.map((message) => {
           const isWelcome = message.id.startsWith("welcome-");
           if (isWelcome) {
@@ -736,7 +743,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
               document.querySelector("main")?.scrollTo({ top: 0 });
             };
             return (
-              <div key={message.id} className="space-y-6">
+              <div key={message.id}>
                 <WarehouseHomepageHero
                   onKirkland={showAllAisle}
                   onOffers={showAllAisle}
@@ -763,53 +770,47 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                     </>
                   }
                 />
-                <WarehouseHomepageShortcuts
-                  onOffers={showAllAisle}
-                  onPick={browseWarehouseDepartment}
-                />
-                <WarehouseShopDepartments
-                  selected={warehouseFacets.departments}
-                  onPick={browseWarehouseDepartment}
-                />
-                {offerPreview.length > 0 ? (
-                  <WarehouseAisleScroller
-                    title="Limited-Time Offers"
-                    products={offerPreview}
-                    onShowAll={showAllAisle}
+                <div className="mx-auto max-w-[1400px] space-y-6 px-4 py-6 lg:px-8">
+                  <WarehouseHomepageShortcuts
+                    onOffers={showAllAisle}
+                    onPick={browseWarehouseDepartment}
                   />
-                ) : null}
-                <WarehouseHomepageSpotlights
-                  onPick={browseWarehouseDepartment}
-                />
-                {preview.length > 0 ? (
-                  <WarehouseAisleScroller
-                    title={aisleTitle}
-                    products={preview}
-                    onShowAll={showAllAisle}
+                  <WarehouseShopDepartments
+                    selected={warehouseFacets.departments}
+                    onPick={browseWarehouseDepartment}
                   />
-                ) : (
-                  <p className="rounded-[3px] border border-[#c4c4c4] bg-white px-3 py-5 text-center text-[13px] text-[#555]">
-                    No items match these filters.{" "}
-                    <button
-                      type="button"
-                      className="font-bold text-costco-blue hover:underline"
-                      onClick={() =>
-                        setWarehouseFacets(EMPTY_WAREHOUSE_FACETS)
-                      }
-                    >
-                      Shop All
-                    </button>
-                  </p>
-                )}
+                  {offerPreview.length > 0 ? (
+                    <WarehouseAisleScroller
+                      title="Limited-Time Offers"
+                      products={offerPreview}
+                      onShowAll={showAllAisle}
+                    />
+                  ) : null}
+                  <WarehouseHomepageSpotlights
+                    onPick={browseWarehouseDepartment}
+                  />
+                  {preview.length > 0 ? (
+                    <WarehouseAisleScroller
+                      title={aisleTitle}
+                      products={preview}
+                      onShowAll={showAllAisle}
+                    />
+                  ) : (
+                    <p className="border border-[#c4c4c4] bg-white px-3 py-5 text-center text-[13px] text-[#555]">
+                      No items match these filters.{" "}
+                      <button
+                        type="button"
+                        className="font-bold text-costco-blue hover:underline"
+                        onClick={() =>
+                          setWarehouseFacets(EMPTY_WAREHOUSE_FACETS)
+                        }
+                      >
+                        Shop All
+                      </button>
+                    </p>
+                  )}
+                </div>
                 <WarehouseMembershipBanner onShop={showAllAisle} />
-                <section className="border-t border-[#ececec] pt-5">
-                  <p className="text-[17px] font-bold text-[#1a1a1a]">
-                    Kirkland Signature shopping help
-                  </p>
-                  <p className="mt-1.5 whitespace-pre-line text-[13px] leading-relaxed text-[#1a1a1a]">
-                    {message.content}
-                  </p>
-                </section>
               </div>
             );
           }
@@ -1021,11 +1022,25 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
         <div ref={messagesEndRef} />
         {kirkShopPage ? null : (
           <div
-            className={`bg-white px-1 pb-2 ${
-              hasUserAsk ? "border-t border-[#ececec] pt-5" : "pt-3"
-            }`}
+            className={
+              hasUserAsk
+                ? "border-t border-[#ececec] bg-white px-1 pb-2 pt-5"
+                : "border-t border-[#d8d8d8] bg-[#f6f7f8] px-4 py-10 lg:px-8"
+            }
           >
-            <div className="flex h-11 items-stretch">
+            <div className={hasUserAsk ? undefined : "mx-auto max-w-[1400px]"}>
+            {!hasUserAsk ? (
+              <>
+                <p className="text-[20px] font-bold text-[#1a1a1a]">
+                  Kirkland Signature shopping help
+                </p>
+                <p className="mt-1.5 whitespace-pre-line text-[13px] leading-relaxed text-[#1a1a1a]">
+                  {messages.find((entry) => entry.id.startsWith("welcome-"))
+                    ?.content}
+                </p>
+              </>
+            ) : null}
+            <div className={`flex h-11 items-stretch ${hasUserAsk ? "" : "mt-5"}`}>
               <div className="relative min-w-0 flex-1">
                 <Search
                   className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-[#8a8a8a]"
@@ -1113,10 +1128,13 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
               Kirkland Signature shopping help · Membership required · Prices
               higher than warehouse
             </p>
+            </div>
           </div>
         )}
         </div>
-        <WarehouseFooter className="mt-8" />
+        <WarehouseFooter
+          className={kirkShopPage || hasUserAsk ? "mt-8" : ""}
+        />
       </div>
 
       {(isRecording || isTranscribing || isSpeaking) && !kirkShopPage && (

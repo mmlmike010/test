@@ -61,7 +61,7 @@ export default function WarehouseHomepageHero({
   };
 
   return (
-    <div className="-mx-4 -mt-4 lg:-mx-8">
+    <div>
       <div
         className="relative"
         aria-roledescription="carousel"
@@ -155,7 +155,7 @@ export default function WarehouseHomepageHero({
           ))}
         </div>
       </div>
-      <div className="flex items-center justify-between gap-3 px-4 pt-1.5 lg:px-8">
+      <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-3 px-4 pt-1.5 lg:px-8">
         <p className="text-[11px] text-[#72767E]">While supplies last</p>
         {utilities ? (
           <div className="flex items-center gap-3">{utilities}</div>

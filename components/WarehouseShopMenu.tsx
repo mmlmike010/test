@@ -38,20 +38,20 @@ export default function WarehouseShopMenu({
             </button>
           ))}
         </div>
-        <div className="grid min-w-0 flex-1 grid-cols-3 gap-2 p-4">
-          {WAREHOUSE_NAV_TILES.map(({ label, image }) => (
+        <div className="grid min-w-0 flex-1 grid-cols-3 gap-3 p-4">
+          {WAREHOUSE_NAV_TILES.map(({ label, mosaic }) => (
             <button
               key={label}
               type="button"
-              className="flex flex-col items-center gap-2 px-2 py-2 text-center hover:bg-[#f7fbfe]"
+              className="flex flex-col gap-1.5 px-1 py-1 text-left hover:bg-[#f7fbfe]"
               onClick={() => onPick(label)}
             >
-              <span className="relative h-28 w-28 overflow-hidden bg-white">
+              <span className="relative aspect-[16/10] w-full overflow-hidden bg-[#eceef1]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={image}
+                  src={mosaic}
                   alt=""
-                  className="absolute inset-0 h-full w-full object-contain p-1.5"
+                  className="absolute inset-0 h-full w-full object-cover"
                 />
               </span>
               <span className="text-[13px] font-bold leading-snug text-costco-blue hover:underline">

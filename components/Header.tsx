@@ -487,7 +487,11 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
       </div>
       </div>
 
-      <div className="bg-white border-b border-[#ececec]">
+      <div
+        className={`border-b border-[#ececec] ${
+          warehouseChrome ? "bg-[#f4f4f4]" : "bg-white"
+        }`}
+      >
         {warehouseChrome ? (
           <div className="relative max-w-[1800px] mx-auto px-3 sm:px-4">
             <div className="flex h-[40px] items-center gap-5 text-[14px]">

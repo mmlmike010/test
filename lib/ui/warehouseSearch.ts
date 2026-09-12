@@ -52,7 +52,7 @@ export const WAREHOUSE_NAV = [
 export const WAREHOUSE_NAV_TILES: {
   label: (typeof WAREHOUSE_NAV)[number];
   image: string;
-  /** 16:10 fill crop for Shop by Department. Mega menu still uses `image`. */
+  /** 16:10 fill crop for Shop by Department and the Shop mega menu. */
   mosaic: string;
 }[] = [
   {
