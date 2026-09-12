@@ -40,6 +40,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
   const setWarehouseFacets = useCatalogStore((s) => s.setWarehouseFacets);
   const warehouseDepts = warehouseFacets?.departments ?? [];
   const warehouseSearch = listTone === "warehouse" && Boolean(q.trim());
+  const chromeTone = warehouseSearch ? "warehouse" : "sameday";
   const onRecipes = tag === "recipes";
   const onFlyers = tag === "flyers";
   const onLists = tag === "lists";
@@ -130,7 +131,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
                 <button
                   type="button"
                   className="hidden sm:inline-flex items-center gap-1 text-[13px] font-semibold text-costco-blue hover:underline"
-                  onClick={() => setSheet("membership", "sameday")}
+                  onClick={() => setSheet("membership", chromeTone)}
                 >
                   {membershipAdded ? (
                     <>
@@ -148,7 +149,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
                 <button
                   type="button"
                   className="text-[13px] font-semibold text-costco-blue hover:underline"
-                  onClick={() => setSheet("signin", "sameday")}
+                  onClick={() => setSheet("signin", chromeTone)}
                 >
                   {signedIn ? displayName : "Sign In / Register"}
                 </button>
@@ -158,7 +159,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
                 <button
                   type="button"
                   className="hidden sm:inline text-[13px] font-semibold text-costco-blue hover:underline"
-                  onClick={() => setSheet("signin", "sameday")}
+                  onClick={() => setSheet("signin", chromeTone)}
                 >
                   Orders & Returns
                 </button>
@@ -335,7 +336,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
             className={`hidden lg:flex text-left items-center gap-1.5 px-1.5 py-0.5 hover:bg-[#f6f6f6] ${
               warehouseSearch ? "rounded-[3px]" : "rounded-md"
             }`}
-            onClick={() => setSheet("delivery", "sameday")}
+            onClick={() => setSheet("delivery", chromeTone)}
           >
             <Clock className="w-[18px] h-[18px] text-costco-blue shrink-0" />
             <span>
@@ -352,7 +353,7 @@ export default function Header({ onAskKirkClick }: HeaderProps) {
 
           <button
             type="button"
-            onClick={openCart}
+            onClick={() => openCart(chromeTone)}
             aria-label={`View Cart. Items in cart: ${totalItems}`}
             className={`relative inline-flex items-center gap-1.5 h-10 px-3 border border-[#c4c4c4] hover:bg-[#f6f6f6] bg-white ${
               warehouseSearch ? "rounded-[3px]" : "rounded-full"

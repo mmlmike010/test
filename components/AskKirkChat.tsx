@@ -792,11 +792,9 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                     </button>
                   </p>
                 )}
-                <div className="rounded-[3px] border border-[#e8e8e8] bg-white px-3 py-1.5">
-                  <p className="text-[12px] leading-relaxed text-[#1a1a1a] whitespace-pre-line">
-                    {message.content}
-                  </p>
-                </div>
+                <KirklandHelpCard title="Kirkland Signature shopping help">
+                  <p className="whitespace-pre-line">{message.content}</p>
+                </KirklandHelpCard>
               </div>
             );
           }
