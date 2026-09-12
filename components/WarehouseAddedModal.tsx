@@ -144,8 +144,8 @@ export default function WarehouseAddedModal() {
           Continue Shopping
         </button>
         {related.length > 0 ? (
-          <div className="border-t border-[#ececec] px-4 py-3">
-            <p className="text-[13px] font-bold text-[#1a1a1a]">
+          <div className="border-t border-[#ececec] bg-[#f6f7f8] px-4 py-3">
+            <p className="text-[20px] font-bold text-[#1a1a1a]">
               Related Products
             </p>
             <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-4">

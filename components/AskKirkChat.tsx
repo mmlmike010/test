@@ -1010,27 +1010,17 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
           </section>
         )}
         <div ref={messagesEndRef} />
-        {kirkShopPage ? null : (
-          <div
-            className={
-              hasUserAsk
-                ? "border-t border-[#ececec] bg-white px-1 pb-2 pt-5"
-                : "border-t border-[#d8d8d8] bg-[#f6f7f8] px-4 py-10 lg:px-8"
-            }
-          >
-            <div className={hasUserAsk ? undefined : "mx-auto max-w-[1400px]"}>
-            {!hasUserAsk ? (
-              <>
-                <p className="text-[20px] font-bold text-[#1a1a1a]">
-                  Kirkland Signature shopping help
-                </p>
-                <p className="mt-1.5 whitespace-pre-line text-[13px] leading-relaxed text-[#1a1a1a]">
-                  {messages.find((entry) => entry.id.startsWith("welcome-"))
-                    ?.content}
-                </p>
-              </>
-            ) : null}
-            <div className={`flex h-11 items-stretch ${hasUserAsk ? "" : "mt-5"}`}>
+        {kirkShopPage || hasUserAsk ? null : (
+          <div className="border-t border-[#d8d8d8] bg-[#f6f7f8] px-4 py-10 lg:px-8">
+            <div className="mx-auto max-w-[1400px]">
+            <p className="text-[20px] font-bold text-[#1a1a1a]">
+              Kirkland Signature shopping help
+            </p>
+            <p className="mt-1.5 whitespace-pre-line text-[13px] leading-relaxed text-[#1a1a1a]">
+              {messages.find((entry) => entry.id.startsWith("welcome-"))
+                ?.content}
+            </p>
+            <div className="mt-5 flex h-11 items-stretch">
               <div className="relative min-w-0 flex-1">
                 <Search
                   className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-[#8a8a8a]"
@@ -1094,26 +1084,22 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                 Search
               </button>
             </div>
-            {!hasUserAsk ? (
-              <>
-                <p className="mt-3 text-[15px] font-bold text-[#1a1a1a]">
-                  Popular Searches
-                </p>
-                <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1">
-                  {suggestionChips.map((chip) => (
-                    <button
-                      key={chip}
-                      type="button"
-                      onClick={() => void sendMessage(chip)}
-                      disabled={isLoading}
-                      className="text-left text-[12px] font-bold leading-tight text-costco-blue hover:underline disabled:opacity-50"
-                    >
-                      {chip}
-                    </button>
-                  ))}
-                </div>
-              </>
-            ) : null}
+            <p className="mt-3 text-[15px] font-bold text-[#1a1a1a]">
+              Popular Searches
+            </p>
+            <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1">
+              {suggestionChips.map((chip) => (
+                <button
+                  key={chip}
+                  type="button"
+                  onClick={() => void sendMessage(chip)}
+                  disabled={isLoading}
+                  className="text-left text-[12px] font-bold leading-tight text-costco-blue hover:underline disabled:opacity-50"
+                >
+                  {chip}
+                </button>
+              ))}
+            </div>
             <p className="mt-2 text-center text-[10px] leading-snug text-[#888]">
               Kirkland Signature shopping help · Membership required · Prices
               higher than warehouse
@@ -1127,7 +1113,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
         />
       </div>
 
-      {(isRecording || isTranscribing || isSpeaking) && !kirkShopPage && (
+      {(isRecording || isTranscribing || isSpeaking) && (
         <div className="px-3.5 py-1.5 border-t border-[#eee] bg-[#fff8f8] text-[12px] text-[#333] flex items-center gap-2 shrink-0">
           {isSpeaking ? (
             <>
