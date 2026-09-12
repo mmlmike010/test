@@ -22,6 +22,7 @@ import WarehouseResultCard from "@/components/WarehouseResultCard";
 import CostcoLogo from "@/components/CostcoLogo";
 import GoldStarMark from "@/components/GoldStarMark";
 import GoldStarMembershipCard from "@/components/GoldStarMembershipCard";
+import WarehouseHomepageHero from "@/components/WarehouseHomepageHero";
 import WarehouseShopDepartments from "@/components/WarehouseShopDepartments";
 import WarehouseAisleScroller from "@/components/WarehouseAisleScroller";
 import WarehouseFilterRail from "@/components/WarehouseFilterRail";
@@ -848,6 +849,10 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             return (
               <div key={message.id} className="space-y-2">
                 <GoldStarMembershipCard />
+                <WarehouseHomepageHero
+                  onKirkland={showAllAisle}
+                  onOffers={showAllAisle}
+                />
                 <WarehouseShopDepartments
                   selected={warehouseFacets.departments}
                   onPick={browseWarehouseDepartment}
