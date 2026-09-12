@@ -809,7 +809,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             applyWarehouseFacets(unfilteredHits, warehouseFacets),
             warehouseSort
           );
-          const preview = hits.slice(0, 4);
+          const preview = hits.slice(0, 12);
           const facetEmpty = unfilteredHits.length > 0 && hits.length === 0;
           const selectionChips = warehouseSelectionChips(warehouseFacets);
           return (
