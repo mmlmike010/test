@@ -202,64 +202,89 @@ export default function ProductDetailModal({
                 : "lg:border-r lg:border-[#eee]"
             }
           >
-            <div
-              className={`relative ${
-                warehouse ? "bg-white px-6 pt-2" : "aspect-square bg-[#f3f4f5]"
-              }`}
-            >
+            {warehouse ? (
+              <div className="bg-white px-6 pt-2 pb-3">
+                <div className="relative w-fit max-w-full">
+                  <button
+                    type="button"
+                    onClick={() => setZoomed(true)}
+                    className="block max-w-full"
+                    aria-label="Enlarge product image"
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={current.image}
+                      alt={`${current.brand} ${current.name}`}
+                      className="max-h-[480px] w-auto max-w-full object-contain"
+                    />
+                  </button>
+                  {isLimitedOffer(current) ? <LimitedTimeOfferBadge /> : null}
+                  <button
+                    type="button"
+                    onClick={() => setZoomed(true)}
+                    className="absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-[3px] bg-white shadow-[0_1px_4px_rgba(0,0,0,0.16)] hover:bg-[#f6f6f6]"
+                    aria-label="Zoom product image"
+                  >
+                    <ZoomIn className="h-4 w-4 text-[#333]" />
+                  </button>
+                </div>
+                <div className="mt-2 flex justify-start gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setZoomed(true)}
+                    className="relative h-14 w-14 overflow-hidden rounded-[3px] border-2 border-[#1a1a1a] bg-white"
+                    aria-label="Selected product photo"
+                    aria-current="true"
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={current.image}
+                      alt=""
+                      className="absolute inset-0 h-full w-full object-contain p-1"
+                    />
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
+            <div className="relative aspect-square bg-[#f3f4f5]">
               <button
                 type="button"
                 onClick={() => setZoomed(true)}
-                className={warehouse ? "relative block w-full" : "absolute inset-0"}
+                className="absolute inset-0"
                 aria-label="Enlarge product image"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={current.image}
                   alt={`${current.brand} ${current.name}`}
-                  className={
-                    warehouse
-                      ? "mx-auto max-h-[480px] w-auto max-w-full object-contain"
-                      : "absolute inset-0 h-full w-full object-contain p-8"
-                  }
+                  className="absolute inset-0 h-full w-full object-contain p-8"
                 />
               </button>
-              {warehouse && isLimitedOffer(current) ? (
-                <LimitedTimeOfferBadge />
-              ) : !warehouse && current.savings > 0 ? (
+              {current.savings > 0 ? (
                 <div className="absolute left-3 top-3 rounded-[4px] bg-costco-red px-2 py-1 text-[12px] font-bold text-white">
                   ${current.savings.toFixed(2)} off
                 </div>
               ) : null}
-              {warehouse ? null : (
-                <SaveHeart
-                  productId={current.id}
-                  productName={current.name}
-                  className="absolute right-3 top-3 h-9 w-9"
-                />
-              )}
+              <SaveHeart
+                productId={current.id}
+                productName={current.name}
+                className="absolute right-3 top-3 h-9 w-9"
+              />
               <button
                 type="button"
                 onClick={() => setZoomed(true)}
-                className={`absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center bg-white shadow-[0_1px_4px_rgba(0,0,0,0.16)] hover:bg-[#f6f6f6] ${
-                  warehouse ? "rounded-[3px]" : "rounded-full"
-                }`}
+                className="absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-full bg-white shadow-[0_1px_4px_rgba(0,0,0,0.16)] hover:bg-[#f6f6f6]"
                 aria-label="Zoom product image"
               >
                 <ZoomIn className="h-4 w-4 text-[#333]" />
               </button>
             </div>
-            <div
-              className={`flex justify-start gap-2 bg-white px-4 ${
-                warehouse ? "pb-3 pt-1" : "border-b border-[#eee] py-3 lg:border-b-0"
-              }`}
-            >
+            <div className="flex justify-start gap-2 border-b border-[#eee] bg-white px-4 py-3 lg:border-b-0">
               <button
                 type="button"
                 onClick={() => setZoomed(true)}
-                className={`relative h-14 w-14 overflow-hidden border-2 border-[#1a1a1a] bg-white ${
-                  warehouse ? "rounded-[3px]" : "rounded-[8px]"
-                }`}
+                className="relative h-14 w-14 overflow-hidden rounded-[8px] border-2 border-[#1a1a1a] bg-white"
                 aria-label="Selected product photo"
                 aria-current="true"
               >
@@ -271,6 +296,8 @@ export default function ProductDetailModal({
                 />
               </button>
             </div>
+              </>
+            )}
           </div>
           <div className={`flex flex-col p-5 ${warehouse ? "bg-white" : ""}`}>
             <h1
