@@ -250,6 +250,7 @@ export default function ProductDetailModal({
                 <ZoomIn className="h-4 w-4 text-[#333]" />
               </button>
             </div>
+            {warehouse ? null : (
             <div
               className={`flex justify-start gap-2 border-b border-[#eee] bg-white px-4 py-3 ${
                   kirkOpen && !kirkShopPage ? "xl:border-b-0" : "lg:border-b-0"
@@ -272,6 +273,7 @@ export default function ProductDetailModal({
                 />
               </button>
             </div>
+            )}
           </div>
           <div className={`flex flex-col p-5 ${warehouse ? "bg-white" : ""}`}>
             <h2
