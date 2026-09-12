@@ -830,12 +830,14 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
                     <GoldStarMembershipCard />
                   </div>
                 </section>
-                <KirklandHelpCard
-                  title="Kirkland Signature shopping help"
-                  variant="page"
-                >
-                  <p className="whitespace-pre-line">{message.content}</p>
-                </KirklandHelpCard>
+                <section className="border-t border-[#ececec] pt-5">
+                  <p className="text-[17px] font-bold text-[#1a1a1a]">
+                    Kirkland Signature shopping help
+                  </p>
+                  <p className="mt-1.5 whitespace-pre-line text-[13px] leading-relaxed text-[#1a1a1a]">
+                    {message.content}
+                  </p>
+                </section>
               </div>
             );
           }
@@ -1283,7 +1285,11 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
         )}
         <div ref={messagesEndRef} />
         {kirkShopPage ? null : (
-          <div className="border-t border-[#ececec] bg-white px-1 pt-5 pb-2">
+          <div
+            className={`bg-white px-1 pb-2 ${
+              hasUserAsk ? "border-t border-[#ececec] pt-5" : "pt-3"
+            }`}
+          >
             <div className="flex h-11 items-stretch">
               <div className="relative min-w-0 flex-1">
                 <Search
@@ -1350,7 +1356,7 @@ export default function AskKirkChat({ isOpen, onClose }: AskKirkChatProps) {
             </div>
             {!hasUserAsk ? (
               <>
-                <p className="mt-2 text-[13px] font-bold text-[#1a1a1a]">
+                <p className="mt-3 text-[15px] font-bold text-[#1a1a1a]">
                   Popular Searches
                 </p>
                 <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1">
